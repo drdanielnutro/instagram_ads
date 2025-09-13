@@ -164,3 +164,10 @@ Thumbs.db
 *.tmp
 *.temp
 *.bak
+
+# Node modules
+frontend/node_modules/
+node_modules/
+
+# Claude configuration
+.claude/
