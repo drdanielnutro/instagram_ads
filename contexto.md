@@ -1,694 +1,648 @@
-# 🤖 FACILITADOR - Flutter Code Generation Agent System
+# 🎯 Instagram Ads Generator - Sistema Multi-Agente com Google ADK
 
-## 🎯 Project Overview
+## 📋 Visão Geral do Projeto
 
-**FACILITADOR** is an advanced multi-agent AI system built on Google ADK v1.4.2 that automates Flutter application feature development through intelligent code generation pipelines.
+**Instagram Ads Generator** é um sistema avançado de multi-agentes construído sobre o Google ADK (Agent Development Kit) v1.4.2 que automatiza a geração de anúncios para Instagram em formato JSON estruturado.
 
-**Core Technology**: Python 3.10+ | FastAPI | Google ADK | Gemini 2.5 | GCP
+**Tecnologia Core**: Python 3.10+ | FastAPI | Google ADK | Gemini 2.5 | GCP
 
-**Mission**: Transform feature descriptions into production-ready Flutter code with automated quality assurance.
+**Missão**: Automatizar completamente o fluxo de criação de anúncios (texto e imagem) a partir de informações fornecidas pelo usuário, gerando sempre 3 variações otimizadas.
 
-## 📚 PRIMARY KNOWLEDGE SOURCE - GEMINI.md
+**Status**: ✅ Funcional com refatorações recentes (2025-09-12)
 
-### ⚡ CRITICAL INSTRUCTION - READ FIRST
+## 🏗️ Arquitetura do Sistema
 
-**THE GEMINI.md FILE IS YOUR ULTIMATE SOURCE OF TRUTH FOR ALL ADK-RELATED QUESTIONS**
+### Pipeline Principal de 8 Agentes
 
-Before making ANY assumptions about Google ADK functionality, architecture, or best practices:
+O sistema utiliza um pipeline sequencial de agentes ADK organizados em 8 etapas:
 
+```
+input_processor → landing_page_analyzer → context_synthesizer → feature_planner
+     ↓                                                                    ↓
+validation ← final_assembly ← task_execution ← plan_review
+```
+
+### Detalhamento dos Agentes
+
+#### 1. **Input Processor** (`input_processor`)
+- **Função**: Extrai e valida campos estruturados da entrada do usuário
+- **Campos Obrigatórios**:
+  - `landing_page_url`: URL da página de destino
+  - `objetivo_final`: Ex: agendamentos, leads, vendas
+  - `perfil_cliente`: Persona/storybrand do público-alvo
+  - `formato_anuncio`: "Reels", "Stories" ou "Feed" (controlado pelo usuário)
+- **Output**: Dados estruturados para próximos agentes
+
+#### 2. **Landing Page Analyzer** (`landing_page_analyzer`)
+- **Função**: Analisa a landing page para extrair contexto
+- **⚠️ LIMITAÇÃO CRÍTICA**: Usa apenas `google_search` (não faz fetch real do HTML)
+- **Tenta Extrair**:
+  - Título principal e proposta de valor
+  - Benefícios e CTAs
+  - Ofertas e provas sociais
+  - Tom de voz e palavras-chave
+- **Output**: Contexto extraído (superficial)
+
+#### 3. **Context Synthesizer** (`context_synthesizer`)
+- **Função**: Consolida todas as entradas em briefing estruturado
+- **Processa**:
+  - Persona e dores/benefícios
+  - Formato definido pelo usuário
+  - Mensagens-chave (tentativa de alinhamento com landing)
+  - Restrições (políticas Instagram/saúde)
+- **Output**: Briefing completo para planejamento
+
+#### 4. **Feature Planner** (`feature_planner`)
+- **Função**: Gera plano detalhado com tarefas categorizadas
+- **Categorias de Tarefas**:
+  - `STRATEGY`: Diretrizes estratégicas
+  - `RESEARCH`: Referências e padrões
+  - `COPY_DRAFT`: Texto do anúncio
+  - `VISUAL_DRAFT`: Descrição de imagem estática
+  - `COPY_QA` / `VISUAL_QA`: Validações
+  - `COMPLIANCE_QA`: Conformidade
+  - `ASSEMBLY`: Montagem JSON
+- **Output**: Lista estruturada de tarefas
+
+#### 5. **Plan Review Loop** (`plan_review`)
+- **Função**: Loop de revisão e refinamento do plano
+- **Iterações**: Até 7 ciclos
+- **Valida**: Coerência, completude, alinhamento com objetivo
+- **Output**: Plano aprovado
+
+#### 6. **Task Execution** (`task_execution`)
+- **Função**: Executa cada tarefa do plano aprovado
+- **Sub-agentes**:
+  1. `code_generator`: Gera fragmento JSON
+  2. `code_reviewer`: Valida alinhamento e qualidade
+  3. `code_refiner`: Aplica correções se necessário
+  4. `code_approver`: Registra fragmento aprovado
+- **Iterações**: Até 8 por tarefa
+- **Output**: Fragmentos JSON aprovados
+
+#### 7. **Final Assembly** (`final_assembly`)
+- **Função**: Combina fragmentos em 3 variações de anúncio
+- **Garante**:
+  - Estrutura JSON válida
+  - Todas as chaves obrigatórias presentes
+  - Variações diferentes entre si
+- **Output**: Array com 3 anúncios completos
+
+#### 8. **Final Validation** (`final_validation`)
+- **Função**: Validação final rigorosa
+- **Iterações**: Até 10 ciclos
+- **Valida**:
+  - JSON válido com exatamente 3 objetos
+  - Enums corretos (formato, aspect_ratio, CTA)
+  - Coerência com objetivo
+  - Conformidade com políticas Instagram
+- **Output**: JSON final aprovado
+
+## 📊 Modelos de Dados
+
+### Estrutura Principal do Anúncio
+
+```python
+from pydantic import BaseModel
+from typing import Literal
+
+class AdCopy(BaseModel):
+    """Textos do anúncio"""
+    headline: str           # Título principal (máx 40 caracteres)
+    corpo: str             # Texto do corpo (máx 125 caracteres)
+    cta_texto: str         # Texto do botão CTA
+
+class AdVisual(BaseModel):
+    """Visual do anúncio - apenas imagens"""
+    descricao_imagem: str  # Descrição detalhada da imagem
+    aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
+
+class AdItem(BaseModel):
+    """Estrutura completa de um anúncio"""
+    landing_page_url: str
+    formato: Literal["Reels", "Stories", "Feed"]
+    copy: AdCopy
+    visual: AdVisual
+    cta_instagram: Literal[
+        "Saiba mais",
+        "Enviar mensagem",
+        "Ligar",
+        "Comprar agora",
+        "Cadastre-se"
+    ]
+    fluxo: str                # Ex: "Instagram Ad → Landing Page → WhatsApp"
+    referencia_padroes: str   # Padrões de mercado utilizados
+    contexto_landing: str     # Contexto extraído da landing page
+```
+
+### Exemplo de Output Final
+
+```json
+[
+  {
+    "landing_page_url": "https://exemplo.com/produto",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Transforme sua rotina hoje",
+      "corpo": "Descubra o método comprovado que já ajudou +5000 pessoas",
+      "cta_texto": "Quero começar agora"
+    },
+    "visual": {
+      "descricao_imagem": "Mulher sorridente usando o produto em ambiente moderno",
+      "aspect_ratio": "1:1"
+    },
+    "cta_instagram": "Saiba mais",
+    "fluxo": "Instagram Ad → Landing Page → Formulário → Email",
+    "referencia_padroes": "Hook emocional + prova social + urgência",
+    "contexto_landing": "Página sobre método de produtividade com depoimentos"
+  },
+  // ... mais 2 variações
+]
+```
+
+## ⚡ Comandos Essenciais
+
+### Desenvolvimento
 ```bash
-# ALWAYS consult GEMINI.md first
-cat GEMINI.md | grep -A 20 "your_topic"  # Quick search
-less GEMINI.md                            # Full browse
+# Ativar ambiente virtual
+source .venv/bin/activate           # Linux/Mac
+.venv\Scripts\activate              # Windows
+
+# Instalar/atualizar dependências
+uv sync                            # Gerenciador de pacotes uv
+pip install -r requirements.txt    # Alternativa com pip
+
+# Executar servidor de desenvolvimento
+make dev-backend-all               # Backend + Frontend
+uvicorn app.server:app --reload --port 8000  # Apenas backend
+
+# Frontend (se disponível)
+npm run dev                        # Interface web
 ```
 
-### 📖 GEMINI.md Quick Reference Guide
-
-The `GEMINI.md` file (1531 lines) contains the complete ADK Python Cheatsheet. Use these section mappings:
-
-```yaml
-ADK_KNOWLEDGE_MAP:
-  Core_Concepts:
-    location: "Section 1: Core Concepts & Project Structure"
-    use_when: "Understanding ADK principles, project layout"
-    
-  Agent_Development:
-    LlmAgent: "Section 2: Agent Definitions"
-    Orchestration: "Section 3: Orchestration with Workflow Agents"
-    Custom_Agents: "Section 5: Building Custom Agents (BaseAgent)"
-    Multi_Agent: "Section 4: Multi-Agent Systems & Communication"
-    
-  Model_Configuration:
-    Gemini: "Section 6.1: Google Gemini Models"
-    Vertex_AI: "Section 6.1: AI Studio & Vertex AI"
-    LiteLLM: "Section 6.2-6.3: Other Models via LiteLLM"
-    
-  Tools_and_Functions:
-    Definition: "Section 7.1: Defining Function Tools"
-    ToolContext: "Section 7.2: The ToolContext Object"
-    All_Types: "Section 7.3: All Tool Types & Usage"
-    
-  State_Management:
-    Session: "Section 8.1: The Session Object"
-    State: "Section 8.2: State - Conversational Scratchpad"
-    Memory: "Section 8.3: Memory - Long-Term Knowledge"
-    Artifacts: "Section 8.4: Artifacts - Binary Data"
-    
-  Runtime_and_Events:
-    Runner: "Section 9.1: The Runner"
-    Event_Loop: "Section 9.2: The Event Loop"
-    Events: "Section 9.3: Event Object"
-    Async: "Section 9.4: Asynchronous Programming"
-    
-  Advanced_Topics:
-    Callbacks: "Section 10: Control Flow with Callbacks"
-    Authentication: "Section 11: Authentication for Tools"
-    Deployment: "Section 12: Deployment Strategies"
-    Evaluation: "Section 13: Evaluation and Safety"
-    Debugging: "Section 14: Debugging, Logging & Observability"
-    Performance: "Section 16: Performance Optimization"
-    Best_Practices: "Section 17: General Best Practices"
-```
-
-### 🔍 When to Consult GEMINI.md
-
-**MUST CONSULT** for these scenarios:
-1. **Creating new agents** → Section 2-5
-2. **Modifying pipelines** → Section 3 (Orchestration)
-3. **Adding tools/functions** → Section 7
-4. **State management changes** → Section 8
-5. **Callback implementation** → Section 10
-6. **Model configuration** → Section 6
-7. **Deployment questions** → Section 12
-8. **ANY uncertainty about ADK** → Search entire document
-
-**Example Workflow**:
-```python
-# Before implementing any ADK feature:
-# 1. Search GEMINI.md for the topic
-# 2. Read the relevant section completely
-# 3. Copy the example code pattern
-# 4. Adapt to project needs
-# 5. Test thoroughly
-```
-
-## 🚀 Quick Start Commands
-
+### Testes
 ```bash
-# Development Environment
-source .venv/bin/activate           # Activate virtual environment
-uv sync                             # Sync dependencies with uv
-python run_agent.py                 # Run agent locally
+# Executar todos os testes
+pytest tests/ -v
 
-# Testing
-pytest tests/ -v                    # Run all tests
-pytest tests/test_agent.py -k "test_pipeline"  # Specific test
+# Teste específico
+pytest tests/unit/test_agent.py -k "test_pipeline"
 
-# Server Operations  
-uvicorn app.server:app --reload --port 8000    # Dev server
-make run-local                      # Run with Makefile
-
-# Google Cloud Operations
-gcloud auth login                   # Authenticate GCP
-gcloud config set project [PROJECT_ID]  # Set project
-export GOOGLE_CLOUD_PROJECT=[PROJECT_ID]  # Set env var
-
-# AI Studio Mode (Alternative to Vertex AI)
-export GOOGLE_GENAI_USE_VERTEXAI=FALSE
-export GOOGLE_API_KEY=[YOUR_KEY]
-
-# ADK Reference Commands
-grep -n "SequentialAgent" GEMINI.md  # Find orchestration patterns
-grep -n "LlmAgent" GEMINI.md        # Find agent patterns
-grep -n "tools" GEMINI.md           # Find tool patterns
+# Com cobertura
+pytest tests/ --cov=app --cov-report=html
 ```
 
-## 📋 CRITICAL RULES (YOU MUST FOLLOW)
+### Validação de Código
+```bash
+# Lint e formatação
+make lint                          # Executa ruff e mypy
+ruff check app/                    # Apenas verificação
+ruff format app/                   # Formatação automática
 
-### 🔴 ABSOLUTE IMPERATIVES
-- **NEVER** modify files in `.venv/`, `uv.lock`, or `__pycache__/`
-- **NEVER** edit Google ADK internal files or Gemini SDK code
-- **NEVER** commit API keys or credentials (check `.env` files)
-- **NEVER** change the agent pipeline structure without architectural review
-- **NEVER** make ADK assumptions without checking GEMINI.md first
-- **ALWAYS** use `uv` for dependency management, NOT pip directly
-- **ALWAYS** run tests before modifying agent.py core logic
-- **ALWAYS** preserve the 5-stage pipeline architecture
-- **ALWAYS** consult GEMINI.md for ADK patterns before implementing
-
-### ⚠️ Agent Development Rules
-- **BEFORE** creating new agents: Read GEMINI.md Section 2 AND existing agent.py patterns
-- **WHEN** modifying pipelines: Check GEMINI.md Section 3 for orchestration patterns
-- **IF** changing models: Consult GEMINI.md Section 6, then update config.py
-- **ASK** before modifying: LoopAgent/SequentialAgent configurations (check GEMINI.md Section 3)
-
-### 📖 Documentation Consultation Protocol
-```python
-# MANDATORY WORKFLOW for ANY ADK-related task:
-def before_any_adk_work(task_description: str):
-    """Protocol for ADK development tasks."""
-    
-    # Step 1: Identify ADK component
-    component = identify_component(task_description)
-    
-    # Step 2: Find in GEMINI.md
-    section = ADK_KNOWLEDGE_MAP[component]
-    
-    # Step 3: Read complete section
-    knowledge = read_gemini_section(section)
-    
-    # Step 4: Extract pattern
-    pattern = extract_code_pattern(knowledge)
-    
-    # Step 5: Validate with existing code
-    validate_against_current_implementation(pattern)
-    
-    # Step 6: Implement with confidence
-    return implement_with_pattern(pattern)
+# Type checking
+mypy app/
 ```
 
-## 🏗️ Architecture & File Structure
+### Google Cloud
+```bash
+# Autenticação
+gcloud auth login
+gcloud config set project [PROJECT_ID]
+export GOOGLE_CLOUD_PROJECT=[PROJECT_ID]
 
-```
-facilitador/
-├── GEMINI.md                    # 📚 [SOURCE OF TRUTH] Complete ADK reference
-├── app/                          # [CORE - Handle with care]
-│   ├── agent.py                 # ⚡ CRITICAL: Main pipeline (1040+ lines)
-│   ├── server.py                # FastAPI server configuration
-│   ├── config.py                # Agent configuration & models
-│   └── utils/                   # Utilities
-│       ├── gcs.py              # GCS bucket operations
-│       ├── tracing.py          # OpenTelemetry setup
-│       └── typing.py           # Pydantic models
-├── frontend/                    # [CAN MODIFY] Streamlit UI
-├── deployment/                  # [CAN MODIFY] Deploy scripts
-├── tests/                       # [CAN MODIFY] Test suite
-├── notebooks/                   # [CAN MODIFY] Experiments
-├── .env                        # [NEVER COMMIT] Credentials
-└── pyproject.toml              # [CAREFUL] Dependencies
+# Deploy
+gcloud run deploy instagram-ads-generator \
+  --source . \
+  --region us-central1
 ```
 
-### File Modification Boundaries with ADK Context
+## 🔒 Regras Críticas
+
+### ⛔ NUNCA FAÇA
+- **NUNCA** modifique arquivos em `.venv/`, `uv.lock`, ou `__pycache__/`
+- **NUNCA** altere a estrutura do pipeline de 8 agentes sem aprovação
+- **NUNCA** remova validações de campos obrigatórios
+- **NUNCA** reduza as iterações de loop (mínimo 7-10)
+- **NUNCA** commite API keys ou credenciais
+- **NUNCA** gere vídeos (apenas imagens são suportadas)
+- **NUNCA** ignore o formato escolhido pelo usuário
+
+### ✅ SEMPRE FAÇA
+- **SEMPRE** gere exatamente 3 variações de anúncio
+- **SEMPRE** valide formato JSON antes de retornar
+- **SEMPRE** use `uv` para gerenciar dependências
+- **SEMPRE** mantenha o campo `formato_anuncio` como obrigatório
+- **SEMPRE** execute testes antes de fazer alterações em `app/agent.py`
+- **SEMPRE** documente limitações conhecidas
+- **SEMPRE** valide conformidade com políticas do Instagram
+
+## 📁 Estrutura de Arquivos
+
+```
+instagram_ads/
+├── app/                          # [CORE - Modificar com cuidado]
+│   ├── agent.py                 # ⚡ Pipeline principal (881 linhas)
+│   ├── config.py                # Configurações e modelos
+│   ├── server.py                # API FastAPI
+│   └── utils/                   # Utilitários
+│       ├── gcs.py              # Google Cloud Storage
+│       └── tracing.py          # OpenTelemetry
+├── frontend/                    # [PODE MODIFICAR] Interface web (se existir)
+├── deployment/                  # [PODE MODIFICAR] Scripts de deploy
+├── tests/                       # [PODE MODIFICAR] Testes
+│   ├── unit/                   # Testes unitários
+│   ├── integration/            # Testes de integração
+│   └── load_test/              # Testes de carga (Locust)
+├── .env                        # [NUNCA COMMITAR] Credenciais
+├── Makefile                    # Comandos automatizados
+├── pyproject.toml              # [CUIDADO] Configuração do projeto
+├── requirements.txt            # Dependências Python
+├── README.md                   # Documentação principal
+├── AGENTS.md                   # Guia de desenvolvimento
+└── contexto.md                # Este arquivo
+```
+
+### Modificação de Arquivos
 ```yaml
-CAN_MODIFY:
-  - frontend/**/*          # UI improvements
-  - tests/**/*            # Test additions
-  - notebooks/**/*        # Experimentation
-  - deployment/scripts/*  # Deploy automation
-  - docs/**/*            # Documentation
+PODE_MODIFICAR:
+  - frontend/**/*          # Interface web
+  - tests/**/*            # Adicionar testes
+  - deployment/**/*       # Scripts de deploy
+  - docs/**/*            # Documentação
 
-MODIFY_WITH_CAUTION:
-  - app/agent.py         # Check GEMINI.md Section 2-4 first
-  - app/server.py        # Check GEMINI.md Section 12 for deployment
-  - app/config.py        # Check GEMINI.md Section 6 for models
-  - pyproject.toml       # Use 'uv add', not manual edits
+MODIFICAR_COM_CUIDADO:
+  - app/agent.py         # Pipeline principal - testar sempre
+  - app/server.py        # API - manter compatibilidade
+  - app/config.py        # Configurações - validar mudanças
+  - pyproject.toml       # Usar 'uv add', não editar manual
 
-NEVER_TOUCH:
-  - .venv/**/*           # Virtual environment
-  - uv.lock              # Lock file (auto-generated)
-  - .git/**/*            # Git internals
-  - __pycache__/**/*     # Python cache
-  - *.pyc                # Compiled Python
-  
-READ_ONLY_REFERENCE:
-  - GEMINI.md            # ADK knowledge base (never edit, only read)
+NUNCA_MODIFICAR:
+  - .venv/**/*           # Ambiente virtual
+  - uv.lock              # Lock file do uv
+  - __pycache__/**/*     # Cache Python
+  - .git/**/*            # Controle de versão
 ```
 
-## 🎨 Code Style & Standards
+## 🎨 Padrões de Código
 
-### Python Code Conventions (ADK-Aligned)
-
+### Python/ADK
 ```python
-# ✅ GOOD: Following GEMINI.md patterns (Section 2.1)
-from google.adk.agents import LlmAgent, SequentialAgent
-from google.adk.tools import FunctionTool
+# ✅ BOM: Seguindo padrões ADK
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Literal
+import logging
 
-class ImplementationTask(BaseModel):
-    """Model for a single implementation task (per GEMINI.md Section 7.1)."""
-    id: str = Field(description="Unique identifier")
-    category: Literal["MODEL", "PROVIDER", "WIDGET"]
-    
-    def execute(self, context: ToolContext) -> Dict[str, Any]:
-        """Execute with ToolContext as per GEMINI.md Section 7.2."""
+logger = logging.getLogger(__name__)
+
+class AdGenerator:
+    """Gerador de anúncios seguindo padrões ADK."""
+
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.validate_config()
+
+    async def generate_ads(
+        self,
+        input_data: Dict[str, Any]
+    ) -> List[AdItem]:
+        """Gera 3 variações de anúncio."""
         try:
-            # Access runtime info via context
-            session = context.session
-            state = session.state
-            
-            result = self._process(state)
-            return {"status": "success", "data": result}
+            validated = self._validate_input(input_data)
+            ads = await self._process_pipeline(validated)
+            return self._ensure_three_variations(ads)
         except Exception as e:
-            logger.error(f"Task {self.id} failed: {e}")
+            logger.error(f"Erro na geração: {e}")
             raise
 
-# ❌ BAD: Not following ADK patterns
-class task:
-    def do_something(self, data):
-        # Missing ToolContext, no types, poor structure
-        try:
-            return data
-        except:
-            print("error")
+# ❌ RUIM: Não seguindo padrões
+class generator:
+    def make_ad(self, data):
+        # Sem tipos, sem validação, sem tratamento de erro
+        return data
 ```
 
-### Agent Pipeline Patterns (From GEMINI.md Section 3)
-
+### Configuração de Modelos LLM
 ```python
-# ✅ GOOD: Structured pipeline following GEMINI.md orchestration
-from google.adk.agents import SequentialAgent, LoopAgent
-
-# Based on GEMINI.md Section 3.1: Sequential Execution
-sequential_agent = SequentialAgent(
-    name="flutter_pipeline",
-    jobs=[
-        analyze_context_agent,    # Step 1
-        create_plan_agent,        # Step 2
-        LoopAgent(               # Step 3: Iterative (Section 3.3)
-            name="implementation_loop",
-            loop_job=code_generation_agent,
-            max_iterations=config.max_task_iterations,
-            post_job_callback=collect_code_snippets_callback  # Section 10
-        ),
-        assembly_agent           # Step 4
-    ],
-    enable_logging=config.enable_detailed_logging
-)
-
-# ❌ BAD: Not using ADK orchestration patterns
-agent = Agent()
-agent.run(data)  # No structure, no patterns from GEMINI.md
-```
-
-## 🧪 Testing Strategy
-
-### Test-Driven Development for ADK Agents
-
-```bash
-# Following GEMINI.md Section 13: Evaluation patterns
-
-# 1. Create evaluation dataset (per GEMINI.md)
-cat > tests/integration/facilitador.evalset.json << 'EOF'
-{
-  "eval_name": "Flutter Generation Test",
-  "agents": ["facilitador"],
-  "examples": [
-    {
-      "input": "Create login state with Riverpod",
-      "expected_output": "StateNotifier implementation"
-    }
-  ]
+# Modelos por tarefa (em config.py)
+MODEL_CONFIG = {
+    "worker": "gemini-2.5-flash",     # Tarefas rápidas
+    "critic": "gemini-2.5-pro",       # Revisões críticas
+    "max_tokens": 1024,
+    "temperature": 0.7,
+    "top_p": 0.9
 }
-EOF
 
-# 2. Run ADK evaluation (GEMINI.md Section 13.1)
-adk eval tests/integration/facilitador.evalset.json
-
-# 3. For unit tests, follow patterns from GEMINI.md
-pytest tests/ --cov=app
+# Iterações máximas
+ITERATION_LIMITS = {
+    "code_review": 8,
+    "plan_review": 7,
+    "final_validation": 10,
+    "max_tasks": 20
+}
 ```
 
-### Integration Testing with Gemini (Per GEMINI.md Section 6)
+## 🧪 Estratégia de Testes
 
+### Testes Unitários
 ```python
-# Pattern from GEMINI.md for mocking Gemini calls
-from unittest.mock import patch
-from google.genai import types as genai_types
+# tests/unit/test_models.py
+import pytest
+from app.config import AdItem, AdCopy, AdVisual
 
-@patch('google.genai.models.GenerativeModel')
-def test_pipeline_with_mock_llm(mock_model):
-    """Test following GEMINI.md mocking patterns."""
-    # Configure mock per GEMINI.md Section 6.1
-    mock_response = genai_types.GenerateContentResponse(...)
-    mock_model.return_value.generate_content.return_value = mock_response
-    
-    # Test your pipeline
-    result = sequential_agent.run_async(...)
-    assert result.success
+def test_ad_item_validation():
+    """Testa validação do modelo AdItem."""
+    valid_data = {
+        "landing_page_url": "https://example.com",
+        "formato": "Feed",
+        "copy": {
+            "headline": "Teste",
+            "corpo": "Corpo do anúncio",
+            "cta_texto": "Saiba mais"
+        },
+        "visual": {
+            "descricao_imagem": "Imagem teste",
+            "aspect_ratio": "1:1"
+        },
+        "cta_instagram": "Saiba mais",
+        "fluxo": "Instagram → Landing",
+        "referencia_padroes": "Padrão X",
+        "contexto_landing": "Contexto Y"
+    }
+
+    ad = AdItem(**valid_data)
+    assert ad.formato == "Feed"
+    assert ad.visual.aspect_ratio == "1:1"
+
+def test_invalid_formato():
+    """Testa rejeição de formato inválido."""
+    with pytest.raises(ValueError):
+        AdItem(formato="TikTok", ...)  # Deve falhar
 ```
 
-## 🔒 Security & API Management
-
-### Environment Configuration (GEMINI.md Section 6.1)
-
-```bash
-# For Vertex AI (Production) - per GEMINI.md
-export GOOGLE_GENAI_USE_VERTEXAI=True
-export GOOGLE_CLOUD_PROJECT=your-project-id
-export GOOGLE_CLOUD_LOCATION=us-central1
-
-# For AI Studio (Development) - per GEMINI.md
-export GOOGLE_GENAI_USE_VERTEXAI=False
-export GOOGLE_API_KEY=your-api-key  # NEVER commit
-```
-
-## 🔄 Git Workflow
-
-### Branch Strategy with ADK Context
-
-```bash
-# Feature development
-git checkout -b feature/agent-improvement
-
-# Before committing agent changes, verify against GEMINI.md
-grep -n "your_pattern" GEMINI.md  # Verify you followed patterns
-
-git add app/agent.py tests/
-git commit -m "feat(agent): add retry logic per GEMINI.md Section 10"
-
-# Reference GEMINI.md sections in commits when applicable
-git commit -m "fix(pipeline): fix LoopAgent per GEMINI.md 3.3"
-```
-
-## 🎯 Development Workflows
-
-### Workflow 1: Adding New Agent Capability (ADK-Guided)
-
-```bash
-# 1. RESEARCH: Check GEMINI.md for patterns
-grep -n "LlmAgent\|output_schema" GEMINI.md
-# Read Section 2.2 for advanced configuration
-
-# 2. EXPLORE: Understand current implementation
-grep -n "SequentialAgent\|LoopAgent" app/agent.py
-
-# 3. PLAN: Design based on GEMINI.md patterns
-echo "Plan: Add structured output per GEMINI.md Section 2.2"
-echo "1. Define Pydantic model (Section 7.1)"
-echo "2. Add output_schema to agent (Section 2.2)"
-echo "3. Update callbacks (Section 10)"
-
-# 4. IMPLEMENT: Follow GEMINI.md examples exactly
-# Copy pattern from GEMINI.md, adapt to your needs
-
-# 5. VALIDATE: Use ADK eval (Section 13)
-adk eval tests/integration/new_capability.evalset.json
-```
-
-### Workflow 2: Debugging Pipeline Issues (With GEMINI.md)
-
+### Testes de Integração
 ```python
-# Based on GEMINI.md Section 14: Debugging & Observability
+# tests/integration/test_pipeline.py
+async def test_full_pipeline():
+    """Testa pipeline completo de geração."""
+    input_data = {
+        "landing_page_url": "https://test.com",
+        "objetivo_final": "vendas",
+        "perfil_cliente": "Empreendedores 25-40 anos",
+        "formato_anuncio": "Feed"
+    }
 
-# Enable detailed logging per GEMINI.md
-config.enable_detailed_logging = True
+    result = await run_pipeline(input_data)
 
-# Add debug callback (GEMINI.md Section 10.2)
-from google.adk.agents.callback_context import CallbackContext
-
-def debug_callback(callback_context: CallbackContext) -> None:
-    """Debug callback per GEMINI.md Section 10 patterns."""
-    session = callback_context._invocation_context.session
-    print(f"Stage: {callback_context.agent_name}")
-    print(f"State keys: {callback_context.state.keys()}")
-    print(f"Events count: {len(session.events)}")
-    
-# Attach per GEMINI.md callback patterns
-problem_agent.post_job_callback = debug_callback
+    assert len(result) == 3  # Sempre 3 variações
+    assert all(ad["formato"] == "Feed" for ad in result)
+    assert all("landing_page_url" in ad for ad in result)
 ```
 
-### Workflow 3: Implementing Custom Tools (GEMINI.md Section 7)
+## ⚠️ Limitações Conhecidas
 
+### 🔴 Críticas
+1. **Não extrai conteúdo real da landing page**
+   - Usa apenas `google_search` (resultados superficiais)
+   - Não acessa HTML/conteúdo real das páginas
+   - **Impacto**: Copy pode não alinhar com landing page real
+
+2. **Sem framework estruturado de copywriting**
+   - Não implementa StoryBrand ou metodologias similares
+   - **Impacto**: Qualidade do copy depende do modelo LLM
+
+3. **Sem fetch HTTP real**
+   - Não pode verificar se landing page existe
+   - **Impacto**: Pode gerar anúncios para páginas inválidas
+
+### 🟡 Moderadas
+1. **Contexto limitado a informações públicas indexadas**
+   - Depende do que o Google já indexou
+   - **Workaround**: Fornecer descrição detalhada manualmente
+
+2. **Alinhamento parcial com conteúdo da landing**
+   - Copy pode divergir do real conteúdo
+   - **Workaround**: Revisar e ajustar manualmente
+
+3. **Sem rastreabilidade de fonte**
+   - Não há evidências do conteúdo extraído
+   - **Workaround**: Logs detalhados do processo
+
+### 🟢 Melhorias Planejadas
+1. Implementar `web_fetch` para acesso real a páginas
+2. Adicionar parser HTML estruturado (BeautifulSoup)
+3. Integrar framework StoryBrand
+4. Adicionar cache para URLs já processadas
+5. Melhorar rastreabilidade com offsets/quotes
+
+## 🔧 Solução de Problemas
+
+### Problema: Pipeline trava na geração
+```bash
+# Verificar logs
+tail -f logs/app.log
+
+# Aumentar timeout
+export PIPELINE_TIMEOUT=600
+
+# Verificar limites de iteração em config.py
+grep -n "max_iterations" app/config.py
+```
+
+### Problema: Validação final falhando repetidamente
 ```python
-# STEP 1: Read GEMINI.md Section 7 completely
-# STEP 2: Follow the FunctionTool pattern
+# Debugar validação
+import json
 
-from google.adk.tools import FunctionTool
-from google.adk.tools.tool_context import ToolContext
+# Verificar JSON gerado
+with open("debug_output.json", "w") as f:
+    json.dump(generated_ads, f, indent=2)
 
-def my_custom_tool(
-    param1: str,
-    param2: int,
-    context: ToolContext  # GEMINI.md Section 7.2 requirement
-) -> dict:
-    """Custom tool following GEMINI.md patterns."""
-    # Access session via context
-    session = context.session
-    current_state = session.state
-    
-    # Tool implementation
-    result = process_data(param1, param2)
-    
-    # Update state if needed
-    session.state["tool_result"] = result
-    
-    return {"status": "success", "result": result}
-
-# Register as per GEMINI.md
-custom_tool = FunctionTool(my_custom_tool)
+# Validar estrutura
+for ad in generated_ads:
+    assert all(key in ad for key in REQUIRED_KEYS)
 ```
 
-### Workflow 4: Multi-Agent Communication (GEMINI.md Section 4)
+### Problema: Erro de API (Gemini/OpenAI)
+```bash
+# Verificar credenciais
+echo $GOOGLE_API_KEY
+echo $OPENAI_API_KEY
 
+# Testar conexão
+curl -H "Authorization: Bearer $GOOGLE_API_KEY" \
+  https://generativelanguage.googleapis.com/v1/models
+
+# Verificar quota
+# Acessar console.cloud.google.com
+```
+
+### Problema: Memória/Performance
+```bash
+# Monitorar uso de memória
+htop
+
+# Profile do código
+python -m cProfile -o profile.stats app/agent.py
+
+# Analisar profile
+python -m pstats profile.stats
+```
+
+## 🚀 Workflows de Desenvolvimento
+
+### Workflow 1: Adicionar Nova Validação
+```bash
+# 1. Criar teste primeiro (TDD)
+echo "def test_new_validation():" >> tests/unit/test_validations.py
+
+# 2. Implementar validação
+vim app/agent.py  # Adicionar lógica
+
+# 3. Executar testes
+pytest tests/unit/test_validations.py -v
+
+# 4. Integrar ao pipeline
+# Adicionar ao final_validation agent
+```
+
+### Workflow 2: Melhorar Extração de Landing Page
 ```python
-# Before implementing, read GEMINI.md Section 4 entirely
+# 1. Avaliar limitação atual
+# landing_page_analyzer usa apenas google_search
 
-# Pattern from GEMINI.md Section 4.2: Inter-Agent Communication
-from google.adk.agents import LlmAgent
+# 2. Implementar solução
+# Opção A: Adicionar web_fetch tool
+from tools import web_fetch
 
-# Producer agent (GEMINI.md pattern)
-producer = LlmAgent(
-    name="producer",
-    model="gemini-2.5-flash",
-    output_key="produced_data",  # Saves to state
-    instruction="Generate data and save to state"
-)
+async def extract_real_content(url: str):
+    html = await web_fetch(url)
+    parsed = parse_html(html)
+    return extract_key_info(parsed)
 
-# Consumer agent (GEMINI.md pattern)  
-consumer = LlmAgent(
-    name="consumer",
-    model="gemini-2.5-flash",
-    instruction="Process the data from {produced_data}",  # Reads from state
-    output_key="final_result"
-)
+# 3. Testar com URLs reais
+test_urls = [
+    "https://example1.com",
+    "https://example2.com"
+]
 
-# Orchestrate per GEMINI.md Section 3.1
-pipeline = SequentialAgent(
-    name="producer_consumer_pipeline",
-    jobs=[producer, consumer]
-)
+# 4. Comparar resultados
+# google_search vs web_fetch
 ```
 
-## 🚨 Troubleshooting Guide (Enhanced with GEMINI.md)
-
-### Problem: "Pipeline hangs at code generation"
-
-```bash
-# Solution 1: Check GEMINI.md Section 3.3 for LoopAgent limits
-grep -n "max_iterations" GEMINI.md
-# Apply the pattern found
-
-# Solution 2: Check GEMINI.md Section 9 for timeout patterns
-grep -n "timeout\|async" GEMINI.md
-
-# Solution 3: Enable debug per GEMINI.md Section 14
-export ADK_DEBUG=true
-```
-
-### Problem: "Agent not using tools correctly"
-
-```bash
-# Consult GEMINI.md Section 7 immediately
-less +/Tools GEMINI.md
-
-# Verify tool definition matches GEMINI.md patterns
-# Check ToolContext usage (Section 7.2)
-# Ensure function signatures match examples
-```
-
-### Problem: "State not persisting between agents"
-
-```bash
-# Read GEMINI.md Section 8 completely
-grep -n "Session\|State\|Memory" GEMINI.md
-
-# Common solution from GEMINI.md:
-# Use output_key and proper state management
-```
-
-### Problem: "Deployment failing"
-
-```bash
-# GEMINI.md Section 12 has complete deployment guide
-grep -n "Deployment\|Cloud Run\|Vertex" GEMINI.md
-
-# Follow the exact deployment pattern for your target
-```
-
-## 📊 Performance Monitoring (Per GEMINI.md Section 16)
-
-### Implementing ADK Metrics
-
+### Workflow 3: Debug de Geração
 ```python
-# Based on GEMINI.md Section 16: Performance Optimization
-import time
+# 1. Ativar modo debug
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# 2. Adicionar checkpoints
+def checkpoint(stage: str, data: Any):
+    print(f"=== {stage} ===")
+    print(json.dumps(data, indent=2))
+    input("Press Enter to continue...")
+
+# 3. Rastrear pipeline
+checkpoint("After input_processor", processed_input)
+checkpoint("After landing_analyzer", landing_context)
+# etc...
+```
+
+## 📊 Métricas e Monitoramento
+
+### KPIs do Sistema
+- **Taxa de Sucesso**: % de gerações sem erro
+- **Tempo Médio**: Tempo total do pipeline
+- **Iterações por Etapa**: Quantas revisões cada agente faz
+- **Qualidade do Output**: Validações passadas na primeira tentativa
+
+### Implementação de Métricas
+```python
 from dataclasses import dataclass
-from google.adk.agents.invocation_context import InvocationContext
+from time import time
 
 @dataclass
 class PipelineMetrics:
-    """Metrics following GEMINI.md patterns."""
     total_time: float
-    tasks_completed: int
-    review_iterations: int
-    tokens_used: int
-    success_rate: float
-    events_generated: int  # Per GEMINI.md Section 9.3
-    
-def track_metrics(context: InvocationContext) -> PipelineMetrics:
-    """Track metrics per GEMINI.md Section 14 & 16."""
-    session = context.session
-    events = session.events
-    
-    return PipelineMetrics(
-        total_time=time.time() - context.start_time,
-        tasks_completed=len(context.state.get("completed_tasks", [])),
-        review_iterations=context.state.get("review_count", 0),
-        tokens_used=calculate_token_usage(events),
-        success_rate=calculate_success_rate(events),
-        events_generated=len(events)
-    )
+    iterations_per_stage: Dict[str, int]
+    validation_passes: int
+    errors: List[str]
+
+    def log_metrics(self):
+        logger.info(f"Pipeline concluído em {self.total_time}s")
+        logger.info(f"Iterações: {self.iterations_per_stage}")
+        logger.info(f"Taxa de sucesso: {self.success_rate}%")
 ```
 
-## 🔧 Advanced Configuration (GEMINI.md-Aligned)
+## 🔄 Processo de Contribuição
 
-### Model Configuration (GEMINI.md Section 6)
-
-```python
-# Following GEMINI.md Section 6.1 for Gemini configuration
-from google.genai import types as genai_types
-
-# Per GEMINI.md Section 2.2: Advanced LlmAgent Configuration
-gen_config = genai_types.GenerateContentConfig(
-    temperature=0.2,          # GEMINI.md recommended for deterministic
-    top_p=0.9,               # Per GEMINI.md Section 6
-    top_k=40,                # Standard per GEMINI.md
-    max_output_tokens=1024,  # Adjust per use case
-    stop_sequences=["## END"] # Custom stop per GEMINI.md
-)
-
-# Task-specific models per GEMINI.md patterns
-TASK_MODEL_MAPPING = {
-    "MODEL": "gemini-2.5-flash",      # Fast per GEMINI.md
-    "WIDGET": "gemini-2.5-pro",       # Quality per GEMINI.md
-    "SERVICE": "gemini-2.5-pro",      # Critical per GEMINI.md
-    "PROVIDER": "gemini-2.5-flash",   # Balance per GEMINI.md
-}
-```
-
-### Callback Configuration (GEMINI.md Section 10)
-
-```python
-# Following GEMINI.md Section 10: Control Flow with Callbacks
-
-from google.adk.agents.callback_context import CallbackContext
-
-# Pre-job callback (GEMINI.md Section 10.2)
-def pre_job_callback(context: CallbackContext) -> None:
-    """Pre-execution per GEMINI.md patterns."""
-    logger.info(f"Starting {context.agent_name}")
-    context.state["start_time"] = time.time()
-
-# Post-job callback (GEMINI.md Section 10.2)
-def post_job_callback(context: CallbackContext) -> None:
-    """Post-execution per GEMINI.md patterns."""
-    duration = time.time() - context.state["start_time"]
-    logger.info(f"Completed {context.agent_name} in {duration}s")
-    
-# Error callback (GEMINI.md pattern)
-def error_callback(context: CallbackContext, error: Exception) -> None:
-    """Error handling per GEMINI.md."""
-    logger.error(f"Error in {context.agent_name}: {error}")
-    # Implement retry logic per GEMINI.md Section 17
-```
-
-## 📝 Project-Specific Guidelines
-
-### Flutter Code Generation Standards
-- Always use Riverpod for state management
-- Include Freezed annotations for models
-- Generate comprehensive error handling
-- Add widget tests for UI components
-- Follow Material Design guidelines
-
-### ADK Agent Best Practices (From GEMINI.md Section 17)
-- Keep agents focused (single responsibility)
-- Use callbacks for state management (Section 10)
-- Implement proper error boundaries
-- Log all critical decisions (Section 14)
-- Version your prompts
-- **ALWAYS verify patterns against GEMINI.md**
-
-### GCP Integration Requirements
-- Use regional buckets (southamerica-east1)
-- Enable Cloud Logging for all agents
-- Implement trace correlation IDs
-- Monitor API quotas daily
-- Set up alerts for failures
-
-## 🎓 Learning Resources & References
-
-### Primary References (In Order of Priority)
-1. **GEMINI.md** - Complete ADK reference (ALWAYS check first)
-2. **app/agent.py** - Current implementation patterns
-3. **tests/** - Working examples and test patterns
-4. **AGENTS.md** - Additional agent patterns
-5. **notebooks/** - Experimental implementations
-
-### Quick Reference Protocol
+### Git Flow
 ```bash
-# When stuck, follow this sequence:
-1. grep "your_problem" GEMINI.md
-2. Read the entire relevant section
-3. Check app/agent.py for current usage
-4. Implement following both patterns
-5. Test thoroughly
+# 1. Criar branch para feature
+git checkout -b feature/melhoria-landing-analyzer
 
-# Common searches
-grep -n "LlmAgent\|BaseAgent" GEMINI.md     # Agent types
-grep -n "SequentialAgent\|Loop" GEMINI.md    # Orchestration
-grep -n "Tool\|Function" GEMINI.md           # Tools
-grep -n "State\|Session" GEMINI.md           # State management
-grep -n "Callback" GEMINI.md                 # Callbacks
-grep -n "Deploy\|Cloud" GEMINI.md            # Deployment
+# 2. Fazer mudanças
+# ... editar arquivos ...
+
+# 3. Testar
+make test
+
+# 4. Lint
+make lint
+
+# 5. Commit
+git add .
+git commit -m "feat: melhoria na extração de landing pages"
+
+# 6. Push
+git push origin feature/melhoria-landing-analyzer
+
+# 7. Criar PR
+# Via GitHub/GitLab
 ```
 
-### Emergency Commands
-```bash
-# If agent breaks, check against GEMINI.md
-diff <(grep -A 10 "pattern" app/agent.py) <(grep -A 10 "pattern" GEMINI.md)
+### Checklist para PR
+- [ ] Testes passando (`make test`)
+- [ ] Lint sem erros (`make lint`)
+- [ ] Documentação atualizada
+- [ ] Não quebra compatibilidade
+- [ ] Segue padrões do projeto
+- [ ] Não expõe credenciais
 
-# Validate structure against GEMINI.md
-python -c "from app.agent import root_agent; print(root_agent.name)"
+## 📚 Referências
 
-# Test with ADK eval (GEMINI.md Section 13)
-adk eval tests/integration/facilitador.evalset.json --debug
-```
+### Documentação Principal
+- [README.md](./README.md) - Visão geral e status atual
+- [AGENTS.md](./AGENTS.md) - Guidelines de desenvolvimento
+- [Google ADK Docs](https://cloud.google.com/adk/docs) - Documentação oficial ADK
+
+### APIs e Serviços
+- [Gemini API](https://ai.google.dev/docs) - Documentação Gemini
+- [Instagram Ads Policies](https://www.facebook.com/policies/ads/) - Políticas de anúncios
+- [FastAPI](https://fastapi.tiangolo.com/) - Framework web
+
+### Ferramentas
+- [uv](https://github.com/astral-sh/uv) - Gerenciador de pacotes Python
+- [Ruff](https://github.com/astral-sh/ruff) - Linter Python
+- [Pytest](https://docs.pytest.org/) - Framework de testes
+
+## 🎯 Regra de Ouro
+
+**Antes de qualquer modificação no pipeline:**
+
+1. **ENTENDA** - Leia o código atual e documentação
+2. **TESTE** - Escreva testes para sua mudança
+3. **IMPLEMENTE** - Faça a modificação
+4. **VALIDE** - Execute todos os testes
+5. **DOCUMENTE** - Atualize documentação se necessário
+6. **REVISE** - Peça review de código
+
+**LEMBRE-SE**:
+- O sistema DEVE sempre gerar 3 variações
+- O formato é controlado pelo USUÁRIO, não pelo sistema
+- Validações são críticas - não as pule
+- Limitações conhecidas devem ser documentadas
 
 ---
 
-## 🏆 GOLDEN RULE
-
-**BEFORE ANY ADK-RELATED TASK:**
-1. **STOP** - Don't assume anything
-2. **SEARCH** - Find the topic in GEMINI.md
-3. **STUDY** - Read the complete section
-4. **SAMPLE** - Copy the example pattern
-5. **SYNTHESIZE** - Adapt to project needs
-6. **SCRUTINIZE** - Test thoroughly
-
-**REMEMBER**: 
-- GEMINI.md is your ADK bible - it contains 1531 lines of validated patterns and examples
-- Every ADK question has an answer in GEMINI.md
-- When in doubt, the answer is in GEMINI.md
-- Failed? Check if you followed GEMINI.md patterns exactly
-
-**SUCCESS CRITERIA**: 
-- Code generated follows GEMINI.md patterns exactly
-- All ADK features implemented per documentation
-- Zero assumptions made without GEMINI.md verification
-- Pipeline maintains integrity per GEMINI.md Section 3
-- Flutter code passes both agent and human review
-
-**THE FACILITATOR PROJECT DEPENDS ON YOUR ADHERENCE TO ADK BEST PRACTICES AS DOCUMENTED IN GEMINI.md**
+**Última atualização**: 2025-09-13
+**Versão**: 2.0.0 (Reescrito para Instagram Ads Generator)
