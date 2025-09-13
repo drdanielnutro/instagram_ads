@@ -1,3 +1,4 @@
+
 # Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import json
 import logging
 import re
@@ -24,963 +24,747 @@ from google.adk.agents.callback_context import CallbackContext
 from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event, EventActions
 from google.adk.tools import google_search
-from google.adk.tools.agent_tool import AgentTool
 from google.genai.types import Content, Part
 from pydantic import BaseModel, Field
 
 from .config import config
 
 
-# --- Structured Output Models ---
-class SearchQuery(BaseModel):
-    """Model representing a specific search query for web search."""
+# ────────────────────────────────────────────────────────────────────────────────
+# Structured Models
+# ────────────────────────────────────────────────────────────────────────────────
 
-    search_query: str = Field(
-        description="A highly specific and targeted query for web search."
-    )
+class SearchQuery(BaseModel):
+    search_query: str = Field(description="A highly specific and targeted query for web search.")
 
 
 class Feedback(BaseModel):
-    """Model for providing evaluation feedback on research quality."""
+    grade: Literal["pass", "fail"]
+    comment: str
+    follow_up_queries: list[SearchQuery] | None = None
 
-    grade: Literal["pass", "fail"] = Field(
-        description="Evaluation result. 'pass' if the research is sufficient, 'fail' if it needs revision."
-    )
-    comment: str = Field(
-        description="Detailed explanation of the evaluation, highlighting strengths and/or weaknesses of the research."
-    )
-    follow_up_queries: list[SearchQuery] | None = Field(
-        default=None,
-        description="A list of specific, targeted follow-up search queries needed to fix research gaps. This should be null or empty if the grade is 'pass'.",
-    )
+
+# Modelos documentais para Ads (auxiliam reviewers/refiners; não são usados para serialização direta)
+class AdCopy(BaseModel):
+    headline: str
+    corpo: str
+    cta_texto: str
+
+
+class AdVisual(BaseModel):
+    descricao_imagem: str  # MUDANÇA: era descricao
+    aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
+    # REMOVIDO: duracao (apenas imagens, sem vídeos)
+
+
+class AdItem(BaseModel):
+    landing_page_url: str
+    formato: Literal["Reels", "Stories", "Feed"]
+    copy: AdCopy  # Manter renomeado
+    visual: AdVisual
+    cta_instagram: Literal["Saiba mais", "Enviar mensagem", "Ligar", "Comprar agora", "Cadastre-se"]
+    fluxo: str
+    referencia_padroes: str
+    contexto_landing: str  # NOVO CAMPO: contexto extraído da landing page
 
 
 class ImplementationTask(BaseModel):
-    """Model for a single implementation task."""
-    id: str = Field(description="Unique identifier for the task, e.g., 'TASK-001'.")
-    category: Literal["MODEL", "PROVIDER", "WIDGET", "SERVICE", "UTIL"]
-    title: str = Field(description="A short, descriptive title for the task.")
-    description: str = Field(description="Detailed description of what to implement.")
-    file_path: str = Field(description="The full path where the file should be created or modified.")
+    """
+    Ampliado para Ads sem quebrar compatibilidade com categorias pré-existentes de Flutter.
+    """
+    id: str
+    category: Literal[
+        # Legado Flutter:
+        "MODEL", "PROVIDER", "WIDGET", "SERVICE", "UTIL",
+        # Ads (alto rigor por etapa):
+        "STRATEGY",          # diretrizes estratégicas (público, promessa, posicionamento)
+        "RESEARCH",          # referências/padrões
+        "COPY_DRAFT",        # rascunho de copy
+        "COPY_QA",           # validação copy
+        "VISUAL_DRAFT",      # rascunho de visual
+        "VISUAL_QA",         # validação visual
+        "COMPLIANCE_QA",     # validação de conformidade (políticas Instagram/saúde)
+        "ASSEMBLY"           # montagem do JSON final
+    ]
+    title: str
+    description: str
+    file_path: str
     action: Literal["CREATE", "MODIFY", "EXTEND"]
-    dependencies: list[str] = Field(description="A list of task IDs that must be completed before this one.")
+    dependencies: list[str]
+
 
 class ImplementationPlan(BaseModel):
-    """Model for the entire implementation plan."""
-    feature_name: str = Field(description="A descriptive name for the entire feature.")
-    estimated_time: str = Field(description="A high-level time estimate, e.g., '2-3 hours'.")
+    feature_name: str
+    estimated_time: str
     implementation_tasks: list[ImplementationTask]
 
 
-# --- Callbacks ---
+# ────────────────────────────────────────────────────────────────────────────────
+# Callbacks utilitários
+# ────────────────────────────────────────────────────────────────────────────────
+
 def collect_code_snippets_callback(callback_context: CallbackContext) -> None:
-    """Collects approved code snippets throughout the execution pipeline."""
-    session = callback_context._invocation_context.session
+    """
+    Coleta/empilha fragmentos aprovados (podem ser JSONs parciais por categoria).
+    """
     code_snippets = callback_context.state.get("approved_code_snippets", [])
-    
-    # Collect any newly approved code snippet
     if "generated_code" in callback_context.state:
-        code_snippet = callback_context.state["generated_code"]
-        task_info = callback_context.state.get("current_task_info", {})
-        
+        task_info = callback_context.state.get("current_task_info", {}) or {}
         code_snippets.append({
             "task_id": task_info.get("id", "unknown"),
+            "category": task_info.get("category", "UNKNOWN"),
             "task_description": task_info.get("description", ""),
             "file_path": task_info.get("file_path", ""),
-            "code": code_snippet
+            "code": callback_context.state["generated_code"]
         })
-    
     callback_context.state["approved_code_snippets"] = code_snippets
 
 
-
-
 def unpack_extracted_input_callback(callback_context: CallbackContext) -> None:
-    """Unpacks the extracted_input dictionary into the session state."""
-    if "extracted_input" in callback_context.state:
-        extracted_input_str = callback_context.state["extracted_input"]
-        try:
-            if isinstance(extracted_input_str, str):
-                if "```json" in extracted_input_str:
-                    extracted_input_str = (
-                        extracted_input_str.split("```json")[1]
-                        .split("```")[0]
-                        .strip()
-                    )
-                extracted_input = json.loads(extracted_input_str)
-            elif isinstance(extracted_input_str, dict):
-                extracted_input = extracted_input_str
-            else:
-                return
+    """
+    Prepara estado a partir do extracted_input.
+    Suporta novo formato (landing_page_url, objetivo_final, perfil_cliente) e legado.
+    """
+    if "extracted_input" not in callback_context.state:
+        return
 
-            if isinstance(extracted_input, dict):
-                for key, value in extracted_input.items():
-                    callback_context.state[key] = value
-                
-                # Store original documents in a separate structure for selective access
-                docs = {}
-                if "especificacao_tecnica_da_ui" in callback_context.state:
-                    docs["ui_spec"] = callback_context.state.get("especificacao_tecnica_da_ui", "")
-                if "contexto_api" in callback_context.state:
-                    docs["api_context"] = callback_context.state.get("contexto_api", "")
-                if "fonte_da_verdade_ux" in callback_context.state:
-                    docs["ux_truth"] = callback_context.state.get("fonte_da_verdade_ux", "")
-                
-                if docs:
-                    callback_context.state["original_docs"] = docs
-                    logging.info(f"Stored original docs with keys: {list(docs.keys())}")
-        except (json.JSONDecodeError, IndexError):
-            pass
+    raw = callback_context.state["extracted_input"]
+    try:
+        if isinstance(raw, str):
+            if "```json" in raw:
+                raw = raw.split("```json")[1].split("```")[0].strip()
+            data = json.loads(raw)
+        elif isinstance(raw, dict):
+            data = raw
+        else:
+            return
+
+        if isinstance(data, dict):
+            for k, v in data.items():
+                callback_context.state[k] = v
+
+            # Compatibilidade com documentos legados (não usados em Ads, mas preservados)
+            docs = {
+                "ui_spec": callback_context.state.get("especificacao_tecnica_da_ui", "") or "",
+                "api_context": callback_context.state.get("contexto_api", "") or "",
+                "ux_truth": callback_context.state.get("fonte_da_verdade_ux", "") or "",
+            }
+            callback_context.state["original_docs"] = docs
+
+            # Garante as novas chaves
+            for k in ["landing_page_url", "objetivo_final", "perfil_cliente", "formato_anuncio"]:
+                if k not in callback_context.state:
+                    callback_context.state[k] = ""
+    except (json.JSONDecodeError, IndexError):
+        pass
 
 
 def make_failure_handler(state_key: str, reason: str):
-    """Creates a callback that marks a failure if the review result isn't pass."""
-
     def _callback(callback_context: CallbackContext) -> None:
         result = callback_context.state.get(state_key)
-        if isinstance(result, dict):
-            grade = result.get("grade")
-        else:
-            grade = result
+        grade = result.get("grade") if isinstance(result, dict) else result
         if grade != "pass":
             callback_context.state[f"{state_key}_failed"] = True
             callback_context.state[f"{state_key}_failure_reason"] = reason
-
     return _callback
 
 
 def task_execution_failure_handler(callback_context: CallbackContext) -> None:
-    """Marks failure if task loop ends before completing all tasks."""
     tasks = callback_context.state.get("implementation_tasks", [])
-    index = callback_context.state.get("current_task_index", 0)
-    if index < len(tasks):
+    idx = callback_context.state.get("current_task_index", 0)
+    if idx < len(tasks):
         callback_context.state["task_execution_failed"] = True
-        callback_context.state[
-            "task_execution_failure_reason"
-        ] = "Limite de tentativas atingido antes de completar todas as tarefas."
+        callback_context.state["task_execution_failure_reason"] = (
+            "Limite de tentativas atingido antes de completar todas as tarefas."
+        )
 
 
-# --- Custom Agent for Loop Control ---
+# ────────────────────────────────────────────────────────────────────────────────
+# Agentes básicos de controle
+# ────────────────────────────────────────────────────────────────────────────────
+
 class EscalationChecker(BaseAgent):
-    """Checks evaluation and escalates to stop the loop if grade is 'pass'."""
-
     def __init__(self, name: str, review_key: str):
         super().__init__(name=name)
         self._review_key = review_key
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        evaluation_result = ctx.session.state.get(self._review_key)
-        if evaluation_result and evaluation_result.get("grade") == "pass":
-            logging.info(
-                f"[{self.name}] Review for '{self._review_key}' passed."
-                " Escalating to stop loop."
-            )
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        result = ctx.session.state.get(self._review_key)
+        if result and result.get("grade") == "pass":
             yield Event(author=self.name, actions=EventActions(escalate=True))
         else:
-            logging.info(
-                f"[{self.name}] Review for '{self._review_key}' failed. Loop"
-                " will continue."
-            )
             yield Event(author=self.name)
 
 
 class TaskCompletionChecker(BaseAgent):
-    """Checks if all tasks have been completed and escalates if done."""
-    
     def __init__(self, name: str):
         super().__init__(name=name)
-    
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        task_index = ctx.session.state.get("current_task_index", 0)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        idx = ctx.session.state.get("current_task_index", 0)
         tasks = ctx.session.state.get("implementation_tasks", [])
-        
-        if task_index >= len(tasks):
-            logging.info(f"[{self.name}] All tasks completed. Escalating to finish.")
+        if idx >= len(tasks):
             yield Event(author=self.name, actions=EventActions(escalate=True))
         else:
-            logging.info(f"[{self.name}] More tasks remaining. Continuing...")
             yield Event(author=self.name)
 
 
 class EscalationBarrier(BaseAgent):
-    """Runs a sub-agent and consumes any escalate signals it emits."""
-
     def __init__(self, name: str, agent: BaseAgent):
         super().__init__(name=name)
         self._agent = agent
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        async for event in self._agent.run_async(ctx):
-            if event.actions and event.actions.escalate:
-                event.actions.escalate = False
-            yield event
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        async for ev in self._agent.run_async(ctx):
+            if ev.actions and ev.actions.escalate:
+                ev.actions.escalate = False
+            yield ev
 
 
 class EnhancedStatusReporter(BaseAgent):
-    """Repórter de status com estimativas de tempo e progresso visual."""
-
     def __init__(self, name: str):
         super().__init__(name=name)
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        state = ctx.session.state
-
-        # Status detalhado com progresso visual
-        status = self._generate_detailed_status(state)
-        yield Event(
-            author=self.name,
-            content=Content(parts=[Part(text=status)])
-        )
-
-    def _generate_detailed_status(self, state: dict) -> str:
-        tasks = state.get("implementation_tasks", [])
-        task_index = state.get("current_task_index", 0)
-
-        # Ainda na fase de planejamento
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        st = ctx.session.state
+        tasks = st.get("implementation_tasks", [])
+        idx = st.get("current_task_index", 0)
         if not tasks:
-            return "🔄 **FASE: PLANEJAMENTO**\nAnalisando documentos e criando plano de implementação..."
-
-        # Processo concluído
-        if "final_code_delivery" in state:
-            return "✅ **CONCLUÍDO**\nCódigo gerado e documentação pronta!"
-
-        # Processo em andamento
-        if task_index < len(tasks):
-            # Progresso visual
-            progress = task_index / len(tasks) if len(tasks) > 0 else 0
-            progress_bar = "█" * int(progress * 10) + "░" * (10 - int(progress * 10))
-
-            current_task = tasks[task_index]
-
-            # Estimativa de tempo
-            remaining_tasks = max(0, len(tasks) - task_index)
-            estimated_minutes = remaining_tasks * 3  # ~3min por tarefa
-
-            # Status da última revisão
-            review_status = "Pendente"
-            if "code_review_result" in state:
-                review_result = state["code_review_result"]
-                if isinstance(review_result, dict):
-                    review_status = review_result.get("grade", "Pendente").upper()
-
-            return f"""🔄 **EXECUTANDO: {task_index + 1}/{len(tasks)} tarefas**
-
-**Progresso:** [{progress_bar}] {progress:.1%}
-
-**Tarefa Atual:** {current_task.get('title', 'Processando...')}
-📁 `{current_task.get('file_path', 'N/A')}`
-
-**Tempo Estimado:** ~{estimated_minutes} minutos restantes
-
-**Última Revisão:** {review_status}"""
-
-        # Montando resultado final
-        return "🔄 **FINALIZANDO**\nMontando documentação e código final..."
+            text = "🔄 **FASE: PLANEJAMENTO** – preparando plano de tarefas (Ads)..."
+        elif "final_code_delivery" in st:
+            text = "✅ **PRONTO** – JSON final do anúncio disponível."
+        elif idx < len(tasks):
+            progress = idx / len(tasks) if tasks else 0
+            bar = "█" * int(progress * 10) + "░" * (10 - int(progress * 10))
+            cur = tasks[idx]
+            text = (
+                f"🔧 **Tarefa {idx+1}/{len(tasks)}** [{bar}] {progress:.1%}\n"
+                f"• {cur.get('title')}  \n"
+                f"• Categoria: `{cur.get('category')}`  \n"
+                f"• Ref: `{cur.get('file_path')}`"
+            )
+        else:
+            text = "🧩 **Finalizando** – montagem/validação do JSON..."
+        yield Event(author=self.name, content=Content(parts=[Part(text=text)]))
 
 
 class TaskInitializer(BaseAgent):
-    """Initializes the task index, total task count, and other necessary state variables."""
-
     def __init__(self, name: str):
         super().__init__(name=name)
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        # Correctly access tasks from the implementation_plan object
-        implementation_plan = ctx.session.state.get("implementation_plan", {})
-        tasks = implementation_plan.get("implementation_tasks", [])
-        
-        # Ensure implementation_tasks is in the top-level state for other agents
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        impl = ctx.session.state.get("implementation_plan", {}) or {}
+        tasks = impl.get("implementation_tasks", []) or []
         ctx.session.state["implementation_tasks"] = tasks
-        
         ctx.session.state["current_task_index"] = 0
         ctx.session.state["total_tasks"] = len(tasks)
-        
-        # Initialize approved_code_snippets to prevent KeyError in final_assembler
         ctx.session.state["approved_code_snippets"] = []
-        
         yield Event(author=self.name)
 
 
 class TaskManager(BaseAgent):
-    """Selects the current task and puts it into the state."""
-
     def __init__(self, name: str):
         super().__init__(name=name)
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        task_index = ctx.session.state.get("current_task_index", 0)
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        idx = ctx.session.state.get("current_task_index", 0)
         tasks = ctx.session.state.get("implementation_tasks", [])
-
-        if task_index < len(tasks):
-            current_task = tasks[task_index]
-            ctx.session.state["current_task_info"] = current_task
-            ctx.session.state["current_task_description"] = current_task[
-                "description"
-            ]
-            logging.info(
-                "Processing task %d/%d: %s",
-                task_index + 1,
-                len(tasks),
-                current_task["description"],
-            )
-            yield Event(
-                author=self.name,
-                content=Content(
-                    parts=[
-                        Part(
-                            text=f"Starting task:"
-                            f" {current_task['description']}"
-                        )
-                    ]
-                ),
-            )
+        if idx < len(tasks):
+            current = tasks[idx]
+            ctx.session.state["current_task_info"] = current
+            ctx.session.state["current_task_description"] = current["description"]
+            yield Event(author=self.name, content=Content(parts=[Part(text=f"Starting task: {current['title']}")]))
         else:
             yield Event(author=self.name, actions=EventActions(escalate=True))
 
 
 class TaskIncrementer(BaseAgent):
-    """Increments the task index."""
-
     def __init__(self, name: str):
         super().__init__(name=name)
 
-    async def _run_async_impl(
-        self, ctx: InvocationContext
-    ) -> AsyncGenerator[Event, None]:
-        task_index = ctx.session.state.get("current_task_index", 0)
-        ctx.session.state["current_task_index"] = task_index + 1
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        ctx.session.state["current_task_index"] = ctx.session.state.get("current_task_index", 0) + 1
         yield Event(author=self.name)
 
 
-# --- PLANNING PIPELINE AGENTS ---
+# ────────────────────────────────────────────────────────────────────────────────
+# LANDING PAGE ANALYZER - Extração de conteúdo da página de destino
+# ────────────────────────────────────────────────────────────────────────────────
+
+landing_page_analyzer = LlmAgent(
+    model=config.worker_model,
+    name="landing_page_analyzer",
+    description="Extrai e analisa conteúdo da landing page",
+    instruction="""
+## IDENTIDADE: Landing Page Analyzer
+
+Você analisa a URL fornecida e extrai informações cruciais para criação de anúncios alinhados.
+
+## ENTRADA
+- landing_page_url: {landing_page_url}
+
+## PROCESSO
+1. Use a ferramenta google_search para buscar e analisar o conteúdo da página
+2. Extraia os seguintes elementos:
+   - Título principal (H1/headline)
+   - Proposta de valor única
+   - Lista de benefícios principais (até 5)
+   - CTAs (call-to-actions) presentes
+   - Preços/ofertas especiais
+   - Depoimentos ou provas sociais
+   - Tom de voz da marca (formal, casual, técnico, emotivo)
+   - Palavras-chave principais
+   - Diferenciais competitivos
+
+## SAÍDA (JSON)
+{
+  "landing_page_context": {
+    "titulo_principal": "string",
+    "proposta_valor": "string",
+    "beneficios": ["beneficio1", "beneficio2", ...],
+    "ctas_principais": ["cta1", "cta2"],
+    "ofertas": "string",
+    "provas_sociais": "string",
+    "tom_voz": "string",
+    "palavras_chave": ["palavra1", "palavra2"],
+    "diferenciais": ["diferencial1", "diferencial2"]
+  }
+}
+
+Se não conseguir acessar a URL, retorne contexto básico baseado apenas na URL.
+""",
+    tools=[google_search],
+    output_key="landing_page_context"
+)
+
+
+# ────────────────────────────────────────────────────────────────────────────────
+# PLANEJAMENTO (Ads) – mantém estilo "tarefas a executar"
+# ────────────────────────────────────────────────────────────────────────────────
 
 context_synthesizer = LlmAgent(
     model=config.worker_model,
     name="context_synthesizer",
-    description="Synthesizes the 3 source documents into a focused briefing for the current feature.",
+    description="Sintetiza entrada para briefing de anúncio Instagram.",
     instruction="""
-    ## IDENTIDADE: Context Synthesizer
-    
-    Você é um especialista em análise de documentação técnica. Sua função é extrair e sintetizar as informações relevantes dos documentos de referência para a feature específica sendo implementada. Se um documento não for fornecido, ignore-o.
+## IDENTIDADE: Context Synthesizer (Ads)
 
-    ## ENTRADA
-    **Feature a Implementar:**
-    {feature_snippet}
+Sua missão (tarefas):
+1) Consolidar as entradas:
+   - landing_page_url: {landing_page_url}
+   - objetivo_final: {objetivo_final}
+   - perfil_cliente: {perfil_cliente}
+   - landing_page_context: {landing_page_context}
+   - formato_anuncio: {formato_anuncio}
+2) Especificar persona, dores, benefícios, proposta de valor e prova social disponível.
+3) Formato definido pelo usuário: {formato_anuncio} - criar estratégia específica
+4) Apontar restrições/políticas relevantes (Instagram e, se aplicável, saúde/medicina).
+5) Produzir um briefing claro e acionável ALINHADO com o contexto da landing page.
 
-    ## DOCUMENTOS DE REFERÊNCIA
-    ### Especificação Técnica da UI
-    {especificacao_tecnica_da_ui}
-
-    ### Contexto da API
-    {contexto_api}
-
-    ### Fonte da Verdade UX
-    {fonte_da_verdade_ux}
-
-    ## SUA TAREFA
-    Criar um "Feature Briefing" conciso e focado, extraindo:
-
-    ### 1. Da Especificação Técnica (se disponível):
-    - Padrões arquiteturais aplicáveis (Riverpod, json_dynamic_widget, etc.)
-    - Estrutura de pastas e convenções
-    - Dependências e bibliotecas relevantes
-
-    ### 2. Do Contexto da API (se disponível):
-    - Endpoints específicos necessários
-    - Estruturas de request/response
-    - Fluxo de autenticação se aplicável
-
-    ### 3. Da Fonte da Verdade UX (se disponível):
-    - Fluxo exato de interação do usuário
-    - Elementos visuais necessários
-    - Estados e transições
-
-    ## FORMATO DE SAÍDA
-    ```
-    FEATURE BRIEFING: [Nome da Feature]
-    
-    ## Requisitos de UX
-    - [Descrição do comportamento esperado]
-    - [Interações do usuário]
-    
-    ## Arquitetura Técnica
-    - Padrão: [Riverpod/MVVM/etc]
-    - Widgets necessários: [lista]
-    
-    ## Integração com API
-    - Endpoint: [método e path]
-    - Request: [estrutura]
-    - Response: [estrutura]
-    
-    ## Considerações Especiais
-    - [Qualquer detalhe importante]
-    ```
-    """,
+## SAÍDA (modelo)
+ADS FEATURE BRIEFING
+- Persona: [...]
+- Dores/Benefícios: [...]
+- Objetivo: [...]
+- Formato recomendado: [...]
+- Mensagens-chave: [...]
+- Restrições: [...]
+- Observações: [...]
+""",
     output_key="feature_briefing",
 )
 
 feature_planner = LlmAgent(
     model=config.worker_model,
     name="feature_planner",
-    description="Creates a detailed, actionable implementation plan with concrete coding tasks.",
+    description="Cria um plano detalhado e sequenciado de tarefas para Ads.",
     output_schema=ImplementationPlan,
     instruction="""
-    ## IDENTIDADE: Flutter Tech Lead
-    
-    Você é um Tech Lead experiente em Flutter. Baseando-se no Feature Briefing fornecido, crie um plano de implementação detalhado e sequencial.
+## IDENTIDADE: Marketing Tech Lead
 
-    ## ENTRADA
-    **Feature Briefing:**
-    {feature_briefing}
+Tarefas a executar:
+1) Gerar um plano **atômico** (15–30min por tarefa) usando **EXATAMENTE** as categorias:
+   STRATEGY → RESEARCH → COPY_DRAFT → COPY_QA → VISUAL_DRAFT → VISUAL_QA → COMPLIANCE_QA → ASSEMBLY
+2) Incluir dependências corretas (ex.: COPY_QA depende de COPY_DRAFT).
+3) Preencher `file_path` (placeholder) para compatibilidade, ex.: "ads/TASK-002.json".
+4) O plano deve convergir para um **único JSON final** conforme o schema do projeto.
 
-    ## SUA TAREFA
-    Criar uma lista estruturada de TODAS as tarefas de código necessárias para implementar esta feature. 
-    
-    ## REGRAS PARA O PLANO
-    1. Ordene as tarefas por dependência (models → providers → widgets → integration)
-    2. Cada tarefa deve ser atômica e implementável em 15-30 minutos
-    3. Especifique exatamente qual arquivo criar ou modificar
-    4. Inclua descrição clara do que implementar
+## ENTRADA
+{feature_briefing}
 
-    
-    """,
+## SAÍDA (Pydantic)
+- feature_name
+- estimated_time
+- implementation_tasks: lista de objetos ImplementationTask
+""",
     output_key="implementation_plan",
 )
 
 plan_reviewer = LlmAgent(
     model=config.critic_model,
     name="plan_reviewer",
-    description="Reviews the implementation plan for completeness and quality.",
+    description="Revisa completude, sequência, granularidade e aderência ao objetivo (Ads).",
     instruction="""
-    ## IDENTIDADE: Principal Flutter Architect
-    
-    Você é um arquiteto principal revisando planos de implementação. Avalie o plano fornecido com rigor.
+## IDENTIDADE: Principal Ads Strategist
 
-    ## ENTRADA
-    **Implementation Plan:**
-    {implementation_plan}
+Avalie o plano:
+- Completude (todas as categorias requeridas)
+- Sequência lógica e dependências
+- Granularidade (15–30min)
+- Clareza (títulos e descrições acionáveis)
+- Aderência ao objetivo_final: {objetivo_final}
 
-    **Feature Briefing:**
-    {feature_briefing}
-    
-    **Requisitos UX Originais (Para Validação):**
-    {original_docs[ux_truth]}
-
-    ## CRITÉRIOS DE AVALIAÇÃO
-    1. **Completude**: O plano cobre todos os aspectos do briefing?
-    2. **Sequência Lógica**: As dependências estão corretas?
-    3. **Granularidade**: As tarefas são pequenas o suficiente?
-    4. **Clareza**: Cada tarefa está bem descrita?
-    5. **Arquitetura**: Segue os padrões estabelecidos?
-
-    ## REGRAS DE DECISÃO
-    - **PASS**: Se o plano está completo e bem estruturado
-    - **FAIL**: Se faltam tarefas essenciais ou há problemas de sequência
-
-    ## FORMATO DE RESPOSTA
-    Retorne um JSON no formato:
-    ```json
-    {
-      "grade": "pass",
-      "comment": "Plano completo e bem estruturado, cobrindo todos os aspectos da feature."
-    }
-    ```
-    
-    Ou se houver problemas:
-    ```json
-    {
-      "grade": "fail",
-      "comment": "Faltam tarefas para [aspecto específico]. Adicionar: [sugestões específicas]"
-    }
-    ```
-    """,
+## SAÍDA
+{"grade":"pass"|"fail","comment":"...","follow_up_queries":[{"search_query":"..."}]}
+""",
     output_schema=Feedback,
     output_key="plan_review_result",
 )
 
-# --- EXECUTION PIPELINE AGENTS ---
 
+# ────────────────────────────────────────────────────────────────────────────────
+# EXECUÇÃO (Ads) – mantém nomes dos agentes geradores/avaliadores/refinadores
+# ────────────────────────────────────────────────────────────────────────────────
 
 code_generator = LlmAgent(
     model=config.worker_model,
-    name="code_generator",
-    description="Generates production-ready Flutter/Dart code for a single task.",
+    name="code_generator",  # mantido
+    description="Gera fragmentos JSON por tarefa de Ads.",
     instruction="""
-    ## IDENTIDADE: Senior Flutter Developer
-    
-    Você é um desenvolvedor Flutter sênior gerando código production-ready para UMA tarefa específica.
+## IDENTIDADE: Senior Ads Content Developer
 
-    ## CONTEXTO
-    **Feature Briefing (Visão Geral):**
-    {feature_briefing}
-    
-    **Documentação API Completa (Quando Disponível):**
-    {original_docs[api_context]}
+Contexto:
+- Briefing: {feature_briefing}
+- landing_page_url: {landing_page_url}
+- objetivo_final: {objetivo_final}
+- perfil_cliente: {perfil_cliente}
+- landing_page_context: {landing_page_context}
+- formato_anuncio: {formato_anuncio}
+- Task atual: {current_task_info}
 
-    **Tarefa Atual:**
-    {current_task_info}
+Regras gerais:
+- **Saída sempre em JSON válido**, sem markdown/comentários.
+- pt-BR e adequado a Instagram.
+- Evite alegações médicas indevidas e promessas irrealistas.
 
-    ## PADRÕES OBRIGATÓRIOS
+Formatação por categoria (retorne somente o fragmento daquela categoria):
 
-    ### Para Models (use Freezed):
-    ```dart
-    import 'package:freezed_annotation/freezed_annotation.dart';
-    
-    part 'model_name.freezed.dart';
-    part 'model_name.g.dart';
-    
-    @freezed
-    class ModelName with _$ModelName {
-      const factory ModelName({
-        required String field1,
-        @Default(false) bool field2,
-      }) = _ModelName;
-      
-      factory ModelName.fromJson(Map<String, dynamic> json) =>
-          _$ModelNameFromJson(json);
-    }
-    ```
+- STRATEGY:
+  {
+    "mensagens_chave": ["...", "..."],
+    "posicionamento": "...",
+    "promessa_central": "...",
+    "diferenciais": ["...", "..."]
+  }
 
-    ### Para Providers (Riverpod 2.0):
-    ```dart
-    import 'package:flutter_riverpod/flutter_riverpod.dart';
-    
-    final providerName = StateNotifierProvider<NotifierClass, StateClass>((ref) {
-      return NotifierClass(ref);
-    });
-    ```
+- RESEARCH:
+  {
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): ... (síntese objetiva)"
+  }
 
-    ### Para Widgets:
-    - Use ConsumerWidget ou ConsumerStatefulWidget
-    - Implemente loading, error e success states
-    - Use const constructors sempre que possível
+- COPY_DRAFT:
+  {
+    "copy": {
+      "headline": "...",
+      "corpo": "...",
+      "cta_texto": "..."
+    },
+    "cta_instagram": "Saiba mais" | "Enviar mensagem" | "Ligar" | "Comprar agora" | "Cadastre-se"
+  }
 
-    ## REGRAS
-    1. Gere APENAS o código para a tarefa especificada
-    2. Código deve estar completo e funcional
-    3. Inclua todos os imports necessários
-    4. Siga as convenções do projeto
-    5. Adicione comentários onde necessário
+- COPY_QA:
+  {
+    "validacao_copy": "ok|ajustar: <motivo>",
+    "ajustes_copy_sugeridos": "..."
+  }
 
-    ## SAÍDA
-    Retorne APENAS o código Dart, pronto para ser salvo no arquivo especificado.
-    """,
+- VISUAL_DRAFT:
+  {
+    "visual": {
+      "descricao_imagem": "Descrição detalhada da imagem estática...",
+      "aspect_ratio": "automático baseado em {formato_anuncio}"
+    },
+    "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
+  }
+
+- VISUAL_QA:
+  {
+    "validacao_visual": "ok|ajustar: <motivo>",
+    "ajustes_visual_sugeridos": "..."
+  }
+
+- COMPLIANCE_QA:
+  {
+    "conformidade": "ok|ajustar: <motivo>",
+    "observacoes_politicas": "Resumo objetivo de riscos e como mitigar"
+  }
+
+- ASSEMBLY:
+  {
+    "obrigatorio": ["landing_page_url","formato","copy","visual","cta_instagram","fluxo","referencia_padroes"]
+  }
+""",
     output_key="generated_code",
 )
 
 code_reviewer = LlmAgent(
     model=config.critic_model,
-    name="code_reviewer",
-    description="Reviews generated code for quality, correctness and adherence to requirements.",
+    name="code_reviewer",  # mantido
+    description="Revisa o fragmento JSON de acordo com a categoria atual.",
     instruction="""
-    ## IDENTIDADE: Principal Software Engineer
-    
-    Você é um engenheiro principal realizando code review rigoroso.
+## IDENTIDADE: Principal Ads Reviewer
 
-    ## CONTEXTO
-    **Feature Briefing:**
-    {feature_briefing}
-    
-    **Especificações UI Originais (Para Validação):**
-    {original_docs[ui_spec]}
+Analise {generated_code} para a tarefa {current_task_info}. 
+VALIDE ALINHAMENTO com {landing_page_context}
 
-    **Task Description:**
-    {current_task_info}
+Aplique critérios **por categoria**:
 
-    **Generated Code:**
-    {generated_code}
+- ALINHAMENTO_LP:
+  * Copy consistente com landing page?
+  * Benefícios mencionados existem na página?
+  * Tom de voz alinhado?
 
-    ## CRITÉRIOS DE REVISÃO
+- STRATEGY:
+  * Mensagens claras e coerentes com {objetivo_final} e {perfil_cliente}
+  * Nada vago ou genérico
 
-    ### 1. Correção Funcional (40%)
-    - [ ] Implementa exatamente o que foi pedido?
-    - [ ] Lógica está correta?
-    - [ ] Tratamento de erros adequado?
+- RESEARCH:
+  * Referência alinhada a Brasil 2024–2025
+  * Útil (insights aplicáveis), sem "lorem ipsum"
 
-    ### 2. Qualidade do Código (30%)
-    - [ ] Segue convenções Dart/Flutter?
-    - [ ] Código limpo e legível?
-    - [ ] Sem duplicação?
+- COPY_DRAFT:
+  * Headline específica e benefício claro
+  * Corpo objetivo, sem promessas irreais/alegações médicas indevidas
+  * CTA coerente com {objetivo_final} e com a landing_page_url
+  * VALIDAR: Conteúdo alinhado com {landing_page_context}
 
-    ### 3. Arquitetura (20%)
-    - [ ] Respeita padrões do projeto?
-    - [ ] Usa Riverpod corretamente?
-    - [ ] Separação de responsabilidades?
+- COPY_QA:
+  * Avaliação honesta; se "ajustar", razões acionáveis
 
-    ### 4. Performance (10%)
-    - [ ] Usa const onde possível?
-    - [ ] Evita rebuilds desnecessários?
-    - [ ] Gerencia recursos corretamente?
+- VISUAL_DRAFT:
+  * Descrição visual com gancho, contexto e elementos on-screen
+  * Formato/ratio/duração coerentes
 
-    ## FORMATO DE RESPOSTA
-    
-    Para código APROVADO:
-    ```json
-    {
-      "grade": "pass",
-      "comment": "Código implementa corretamente [descrição]. Segue todos os padrões e está pronto para produção."
-    }
-    ```
+- VISUAL_QA:
+  * Avaliação honesta; se "ajustar", razões acionáveis
 
-    Para código com PROBLEMAS:
-    ```json
-    {
-      "grade": "fail",
-      "comment": "Problemas identificados: [lista específica]. Correções necessárias: [lista de mudanças]",
-      "follow_up_queries": [
-        {"search_query": "Flutter [specific pattern] best practices"},
-        {"search_query": "Riverpod [specific issue] solution"}
-      ]
-    }
-    ```
-    """,
+- COMPLIANCE_QA:
+  * Checagem de conformidade (Instagram; se saúde/medicina, tom responsável)
+  * Sem termos proibidos
+
+- ASSEMBLY:
+  * Lista "obrigatorio" contempla todas as chaves exigidas
+
+## SAÍDA
+{"grade":"pass"|"fail","comment":"...","follow_up_queries":[{"search_query":"..."}]}
+""",
     output_schema=Feedback,
     output_key="code_review_result",
 )
 
 code_refiner = LlmAgent(
     model=config.worker_model,
-    name="code_refiner",
-    description="Refines code based on review feedback.",
+    name="code_refiner",  # mantido
+    description="Refina o fragmento conforme o review; usa busca quando necessário.",
     instruction="""
-    ## IDENTIDADE: Code Refinement Specialist
-    
-    Você é especialista em corrigir e melhorar código baseado em feedback de revisão.
+## IDENTIDADE: Ads Refinement Specialist
 
-    ## CONTEXTO
-    **Review Feedback:**
-    {code_review_result}
-
-    **Original Code:**
-    {generated_code}
-
-    **Task Context:**
-    {current_task_info}
-
-    ## SUA TAREFA
-    1. Analise o feedback da revisão
-    2. Execute TODAS as queries de follow-up se houver
-    3. Implemente TODAS as correções solicitadas
-    4. Mantenha o que estava bom
-    5. Melhore o que foi criticado
-
-    ## PROCESSO
-    Se há queries de follow-up:
-    1. Execute cada uma com google_search
-    2. Incorpore as best practices encontradas
-    3. Aplique ao código
-
-    ## SAÍDA
-    Retorne o código CORRIGIDO e MELHORADO, pronto para nova revisão.
-    """,
+Tarefas:
+1) Aplique TODAS as correções do review {code_review_result} ao fragmento {generated_code}.
+2) Se houver `follow_up_queries`, execute-as via `google_search` e incorpore boas práticas.
+3) Retorne o **mesmo fragmento** corrigido em **JSON válido**.
+""",
     tools=[google_search],
     output_key="generated_code",
 )
 
 code_approver = LlmAgent(
     model=config.worker_model,
-    name="code_approver",
-    description="Saves approved code to the state for final assembly.",
+    name="code_approver",  # mantido
+    description="Registra fragmento aprovado no estado.",
     instruction="""
-    ## IDENTIDADE: Code Approval Manager
-    
-    O código para a tarefa atual foi aprovado na revisão. 
+## IDENTIDADE: Code Approval Manager
 
-    ## SUA TAREFA
-    1. Registre o código aprovado no estado
-    2. Marque a tarefa como completa
-    3. Prepare para a próxima tarefa
+Confirme registro:
+- Task: {current_task_info}
+- JSON: {generated_code}
 
-    ## DADOS
-    **Task Info:** {current_task_info}
-    **Approved Code:** {generated_code}
-
-    ## SAÍDA
-    Confirme que o código foi registrado e a tarefa marcada como completa.
-    """,
+Responda com confirmação simples.
+""",
     output_key="approval_confirmation",
     after_agent_callback=collect_code_snippets_callback,
 )
 
 final_assembler = LlmAgent(
     model=config.critic_model,
-    name="final_assembler",
-    description="Assembles all approved code snippets into the final deliverable with comprehensive documentation.",
+    name="final_assembler",  # mantido
+    description="Monta o JSON final do anúncio a partir dos fragmentos aprovados.",
     instruction="""
-    ## IDENTIDADE: Final Code Assembler & Documentation Generator
-    
-    Você é responsável por criar uma entrega profissional completa, incluindo todo o código implementado E documentação contextual que agrega valor ao desenvolvedor.
+## IDENTIDADE: Final Ads Assembler
 
-    ## DADOS DISPONÍVEIS
-    **Feature Name:** {{ implementation_plan.feature_name or "Unknown Feature" }}
-    **Feature Briefing:** {feature_briefing}
-    **Implementation Plan:** {implementation_plan}
-    **Approved Code Snippets:** {approved_code_snippets}
+Monte **3 variações** de anúncio combinando `approved_code_snippets`.
 
-    ## SUA MISSÃO
-    Criar uma entrega completa que inclua:
-    1. Todo o código implementado organizado por categoria
-    2. Um README.md específico da feature explicando arquitetura e integração
-    3. Instruções claras de como conectar a feature ao app principal
+Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
+- "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
+- "formato": usar {formato_anuncio} especificado pelo usuário
+- "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
+- "visual": { "descricao_imagem", "aspect_ratio" } (sem duracao - apenas imagens)
+- "cta_instagram": do COPY_DRAFT
+- "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
+- "referencia_padroes": do RESEARCH
+- "contexto_landing": resumo do {landing_page_context}
 
-    ## FORMATO DE SAÍDA OBRIGATÓRIO
-
-    Sua resposta DEVE conter DUAS seções principais:
-
-    ### SEÇÃO 1: README da Feature
-    ```markdown
-    <!-- README.md -->
-    # Feature: [Nome Descritivo]
-
-    ## 📋 Visão Geral
-    [Descrição concisa do que a feature faz e seu valor para o usuário]
-
-    ## 🏗️ Arquitetura
-    
-    ### Componentes Principais
-    - **Models**: [Descreva os modelos de dados e seu propósito]
-    - **Providers**: [Explique o gerenciamento de estado]
-    - **Widgets**: [Liste os widgets principais e suas responsabilidades]
-    - **Services**: [Descreva integrações com API]
-
-    ### Fluxo de Dados
-    ```
-    User Input → Widget → Provider → Service → API
-                   ↑          ↓
-                   └──────────┘
-    ```
-
-    ## 📁 Estrutura de Arquivos
-    ```
-    lib/features/[feature_name]/
-    ├── models/
-    │   └── feature_state.dart
-    ├── providers/
-    │   └── feature_provider.dart
-    ├── widgets/
-    │   └── feature_widget.dart
-    └── services/
-        └── feature_service.dart
-    ```
-
-    ## 🔧 Como Integrar
-
-    ### 1. Adicionar ao Roteamento
-    ```dart
-    // Em lib/router/app_router.dart
-    GoRoute(
-      path: '/feature-name',
-      builder: (context, state) => const FeatureWidget(),
-    ),
-    ```
-
-    ### 2. Registrar Providers (se necessário)
-    ```dart
-    // Em lib/main.dart ou provider_scope
-    ProviderScope(
-      overrides: [
-        // Adicione overrides se necessário
-      ],
-    )
-    ```
-
-    ### 3. Conectar à Navegação
-    ```dart
-    // Onde você quer acessar a feature
-    context.go('/feature-name');
-    ```
-
-    ## 🧪 Testando a Feature
-    
-    ### Testes Unitários Sugeridos
-    - [ ] Testar transformações do modelo
-    - [ ] Testar lógica do StateNotifier
-    - [ ] Testar chamadas de API mockadas
-
-    ### Testes de Widget Sugeridos
-    - [ ] Testar estados de loading
-    - [ ] Testar tratamento de erros
-    - [ ] Testar fluxo completo do usuário
-
-    ## 🚀 Checklist de Deploy
-    - [ ] Executar `flutter pub get`
-    - [ ] Executar `flutter pub run build_runner build --delete-conflicting-outputs`
-    - [ ] Verificar análise estática: `flutter analyze`
-    - [ ] Executar testes: `flutter test`
-    - [ ] Testar em dispositivo físico
-    - [ ] Verificar performance com Flutter DevTools
-
-    ## 📝 Notas Técnicas
-    [Qualquer consideração especial, limitação conhecida ou decisão arquitetural importante]
-    ```
-
-    ### SEÇÃO 2: Código Implementado
-    ```markdown
-    # 💻 Código Implementado
-
-    ## Resumo da Implementação
-    - **Total de arquivos**: [número]
-    - **Linhas de código**: ~[estimativa]
-    - **Tempo estimado**: [horas]
-    - **Complexidade**: [Baixa/Média/Alta]
-
-    ## Arquivos Criados
-
-    [Organize por categoria: Models → Providers → Widgets → Services]
-
-    ### 📦 Models
-
-    #### `lib/features/[feature]/models/[model].dart`
-    ```dart
-    [código completo]
-    ```
-
-    ### 🔄 Providers
-
-    #### `lib/features/[feature]/providers/[provider].dart`
-    ```dart
-    [código completo]
-    ```
-
-    ### 🎨 Widgets
-
-    #### `lib/features/[feature]/widgets/[widget].dart`
-    ```dart
-    [código completo]
-    ```
-
-    ### 🔌 Services
-
-    #### `lib/features/[feature]/services/[service].dart`
-    ```dart
-    [código completo]
-    ```
-    ```
-
-    ## REGRAS IMPORTANTES
-    1. O README deve ser específico e contextual para ESTA feature
-    2. Use diagramas simples em ASCII quando ajudar a explicar o fluxo
-    3. Exemplos de código no README devem ser reais, não genéricos
-    4. Mantenha um tom profissional mas acessível
-    5. Foque em agregar valor prático ao desenvolvedor que vai integrar
-    """,
+Regras:
+- Criar 3 variações diferentes de copy e visual
+- Complete faltantes de forma conservadora.
+- **Saída**: apenas JSON válido (sem markdown).
+""",
     output_key="final_code_delivery",
 )
 
-# --- INPUT PROCESSING AGENT ---
+# Validador final (schema estrito + coerência)
+final_validator = LlmAgent(
+    model=config.critic_model,
+    name="final_validator",
+    description="Valida o JSON final contra o schema e regras de coerência.",
+    instruction=r"""
+## IDENTIDADE: Final Schema & Coherence Validator
+
+Valide `final_code_delivery` (string JSON).
+Critérios (deve ser **pass** se TODOS forem verdadeiros):
+1) JSON válido e lista com 3 objetos (3 variações).
+2) Chaves obrigatórias presentes:
+   landing_page_url, formato, copy{headline,corpo,cta_texto}, 
+   visual{descricao_imagem,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
+3) Enums:
+   - formato ∈ {"Reels","Stories","Feed"}
+   - aspect_ratio ∈ {"9:16","1:1","4:5","16:9"}
+   - cta_instagram ∈ {"Saiba mais","Enviar mensagem","Ligar","Comprar agora","Cadastre-se"}
+4) Coerência com objetivo_final: CTA e fluxo fazem sentido (ex.: leads → "Saiba mais" ou "Cadastre-se").
+5) Campos não vazios/placeholder.
+6) As 3 variações devem ser diferentes entre si.
+
+## SAÍDA
+{"grade":"pass"|"fail","comment":"Se fail, liste campos/problemas específicos."}
+""",
+    output_schema=Feedback,
+    output_key="final_validation_result",
+)
+
+# Fixador final (aplica correções apontadas pelo validador)
+final_fix_agent = LlmAgent(
+    model=config.worker_model,
+    name="final_fix_agent",
+    description="Corrige o JSON final com base no feedback do validador.",
+    instruction="""
+## IDENTIDADE: Final JSON Fixer
+
+Tarefas:
+1) Leia `final_code_delivery` (JSON).
+2) Leia `final_validation_result.comment` e **corrija** exatamente os pontos citados (enums, chaves faltantes, etc.).
+3) Garanta coerência com:
+   - landing_page_url: {landing_page_url}
+   - objetivo_final: {objetivo_final}
+   - perfil_cliente: {perfil_cliente}
+   - formato_anuncio: {formato_anuncio}
+   - landing_page_context: {landing_page_context}
+4) Retorne **apenas** o JSON final corrigido com 3 variações.
+""",
+    output_key="final_code_delivery",
+)
+
+
+# ────────────────────────────────────────────────────────────────────────────────
+# INPUT PROCESSOR (Ads + legado)
+# ────────────────────────────────────────────────────────────────────────────────
 
 input_processor = LlmAgent(
     model=config.worker_model,
     name="input_processor",
-    description="Processes and extracts feature requests and documentation from user input",
+    description="Extrai campos estruturados da entrada do usuário (Ads) com compatibilidade legada.",
     instruction="""
-    ## IDENTIDADE: Input Processor
-    
-    Você é responsável por processar a entrada do usuário e extrair informações estruturadas
-    para o sistema de geração de código Flutter.
-    
-    ## SUA TAREFA
-    
-    Analise a mensagem do usuário e extraia:
-    
-    1. **Feature Request** (OBRIGATÓRIO):
-       - Procure por conteúdo entre tags [feature_snippet]...[/feature_snippet]
-       - Se não houver tags, trate a mensagem inteira como feature request
-       - Armazene em: feature_snippet
-    
-    2. **Documentação de Referência** (OPCIONAL):
-       - [especificacao_tecnica_da_ui]...[/especificacao_tecnica_da_ui]: Especificações técnicas da UI
-       - [contexto_api]...[/contexto_api]: Documentação da API
-       - [fonte_da_verdade_ux]...[/fonte_da_verdade_ux]: Requisitos de UX
-    
-    ## REGRAS DE EXTRAÇÃO
-    
-    1. Se encontrar tags, extraia EXATAMENTE o conteúdo entre elas
-    2. Preserve formatação, quebras de linha e código
-    3. Se não encontrar [feature_snippet], mas encontrar outras tags, extraia-as mesmo assim
-    4. Se não encontrar nenhuma tag, considere toda a mensagem como feature_snippet
-    
-    ## FORMATO DE SAÍDA
-    
-    Retorne um JSON com os campos extraídos:
-    ```json
-    {
-      "feature_snippet": "descrição da feature extraída",
-      "especificacao_tecnica_da_ui": "conteúdo extraído ou null",
-      "contexto_api": "conteúdo extraído ou null",
-      "fonte_da_verdade_ux": "conteúdo extraído ou null",
-      "extraction_status": "success" ou "no_feature_found"
-    }
-    ```
-    
-    ## IMPORTANTE
-    - Sempre defina feature_snippet se houver qualquer pedido de implementação
-    - Defina extraction_status como "success" se encontrou uma feature
-    - Defina extraction_status como "no_feature_found" apenas se não há nada para implementar
-    """,
+## IDENTIDADE: Input Processor
+
+Extraia os campos:
+
+### NOVO (Ads)
+- landing_page_url
+- objetivo_final (contato, leads, vendas, agendamentos, etc.)
+- perfil_cliente (storybrand/persona)
+- formato_anuncio (OBRIGATÓRIO: "Reels", "Stories" ou "Feed")
+
+Formas aceitas:
+- Linhas "chave: valor" (ex.: "landing_page_url: https://...")
+- Tags: [landing_page_url]...[/landing_page_url], [objetivo_final]...[/objetivo_final], 
+        [perfil_cliente]...[/perfil_cliente], [formato_anuncio]...[/formato_anuncio]
+
+### LEGADO (se houver)
+- [feature_snippet]...[/feature_snippet]
+- [especificacao_tecnica_da_ui]...[/especificacao_tecnica_da_ui]
+- [contexto_api]...[/contexto_api]
+- [fonte_da_verdade_ux]...[/fonte_da_verdade_ux]
+
+Regras:
+- Preserve exatamente conteúdo entre tags.
+- Se não houver tags, parseie linhas "chave: valor".
+- extraction_status = "success" se ANY campo foi encontrado.
+
+### SAÍDA (JSON)
+{
+  "landing_page_url": "string|null",
+  "objetivo_final": "string|null",
+  "perfil_cliente": "string|null",
+  "formato_anuncio": "string|null",
+  "feature_snippet": "string|null",
+  "especificacao_tecnica_da_ui": "string|null",
+  "contexto_api": "string|null",
+  "fonte_da_verdade_ux": "string|null",
+  "extraction_status": "success" | "no_feature_found"
+}
+""",
     output_key="extracted_input",
     after_agent_callback=unpack_extracted_input_callback,
 )
 
-# --- PIPELINE DEFINITIONS ---
+
+# ────────────────────────────────────────────────────────────────────────────────
+# PIPELINES
+# ────────────────────────────────────────────────────────────────────────────────
 
 plan_review_loop = LoopAgent(
     name="plan_review_loop",
-    max_iterations=3,
+    max_iterations=config.max_plan_review_iterations if hasattr(config, "max_plan_review_iterations") else 5,
     sub_agents=[
         feature_planner,
         plan_reviewer,
-        EscalationChecker(
-            name="plan_escalation_checker",
-            review_key="plan_review_result",
-        ),
+        EscalationChecker(name="plan_escalation_checker", review_key="plan_review_result"),
     ],
     after_agent_callback=make_failure_handler(
         "plan_review_result",
-        "Não foi possível atender aos critérios de revisão após 3 tentativas.",
+        "Não foi possível atender aos critérios de revisão após as iterações."
     ),
 )
 
 planning_pipeline = SequentialAgent(
     name="planning_pipeline",
-    description="Creates comprehensive implementation plan for a feature.",
+    description="Gera briefing e plano de tarefas (Ads).",
     sub_agents=[
         context_synthesizer,
-        EscalationBarrier(
-            name="plan_review_stage",
-            agent=plan_review_loop,
-        ),
+        EscalationBarrier(name="plan_review_stage", agent=plan_review_loop),
     ],
 )
 
-# Define the sequential pipeline for processing a single task.
-# This isolates the inner code_review_loop's escalation signal.
 code_review_loop = LoopAgent(
     name="code_review_loop",
-    max_iterations=3,
+    max_iterations=config.max_code_review_iterations if hasattr(config, "max_code_review_iterations") else 5,
     sub_agents=[
         code_reviewer,
-        EscalationChecker(
-            name="code_escalation_checker",
-            review_key="code_review_result",
-        ),
+        EscalationChecker(name="code_escalation_checker", review_key="code_review_result"),
         code_refiner,
     ],
     after_agent_callback=make_failure_handler(
         "code_review_result",
-        "Não foi possível atender aos critérios de revisão de código após 3 tentativas.",
+        "Não foi possível atender aos critérios de revisão de conteúdo após as iterações."
     ),
 )
 
@@ -989,119 +773,110 @@ single_task_pipeline = SequentialAgent(
     sub_agents=[
         TaskManager(name="task_manager"),
         code_generator,
-        EscalationBarrier(
-            name="code_review_stage",
-            agent=code_review_loop,
-        ),
+        EscalationBarrier(name="code_review_stage", agent=code_review_loop),
         code_approver,
         TaskIncrementer(name="task_incrementer"),
     ],
 )
 
-# Task execution loop - processa uma tarefa por vez
 task_execution_loop = LoopAgent(
     name="task_execution_loop",
-    max_iterations=20,  # Máximo de 20 tarefas por feature
+    max_iterations=config.max_task_iterations if hasattr(config, "max_task_iterations") else 20,
     sub_agents=[
-        single_task_pipeline,  # Run the self-contained pipeline for one task
-        TaskCompletionChecker(
-            name="task_completion_checker"
-        ),  # Check if the outer loop should continue
+        single_task_pipeline,
+        TaskCompletionChecker(name="task_completion_checker"),
     ],
     after_agent_callback=task_execution_failure_handler,
 )
 
+# Validação final em loop: valida → (pass?) → corrige → revalida
+final_validation_loop = LoopAgent(
+    name="final_validation_loop",
+    max_iterations=5,
+    sub_agents=[
+        final_validator,
+        EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
+        final_fix_agent,
+    ],
+    after_agent_callback=make_failure_handler(
+        "final_validation_result",
+        "JSON final não passou na validação de schema/coerência."
+    ),
+)
+
 execution_pipeline = SequentialAgent(
     name="execution_pipeline",
-    description="Executes approved implementation plan, generating code for each task.",
+    description="Executa plano, gera fragmentos e monta/valida JSON final.",
     sub_agents=[
         TaskInitializer(name="task_initializer"),
-        EnhancedStatusReporter(name="status_reporter_start"),  # Status inicial
+        EnhancedStatusReporter(name="status_reporter_start"),
         task_execution_loop,
-        EnhancedStatusReporter(
-            name="status_reporter_assembly"
-        ),  # Status pré-assembly
+        EnhancedStatusReporter(name="status_reporter_assembly"),
         final_assembler,
-        EnhancedStatusReporter(name="status_reporter_final"),  # Status final
+        EscalationBarrier(name="final_validation_stage", agent=final_validation_loop),
+        EnhancedStatusReporter(name="status_reporter_final"),
     ],
 )
 
-# --- COMPLETE PIPELINE WITH INPUT PROCESSING ---
-
 complete_pipeline = SequentialAgent(
     name="complete_pipeline",
-    description="Complete pipeline from input processing to code generation",
+    description="Pipeline completo (Ads): input → análise LP → planejamento → execução → montagem → validação.",
     sub_agents=[
-        input_processor,        # Primeiro processa o input
-        planning_pipeline,      # Depois planeja
-        execution_pipeline      # Por fim executa
-    ]
+        input_processor,
+        landing_page_analyzer,  # NOVO: adicionar aqui
+        planning_pipeline,
+        execution_pipeline
+    ],
 )
 
-# --- MAIN ORCHESTRATOR ---
+
+# ────────────────────────────────────────────────────────────────────────────────
+# ORQUESTRADOR RAIZ (mantido)
+# ────────────────────────────────────────────────────────────────────────────────
 
 class FeatureOrchestrator(BaseAgent):
     def __init__(self, complete_pipeline: BaseAgent):
         super().__init__(
             name="FeatureOrchestrator",
-            description="Orchestrates the complete Flutter feature implementation flow."
+            description="Orchestrates the complete feature implementation flow."
         )
         self._complete_pipeline = complete_pipeline
-    
+
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-        # Use session state for control to avoid concurrency issues
         if ctx.session.state.get("orchestrator_has_run"):
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text="Processamento já concluído para esta sessão.")])
             )
             return
-        
-        # Mark as processed in the session
+
         ctx.session.state["orchestrator_has_run"] = True
-        
-        # Inicia o processamento
-        yield Event(
-            author=self.name,
-            content=Content(parts=[Part(text="Iniciando processamento da solicitação...")])
-        )
-        
-        # Executa o pipeline completo
+        yield Event(author=self.name, content=Content(parts=[Part(text="Iniciando processamento...")]))
+
         async for event in self._complete_pipeline.run_async(ctx):
             yield event
-        
-        # Verifica falhas específicas e fornece feedback apropriado
+
         if ctx.session.state.get("plan_review_result_failed"):
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text=f"⚠️ Falha no Planejamento: {ctx.session.state.get('plan_review_result_failure_reason', 'Não foi possível criar um plano adequado.')}")])
-            )
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha no Planejamento: {ctx.session.state.get('plan_review_result_failure_reason')}"
+            )]))
         elif ctx.session.state.get("code_review_result_failed"):
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text=f"⚠️ Falha na Revisão de Código: {ctx.session.state.get('code_review_result_failure_reason', 'Código não atendeu aos critérios de qualidade.')}")])
-            )
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Revisão de Conteúdo: {ctx.session.state.get('code_review_result_failure_reason')}"
+            )]))
         elif ctx.session.state.get("task_execution_failed"):
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text=f"⚠️ Falha na Execução: {ctx.session.state.get('task_execution_failure_reason', 'Não foi possível completar todas as tarefas.')}")])
-            )
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Execução: {ctx.session.state.get('task_execution_failure_reason')}"
+            )]))
+        elif ctx.session.state.get("final_validation_result_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Validação Final: {ctx.session.state.get('final_validation_result_failure_reason')}"
+            )]))
         elif "final_code_delivery" in ctx.session.state:
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text="✅ Feature implementada com sucesso!")])
-            )
-        elif "feature_snippet" not in ctx.session.state:
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text="Por favor, forneça uma descrição clara da feature a ser implementada.")])
-            )
-        
-        # Optional: Reset the flag at the end to allow re-running in the same session
+            yield Event(author=self.name, content=Content(parts=[Part(text="✅ Anúncio (JSON) gerado e validado!")]))
+
         ctx.session.state["orchestrator_has_run"] = False
 
 
-# A nova raiz do agente
-root_agent = FeatureOrchestrator(
-    complete_pipeline=complete_pipeline
-)
+root_agent = FeatureOrchestrator(complete_pipeline=complete_pipeline)
+

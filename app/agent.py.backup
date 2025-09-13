@@ -116,6 +116,19 @@ def unpack_extracted_input_callback(callback_context: CallbackContext) -> None:
             if isinstance(extracted_input, dict):
                 for key, value in extracted_input.items():
                     callback_context.state[key] = value
+                
+                # Store original documents in a separate structure for selective access
+                docs = {}
+                if "especificacao_tecnica_da_ui" in callback_context.state:
+                    docs["ui_spec"] = callback_context.state.get("especificacao_tecnica_da_ui", "")
+                if "contexto_api" in callback_context.state:
+                    docs["api_context"] = callback_context.state.get("contexto_api", "")
+                if "fonte_da_verdade_ux" in callback_context.state:
+                    docs["ux_truth"] = callback_context.state.get("fonte_da_verdade_ux", "")
+                
+                if docs:
+                    callback_context.state["original_docs"] = docs
+                    logging.info(f"Stored original docs with keys: {list(docs.keys())}")
         except (json.JSONDecodeError, IndexError):
             pass
 
@@ -193,6 +206,22 @@ class TaskCompletionChecker(BaseAgent):
             yield Event(author=self.name)
 
 
+class EscalationBarrier(BaseAgent):
+    """Runs a sub-agent and consumes any escalate signals it emits."""
+
+    def __init__(self, name: str, agent: BaseAgent):
+        super().__init__(name=name)
+        self._agent = agent
+
+    async def _run_async_impl(
+        self, ctx: InvocationContext
+    ) -> AsyncGenerator[Event, None]:
+        async for event in self._agent.run_async(ctx):
+            if event.actions and event.actions.escalate:
+                event.actions.escalate = False
+            yield event
+
+
 class EnhancedStatusReporter(BaseAgent):
     """Repórter de status com estimativas de tempo e progresso visual."""
 
@@ -258,7 +287,7 @@ class EnhancedStatusReporter(BaseAgent):
 
 
 class TaskInitializer(BaseAgent):
-    """Initializes the task index and total task count."""
+    """Initializes the task index, total task count, and other necessary state variables."""
 
     def __init__(self, name: str):
         super().__init__(name=name)
@@ -266,9 +295,19 @@ class TaskInitializer(BaseAgent):
     async def _run_async_impl(
         self, ctx: InvocationContext
     ) -> AsyncGenerator[Event, None]:
-        tasks = ctx.session.state.get("implementation_tasks", [])
+        # Correctly access tasks from the implementation_plan object
+        implementation_plan = ctx.session.state.get("implementation_plan", {})
+        tasks = implementation_plan.get("implementation_tasks", [])
+        
+        # Ensure implementation_tasks is in the top-level state for other agents
+        ctx.session.state["implementation_tasks"] = tasks
+        
         ctx.session.state["current_task_index"] = 0
         ctx.session.state["total_tasks"] = len(tasks)
+        
+        # Initialize approved_code_snippets to prevent KeyError in final_assembler
+        ctx.session.state["approved_code_snippets"] = []
+        
         yield Event(author=self.name)
 
 
@@ -435,6 +474,9 @@ plan_reviewer = LlmAgent(
 
     **Feature Briefing:**
     {feature_briefing}
+    
+    **Requisitos UX Originais (Para Validação):**
+    {original_docs[ux_truth]}
 
     ## CRITÉRIOS DE AVALIAÇÃO
     1. **Completude**: O plano cobre todos os aspectos do briefing?
@@ -481,8 +523,11 @@ code_generator = LlmAgent(
     Você é um desenvolvedor Flutter sênior gerando código production-ready para UMA tarefa específica.
 
     ## CONTEXTO
-    **Feature Briefing:**
+    **Feature Briefing (Visão Geral):**
     {feature_briefing}
+    
+    **Documentação API Completa (Quando Disponível):**
+    {original_docs[api_context]}
 
     **Tarefa Atual:**
     {current_task_info}
@@ -547,6 +592,9 @@ code_reviewer = LlmAgent(
     ## CONTEXTO
     **Feature Briefing:**
     {feature_briefing}
+    
+    **Especificações UI Originais (Para Validação):**
+    {original_docs[ui_spec]}
 
     **Task Description:**
     {current_task_info}
@@ -888,27 +936,65 @@ input_processor = LlmAgent(
 
 # --- PIPELINE DEFINITIONS ---
 
+plan_review_loop = LoopAgent(
+    name="plan_review_loop",
+    max_iterations=3,
+    sub_agents=[
+        feature_planner,
+        plan_reviewer,
+        EscalationChecker(
+            name="plan_escalation_checker",
+            review_key="plan_review_result",
+        ),
+    ],
+    after_agent_callback=make_failure_handler(
+        "plan_review_result",
+        "Não foi possível atender aos critérios de revisão após 3 tentativas.",
+    ),
+)
+
 planning_pipeline = SequentialAgent(
     name="planning_pipeline",
     description="Creates comprehensive implementation plan for a feature.",
     sub_agents=[
         context_synthesizer,
-        LoopAgent(
-            name="plan_review_loop",
-            max_iterations=3,
-            sub_agents=[
-                feature_planner,  # Cria ou refaz o plano
-                plan_reviewer,    # Revisa o plano
-                EscalationChecker(
-                    name="plan_escalation_checker",
-                    review_key="plan_review_result",
-                ),
-            ],
-            after_agent_callback=make_failure_handler(
-                "plan_review_result",
-                "Não foi possível atender aos critérios de revisão após 3 tentativas.",
-            ),
+        EscalationBarrier(
+            name="plan_review_stage",
+            agent=plan_review_loop,
         ),
+    ],
+)
+
+# Define the sequential pipeline for processing a single task.
+# This isolates the inner code_review_loop's escalation signal.
+code_review_loop = LoopAgent(
+    name="code_review_loop",
+    max_iterations=3,
+    sub_agents=[
+        code_reviewer,
+        EscalationChecker(
+            name="code_escalation_checker",
+            review_key="code_review_result",
+        ),
+        code_refiner,
+    ],
+    after_agent_callback=make_failure_handler(
+        "code_review_result",
+        "Não foi possível atender aos critérios de revisão de código após 3 tentativas.",
+    ),
+)
+
+single_task_pipeline = SequentialAgent(
+    name="single_task_pipeline",
+    sub_agents=[
+        TaskManager(name="task_manager"),
+        code_generator,
+        EscalationBarrier(
+            name="code_review_stage",
+            agent=code_review_loop,
+        ),
+        code_approver,
+        TaskIncrementer(name="task_incrementer"),
     ],
 )
 
@@ -917,29 +1003,10 @@ task_execution_loop = LoopAgent(
     name="task_execution_loop",
     max_iterations=20,  # Máximo de 20 tarefas por feature
     sub_agents=[
-        TaskManager(name="task_manager"),
-        code_generator,  # Gera código
-        LoopAgent(
-            name="code_review_loop",
-            max_iterations=3,
-            sub_agents=[
-                code_reviewer,
-                EscalationChecker(
-                    name="code_escalation_checker",
-                    review_key="code_review_result",
-                ),
-                code_refiner,
-            ],
-            after_agent_callback=make_failure_handler(
-                "code_review_result",
-                "Não foi possível atender aos critérios de revisão de código após 3 tentativas.",
-            ),
-        ),
-        code_approver,  # Salva código aprovado
-        TaskIncrementer(name="task_incrementer"),
+        single_task_pipeline,  # Run the self-contained pipeline for one task
         TaskCompletionChecker(
             name="task_completion_checker"
-        ),  # Verifica se há mais tarefas
+        ),  # Check if the outer loop should continue
     ],
     after_agent_callback=task_execution_failure_handler,
 )

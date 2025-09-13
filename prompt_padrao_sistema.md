@@ -1,16 +1,43 @@
 
-[especificacao_tecnica_da_ui]
-O aplicativo usa a arquitetura MVVM com Riverpod. Todos os novos widgets devem ser `ConsumerWidget` e o estado deve ser gerenciado por `StateNotifierProvider`. As dependências principais são `flutter_riverpod`, `freezed`, e `json_serializable`.
-[/especificacao_tecnica_da_ui]
+# Formato de Entrada para Geração de Anúncios Instagram
 
-[contexto_api]
-O endpoint para autenticação é `POST /api/v1/auth/login`. Ele espera um JSON com `email` e `password` e retorna um `access_token`. O token deve ser enviado no header `Authorization: Bearer <token>` para todas as outras chamadas.
-[/contexto_api]
+## Campos Principais (OBRIGATÓRIOS)
 
-[fonte_da_verdade_ux]
-A tela de login deve ter dois campos de texto para email e senha, e um botão "Entrar". Deve haver um indicador de carregamento enquanto a chamada de API está em andamento. Em caso de erro, uma mensagem deve ser exibida abaixo do botão.
-[/fonte_da_verdade_ux]
+### Opção 1: Formato com tags
+```
+[landing_page_url]https://seusite.com.br[/landing_page_url]
+[objetivo_final]gerar leads qualificados[/objetivo_final]
+[perfil_cliente]Empreendedores de 25-45 anos que buscam crescer seu negócio online[/perfil_cliente]
+```
 
-[feature_snippet]
-Implemente a tela de login completa, incluindo o modelo de estado, o provider de autenticação que chama a API e o widget da UI com tratamento de estados de loading, success e error.
-[/feature_snippet]
+### Opção 2: Formato chave-valor (mais simples)
+```
+landing_page_url: https://seusite.com.br
+objetivo_final: gerar leads qualificados
+perfil_cliente: Empreendedores de 25-45 anos que buscam crescer seu negócio online
+```
+
+## Descrição dos Campos
+
+| Campo | Descrição | Exemplos |
+|-------|-----------|----------|
+| **landing_page_url** | URL da página de destino do anúncio | `https://exemplo.com.br` |
+| **objetivo_final** | O que você quer alcançar com o anúncio | `contato`, `leads`, `vendas`, `agendamentos` |
+| **perfil_cliente** | Descrição detalhada da persona/público-alvo | `Mulheres 30-50 anos interessadas em bem-estar` |
+
+## Exemplo Completo de Prompt
+
+```
+landing_page_url: https://clinicasaude.com.br/consulta
+objetivo_final: agendamentos de consultas
+perfil_cliente: Pessoas acima de 40 anos preocupadas com saúde preventiva, classe B/C, que valorizam atendimento humanizado
+```
+
+## Saída Esperada
+
+O agente irá gerar um JSON completo com:
+- Copy (headline, corpo, CTA)
+- Visual (descrição, aspect ratio, duração)
+- Formato (Reels, Stories, Feed)
+- Fluxo de conversão
+- Referências de padrões de alta performance
