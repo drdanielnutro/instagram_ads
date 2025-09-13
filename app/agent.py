@@ -792,7 +792,7 @@ task_execution_loop = LoopAgent(
 # Validação final em loop: valida → (pass?) → corrige → revalida
 final_validation_loop = LoopAgent(
     name="final_validation_loop",
-    max_iterations=5,
+    max_iterations=10,  # Aumentado para garantir validação rigorosa
     sub_agents=[
         final_validator,
         EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
