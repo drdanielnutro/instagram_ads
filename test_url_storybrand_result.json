@@ -1,0 +1,85 @@
+{
+  "url": "https://www.hubspot.com",
+  "web_fetch": {
+    "status": "success",
+    "html_size": 656338,
+    "text_size": 13978,
+    "title": "HubSpot | Software & Tools for your Business - Homepage",
+    "meta_description": "HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business.",
+    "metadata": {
+      "title": "HubSpot | Software & Tools for your Business - Homepage",
+      "meta_description": "HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business.",
+      "url": "https://www.hubspot.com/",
+      "status_code": 200,
+      "content_length": 656338,
+      "text_length": 13978,
+      "open_graph": {
+        "description": "HubSpot's customer platform includes all the marketing, sales, customer service, and CRM software you need to grow your business.",
+        "title": "HubSpot | Software & Tools for your Business - Homepage",
+        "image": "https://www.hubspot.com/hubfs/assets/hubspot.com/homepage/hero-backgrounds-2025/HS_Full_Bleed_1.jpg",
+        "image:width": "2160",
+        "image:height": "1440",
+        "image:alt": "HubSpot's customer platform",
+        "url": "https://www.hubspot.com"
+      },
+      "h1_headings": [
+        "Where go-to-marketteams go togrowscalecloseretaingrow"
+      ]
+    }
+  },
+  "storybrand": {
+    "character": {
+      "description": "",
+      "evidence": [],
+      "confidence": 0
+    },
+    "problem": {
+      "description": "",
+      "evidence": [],
+      "types": {
+        "external": "",
+        "internal": "",
+        "philosophical": ""
+      },
+      "confidence": 0
+    },
+    "guide": {
+      "description": "",
+      "authority": "",
+      "empathy": "",
+      "evidence": [],
+      "confidence": 0
+    },
+    "plan": {
+      "description": "",
+      "steps": [],
+      "evidence": [],
+      "confidence": 0
+    },
+    "action": {
+      "primary": "",
+      "secondary": "",
+      "evidence": [],
+      "confidence": 0
+    },
+    "failure": {
+      "description": "",
+      "consequences": [],
+      "evidence": [],
+      "confidence": 0
+    },
+    "success": {
+      "description": "",
+      "benefits": [],
+      "transformation": "",
+      "evidence": [],
+      "confidence": 0
+    },
+    "completeness_score": 0,
+    "metadata": {
+      "extraction_method": "langextract",
+      "error": "extraction_failed"
+    }
+  },
+  "errors": []
+}

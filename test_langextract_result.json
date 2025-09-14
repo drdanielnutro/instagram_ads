@@ -1,0 +1,105 @@
+{
+  "character": {
+    "description": "João Silva",
+    "evidence": [
+      "empresários",
+      "CEO TechStart"
+    ],
+    "confidence": 0.9
+  },
+  "problem": {
+    "description": "Cada dia sem uma estratégia digital é dinheiro perdido; Seus concorrentes não vão esperar você decidir; É injusto que empresas menores estejam crescendo mais rápido que a sua",
+    "evidence": [
+      "luta para conseguir clientes",
+      "frustrante ver concorrentes vendendo mais",
+      "Se sente perdido com tantas estratégias de marketing que não funcionam",
+      "É injusto que empresas menores estejam crescendo mais rápido que a sua",
+      "Cada dia sem uma estratégia digital é dinheiro perdido",
+      "Seus concorrentes não vão esperar você decidir"
+    ],
+    "types": {
+      "external": "Cada dia sem uma estratégia digital é dinheiro perdido",
+      "internal": "Seus concorrentes não vão esperar você decidir",
+      "philosophical": "É injusto que empresas menores estejam crescendo mais rápido que a sua"
+    },
+    "confidence": 0.8
+  },
+  "guide": {
+    "description": "Autoridade: Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart; Empatia: Entendemos sua frustração porque já passamos por isso",
+    "authority": "Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart",
+    "empathy": "Entendemos sua frustração porque já passamos por isso",
+    "evidence": [
+      "10 anos de experiência, já ajudamos mais de 500 empresas a triplicar suas vendas",
+      "Entendemos sua frustração porque já passamos por isso",
+      "Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart"
+    ],
+    "confidence": 0.8
+  },
+  "plan": {
+    "description": "3 steps",
+    "steps": [
+      "3",
+      "Análise gratuita do seu negócio digital",
+      "Estratégia personalizada de crescimento",
+      "Implementação com acompanhamento semanal"
+    ],
+    "evidence": [
+      "3 Passos: 1) Análise gratuita do seu negócio digital, 2) Estratégia personalizada de crescimento, 3) Implementação com acompanhamento semanal",
+      "3 Passos: 1) Análise gratuita do seu negócio digital, 2) Estratégia personalizada de crescimento, 3) Implementação com acompanhamento semanal"
+    ],
+    "confidence": 0.85
+  },
+  "action": {
+    "primary": "Agende Sua Consulta Gratuita Agora",
+    "secondary": "Baixe nosso guia gratuito de vendas online",
+    "evidence": [
+      "Agende Sua Consulta Gratuita Agora",
+      "Baixe nosso guia gratuito de vendas online"
+    ],
+    "confidence": 0.9
+  },
+  "failure": {
+    "description": "ficar para trás",
+    "consequences": [
+      "Cada dia sem uma estratégia digital é dinheiro perdido.",
+      "Seus concorrentes não vão esperar você decidir."
+    ],
+    "evidence": [
+      "Cada dia sem uma estratégia digital é dinheiro perdido.",
+      "Seus concorrentes não vão esperar você decidir."
+    ],
+    "confidence": 0.75
+  },
+  "success": {
+    "description": "",
+    "benefits": [
+      "triplicar suas vendas",
+      "Vendas automáticas acontecendo 24/7",
+      "Clientes chegando sem você precisar prospectar",
+      "Liberdade para focar no que você ama fazer"
+    ],
+    "transformation": "liberdade e foco",
+    "evidence": [
+      "triplicar suas vendas",
+      "Vendas automáticas acontecendo 24/7",
+      "Clientes chegando sem você precisar prospectar",
+      "Liberdade para focar no que você ama fazer"
+    ],
+    "confidence": 0.85
+  },
+  "completeness_score": 1.0,
+  "metadata": {
+    "extraction_method": "langextract",
+    "model_used": "gemini-2.5-flash-lite",
+    "elements_found": [
+      "action",
+      "guide",
+      "success",
+      "failure",
+      "character",
+      "plan",
+      "problem"
+    ],
+    "total_extractions": 21
+  }
+}

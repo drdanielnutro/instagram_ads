@@ -23,11 +23,14 @@ from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event, EventActions
-from google.adk.tools import google_search
+from google.adk.tools import google_search, FunctionTool
 from google.genai.types import Content, Part
 from pydantic import BaseModel, Field
 
 from .config import config
+from .tools.web_fetch import web_fetch_tool
+from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
+from .schemas.storybrand import StoryBrandAnalysis
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -152,7 +155,7 @@ def unpack_extracted_input_callback(callback_context: CallbackContext) -> None:
             callback_context.state["original_docs"] = docs
 
             # Garante as novas chaves
-            for k in ["landing_page_url", "objetivo_final", "perfil_cliente", "formato_anuncio"]:
+            for k in ["landing_page_url", "objetivo_final", "perfil_cliente", "formato_anuncio", "foco"]:
                 if k not in callback_context.state:
                     callback_context.state[k] = ""
     except (json.JSONDecodeError, IndexError):
@@ -294,46 +297,63 @@ class TaskIncrementer(BaseAgent):
 landing_page_analyzer = LlmAgent(
     model=config.worker_model,
     name="landing_page_analyzer",
-    description="Extrai e analisa conteúdo da landing page",
+    description="Extrai e analisa conteúdo real da landing page com framework StoryBrand",
     instruction="""
-## IDENTIDADE: Landing Page Analyzer
+## IDENTIDADE: Landing Page Analyzer com StoryBrand
 
-Você analisa a URL fornecida e extrai informações cruciais para criação de anúncios alinhados.
+Você analisa a URL fornecida extraindo o conteúdo REAL da página e aplicando análise StoryBrand.
 
 ## ENTRADA
 - landing_page_url: {landing_page_url}
+- foco (opcional): {foco}
 
 ## PROCESSO
-1. Use a ferramenta google_search para buscar e analisar o conteúdo da página
-2. Extraia os seguintes elementos:
-   - Título principal (H1/headline)
-   - Proposta de valor única
-   - Lista de benefícios principais (até 5)
-   - CTAs (call-to-actions) presentes
-   - Preços/ofertas especiais
-   - Depoimentos ou provas sociais
-   - Tom de voz da marca (formal, casual, técnico, emotivo)
-   - Palavras-chave principais
-   - Diferenciais competitivos
+1. Use a ferramenta web_fetch_tool para fazer o download completo do HTML da página
+2. A ferramenta automaticamente aplicará análise StoryBrand ao conteúdo
+3. Com base no conteúdo extraído e análise StoryBrand, compile as informações:
+   - Título principal (H1/headline) - do HTML real
+   - Proposta de valor única - baseada no StoryBrand Guide
+   - Lista de benefícios principais - do StoryBrand Success
+   - CTAs (call-to-actions) - do StoryBrand Action
+   - Preços/ofertas especiais - extraídos do HTML
+   - Provas sociais - autoridade do StoryBrand Guide
+   - Tom de voz da marca - análise do texto
+   - Palavras-chave principais - do conteúdo real
+   - Diferenciais competitivos - do StoryBrand
+   - Persona do cliente - do StoryBrand Character
+   - Problemas/dores - do StoryBrand Problem
+   - Transformação prometida - do StoryBrand Success
+
+## ANÁLISE STORYBRAND DISPONÍVEL
+Após o fetch, você terá acesso a:
+- storybrand_analysis: Análise completa dos 7 elementos
+- storybrand_summary: Resumo textual
+- storybrand_ad_context: Contexto otimizado para anúncios
 
 ## SAÍDA (JSON)
 {
   "landing_page_context": {
-    "titulo_principal": "string",
-    "proposta_valor": "string",
-    "beneficios": ["beneficio1", "beneficio2", ...],
-    "ctas_principais": ["cta1", "cta2"],
+    "titulo_principal": "string (extraído do HTML real)",
+    "proposta_valor": "string (baseado no StoryBrand)",
+    "beneficios": ["do Success do StoryBrand"],
+    "ctas_principais": ["do Action do StoryBrand"],
     "ofertas": "string",
-    "provas_sociais": "string",
+    "provas_sociais": "string (autoridade do Guide)",
     "tom_voz": "string",
-    "palavras_chave": ["palavra1", "palavra2"],
-    "diferenciais": ["diferencial1", "diferencial2"]
+    "palavras_chave": ["do conteúdo real"],
+    "diferenciais": ["do StoryBrand"],
+    "persona_cliente": "do Character do StoryBrand",
+    "problemas_dores": ["do Problem do StoryBrand"],
+    "transformacao": "do Success do StoryBrand",
+    "storybrand_completeness": "score de 0-1"
   }
 }
 
-Se não conseguir acessar a URL, retorne contexto básico baseado apenas na URL.
+IMPORTANTE: Use web_fetch_tool, NÃO google_search. O conteúdo deve vir do HTML real da página.
+Observação: se houver um "foco" (ex.: campanha sazonal, liquidação), priorize mensagens, benefícios e CTAs relacionados a esse foco sem contrariar o conteúdo real da página.
 """,
-    tools=[google_search],
+    tools=[FunctionTool(func=web_fetch_tool)],
+    after_tool_callback=process_and_extract_sb7,  # Singular, sem lista
     output_key="landing_page_context"
 )
 
@@ -345,32 +365,50 @@ Se não conseguir acessar a URL, retorne contexto básico baseado apenas na URL.
 context_synthesizer = LlmAgent(
     model=config.worker_model,
     name="context_synthesizer",
-    description="Sintetiza entrada para briefing de anúncio Instagram.",
+    description="Sintetiza entrada para briefing de anúncio Instagram com insights StoryBrand.",
     instruction="""
-## IDENTIDADE: Context Synthesizer (Ads)
+## IDENTIDADE: Context Synthesizer (Ads) com StoryBrand
 
 Sua missão (tarefas):
 1) Consolidar as entradas:
    - landing_page_url: {landing_page_url}
    - objetivo_final: {objetivo_final}
    - perfil_cliente: {perfil_cliente}
+   - foco (opcional): {foco}
    - landing_page_context: {landing_page_context}
+   - storybrand_analysis: {storybrand_analysis}
+   - storybrand_ad_context: {storybrand_ad_context}
    - formato_anuncio: {formato_anuncio}
-2) Especificar persona, dores, benefícios, proposta de valor e prova social disponível.
+
+2) INTEGRAR elementos StoryBrand no briefing:
+   - Persona: Combinar {perfil_cliente} com Character do StoryBrand
+   - Dores: Usar os 3 níveis de Problem (external, internal, philosophical)
+   - Guia: Posicionar marca com Authority e Empathy
+   - Plano: Simplificar Plan em 3 passos claros
+   - Ação: Destacar CTAs do Action
+   - Urgência: Usar Failure para criar senso de urgência
+   - Transformação: Usar Success como promessa principal
+
 3) Formato definido pelo usuário: {formato_anuncio} - criar estratégia específica
-4) Apontar restrições/políticas relevantes (Instagram e, se aplicável, saúde/medicina).
-5) Produzir um briefing claro e acionável ALINHADO com o contexto da landing page.
+4) Apontar restrições/políticas relevantes (Instagram e, se aplicável, saúde/medicina)
+5) Produzir briefing 100% ALINHADO com conteúdo REAL da landing page
 
 ## SAÍDA (modelo)
 ADS FEATURE BRIEFING
-- Persona: [...]
-- Dores/Benefícios: [...]
-- Objetivo: [...]
-- Formato recomendado: [...]
-- Mensagens-chave: [...]
-- Restrições: [...]
-- Observações: [...]
+- Persona: [Character do StoryBrand + perfil_cliente]
+- Dores Principais: [Problem - external, internal, philosophical]
+- Nossa Posição: [Guide - autoridade + empatia]
+- Benefícios/Transformação: [Success do StoryBrand]
+- Plano Simplificado: [3 passos do Plan]
+- CTAs Principais: [Action - primário e secundário]
+- Urgência: [Failure - o que evitar]
+- Objetivo: {objetivo_final}
+- Formato: {formato_anuncio}
+- Mensagens-chave: [baseadas no conteúdo real]
+- Restrições: [políticas Instagram]
+- StoryBrand Score: [completeness_score]
 """,
+    after_agent_callback=enrich_landing_context_with_storybrand,  # Singular
     output_key="feature_briefing",
 )
 
@@ -388,6 +426,7 @@ Tarefas a executar:
 2) Incluir dependências corretas (ex.: COPY_QA depende de COPY_DRAFT).
 3) Preencher `file_path` (placeholder) para compatibilidade, ex.: "ads/TASK-002.json".
 4) O plano deve convergir para um **único JSON final** conforme o schema do projeto.
+5) Se houver "foco" (tema/gancho de campanha), inclua-o como critério de direção nas tarefas de STRATEGY/COPY/ASSEMBLY.
 
 ## ENTRADA
 {feature_briefing}
@@ -413,6 +452,7 @@ Avalie o plano:
 - Granularidade (15–30min)
 - Clareza (títulos e descrições acionáveis)
 - Aderência ao objetivo_final: {objetivo_final}
+- Aderência ao foco (se informado): {foco}
 
 ## SAÍDA
 {"grade":"pass"|"fail","comment":"...","follow_up_queries":[{"search_query":"..."}]}
@@ -438,6 +478,7 @@ Contexto:
 - landing_page_url: {landing_page_url}
 - objetivo_final: {objetivo_final}
 - perfil_cliente: {perfil_cliente}
+- foco: {foco}
 - landing_page_context: {landing_page_context}
 - formato_anuncio: {formato_anuncio}
 - Task atual: {current_task_info}
@@ -446,6 +487,7 @@ Regras gerais:
 - **Saída sempre em JSON válido**, sem markdown/comentários.
 - pt-BR e adequado a Instagram.
 - Evite alegações médicas indevidas e promessas irrealistas.
+- Quando "foco" for fornecido (tema/gancho da campanha), direcione headline/corpo/CTA e elementos visuais para refletir esse foco.
 
 Formatação por categoria (retorne somente o fragmento daquela categoria):
 
@@ -523,6 +565,10 @@ Aplique critérios **por categoria**:
   * Copy consistente com landing page?
   * Benefícios mencionados existem na página?
   * Tom de voz alinhado?
+ 
+- ALINHAMENTO_FOCO (se {foco} informado):
+  * Headline/CTA/mensagens refletem o foco declarado?
+  * Não desviar do tema (ex.: "liquidação de inverno").
 
 - STRATEGY:
   * Mensagens claras e coerentes com {objetivo_final} e {perfil_cliente}
@@ -617,6 +663,7 @@ Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 Regras:
 - Criar 3 variações diferentes de copy e visual
 - Complete faltantes de forma conservadora.
+- Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
 - **Saída**: apenas JSON válido (sem markdown).
 """,
     output_key="final_code_delivery",
@@ -641,6 +688,7 @@ Critérios (deve ser **pass** se TODOS forem verdadeiros):
    - aspect_ratio ∈ {"9:16","1:1","4:5","16:9"}
    - cta_instagram ∈ {"Saiba mais","Enviar mensagem","Ligar","Comprar agora","Cadastre-se"}
 4) Coerência com objetivo_final: CTA e fluxo fazem sentido (ex.: leads → "Saiba mais" ou "Cadastre-se").
+   Se houver "foco" definido, as mensagens devem refletir esse tema sem contradizer o conteúdo da landing page.
 5) Campos não vazios/placeholder.
 6) As 3 variações devem ser diferentes entre si.
 
@@ -667,6 +715,7 @@ Tarefas:
    - objetivo_final: {objetivo_final}
    - perfil_cliente: {perfil_cliente}
    - formato_anuncio: {formato_anuncio}
+   - foco: {foco}
    - landing_page_context: {landing_page_context}
 4) Retorne **apenas** o JSON final corrigido com 3 variações.
 """,
@@ -692,11 +741,13 @@ Extraia os campos:
 - objetivo_final (contato, leads, vendas, agendamentos, etc.)
 - perfil_cliente (storybrand/persona)
 - formato_anuncio (OBRIGATÓRIO: "Reels", "Stories" ou "Feed")
+- foco (opcional): tema/gancho da campanha (ex.: "liquidação de inverno")
 
 Formas aceitas:
 - Linhas "chave: valor" (ex.: "landing_page_url: https://...")
 - Tags: [landing_page_url]...[/landing_page_url], [objetivo_final]...[/objetivo_final], 
         [perfil_cliente]...[/perfil_cliente], [formato_anuncio]...[/formato_anuncio]
+        [foco]...[/foco]
 
 ### LEGADO (se houver)
 - [feature_snippet]...[/feature_snippet]
@@ -715,6 +766,7 @@ Regras:
   "objetivo_final": "string|null",
   "perfil_cliente": "string|null",
   "formato_anuncio": "string|null",
+  "foco": "string|null",
   "feature_snippet": "string|null",
   "especificacao_tecnica_da_ui": "string|null",
   "contexto_api": "string|null",
@@ -879,4 +931,3 @@ class FeatureOrchestrator(BaseAgent):
 
 
 root_agent = FeatureOrchestrator(complete_pipeline=complete_pipeline)
-

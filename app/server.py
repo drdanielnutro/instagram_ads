@@ -32,9 +32,16 @@ allow_origins = (
     os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else None
 )
 
-bucket_name = f"gs://{project_id}-facilitador-logs-data"
+# Artifacts bucket configuration (parametrized via env vars)
+artifacts_bucket = os.getenv(
+    "ARTIFACTS_BUCKET", f"gs://{project_id}-facilitador-logs-data"
+)
+bucket_location = os.getenv(
+    "ARTIFACTS_BUCKET_LOCATION",
+    os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"),
+)
 create_bucket_if_not_exists(
-    bucket_name=bucket_name, project=project_id, location="southamerica-east1"
+    bucket_name=artifacts_bucket, project=project_id, location=bucket_location
 )
 
 provider = TracerProvider()
@@ -49,7 +56,7 @@ session_service_uri = None
 app: FastAPI = get_fast_api_app(
     agents_dir=AGENT_DIR,
     web=True,
-    artifact_service_uri=bucket_name,
+    artifact_service_uri=artifacts_bucket,
     allow_origins=allow_origins,
     session_service_uri=session_service_uri,
 )

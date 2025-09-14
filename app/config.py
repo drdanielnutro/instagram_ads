@@ -43,10 +43,14 @@ class DevelopmentConfiguration:
     # Legacy (sem uso direto em Ads, mantido por compatibilidade)
     min_code_coverage: float = 0.8
     max_cyclomatic_complexity: int = 10
-    
-    # Landing Page Analysis
+
+    # Landing Page Analysis com StoryBrand
     max_web_fetch_retries: int = 3
     enable_landing_page_analysis: bool = True
+    enable_storybrand_analysis: bool = True
+    web_fetch_timeout: int = 30
+    cache_landing_pages: bool = True
+    min_storybrand_completeness: float = 0.6
 
 
 config = DevelopmentConfiguration()

@@ -4,10 +4,99 @@
 
 Este projeto é um sistema multiagente baseado no Google ADK (Agent Development Kit) para gerar anúncios do Instagram em formato JSON. O objetivo principal é automatizar todo o fluxo de criação de anúncios (texto e imagem) a partir de informações fornecidas pelo usuário.
 
-**Status**: ✅ Funcional com refatorações recentes (2025-09-12)
+**Status**: ⚠️ Funcional com travamento em LangExtract (2025-09-14)
+
+## 🚨 Problema Atual - TRAVAMENTO
+
+### Diagnóstico (2025-09-14)
+O sistema está travando ao processar requisições com o campo `foco`. O travamento ocorre especificamente em:
+- **Arquivo**: `app/tools/langextract_sb7.py` (linha ~309)
+- **Momento**: Durante análise StoryBrand com LangExtract + Vertex AI
+- **Sintoma**: Requisição trava indefinidamente (timeout após 5+ minutos)
+- **Causa provável**: Timeout na API Vertex AI/Gemini ou HTML muito grande
+
+## 📝 Como Fazer Requisições ao Sistema
+
+### Opção 1: Via Frontend (Interface Web) - RECOMENDADO
+
+1. **Acesse**: http://localhost:5173/app/
+2. **Digite no campo de texto**:
+```
+landing_page_url: https://seusite.com.br/pagina
+objetivo_final: agendamentos
+perfil_cliente: descrição da persona e suas dores
+formato_anuncio: Reels
+foco: liquidação de inverno
+```
+
+3. **Frontend gerencia automaticamente**:
+   - Session ID (UUID único)
+   - User ID (fixo: "u_999")
+   - App Name (fixo: "app")
+   - Conversão para formato JSON da API
+
+### Opção 2: Via API Direta (curl)
+
+#### Passo 1: Criar uma sessão
+```bash
+SESSION_ID="session_$(date +%s)"
+curl -X POST "http://localhost:8000/apps/app/users/user1/sessions/$SESSION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+#### Passo 2: Fazer a requisição
+```bash
+curl -X POST http://localhost:8000/run \
+  -H "Content-Type: application/json" \
+  -d '{
+    "appName": "app",
+    "userId": "user1",
+    "sessionId": "'$SESSION_ID'",
+    "newMessage": {
+      "role": "user",
+      "parts": [
+        {
+          "text": "landing_page_url: https://nutrologodivinopolis.com.br/masculino/\nobjetivo_final: agendamentos de consulta via WhatsApp\nperfil_cliente: homens 35-50 anos, executivos com sobrepeso, querem emagrecer sem perder massa muscular\nformato_anuncio: Reels\nfoco: não engordar no inverno"
+        }
+      ]
+    }
+  }'
+```
+
+### Opção 3: Via API com Streaming (SSE)
+
+Use o endpoint `/run_sse` ao invés de `/run` para receber eventos em tempo real:
+```bash
+curl -X POST http://localhost:8000/run_sse \
+  -H "Content-Type: application/json" \
+  -d '{...mesmo payload...}'
+```
+
+## 📊 Comparação entre Frontend e API Direta
+
+| Aspecto | Frontend | API Direta |
+|---------|----------|------------|
+| **Session ID** | UUID gerado automaticamente | Você cria manualmente |
+| **User ID** | Fixo: "u_999" | Você define (ex: "user1") |
+| **Formato de Entrada** | Texto simples (chave: valor) | JSON complexo |
+| **Endpoint** | Frontend escolhe automaticamente | Você especifica (/run ou /run_sse) |
+| **Streaming** | Automático (SSE) | Você controla |
+| **Complexidade** | Baixa (só digitar) | Alta (gerenciar sessões) |
 
 ## Refatorações Recentes
 
+### 2025-09-14 - Campo "foco" e Makefile
+- ✅ **Novo campo `foco`**: Campo opcional para temas/ganchos de campanha
+- ✅ **Makefile melhorado**: Auto-kill de portas 8000 e 5173 antes de iniciar
+
+### 2025-09-13 - Integração LangExtract
+- ✅ **Web fetch real**: Implementado download completo de HTML
+- ✅ **Framework StoryBrand**: Análise dos 7 elementos via LangExtract
+- ✅ **Callbacks ADK**: Processamento via `after_tool_callback`
+- ⚠️ **Bug**: Sistema trava ao processar com LangExtract
+
+### 2025-09-12 - Melhorias Core
 - ✅ **Campo `formato_anuncio` obrigatório**: Usuário controla o formato (Reels/Stories/Feed)
 - ✅ **Gera 3 variações**: Sistema sempre produz 3 versões diferentes do anúncio
 - ✅ **Apenas imagens**: Removido suporte a vídeos (campo `duracao` eliminado)
@@ -31,20 +120,30 @@ Extrai campos estruturados da entrada do usuário:
 - `perfil_cliente`: Persona/storybrand do público-alvo
 - `formato_anuncio`: **"Reels", "Stories" ou "Feed"** (controlado pelo usuário)
 
-### 2. Landing Page Analyzer
-**⚠️ LIMITAÇÃO CRÍTICA**: Usa apenas `google_search` para buscar informações públicas. **NÃO faz fetch real do HTML**.
+**Campo opcional**:
+- `foco`: Tema ou gancho da campanha (ex: "liquidação de inverno")
 
-Tenta extrair:
-- Título principal e proposta de valor
-- Benefícios e CTAs
+### 2. Landing Page Analyzer
+**✅ ATUALIZADO**: Agora usa `web_fetch_tool` para extrair HTML real + análise StoryBrand
+
+Extrai:
+- Título principal (H1) do HTML real
+- Proposta de valor baseada no StoryBrand Guide
+- Benefícios do StoryBrand Success
+- CTAs do StoryBrand Action
 - Ofertas e provas sociais
 - Tom de voz e palavras-chave
+- Persona do StoryBrand Character
+- Problemas/dores do StoryBrand Problem
+- Transformação do StoryBrand Success
 
 ### 3. Context Synthesizer
 Consolida entradas em briefing estruturado:
 - Persona e dores/benefícios
 - Formato definido pelo usuário
-- Mensagens-chave (tentativa de alinhamento com landing page)
+- Mensagens-chave alinhadas com landing page real
+- Integração com análise StoryBrand
+- Consideração do campo "foco" quando presente
 - Restrições (políticas Instagram/saúde)
 
 ### 4. Feature Planner
@@ -64,7 +163,7 @@ Gera plano com tarefas categorizadas:
 
 ### 6. Task Execution
 Para cada tarefa do plano:
-1. `code_generator`: Gera fragmento JSON
+1. `code_generator`: Gera fragmento JSON (considera "foco")
 2. `code_reviewer`: Valida alinhamento e qualidade
 3. `code_refiner`: Aplica correções se necessário
 4. `code_approver`: Registra fragmento aprovado
@@ -77,19 +176,26 @@ Combina fragmentos em **3 variações** de anúncio com:
 - `visual`: descricao_imagem, aspect_ratio
 - `cta_instagram`: Saiba mais, Enviar mensagem, etc.
 - `fluxo`: Ex: "Instagram Ad → Landing Page → WhatsApp"
-- `contexto_landing`: Resumo do contexto extraído
+- `contexto_landing`: Resumo do contexto extraído com StoryBrand
+- `referencia_padroes`: Padrões de alta performance utilizados
 
 ### 8. Final Validation
 Valida:
-- JSON válido com 3 objetos
+- JSON válido com exatamente 3 objetos
 - Todas chaves obrigatórias presentes
 - Enums corretos (formato, aspect_ratio, CTA)
-- Coerência com objetivo
+- Coerência com objetivo e "foco" (se fornecido)
 - Variações diferentes entre si
+- Conformidade com políticas Instagram
 
 ## Modelos de Dados
 
 ```python
+class AdCopy(BaseModel):
+    headline: str           # Título principal (máx 40 caracteres)
+    corpo: str             # Texto do corpo (máx 125 caracteres)
+    cta_texto: str         # Texto do botão CTA
+
 class AdVisual(BaseModel):
     descricao_imagem: str  # Apenas imagens, sem vídeos
     aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
@@ -102,26 +208,34 @@ class AdItem(BaseModel):
     cta_instagram: Literal["Saiba mais", "Enviar mensagem", "Ligar", "Comprar agora", "Cadastre-se"]
     fluxo: str
     referencia_padroes: str
-    contexto_landing: str  # Novo campo
+    contexto_landing: str  # Inclui análise StoryBrand
 ```
 
-## Limitações Conhecidas
+## Estrutura de Arquivos
 
-### 🔴 Críticas
-1. **Não extrai conteúdo real da landing page**: Usa apenas `google_search` (superficial)
-2. **Sem fetch HTTP**: Não acessa HTML/conteúdo real das páginas
-3. **Sem framework estruturado**: Não implementa StoryBrand ou similar
-
-### 🟡 Moderadas
-1. **Contexto limitado**: Depende de informações públicas indexadas
-2. **Alinhamento parcial**: Copy pode divergir do conteúdo real da landing
-3. **Sem rastreabilidade**: Não há evidências/offsets do conteúdo extraído
+```
+app/
+├── agent.py              # Pipeline completo (881 linhas)
+├── config.py             # Configurações e modelos
+├── server.py             # API FastAPI
+├── tools/                # Ferramentas customizadas
+│   ├── web_fetch.py      # Fetch HTTP real
+│   └── langextract_sb7.py # Análise StoryBrand com LangExtract
+├── callbacks/            # Callbacks ADK
+│   └── landing_page_callbacks.py
+├── schemas/              # Schemas Pydantic
+│   └── storybrand.py
+└── utils/
+    ├── gcs.py           # Google Cloud Storage
+    └── tracing.py       # Telemetria
+```
 
 ## Configuração
 
 ### Modelos LLM
 - **Worker**: `gemini-2.5-flash`
 - **Critic**: `gemini-2.5-pro`
+- **LangExtract**: `gemini-2.5-flash` (via Vertex AI)
 
 ### Iterações Máximas
 ```python
@@ -131,18 +245,60 @@ final_validation_loop: 10
 max_task_iterations: 20
 ```
 
-### Estrutura de Arquivos
-```
-app/
-├── agent.py          # Pipeline completo (881 linhas)
-├── config.py         # Configurações
-├── server.py         # API FastAPI
-└── utils/
-    ├── gcs.py       # Google Cloud Storage
-    └── tracing.py   # Telemetria
+### Variáveis de Ambiente (.env)
+```bash
+GOOGLE_CLOUD_PROJECT=instagram-ads-472021
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
+LANGEXTRACT_API_KEY=sua-chave-gemini  # Opcional
 ```
 
-## API
+## Execução
+
+### Desenvolvimento (com auto-kill de portas)
+```bash
+# O Makefile agora mata automaticamente processos nas portas 8000 e 5173
+make dev
+
+# Ou executar separadamente:
+make dev-backend-all  # Backend apenas
+make dev-frontend     # Frontend apenas
+```
+
+### Produção
+```bash
+# Deploy no Google Cloud Run
+make backend
+```
+
+### Testes
+```bash
+# Executar todos os testes
+pytest tests/ -v
+
+# Com cobertura
+pytest tests/ --cov=app --cov-report=html
+```
+
+Acesso:
+- Frontend: http://localhost:5173/app/
+- Backend API: http://localhost:8000/docs
+
+## API Endpoints
+
+### POST /run
+Executa o agente de forma síncrona
+- **Body**: AgentRunRequest (veja exemplo acima)
+- **Response**: JSON com resultado final
+
+### POST /run_sse
+Executa o agente com streaming (Server-Sent Events)
+- **Body**: Mesmo que /run
+- **Response**: Stream de eventos
+
+### POST /apps/{app_name}/users/{user_id}/sessions/{session_id}
+Cria uma nova sessão
+- **Body**: `{}` ou estado inicial opcional
+- **Response**: Detalhes da sessão criada
 
 ### POST /feedback
 Recebe feedback sobre anúncios gerados:
@@ -154,32 +310,60 @@ Recebe feedback sobre anúncios gerados:
 }
 ```
 
-## Execução
+## Limitações Conhecidas
 
+### 🔴 Crítica - Travamento com LangExtract
+1. **Sistema trava ao processar**: Especificamente em `langextract_sb7.py`
+2. **Timeout indefinido**: Requisições ficam pendentes por 5+ minutos
+3. **Afeta campo "foco"**: Problema aparece ao usar o novo campo opcional
+
+### 🟢 Resolvidas (eram limitações)
+1. ~~Não extrai conteúdo real da landing page~~ ✅ Resolvido com web_fetch_tool
+2. ~~Sem framework estruturado~~ ✅ Implementado StoryBrand via LangExtract
+3. ~~Sem rastreabilidade~~ ✅ Adicionado com análise StoryBrand
+
+## Solução de Problemas
+
+### Problema: Sistema trava ao processar
+**Sintoma**: Requisição fica pendente indefinidamente
+**Causa**: LangExtract travando com Vertex AI
+**Solução temporária**:
+1. Remover campo "foco" da requisição
+2. Ou desabilitar análise StoryBrand em `landing_page_callbacks.py`
+
+### Problema: Porta já em uso
+**Sintoma**: "address already in use"
+**Solução**: Use `make dev` - ele mata automaticamente processos nas portas
+
+### Problema: Erro de autenticação Google Cloud
+**Sintoma**: Erros de credenciais
+**Solução**:
 ```bash
-# Backend
-make dev-backend-all
-
-# Frontend (se disponível)
-npm run dev
+gcloud auth application-default login
+export GOOGLE_CLOUD_PROJECT=seu-projeto
 ```
-
-Acesso: http://localhost:8000
 
 ## Próximos Passos Sugeridos
 
-1. **Implementar fetch real de HTML** (web_fetch tool)
-2. **Adicionar parser estruturado** (Trafilatura/BeautifulSoup)
-3. **Integrar framework StoryBrand** com evidências
-4. **Melhorar rastreabilidade** (offsets/quotes)
-5. **Adicionar cache** para URLs já processadas
+1. **URGENTE: Corrigir travamento do LangExtract**
+   - Adicionar timeout na chamada Vertex AI
+   - Limitar tamanho do HTML processado
+   - Implementar fallback sem StoryBrand
+
+2. **Melhorias planejadas**:
+   - Cache para URLs já processadas
+   - Suporte a Selenium para páginas JavaScript-heavy
+   - A/B testing de variações
+   - Métricas de performance
 
 ## Observações
 
 - O bucket de logs usa nome `{project_id}-facilitador-logs-data` (herança do projeto original)
-- Sistema funcional mas com limitações na extração de conteúdo
-- Refatorações recentes melhoraram qualidade e controle do usuário
+- Sistema funcional mas com bug crítico no LangExtract
+- Frontend gerencia sessões automaticamente
+- Campo "foco" é opcional mas recomendado para campanhas direcionadas
 
 ---
 
-**Última atualização**: 2025-09-13
+**Última atualização**: 2025-09-14
+**Versão**: 2.1.0 (com campo "foco" e diagnóstico de travamento)
