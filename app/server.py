@@ -13,9 +13,11 @@
 # limitations under the License.
 
 import os
+import logging
 
 import google.auth
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi import Body
 from google.adk.cli.fast_api import get_fast_api_app
 from google.cloud import logging as google_cloud_logging
 from opentelemetry import trace
@@ -24,10 +26,20 @@ from opentelemetry.sdk.trace import TracerProvider, export
 from app.utils.gcs import create_bucket_if_not_exists
 from app.utils.tracing import CloudTraceLoggingSpanExporter
 from app.utils.typing import Feedback
+from app.plan_models.fixed_plans import get_plan_by_format
+from app.format_specifications import get_specs_by_format, get_specs_json_by_format
+
+try:
+    from helpers.user_extract_data import extract_user_input
+except Exception:
+    # Import opcional para permitir rodar mesmo sem helper durante desenvolvimento
+    extract_user_input = None  # type: ignore
 
 _, project_id = google.auth.default()
 logging_client = google_cloud_logging.Client()
 logger = logging_client.logger(__name__)
+py_logger = logging.getLogger("preflight")
+logging.basicConfig(level=logging.INFO)
 allow_origins = (
     os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else None
 )
@@ -76,6 +88,155 @@ def collect_feedback(feedback: Feedback) -> dict[str, str]:
     """
     logger.log_struct(feedback.model_dump(), severity="INFO")
     return {"status": "success"}
+
+
+@app.post("/run_preflight")
+def run_preflight(payload: dict = Body(...)) -> dict:
+    """Preflight: valida/normaliza entrada do usuário e retorna estado inicial.
+
+    Aceita:
+      - { "text": "..." }
+      - payload do /run com newMessage.parts[0].text
+    Retorna 422 com campos faltantes/invalidos, ou 200 com initial_state pronto
+    para criar a sessão ADK e executar o pipeline em modo plano fixo.
+    """
+    if extract_user_input is None:
+        raise HTTPException(status_code=500, detail="Preflight helper not available.")
+
+    # Extrair texto do payload (compatível com /run e modo simples)
+    text = None
+    if isinstance(payload, dict):
+        text = payload.get("text")
+        if not text:
+            try:
+                parts = payload.get("newMessage", {}).get("parts", [])
+                if parts and isinstance(parts, list):
+                    text = parts[0].get("text")
+            except Exception:
+                text = None
+    if not text:
+        raise HTTPException(status_code=400, detail="Payload must include 'text' or newMessage.parts[0].text")
+
+    # Log início do preflight
+    try:
+        logger.log_struct({
+            "event": "preflight_start",
+            "text_len": len(text or ""),
+        }, severity="INFO")
+    except Exception:
+        pass
+    # Mirror to console
+    try:
+        py_logger.info("[preflight] start text_len=%s", len(text or ""))
+    except Exception:
+        pass
+
+    result = extract_user_input(text)
+    try:
+        logger.log_struct({
+            "event": "preflight_result",
+            "success": result.get("success"),
+            "errors_count": len(result.get("errors", [])),
+        }, severity="INFO")
+    except Exception:
+        pass
+    try:
+        py_logger.info(
+            "[preflight] result success=%s errors_count=%s",
+            result.get("success"),
+            len(result.get("errors", [])),
+        )
+    except Exception:
+        pass
+
+    if not result.get("success"):
+        try:
+            logger.log_struct({
+                "event": "preflight_blocked",
+                "reason": "validation_failed",
+                "errors": result.get("errors", []),
+            }, severity="WARNING")
+        except Exception:
+            pass
+        try:
+            py_logger.warning(
+                "[preflight] blocked errors=%s",
+                result.get("errors", []),
+            )
+        except Exception:
+            pass
+        raise HTTPException(status_code=422, detail={
+            "message": "Campos mínimos ausentes/invalidos.",
+            "errors": result.get("errors", []),
+            "partial": result.get("data", {}),
+        })
+
+    data = result["data"]
+    norm = result["normalized"]
+
+    formato = norm.get("formato_anuncio_norm") or data.get("formato_anuncio")
+    try:
+        plan = get_plan_by_format(formato)
+        specs = get_specs_by_format(formato)
+        specs_json = get_specs_json_by_format(formato)
+    except Exception as e:  # pragma: no cover
+        raise HTTPException(status_code=422, detail=str(e))
+
+    # Log plano selecionado
+    try:
+        logger.log_struct({
+            "event": "preflight_plan_selected",
+            "formato": formato,
+            "feature_name": plan.get("feature_name"),
+            "tasks_count": len(plan.get("implementation_tasks", [])),
+        }, severity="INFO")
+    except Exception:
+        pass
+    try:
+        py_logger.info(
+            "[preflight] plan_selected formato=%s tasks_count=%s",
+            formato,
+            len(plan.get("implementation_tasks", [])),
+        )
+    except Exception:
+        pass
+
+    # Montar estado inicial para a sessão ADK
+    initial_state = {
+        "landing_page_url": data.get("landing_page_url"),
+        "objetivo_final": (norm.get("objetivo_final_norm") or data.get("objetivo_final")),
+        "perfil_cliente": data.get("perfil_cliente"),
+        "formato_anuncio": formato,
+        "foco": data.get("foco") or "",
+        # Plano fixo e specs por formato
+        "implementation_plan": plan,
+        "format_specs": specs,
+        "format_specs_json": specs_json,
+        # Sinalizador para pular o planner (será usado em fase 2)
+        "planning_mode": "fixed",
+    }
+
+    response = {
+        "success": True,
+        "normalized": norm,
+        "initial_state": initial_state,
+        "plan_summary": {
+            "feature_name": plan["feature_name"],
+            "tasks": [t["category"] for t in plan.get("implementation_tasks", [])],
+        },
+    }
+    try:
+        logger.log_struct({
+            "event": "preflight_return",
+            "status": "ok",
+        }, severity="INFO")
+    except Exception:
+        pass
+    try:
+        py_logger.info("[preflight] return status=ok")
+    except Exception:
+        pass
+    return response
 
 
 # Main execution

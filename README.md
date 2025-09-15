@@ -111,6 +111,14 @@ O sistema utiliza múltiplos agentes ADK organizados em pipeline sequencial:
 input_processor → landing_page_analyzer → planning_pipeline → execution_pipeline → final_assembly → validation
 ```
 
+### Modo “Plano Fixo” (Preflight)
+- O servidor executa um “preflight” para extrair/validar a entrada do usuário (LangExtract via Vertex/ADC) e seleciona um de 3 planos fixos (Reels/Stories/Feed).
+- Quando o plano fixo está presente no estado (`planning_mode=fixed` + `implementation_plan`), o pipeline:
+  - Executa o `context_synthesizer` (gera `{feature_briefing}`)
+  - Pula o `planning_pipeline` (revisão/geração dinâmica de plano)
+  - Segue direto para `execution_pipeline` com as 8 tarefas do plano fixo
+- Os prompts consideram `{format_specs_json}` (regras por formato como aspect_ratio, estilo/limites de copy etc.).
+
 ### 1. Input Processor
 Extrai campos estruturados da entrada do usuário:
 
@@ -122,6 +130,8 @@ Extrai campos estruturados da entrada do usuário:
 
 **Campo opcional**:
 - `foco`: Tema ou gancho da campanha (ex: "liquidação de inverno")
+
+Observação: No modo “preflight”, a extração/normalização ocorre no servidor antes do ADK. Se inválido, o servidor responde 422 com os erros e o ADK não é acionado.
 
 ### 2. Landing Page Analyzer
 **✅ ATUALIZADO**: Agora usa `web_fetch_tool` para extrair HTML real + análise StoryBrand
@@ -260,7 +270,7 @@ LANGEXTRACT_API_KEY=sua-chave-gemini  # Opcional
 make dev
 
 # Ou executar separadamente:
-make dev-backend-all  # Backend apenas
+make dev-backend-all  # Backend apenas (uvicorn app.server:app com /run_preflight)
 make dev-frontend     # Frontend apenas
 ```
 
@@ -284,6 +294,20 @@ Acesso:
 - Backend API: http://localhost:8000/docs
 
 ## API Endpoints
+
+### POST /run_preflight
+Valida e normaliza a entrada do usuário e retorna um estado inicial com plano fixo por formato (Reels/Stories/Feed).
+
+- Body (simples):
+```
+{ "text": "landing_page_url: https://...\nobjetivo_final: agendamentos\nperfil_cliente: ...\nformato_anuncio: Reels\nfoco: ..." }
+```
+
+- Respostas:
+  - 200 OK → `{ success: true, initial_state: {...}, plan_summary: {...} }`
+  - 422 Unprocessable Entity → `{ message: "Campos mínimos ausentes/invalidos.", errors: [{field, message}], partial: {...} }`
+
+Uso típico: o frontend chama `/run_preflight` antes de criar a sessão; se `success=true`, cria a sessão enviando `initial_state` no body e depois chama `/run_sse` normalmente. Em caso de 422, não dispara o ADK.
 
 ### POST /run
 Executa o agente de forma síncrona
@@ -324,6 +348,9 @@ Recebe feedback sobre anúncios gerados:
 
 ## Solução de Problemas
 
+### Preflight retorna 404
+Inicie o backend com `uvicorn app.server:app` (o Makefile já faz isso em `make dev` e `make dev-backend-all`). O endpoint `/run_preflight` é definido em `app/server.py`.
+
 ### Problema: Sistema trava ao processar
 **Sintoma**: Requisição fica pendente indefinidamente
 **Causa**: LangExtract travando com Vertex AI
@@ -362,6 +389,7 @@ export GOOGLE_CLOUD_PROJECT=seu-projeto
 - Sistema funcional mas com bug crítico no LangExtract
 - Frontend gerencia sessões automaticamente
 - Campo "foco" é opcional mas recomendado para campanhas direcionadas
+ - Preflight: no frontend, o preflight vem ativado por padrão (toggle no topo). Se desativar (`VITE_ENABLE_PREFLIGHT='false'`), o fluxo segue como antes (apenas ADK).
 
 ---
 

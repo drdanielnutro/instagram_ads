@@ -36,8 +36,15 @@ export function InputForm({ onSubmit, isLoading, context = 'homepage' }: InputFo
 
   const placeholderText =
     context === 'chat'
-      ? "Respond to the Agent, refine the plan, or type 'Looks good'..."
-      : "Ask me anything... e.g., A report on the latest Google I/O";
+      ? "Refine, peça ajustes (ex.: mude CTA para 'Saiba mais') ou continue a conversa..."
+      : [
+          "Use linhas no formato 'chave: valor', por exemplo:",
+          "landing_page_url: https://sua-pagina.com",
+          "objetivo_final: agendamentos",
+          "perfil_cliente: homens 35-50, executivos",
+          "formato_anuncio: Reels",
+          "foco: não engordar no inverno"
+        ].join("\n");
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">

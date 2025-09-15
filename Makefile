@@ -40,7 +40,8 @@ dev-coder: check-and-kill-ports
 
 # --- Helper targets for backends ---
 dev-backend-all:
-	@uv run adk api_server --allow_origins="*"
+	@echo "Starting backend with uvicorn (app.server:app) to include custom endpoints like /run_preflight"
+	@uv run uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload
 
 dev-backend-original:
 	@uv run adk api_server app --allow_origins="*"
@@ -59,8 +60,8 @@ NOISE_PATTERNS := Generated event in agent run streaming|LLM Request|LLM Respons
 # Start backend (ADK API server) and write both raw and filtered logs
 dev-backend-all-quiet:
 	@mkdir -p logs
-	@echo "Starting backend (quiet) with filtered logging..."
-	@uv run adk api_server --allow_origins="*" 2>&1 \
+	@echo "Starting backend (quiet) with filtered logging (uvicorn app.server:app)..."
+	@uv run uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload 2>&1 \
 		| tee logs/backend.raw.log \
 		| grep -E -v '$(NOISE_PATTERNS)' \
 		| tee logs/backend.filtered.log
@@ -102,8 +103,14 @@ logs-slim:
 logs-essential:
 	@mkdir -p logs
 	@echo "Generating logs/backend.essential.log (essential signals only)..."
-	@grep -E "Iniciando processamento|Fazendo fetch da URL|Conteúdo salvo no estado|Iniciando análise StoryBrand|Usando Vertex AI| 200 OK|final_assembler|final_validator|WARNING|ERROR|CRITICAL|New session created:" logs/backend.raw.log > logs/backend.essential.log || true
+	@grep -E "Iniciando processamento|Fazendo fetch da URL|Conteúdo salvo no estado|Iniciando análise StoryBrand|Usando Vertex AI|LangExtract params|StoryBrand input sizes|Conteúdo truncado|StoryBrand timing| 200 OK|final_assembler|final_validator|WARNING|ERROR|CRITICAL|New session created:" logs/backend.raw.log > logs/backend.essential.log || true
 	@echo "Created logs/backend.essential.log"
+
+logs-storybrand:
+	@mkdir -p logs
+	@echo "Filtering StoryBrand-related timing & params..."
+	@grep -E "Iniciando análise StoryBrand|LangExtract params|StoryBrand input sizes|Conteúdo truncado|StoryBrand timing" logs/backend.raw.log > logs/backend.storybrand.log || true
+	@echo "Created logs/backend.storybrand.log"
 
 playground:
 	uv run adk web --port 8501

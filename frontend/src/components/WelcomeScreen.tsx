@@ -28,10 +28,10 @@ export function WelcomeScreen({
         {/* Header section of the card */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-white flex items-center justify-center gap-3">
-            ✨ Gemini FullStack - ADK 🚀
+            ✨ Gerador de Anúncios Instagram (ADK + Vertex AI) 🚀
           </h1>
           <p className="text-lg text-neutral-300 max-w-md mx-auto">
-            Turns your questions into comprehensive reports!
+            Gere 3 variações de anúncio a partir da sua landing page, objetivo e formato (Reels, Stories ou Feed).
           </p>
         </div>
 

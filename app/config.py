@@ -28,8 +28,8 @@ class DevelopmentConfiguration:
     # Iteration limits
     max_search_iterations: int = 5
     max_task_iterations: int = 20
-    max_code_review_iterations: int = 8  # Aumentado para melhor qualidade
-    max_plan_review_iterations: int = 7  # Aumentado para melhor planejamento
+    max_code_review_iterations: int = 3  # Modo fixo: loops concisos
+    max_plan_review_iterations: int = 1  # Planejamento será bypass quando plano fixo existir
 
     # Flags
     enable_detailed_logging: bool = True

@@ -76,9 +76,9 @@ formato_anuncio: Feed
 ```
 landing_page_url: https://nutrologodivinopolis.com.br/masculino/
 objetivo_final: agendamentos de consulta via WhatsApp
-perfil_cliente: homens 35-50 anos, executivos com sobrepeso, querem emagrecer sem perder massa muscular
-formato_anuncio: Reels
-foco: não engordar no inverno
+perfil_cliente: homens 35-50 anos, com sobrepeso, querem emagrecer sem parar de beber aos finais de semana
+formato_anuncio: Feed
+foco: medicamentos para perder peso: mounjaro vs wegovy
 ```
 
 ### Exemplo 3: E-commerce (com foco promocional)

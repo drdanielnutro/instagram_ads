@@ -306,21 +306,32 @@ class StoryBrandExtractor:
         try:
             logger.info("Iniciando extração StoryBrand com LangExtract (Vertex AI)")
 
+            # Parâmetros de performance via env vars (com defaults seguros)
+            passes = int(os.getenv("STORYBRAND_EXTRACTION_PASSES", "1"))
+            max_workers = int(os.getenv("STORYBRAND_MAX_WORKERS", "4"))
+            max_char_buffer = int(os.getenv("STORYBRAND_MAX_CHAR_BUFFER", "1500"))
+
             # Configurar parâmetros baseado no modo (Vertex AI ou Gemini API)
             extract_kwargs = {
                 "text_or_documents": html_content,
                 "prompt_description": self.prompt,
                 "examples": self.examples,
                 "model_id": self.model_id,  # String com nome do modelo
-                "extraction_passes": 2,  # Duas passadas para melhor recall
-                "max_workers": 10,       # Processamento paralelo
-                "max_char_buffer": 2000, # Chunks menores para precisão
+                "extraction_passes": passes,
+                "max_workers": max_workers,
+                "max_char_buffer": max_char_buffer,
                 "use_schema_constraints": True,  # Forçar estrutura
                 "fence_output": False
             }
 
             # Sempre usar Vertex AI via ADC (sem API key)
             logger.info(f"Usando Vertex AI - Projeto: {self.project}, Região: {self.location}")
+            logger.info(
+                "LangExtract params: passes=%s, max_workers=%s, max_char_buffer=%s",
+                passes,
+                max_workers,
+                max_char_buffer,
+            )
             extract_kwargs["language_model_params"] = {
                 "vertexai": True,
                 "project": self.project,

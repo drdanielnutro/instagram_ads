@@ -30,6 +30,7 @@ from pydantic import BaseModel, Field
 from .config import config
 from .tools.web_fetch import web_fetch_tool
 from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
+from .callbacks.persist_outputs import persist_final_delivery
 from .schemas.storybrand import StoryBrandAnalysis
 
 
@@ -221,6 +222,49 @@ class EscalationBarrier(BaseAgent):
         async for ev in self._agent.run_async(ctx):
             if ev.actions and ev.actions.escalate:
                 ev.actions.escalate = False
+            yield ev
+
+
+class RunIfFailed(BaseAgent):
+    """Runs the wrapped agent only if the given review key is not pass.
+
+    Useful to avoid unnecessary refiner/fixer calls when a previous reviewer graded pass.
+    """
+
+    def __init__(self, name: str, review_key: str, agent: BaseAgent):
+        super().__init__(name=name)
+        self._review_key = review_key
+        self._agent = agent
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        result = ctx.session.state.get(self._review_key)
+        grade = result.get("grade") if isinstance(result, dict) else None
+        if grade == "pass":
+            # Skip running the wrapped agent
+            yield Event(author=self.name, content=Content(parts=[Part(text=f"Skipping {self._agent.name}; review passed.")]))
+            return
+        async for ev in self._agent.run_async(ctx):
+            yield ev
+
+
+class PlanningOrRunSynth(BaseAgent):
+    """Runs only the synthesizer when a fixed plan is provided; otherwise runs full planning."""
+
+    def __init__(self, synth_agent: BaseAgent, planning_agent: BaseAgent):
+        super().__init__(name="planning_or_run_synth")
+        self._synth = synth_agent
+        self._planning = planning_agent
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        st = ctx.session.state
+        if st.get("planning_mode") == "fixed" and st.get("implementation_plan"):
+            # Run only the context synthesizer to build the briefing, then skip planning loop
+            async for ev in self._synth.run_async(ctx):
+                yield ev
+            yield Event(author=self.name, content=Content(parts=[Part(text="Bypassed planning (fixed plan provided).")]))
+            return
+        # Run full planning (includes synthesizer + plan review loop)
+        async for ev in self._planning.run_async(ctx):
             yield ev
 
 
@@ -481,6 +525,7 @@ Contexto:
 - foco: {foco}
 - landing_page_context: {landing_page_context}
 - formato_anuncio: {formato_anuncio}
+ - format_specs: {format_specs_json}
 - Task atual: {current_task_info}
 
 Regras gerais:
@@ -488,6 +533,7 @@ Regras gerais:
 - pt-BR e adequado a Instagram.
 - Evite alegações médicas indevidas e promessas irrealistas.
 - Quando "foco" for fornecido (tema/gancho da campanha), direcione headline/corpo/CTA e elementos visuais para refletir esse foco.
+ - Respeite as especificações do formato em {format_specs_json} (ex.: aspect_ratio, limites de caracteres/tom da copy, aparência nativa do formato).
 
 Formatação por categoria (retorne somente o fragmento daquela categoria):
 
@@ -524,7 +570,7 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
   {
     "visual": {
       "descricao_imagem": "Descrição detalhada da imagem estática...",
-      "aspect_ratio": "automático baseado em {formato_anuncio}"
+      "aspect_ratio": "definido conforme especificação do formato"
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
   }
@@ -557,7 +603,7 @@ code_reviewer = LlmAgent(
 ## IDENTIDADE: Principal Ads Reviewer
 
 Analise {generated_code} para a tarefa {current_task_info}. 
-VALIDE ALINHAMENTO com {landing_page_context}
+VALIDE ALINHAMENTO com {landing_page_context} e CONFORMIDADE com {format_specs_json}
 
 Aplique critérios **por categoria**:
 
@@ -583,13 +629,14 @@ Aplique critérios **por categoria**:
   * Corpo objetivo, sem promessas irreais/alegações médicas indevidas
   * CTA coerente com {objetivo_final} e com a landing_page_url
   * VALIDAR: Conteúdo alinhado com {landing_page_context}
+  * Respeitar limites/estilo definidos em {format_specs_json} (ex.: headline curta em Reels/Stories)
 
 - COPY_QA:
   * Avaliação honesta; se "ajustar", razões acionáveis
 
 - VISUAL_DRAFT:
   * Descrição visual com gancho, contexto e elementos on-screen
-  * Formato/ratio/duração coerentes
+  * Aspect ratio coerente com o formato (conforme {format_specs_json}); aparência nativa do posicionamento
 
 - VISUAL_QA:
   * Avaliação honesta; se "ajustar", razões acionáveis
@@ -667,6 +714,7 @@ Regras:
 - **Saída**: apenas JSON válido (sem markdown).
 """,
     output_key="final_code_delivery",
+    after_agent_callback=persist_final_delivery,
 )
 
 # Validador final (schema estrito + coerência)
@@ -691,6 +739,10 @@ Critérios (deve ser **pass** se TODOS forem verdadeiros):
    Se houver "foco" definido, as mensagens devem refletir esse tema sem contradizer o conteúdo da landing page.
 5) Campos não vazios/placeholder.
 6) As 3 variações devem ser diferentes entre si.
+
+7) Quando `format_specs_json` estiver presente:
+   - O `aspect_ratio` e demais características do formato devem obedecer às especificações do formato selecionado.
+   - A copy deve respeitar limites/estilo indicados (ex.: headline curta em Reels/Stories; informativa em Feed).
 
 ## SAÍDA
 {"grade":"pass"|"fail","comment":"Se fail, liste campos/problemas específicos."}
@@ -812,7 +864,7 @@ code_review_loop = LoopAgent(
     sub_agents=[
         code_reviewer,
         EscalationChecker(name="code_escalation_checker", review_key="code_review_result"),
-        code_refiner,
+        RunIfFailed(name="refine_if_failed", review_key="code_review_result", agent=code_refiner),
     ],
     after_agent_callback=make_failure_handler(
         "code_review_result",
@@ -844,11 +896,11 @@ task_execution_loop = LoopAgent(
 # Validação final em loop: valida → (pass?) → corrige → revalida
 final_validation_loop = LoopAgent(
     name="final_validation_loop",
-    max_iterations=10,  # Aumentado para garantir validação rigorosa
+    max_iterations=3,
     sub_agents=[
         final_validator,
         EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
-        final_fix_agent,
+        RunIfFailed(name="final_fix_if_failed", review_key="final_validation_result", agent=final_fix_agent),
     ],
     after_agent_callback=make_failure_handler(
         "final_validation_result",
@@ -876,7 +928,7 @@ complete_pipeline = SequentialAgent(
     sub_agents=[
         input_processor,
         landing_page_analyzer,  # NOVO: adicionar aqui
-        planning_pipeline,
+        PlanningOrRunSynth(synth_agent=context_synthesizer, planning_agent=planning_pipeline),
         execution_pipeline
     ],
 )

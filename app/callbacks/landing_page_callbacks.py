@@ -6,6 +6,8 @@ Integrates StoryBrand analysis after web fetching.
 import logging
 import json
 from typing import Any, Dict, Optional
+import os
+import time
 from app.tools.langextract_sb7 import StoryBrandExtractor
 from app.schemas.storybrand import StoryBrandAnalysis
 
@@ -59,7 +61,49 @@ def process_and_extract_sb7(
         # Criar extrator e processar
         extractor = StoryBrandExtractor()
         # Se houver texto limpo, usar; senão, cair para HTML bruto
-        storybrand_data = extractor.extract(text_content or html_content)
+        input_text = text_content or html_content
+        # Logar tamanhos
+        try:
+            logger.info(
+                "StoryBrand input sizes: text_len=%s, html_len=%s",
+                len(text_content) if isinstance(text_content, str) else 0,
+                len(html_content) if isinstance(html_content, str) else 0,
+            )
+        except Exception:
+            pass
+
+        # Truncar para reduzir latência (mantendo contexto suficiente) – controlável por env
+        truncate_limit = int(os.getenv("STORYBRAND_TRUNCATE_LIMIT_CHARS", "12000"))
+        truncated = False
+        if (
+            truncate_limit > 0
+            and isinstance(input_text, str)
+            and len(input_text) > truncate_limit
+        ):
+            input_text = input_text[:truncate_limit]
+            truncated = True
+            logger.info(
+                "Conteúdo truncado para %sk chars para análise StoryBrand (melhor latência)",
+                int(truncate_limit / 1000),
+            )
+
+        t0 = time.time()
+        storybrand_data = extractor.extract(input_text)
+        t1 = time.time()
+        duration = round(t1 - t0, 2)
+        # Logar métrica de latência
+        try:
+            params = {
+                "duration_s": duration,
+                "truncated": truncated,
+                "truncate_limit": truncate_limit,
+            }
+            # Persistir no estado para debug rápido
+            if hasattr(tool_context, 'state'):
+                tool_context.state['storybrand_timing'] = params
+            logger.info("StoryBrand timing: %s", params)
+        except Exception:
+            pass
 
         # Validar com schema Pydantic
         try:

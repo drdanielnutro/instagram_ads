@@ -50,9 +50,18 @@ export default function App() {
   const [websiteCount, setWebsiteCount] = useState<number>(0);
   const [isBackendReady, setIsBackendReady] = useState(false);
   const [isCheckingBackend, setIsCheckingBackend] = useState(true);
+  const [preflightEnabled, setPreflightEnabled] = useState<boolean>(true);
   const currentAgentRef = useRef('');
   const accumulatedTextRef = useRef("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  // Initialize preflight from env (default ON)
+  useEffect(() => {
+    const env = (import.meta as any).env?.VITE_ENABLE_PREFLIGHT;
+    if (env === 'false') {
+      setPreflightEnabled(false);
+    }
+  }, []);
 
   const retryWithBackoff = async (
     fn: () => Promise<any>,
@@ -80,13 +89,14 @@ export default function App() {
     throw lastError!;
   };
 
-  const createSession = async (): Promise<{userId: string, sessionId: string, appName: string}> => {
+  const createSession = async (initialState?: any): Promise<{userId: string, sessionId: string, appName: string}> => {
     const generatedSessionId = uuidv4();
     const response = await fetch(`/api/apps/app/users/u_999/sessions/${generatedSessionId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify(initialState || {})
     });
     
     if (!response.ok) {
@@ -99,6 +109,32 @@ export default function App() {
       sessionId: data.id,
       appName: data.appName
     };
+  };
+
+  const runPreflight = async (text: string): Promise<{ initial_state?: any, plan_summary?: any, blocked?: boolean } | null> => {
+    try {
+      const resp = await fetch(`/api/run_preflight`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      if (resp.status === 422) {
+        const detail = await resp.json();
+        const msg = (detail && detail.detail && detail.detail.message) ? detail.detail.message : "Preflight inválido.";
+        const errs = (detail && detail.detail && detail.detail.errors) ? JSON.stringify(detail.detail.errors) : "";
+        setMessages(prev => [...prev, { type: "ai", content: `${msg}\n${errs}`, id: Date.now().toString(), agent: "preflight" }]);
+        return { blocked: true };
+      }
+      if (!resp.ok) {
+        console.warn("/run_preflight falhou, seguindo sem preflight.");
+        return null;
+      }
+      const data = await resp.json();
+      return { initial_state: data.initial_state, plan_summary: data.plan_summary };
+    } catch (e) {
+      console.warn("Erro no preflight, seguindo sem preflight.", e);
+      return null;
+    }
   };
 
   const checkBackendHealth = async (): Promise<boolean> => {
@@ -294,7 +330,17 @@ export default function App() {
       
       if (!currentSessionId || !currentUserId || !currentAppName) {
         console.log('Creating new session...');
-        const sessionData = await retryWithBackoff(createSession);
+        // Tentar preflight para preparar estado inicial (plano fixo + specs por formato)
+        let initialState: any = {};
+        if (preflightEnabled) {
+          const preflight = await runPreflight(query);
+          if (preflight?.blocked) {
+            setIsLoading(false);
+            return; // Não segue para o ADK quando preflight inválido
+          }
+          initialState = preflight?.initial_state || {};
+        }
+        const sessionData = await retryWithBackoff(() => createSession(initialState));
         currentUserId = sessionData.userId;
         currentSessionId = sessionData.sessionId;
         currentAppName = sessionData.appName;
@@ -522,6 +568,20 @@ export default function App() {
   return (
     <div className="flex h-screen bg-neutral-800 text-neutral-100 font-sans antialiased">
       <main className="flex-1 flex flex-col overflow-hidden w-full">
+        {/* Toolbar */}
+        <div className="px-4 py-2 border-b border-neutral-700 bg-neutral-900/60 backdrop-blur sticky top-0 z-20 flex items-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-neutral-200">
+            <input
+              type="checkbox"
+              checked={preflightEnabled}
+              onChange={(e) => setPreflightEnabled(e.target.checked)}
+            />
+            Preflight (plano fixo)
+          </label>
+          <span className="text-xs text-neutral-400">
+            {preflightEnabled ? 'ON' : 'OFF'} — valida entrada e injeta plano por formato
+          </span>
+        </div>
         <div className={`flex-1 overflow-y-auto ${(messages.length === 0 || isCheckingBackend) ? "flex" : ""}`}>
           {isCheckingBackend ? (
             <BackendLoadingScreen />
