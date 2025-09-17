@@ -1,3 +1,4 @@
+# [DEPRECATED – ver docs/entrega_json_final_producao.md]
 # Plano de Entrega e Download do JSON Final (Local + GCS)
 
 ## Objetivo
@@ -193,4 +194,3 @@ gcloud storage cp gs://instagram-ads-472021-facilitador-logs-data/ads/final/<arq
 - Observabilidade: logs já indicam onde foi salvo; endpoints `meta`/`download` podem logar as chamadas e respostas.
 
 Conclusão: plano consistente e incremental; não quebra a geração (3 variações), garante download em dev e provê caminho seguro para produção via Signed URL.
-

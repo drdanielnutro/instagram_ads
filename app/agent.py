@@ -57,6 +57,7 @@ class AdCopy(BaseModel):
 
 class AdVisual(BaseModel):
     descricao_imagem: str  # MUDANÇA: era descricao
+    prompt_imagem: str  # Prompt técnico em inglês para geração de imagem
     aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
     # REMOVIDO: duracao (apenas imagens, sem vídeos)
 
@@ -569,7 +570,8 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
 - VISUAL_DRAFT:
   {
     "visual": {
-      "descricao_imagem": "Descrição detalhada da imagem estática...",
+      "descricao_imagem": "Descrição detalhada da imagem estática em pt-BR...",
+      "prompt_imagem": "Prompt técnico em inglês para IA (estilo, composição, iluminação, câmera/lente, mood, qualidade)...",
       "aspect_ratio": "definido conforme especificação do formato"
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
@@ -636,10 +638,12 @@ Aplique critérios **por categoria**:
 
 - VISUAL_DRAFT:
   * Descrição visual com gancho, contexto e elementos on-screen
+  * Incluir prompt_imagem em inglês técnico (estilo, iluminação, câmera, qualidade) coerente com a descrição
   * Aspect ratio coerente com o formato (conforme {format_specs_json}); aparência nativa do posicionamento
 
 - VISUAL_QA:
   * Avaliação honesta; se "ajustar", razões acionáveis
+  * Confirmar que descricao_imagem (pt-BR) e prompt_imagem (inglês) são consistentes e acionáveis para IA
 
 - COMPLIANCE_QA:
   * Checagem de conformidade (Instagram; se saúde/medicina, tom responsável)
@@ -701,7 +705,7 @@ Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 - "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
 - "formato": usar {formato_anuncio} especificado pelo usuário
 - "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
-- "visual": { "descricao_imagem", "aspect_ratio" } (sem duracao - apenas imagens)
+- "visual": { "descricao_imagem", "prompt_imagem", "aspect_ratio" } (sem duracao - apenas imagens)
 - "cta_instagram": do COPY_DRAFT
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
@@ -730,7 +734,7 @@ Critérios (deve ser **pass** se TODOS forem verdadeiros):
 1) JSON válido e lista com 3 objetos (3 variações).
 2) Chaves obrigatórias presentes:
    landing_page_url, formato, copy{headline,corpo,cta_texto}, 
-   visual{descricao_imagem,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
+   visual{descricao_imagem,prompt_imagem,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
 3) Enums:
    - formato ∈ {"Reels","Stories","Feed"}
    - aspect_ratio ∈ {"9:16","1:1","4:5","16:9"}

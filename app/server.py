@@ -23,7 +23,6 @@ from google.cloud import logging as google_cloud_logging
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider, export
 
-from app.utils.gcs import create_bucket_if_not_exists
 from app.utils.tracing import CloudTraceLoggingSpanExporter
 from app.utils.typing import Feedback
 from app.plan_models.fixed_plans import get_plan_by_format
@@ -48,13 +47,23 @@ allow_origins = (
 artifacts_bucket = os.getenv(
     "ARTIFACTS_BUCKET", f"gs://{project_id}-facilitador-logs-data"
 )
-bucket_location = os.getenv(
-    "ARTIFACTS_BUCKET_LOCATION",
-    os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"),
-)
-create_bucket_if_not_exists(
-    bucket_name=artifacts_bucket, project=project_id, location=bucket_location
-)
+
+# Production note: avoid creating buckets at startup.
+# If you really need auto-create in dev, set ENABLE_AUTO_BUCKET_CREATE=true
+if os.getenv("ENABLE_AUTO_BUCKET_CREATE", "false").lower() == "true":
+    from app.utils.gcs import create_bucket_if_not_exists
+    bucket_location = os.getenv(
+        "ARTIFACTS_BUCKET_LOCATION",
+        os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"),
+    )
+    try:
+        create_bucket_if_not_exists(
+            bucket_name=artifacts_bucket, project=project_id, location=bucket_location
+        )
+    except Exception as e:
+        logging.getLogger(__name__).warning(
+            "Auto bucket creation failed or is not permitted: %s", e
+        )
 
 provider = TracerProvider()
 processor = export.BatchSpanProcessor(CloudTraceLoggingSpanExporter())
@@ -74,6 +83,13 @@ app: FastAPI = get_fast_api_app(
 )
 app.title = "facilitador"
 app.description = "API for interacting with the Agent facilitador"
+
+# Include custom delivery router (final JSON download)
+try:
+    from app.routers.delivery import router as delivery_router
+    app.include_router(delivery_router)
+except Exception as e:  # pragma: no cover
+    logging.getLogger(__name__).warning("Delivery router not loaded: %s", e)
 
 
 @app.post("/feedback")

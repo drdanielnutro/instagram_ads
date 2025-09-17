@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { WelcomeScreen } from "@/components/WelcomeScreen";
+import { Button } from "@/components/ui/button";
 import { ChatMessagesView } from "@/components/ChatMessagesView";
 
 // Update DisplayData to be a string type
@@ -51,6 +52,8 @@ export default function App() {
   const [isBackendReady, setIsBackendReady] = useState(false);
   const [isCheckingBackend, setIsCheckingBackend] = useState(true);
   const [preflightEnabled, setPreflightEnabled] = useState<boolean>(true);
+  const [deliveryMeta, setDeliveryMeta] = useState<any | null>(null);
+  const [deliveryChecking, setDeliveryChecking] = useState<boolean>(false);
   const currentAgentRef = useRef('');
   const accumulatedTextRef = useRef("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -136,6 +139,45 @@ export default function App() {
       return null;
     }
   };
+
+  const checkDeliveryMeta = useCallback(async () => {
+    if (!userId || !sessionId) return;
+    try {
+      setDeliveryChecking(true);
+      const resp = await fetch(`/api/delivery/final/meta?user_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data && data.ok) {
+          setDeliveryMeta(data);
+        }
+      }
+    } catch (e) {
+      // ignore
+    } finally {
+      setDeliveryChecking(false);
+    }
+  }, [userId, sessionId]);
+
+  const handleDownloadFinal = useCallback(async () => {
+    if (!userId || !sessionId) return;
+    try {
+      const url = `/api/delivery/final/download?user_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`;
+      // Try to get a signed URL first
+      const resp = await fetch(url);
+      const ct = resp.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        const data = await resp.json();
+        if (data && data.signed_url) {
+          window.open(data.signed_url, '_blank');
+          return;
+        }
+      }
+      // Fallback: open endpoint directly (local stream case)
+      window.open(url, '_blank');
+    } catch (e) {
+      console.warn('Download failed', e);
+    }
+  }, [userId, sessionId]);
 
   const checkBackendHealth = async (): Promise<boolean> => {
     try {
@@ -565,6 +607,23 @@ export default function App() {
     </div>
   );
 
+  // Auto-check delivery meta when processing finishes and session exists
+  useEffect(() => {
+    if (!isLoading && userId && sessionId && !deliveryMeta) {
+      let attempts = 0;
+      const id = setInterval(() => {
+        attempts += 1;
+        checkDeliveryMeta();
+        if (attempts >= 20) {
+          clearInterval(id);
+        }
+      }, 3000);
+      // First immediate check
+      checkDeliveryMeta();
+      return () => clearInterval(id);
+    }
+  }, [isLoading, userId, sessionId, deliveryMeta, checkDeliveryMeta]);
+
   return (
     <div className="flex h-screen bg-neutral-800 text-neutral-100 font-sans antialiased">
       <main className="flex-1 flex flex-col overflow-hidden w-full">
@@ -581,6 +640,23 @@ export default function App() {
           <span className="text-xs text-neutral-400">
             {preflightEnabled ? 'ON' : 'OFF'} — valida entrada e injeta plano por formato
           </span>
+          <div className="ml-auto flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={checkDeliveryMeta}
+              disabled={!userId || !sessionId || deliveryChecking}
+              className="text-xs border-neutral-600 text-neutral-200 hover:bg-neutral-700"
+            >
+              {deliveryChecking ? 'Verificando…' : 'Atualizar' }
+            </Button>
+            <Button
+              onClick={handleDownloadFinal}
+              disabled={!deliveryMeta || !deliveryMeta.ok}
+              className={`${(!deliveryMeta || !deliveryMeta.ok) ? 'bg-neutral-700 text-neutral-300 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'} text-xs`}
+            >
+              Baixar JSON
+            </Button>
+          </div>
         </div>
         <div className={`flex-1 overflow-y-auto ${(messages.length === 0 || isCheckingBackend) ? "flex" : ""}`}>
           {isCheckingBackend ? (

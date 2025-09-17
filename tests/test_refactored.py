@@ -60,6 +60,7 @@ async def test_ad_generation():
                             print(f"  - Formato: {ad.get('formato', 'N/A')}")
                             print(f"  - Tem contexto_landing: {'✓' if 'contexto_landing' in ad else '✗'}")
                             print(f"  - Tem descricao_imagem: {'✓' if ad.get('visual', {}).get('descricao_imagem') else '✗'}")
+                            print(f"  - Tem prompt_imagem: {'✓' if ad.get('visual', {}).get('prompt_imagem') else '✗'}")
                             print(f"  - Sem duração: {'✓' if 'duracao' not in ad.get('visual', {}) else '✗'}")
                     else:
                         print("⚠️ Resultado não é uma lista")

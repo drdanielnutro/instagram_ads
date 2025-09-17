@@ -4,7 +4,7 @@
 
 Este projeto é um sistema multiagente baseado no Google ADK (Agent Development Kit) para gerar anúncios do Instagram em formato JSON. O objetivo principal é automatizar todo o fluxo de criação de anúncios (texto e imagem) a partir de informações fornecidas pelo usuário.
 
-**Status**: ⚠️ Funcional com travamento em LangExtract (2025-09-14)
+**Status**: ✅ Funcional. Análise StoryBrand com mitigação de latência (truncagem + parâmetros). Ver Solução de Problemas para env vars e logs de timing (2025-09-15)
 
 ## 🚨 Problema Atual - TRAVAMENTO
 
@@ -34,6 +34,7 @@ foco: liquidação de inverno
    - User ID (fixo: "u_999")
    - App Name (fixo: "app")
    - Conversão para formato JSON da API
+   - Preflight (valida/normaliza) antes de criar sessão; se inválido, retorna 422 e não dispara o ADK
 
 ### Opção 2: Via API Direta (curl)
 
@@ -86,6 +87,13 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## Refatorações Recentes
 
+### 2025-09-15 - Preflight + Planos fixos + Persistência JSON
+- ✅ Preflight no servidor (LangExtract/Vertex) valida/normaliza entrada e injeta plano fixo por formato
+- ✅ Bypass do planejamento dinâmico; `context_synthesizer` ainda roda para gerar `{feature_briefing}`
+- ✅ Prompts consideram `{format_specs_json}` (regras por formato)
+- ✅ Persistência do JSON final: local em `artifacts/ads_final/…json` e upload opcional ao GCS `ads/final/…json`
+- ✅ Logs essenciais (preflight) e métricas de StoryBrand (parâmetros e timing)
+
 ### 2025-09-14 - Campo "foco" e Makefile
 - ✅ **Novo campo `foco`**: Campo opcional para temas/ganchos de campanha
 - ✅ **Makefile melhorado**: Auto-kill de portas 8000 e 5173 antes de iniciar
@@ -118,6 +126,11 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
   - Pula o `planning_pipeline` (revisão/geração dinâmica de plano)
   - Segue direto para `execution_pipeline` com as 8 tarefas do plano fixo
 - Os prompts consideram `{format_specs_json}` (regras por formato como aspect_ratio, estilo/limites de copy etc.).
+ 
+### Persistência do JSON Final
+- Ao final do pipeline, o JSON é salvo localmente em `artifacts/ads_final/<timestamp>_<session>_<formato>.json`.
+- Em produção, use um bucket dedicado para entregas finais: `DELIVERIES_BUCKET=gs://…`. O upload vai para `gs://<deliveries_bucket>/deliveries/<user_id>/<session_id>/<arquivo>.json` e um sidecar `meta.json` é salvo no mesmo prefixo.
+- Os caminhos ficam no state da sessão: `final_delivery_local_path` e (se houver upload) `final_delivery_gcs_uri`. O sidecar facilita o lookup por sessão.
 
 ### 1. Input Processor
 Extrai campos estruturados da entrada do usuário:
@@ -249,9 +262,9 @@ app/
 
 ### Iterações Máximas
 ```python
-max_code_review_iterations: 8
-max_plan_review_iterations: 7
-final_validation_loop: 10
+max_code_review_iterations: 3
+max_plan_review_iterations: 1
+final_validation_loop: 3
 max_task_iterations: 20
 ```
 
@@ -260,6 +273,8 @@ max_task_iterations: 20
 GOOGLE_CLOUD_PROJECT=instagram-ads-472021
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 LANGEXTRACT_API_KEY=sua-chave-gemini  # Opcional
+ARTIFACTS_BUCKET=gs://instagram-ads-472021-facilitador-logs-data   # uso interno do ADK
+DELIVERIES_BUCKET=gs://instagram-ads-472021-deliveries             # JSON final (frontend via Signed URL)
 ```
 
 ## Execução
@@ -308,6 +323,17 @@ Valida e normaliza a entrada do usuário e retorna um estado inicial com plano f
   - 422 Unprocessable Entity → `{ message: "Campos mínimos ausentes/invalidos.", errors: [{field, message}], partial: {...} }`
 
 Uso típico: o frontend chama `/run_preflight` antes de criar a sessão; se `success=true`, cria a sessão enviando `initial_state` no body e depois chama `/run_sse` normalmente. Em caso de 422, não dispara o ADK.
+Logs úteis: `[preflight] start` → `result` → `blocked` (422) → `plan_selected` → `return`.
+
+### GET /delivery/final/meta
+- Parâmetros: `user_id`, `session_id`
+- Resposta: `{ ok: true, filename, formato, timestamp, size_bytes, final_delivery_local_path, final_delivery_gcs_uri, user_id, session_id }`
+- 404 quando o artefato ainda não estiver disponível
+
+### GET /delivery/final/download
+- Parâmetros: `user_id`, `session_id`
+- Produção (GCS): retorna `{ signed_url: "...", expires_in: 600 }` (v4, GET, 10 min, com `Content-Disposition` e `Content-Type` para download)
+- Desenvolvimento: stream do arquivo local (`application/json`)
 
 ### POST /run
 Executa o agente de forma síncrona
@@ -348,6 +374,19 @@ Recebe feedback sobre anúncios gerados:
 
 ## Solução de Problemas
 
+### Ajuste de desempenho da análise StoryBrand
+Se notar latência elevada na análise da landing (LangExtract), ajuste via env vars e verifique logs de timing:
+```bash
+export STORYBRAND_TRUNCATE_LIMIT_CHARS=12000   # 0 desativa truncagem; 8–12k recomendados
+export STORYBRAND_EXTRACTION_PASSES=1          # 1 recomendado
+export STORYBRAND_MAX_WORKERS=4                # 2–4
+export STORYBRAND_MAX_CHAR_BUFFER=1500         # 1000–2000
+```
+- Logs úteis:
+  - `LangExtract params: passes=…, max_workers=…, max_char_buffer=…`
+  - `StoryBrand timing: { duration_s, truncated, truncate_limit }`
+- Makefile: gere o extrato com `make logs-storybrand`.
+
 ### Preflight retorna 404
 Inicie o backend com `uvicorn app.server:app` (o Makefile já faz isso em `make dev` e `make dev-backend-all`). O endpoint `/run_preflight` é definido em `app/server.py`.
 
@@ -385,11 +424,14 @@ export GOOGLE_CLOUD_PROJECT=seu-projeto
 
 ## Observações
 
-- O bucket de logs usa nome `{project_id}-facilitador-logs-data` (herança do projeto original)
-- Sistema funcional mas com bug crítico no LangExtract
-- Frontend gerencia sessões automaticamente
-- Campo "foco" é opcional mas recomendado para campanhas direcionadas
- - Preflight: no frontend, o preflight vem ativado por padrão (toggle no topo). Se desativar (`VITE_ENABLE_PREFLIGHT='false'`), o fluxo segue como antes (apenas ADK).
+- Buckets:
+  - `ARTIFACTS_BUCKET`: uso interno do ADK (agentes/ferramentas). Não é exposto ao frontend.
+  - `DELIVERIES_BUCKET`: uso da aplicação para entregas finais (JSON). Acesso via Signed URL (v4) nos endpoints `/delivery/*`.
+- Em produção, não crie buckets no startup; provisione via IaC/CLI.
+- Sistema funcional com mitigação de latência na análise StoryBrand (use as env vars de desempenho se necessário).
+- Frontend gerencia sessões automaticamente e executa preflight por padrão.
+- Campo "foco" é opcional mas recomendado para campanhas direcionadas.
+- Preflight: no frontend, vem ativado por padrão (toggle no topo). Se desativar (`VITE_ENABLE_PREFLIGHT='false'`), o fluxo segue como antes (apenas ADK).
 
 ---
 

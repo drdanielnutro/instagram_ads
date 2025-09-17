@@ -1,0 +1,15 @@
+[
+  {
+    "origin": [
+      "https://seu-frontend.com"
+    ],
+    "method": [
+      "GET"
+    ],
+    "responseHeader": [
+      "Content-Type",
+      "Content-Disposition"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

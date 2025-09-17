@@ -26,6 +26,30 @@ def _safe_session_id(callback_context: Any) -> str:
     return "nosession"
 
 
+def _safe_user_id(callback_context: Any) -> str:
+    """Best-effort extraction of user_id from callback context.
+
+    Falls back to `state.get('user_id')` and finally 'anonymous'.
+    """
+    try:
+        sess = getattr(callback_context, "_invocation_context", None)
+        if sess and getattr(sess, "session", None):
+            s = sess.session
+            uid = getattr(s, "user_id", None)
+            if uid:
+                return uid
+    except Exception:
+        pass
+    try:
+        st = getattr(callback_context, "state", {}) or {}
+        uid = st.get("user_id")
+        if uid:
+            return str(uid)
+    except Exception:
+        pass
+    return "anonymous"
+
+
 def _upload_to_gcs(bucket_uri: str, dest_path: str, data: bytes) -> str:
     if not bucket_uri.startswith("gs://"):
         raise ValueError("ARTIFACTS_BUCKET must start with gs://")
@@ -64,10 +88,14 @@ def persist_final_delivery(callback_context: Any) -> None:
 
         # Determine format for naming (best effort)
         fmt = state.get("formato_anuncio") or "unknown"
-        if fmt == "" and isinstance(data_obj, list) and data_obj:
-            fmt = data_obj[0].get("formato", "unknown")
+        if (fmt in ("", "unknown")) and isinstance(data_obj, list) and data_obj:
+            try:
+                fmt = data_obj[0].get("formato", fmt) or fmt
+            except Exception:
+                pass
 
         session_id = _safe_session_id(callback_context)
+        user_id = _safe_user_id(callback_context)
         ts = time.strftime("%Y%m%d-%H%M%S")
         fname = f"{ts}_{session_id}_{fmt}.json"
 
@@ -81,19 +109,54 @@ def persist_final_delivery(callback_context: Any) -> None:
 
         # Try GCS upload if configured
         gcs_uri = ""
-        bucket_uri = os.getenv("ARTIFACTS_BUCKET", "").strip()
-        if bucket_uri.startswith("gs://"):
+        deliveries_bucket_uri = os.getenv("DELIVERIES_BUCKET", "").strip()
+        if deliveries_bucket_uri.startswith("gs://"):
             try:
-                gcs_dest = f"ads/final/{fname}"
-                gcs_uri = _upload_to_gcs(bucket_uri, gcs_dest, json.dumps(data_obj, ensure_ascii=False).encode("utf-8"))
+                prefix = f"deliveries/{user_id}/{session_id}"
+                gcs_dest = f"{prefix}/{fname}"
+                payload_bytes = json.dumps(data_obj, ensure_ascii=False).encode("utf-8")
+                gcs_uri = _upload_to_gcs(deliveries_bucket_uri, gcs_dest, payload_bytes)
                 logger.info("Final delivery uploaded to GCS: %s", gcs_uri)
             except Exception as e:
                 logger.error("Failed to upload final delivery to GCS: %s", e)
+        else:
+            if os.getenv("K_SERVICE") or os.getenv("CLOUD_RUN_JOB"):
+                logger.warning(
+                    "DELIVERIES_BUCKET is not configured; skipping GCS upload in production environment.")
 
         # Persist paths into state for easy retrieval
         state["final_delivery_local_path"] = str(local_path)
         if gcs_uri:
             state["final_delivery_gcs_uri"] = gcs_uri
+
+        # Write sidecar meta locally and to GCS for fast lookup by endpoints
+        try:
+            meta = {
+                "filename": fname,
+                "formato": fmt,
+                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "size_bytes": local_path.stat().st_size if local_path.exists() else None,
+                "final_delivery_local_path": str(local_path),
+                "final_delivery_gcs_uri": gcs_uri,
+                "user_id": user_id,
+                "session_id": session_id,
+            }
+            meta_dir = base_dir / "meta"
+            _ensure_dir(meta_dir)
+            meta_local = meta_dir / f"{session_id}.json"
+            with meta_local.open("w", encoding="utf-8") as mf:
+                json.dump(meta, mf, ensure_ascii=False, indent=2)
+            logger.info("Final delivery meta saved locally: %s", str(meta_local))
+
+            if deliveries_bucket_uri.startswith("gs://"):
+                try:
+                    meta_dest = f"deliveries/{user_id}/{session_id}/meta.json"
+                    _upload_to_gcs(deliveries_bucket_uri, meta_dest, json.dumps(meta, ensure_ascii=False).encode("utf-8"))
+                    state["final_delivery_meta_gcs_uri"] = f"{deliveries_bucket_uri.rstrip('/')}/{meta_dest}"
+                    logger.info("Final delivery meta uploaded to GCS: %s", state["final_delivery_meta_gcs_uri"])
+                except Exception as me:
+                    logger.error("Failed to upload final delivery meta to GCS: %s", me)
+        except Exception as e:
+            logger.error("Failed to persist final delivery meta: %s", e)
     except Exception as e:
         logger.error("persist_final_delivery error: %s", e)
-

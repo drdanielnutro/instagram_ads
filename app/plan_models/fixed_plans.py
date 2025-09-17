@@ -74,8 +74,9 @@ def _tasks_reels() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Reels)",
             "description": (
-                "Descrever imagem estática estética de Reels com texto on‑screen curto e legível; respeitar zonas de "
-                "segurança da UI. Definir aspect_ratio=\"9:16\"."
+                "Gerar draft visual com dois campos: descricao_imagem (pt-BR, detalhando composição/elementos) e "
+                "prompt_imagem (inglês técnico para IA, cobrindo estilo, iluminação, lente, qualidade). Respeitar zonas de "
+                "segurança da UI e definir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -174,8 +175,8 @@ def _tasks_stories() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Stories)",
             "description": (
-                "Descrever imagem estática 9:16 com foco em legibilidade; texto on‑screen curto e claro; priorizar "
-                "hierarquia e contraste; aspect_ratio=\"9:16\"."
+                "Gerar descricao_imagem (pt-BR, foco em legibilidade/elementos verticais) e prompt_imagem (inglês técnico "
+                "para IA destacando composição vertical, contraste, estilo). Garantir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -270,8 +271,8 @@ def _tasks_feed() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 4:5 (preferido)",
             "description": (
-                "Descrever imagem estática com composição limpa e legível; evitar excesso de texto; definir "
-                "aspect_ratio=\"4:5\" (preferido) ou \"1:1\" quando justificável."
+                "Produzir descricao_imagem (pt-BR, composição limpa e legível) e prompt_imagem (inglês técnico para IA "
+                "detalhando paleta, iluminação, ângulo). Manter aspect_ratio=\"4:5\" (preferido) ou \"1:1\" justificável."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
