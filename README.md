@@ -85,6 +85,16 @@ curl -X POST http://localhost:8000/run_sse \
 | **Streaming** | Automático (SSE) | Você controla |
 | **Complexidade** | Baixa (só digitar) | Alta (gerenciar sessões) |
 
+## 🔐 Autenticação Local (Vertex AI)
+
+- Use **Application Default Credentials (ADC)** com sua conta do gcloud:
+  ```bash
+  gcloud auth application-default login
+  gcloud auth application-default set-quota-project instagram-ads-472021
+  ```
+- **Não configure** `GOOGLE_APPLICATION_CREDENTIALS=./sa-key.json` no ambiente de desenvolvimento local; isso força o uso da service account e pode falhar caso a chave não tenha permissões completas de Vertex AI.
+- Se optar por uma service account no futuro, garanta que ela tenha `roles/aiplatform.user` (ou equivalente) no projeto antes de reutilizar o arquivo.
+
 ## Refatorações Recentes
 
 ### 2025-09-15 - Preflight + Planos fixos + Persistência JSON
