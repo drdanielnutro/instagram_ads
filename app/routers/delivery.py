@@ -84,8 +84,13 @@ def download_final(user_id: str = Query(...), session_id: str = Query(...)):
             )
             return {"ok": True, "signed_url": url, "expires_in": 600}
         except Exception as e:
-            logger.error("Failed to generate Signed URL for %s: %s", gcs_uri, e)
-            raise HTTPException(status_code=500, detail="Failed to generate Signed URL")
+            logger.error(
+                "Failed to generate Signed URL for %s: %s. Falling back to local download if available.",
+                gcs_uri,
+                e,
+                exc_info=True,
+            )
+            # Fall through to local fallback below
 
     # Fallback to local stream
     local_path = meta.get("final_delivery_local_path")
@@ -93,4 +98,3 @@ def download_final(user_id: str = Query(...), session_id: str = Query(...)):
         return FileResponse(path=local_path, media_type="application/json", filename=filename)
 
     raise HTTPException(status_code=404, detail="No artifact available for download")
-

@@ -74,9 +74,11 @@ def _tasks_reels() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Reels)",
             "description": (
-                "Gerar draft visual com dois campos: descricao_imagem (pt-BR, detalhando composição/elementos) e "
-                "prompt_imagem (inglês técnico para IA, cobrindo estilo, iluminação, lente, qualidade). Respeitar zonas de "
-                "segurança da UI e definir aspect_ratio=\"9:16\"."
+                "Gerar descrição e prompts que mostrem a transformação: descreva em pt-BR a persona no estado atual (dor/frustração) e "
+                "no estado aspiracional (resultado positivo) dentro do contexto real da landing. Produza dois prompts técnicos em inglês "
+                "derivados da narrativa: `prompt_estado_atual` (emoção negativa, linguagem corporal, ambiente que reforça o problema) e "
+                "`prompt_estado_aspiracional` (emoção positiva, sinais de melhoria, ambiente coerente com o sucesso). Garanta que ambos "
+                "contrastes usem a mesma persona/ambientação evoluindo e respeite zonas seguras de UI. Definir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -98,7 +100,9 @@ def _tasks_reels() -> List[Dict[str, Any]]:
             "category": "COMPLIANCE_QA",
             "title": "Compliance (saúde/Meta)",
             "description": (
-                "Checar: sem ‘antes‑depois’, sem alegações médicas indevidas, sem termos proibidos; tom responsável."
+                "Checar se a narrativa de transformação (antes/depois) é honesta e compatível com as políticas do Meta: sem prazos "
+                "impossíveis, sem prometer resultados imediatos/milagrosos, sem alegações médicas proibidas. Garantir tom responsável "
+                "e sem uso de imagens chocantes ou comparações enganosas."
             ),
             "file_path": f"{base_dir}/TASK-007.json",
             "action": "CREATE",
@@ -175,8 +179,9 @@ def _tasks_stories() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Stories)",
             "description": (
-                "Gerar descricao_imagem (pt-BR, foco em legibilidade/elementos verticais) e prompt_imagem (inglês técnico "
-                "para IA destacando composição vertical, contraste, estilo). Garantir aspect_ratio=\"9:16\"."
+                "Descrever em pt-BR a persona nos dois momentos (dor antes do serviço/produto e situação aspiracional após o resultado), "
+                "mantendo foco em legibilidade e elementos verticais. Gerar `prompt_estado_atual` e `prompt_estado_aspiracional` em inglês "
+                "derivados da narrativa, evidenciando o contraste emocional e visual de forma coerente com Stories. Garantir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -198,7 +203,9 @@ def _tasks_stories() -> List[Dict[str, Any]]:
             "category": "COMPLIANCE_QA",
             "title": "Compliance (saúde/Meta)",
             "description": (
-                "Checar: sem ‘antes‑depois’, sem alegações médicas indevidas; respeitar restrições de stickers em ads."
+                "Checar se o contraste antes/depois descrito é verossímil e respeita as políticas do Meta: nada de prometer resultados "
+                "instantâneos ou não suportados; evitar alegações médicas proibidas; manter tom responsável. Verificar se não há elementos "
+                "interativos bloqueados em ads e se o conteúdo aspiracional é honesto."
             ),
             "file_path": f"{base_dir}/TASK-007.json",
             "action": "CREATE",
@@ -271,8 +278,10 @@ def _tasks_feed() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 4:5 (preferido)",
             "description": (
-                "Produzir descricao_imagem (pt-BR, composição limpa e legível) e prompt_imagem (inglês técnico para IA "
-                "detalhando paleta, iluminação, ângulo). Manter aspect_ratio=\"4:5\" (preferido) ou \"1:1\" justificável."
+                "Criar descricao_imagem em pt-BR cobrindo tanto o estado atual (dor/frustração) quanto o aspiracional (resultado positivo) "
+                "da mesma persona em contexto Feed. Derivar `prompt_estado_atual` e `prompt_estado_aspiracional` em inglês, destacando elementos "
+                "visuais que ilustrem a transformação (emoções, postura, ambiente). Manter aspect_ratio=\"4:5\" (preferido) ou \"1:1\" quando "
+                "justificado."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -294,7 +303,8 @@ def _tasks_feed() -> List[Dict[str, Any]]:
             "category": "COMPLIANCE_QA",
             "title": "Compliance (saúde/Meta)",
             "description": (
-                "Checar: sem ‘antes‑depois’, sem alegações médicas indevidas, sem termos proibidos; tom responsável."
+                "Validar se o contraste antes/depois indicado é verossímil, sem prometer resultados imediatos ou improváveis e sem alegações "
+                "médicas proibidas. Garantir tom responsável, linguagem consistente com políticas do Meta e ausência de comparações enganosas."
             ),
             "file_path": f"{base_dir}/TASK-007.json",
             "action": "CREATE",

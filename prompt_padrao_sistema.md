@@ -81,7 +81,43 @@ formato_anuncio: Feed
 foco: medicamentos para perder peso: mounjaro vs wegovy
 ```
 
-### Exemplo 3: E-commerce (com foco promocional)
+### Exemplo 3: Nutricionista - Mulheres com Rotina Corrida
+```
+landing_page_url: https://nutrologodivinopolis.com.br/feminino/
+objetivo_final: agendamentos de consulta via WhatsApp
+perfil_cliente: mulheres 30-55 anos, com sobrepeso, ROTINA CORRIDA (pouco tempo para treinos e planejamento alimentar; preferem solução médica prática que se adapte à agenda)
+formato_anuncio: Feed
+foco: medicamentos para perder peso (Mounjaro vs Wegovy) com ênfase em manejo de compulsão alimentar/ansiedade sob supervisão médica
+```
+
+### Exemplo 4: Nutricionista - Mulheres que Comem por Estresse
+```
+landing_page_url: https://nutrologodivinopolis.com.br/feminino/
+objetivo_final: agendamentos de consulta via WhatsApp
+perfil_cliente: mulheres 30-55 anos, com sobrepeso, COMEM POR ESTRESSE (relatam gatilhos emocionais e episódios de compulsão; buscam controle da ansiedade com acompanhamento médico)
+formato_anuncio: Feed
+foco: medicamentos para perder peso (Mounjaro vs Wegovy) com ênfase em manejo de compulsão alimentar/ansiedade sob supervisão médica
+```
+
+### Exemplo 5: Nutricionista - Mulheres com Metabolismo Travado
+```
+landing_page_url: https://nutrologodivinopolis.com.br/feminino/
+objetivo_final: agendamentos de consulta via WhatsApp
+perfil_cliente: mulheres 30-55 anos, com sobrepeso, SENSAÇÃO DE 'METABOLISMO TRAVADO' (queda de resultados apesar de esforço; querem avaliação médica e ajuste terapêutico)
+formato_anuncio: Feed
+foco: medicamentos para perder peso (Mounjaro vs Wegovy) com ênfase em manejo de compulsão alimentar/ansiedade sob supervisão médica
+```
+
+### Exemplo 6: Nutricionista - Mulheres com Pouca Rede de Apoio
+```
+landing_page_url: https://nutrologodivinopolis.com.br/feminino/
+objetivo_final: agendamentos de consulta via WhatsApp
+perfil_cliente: mulheres 30-55 anos, com sobrepeso, POUCA REDE DE APOIO (sentem-se cobradas e pouco acolhidas; valorizam acompanhamento empático e contínuo)
+formato_anuncio: Feed
+foco: medicamentos para perder peso (Mounjaro vs Wegovy) com ênfase em manejo de compulsão alimentar/ansiedade sob supervisão médica
+```
+
+### Exemplo 7: E-commerce (com foco promocional)
 ```
 landing_page_url: https://loja.exemplo.com.br/categoria/roupas
 objetivo_final: vendas
@@ -90,7 +126,7 @@ formato_anuncio: Stories
 foco: liquidação de inverno 70% off
 ```
 
-### Exemplo 4: Curso Online (com foco de urgência)
+### Exemplo 8: Curso Online (com foco de urgência)
 ```
 landing_page_url: https://curso.exemplo.com.br/inscricao
 objetivo_final: leads qualificados
@@ -151,5 +187,5 @@ O sistema gerará **3 variações de anúncio** em formato JSON, cada uma conten
 
 ---
 
-**Última atualização**: 2025-09-14
-**Versão**: 3.0.0 (Adicionado suporte ao campo "foco")
+**Última atualização**: 2025-09-18
+**Versão**: 3.1.0 (Adicionados exemplos de personas femininas para nutricionista)
