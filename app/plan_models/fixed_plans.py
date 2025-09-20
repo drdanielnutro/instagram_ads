@@ -74,11 +74,12 @@ def _tasks_reels() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Reels)",
             "description": (
-                "Gerar descrição e prompts que mostrem a transformação: descreva em pt-BR a persona no estado atual (dor/frustração) e "
-                "no estado aspiracional (resultado positivo) dentro do contexto real da landing. Produza dois prompts técnicos em inglês "
-                "derivados da narrativa: `prompt_estado_atual` (emoção negativa, linguagem corporal, ambiente que reforça o problema) e "
-                "`prompt_estado_aspiracional` (emoção positiva, sinais de melhoria, ambiente coerente com o sucesso). Garanta que ambos "
-                "contrastes usem a mesma persona/ambientação evoluindo e respeite zonas seguras de UI. Definir aspect_ratio=\"9:16\"."
+                "Gerar descrição e prompts que mostrem a transformação em três atos: descreva em pt-BR a persona no estado atual (dor/frustração), "
+                "no estado intermediário (ação imediata mantendo cenário/vestuário) e no estado aspiracional (resultado positivo) dentro do contexto real "
+                "da landing. Produza três prompts técnicos em inglês derivados da narrativa: `prompt_estado_atual` (emoção negativa, linguagem corporal, "
+                "ambiente que reforça o problema), `prompt_estado_intermediario` (mesmo cenário/vestuário mostrando a decisão/ação de mudança) e "
+                "`prompt_estado_aspiracional` (emoção positiva, sinais de melhoria, ambiente coerente com o sucesso). Garanta que a evolução use a mesma "
+                "persona/ambientação e respeite zonas seguras de UI. Definir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -179,9 +180,10 @@ def _tasks_stories() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 9:16 (Stories)",
             "description": (
-                "Descrever em pt-BR a persona nos dois momentos (dor antes do serviço/produto e situação aspiracional após o resultado), "
-                "mantendo foco em legibilidade e elementos verticais. Gerar `prompt_estado_atual` e `prompt_estado_aspiracional` em inglês "
-                "derivados da narrativa, evidenciando o contraste emocional e visual de forma coerente com Stories. Garantir aspect_ratio=\"9:16\"."
+                "Descrever em pt-BR a persona nos três momentos (dor antes do serviço/produto, decisão imediata de mudança mantendo cenário/vestuário e "
+                "situação aspiracional após o resultado), mantendo foco em legibilidade e elementos verticais. Gerar `prompt_estado_atual`, "
+                "`prompt_estado_intermediario` e `prompt_estado_aspiracional` em inglês derivados da narrativa, evidenciando a evolução emocional e visual de forma "
+                "coerente com Stories. Garantir aspect_ratio=\"9:16\"."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",
@@ -278,10 +280,10 @@ def _tasks_feed() -> List[Dict[str, Any]]:
             "category": "VISUAL_DRAFT",
             "title": "Visual estático 4:5 (preferido)",
             "description": (
-                "Criar descricao_imagem em pt-BR cobrindo tanto o estado atual (dor/frustração) quanto o aspiracional (resultado positivo) "
-                "da mesma persona em contexto Feed. Derivar `prompt_estado_atual` e `prompt_estado_aspiracional` em inglês, destacando elementos "
-                "visuais que ilustrem a transformação (emoções, postura, ambiente). Manter aspect_ratio=\"4:5\" (preferido) ou \"1:1\" quando "
-                "justificado."
+                "Criar descricao_imagem em pt-BR cobrindo a evolução da mesma persona em três momentos dentro do contexto Feed: estado atual (dor/frustração), "
+                "estado intermediário (ação imediata mantendo cenário coerente) e estado aspiracional (resultado positivo). Derivar `prompt_estado_atual`, "
+                "`prompt_estado_intermediario` e `prompt_estado_aspiracional` em inglês, destacando elementos visuais que ilustrem a evolução (emoções, postura, ambiente). "
+                "Manter aspect_ratio=\"4:5\" (preferido) ou \"1:1\" quando justificado."
             ),
             "file_path": f"{base_dir}/TASK-005.json",
             "action": "CREATE",

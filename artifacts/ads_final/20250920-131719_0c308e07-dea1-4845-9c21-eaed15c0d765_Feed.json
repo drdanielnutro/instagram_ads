@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu metabolismo travou? A ajuda médica pode ser a virada.",
+      "corpo": "Cansada de fazer tudo certo e o ponteiro da balança não se mexer? A sensação de 'metabolismo travado' é real e frustrante. Com a orientação do Dr. Daniel Araújo, Médico Nutrólogo, você vai além das dietas comuns, entendendo as causas hormonais e metabólicas. Descubra um plano que respeita sua rotina e, se indicado, utiliza suporte farmacológico seguro para destravar seus resultados. Recupere a confiança no seu corpo. Agende uma consulta.",
+      "cta_texto": "Agendar Consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 45 anos, com aparência real. No primeiro quadro, ela olha frustrada para uma calça jeans que não fecha. No segundo, ela está em uma consulta online, conversando com um médico atencioso, sentindo-se ouvida. No terceiro, ela caminha com energia em um parque, vestindo roupas confortáveis que lhe caem bem, com um sorriso de autoconfiança e bem-estar.",
+      "prompt_estado_atual": "Photo of a real-looking 45-year-old woman in her bedroom, visibly frustrated trying to button a pair of jeans that no longer fit. The lighting is soft, her posture slightly slumped, conveying disappointment. Realistic style, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "The same woman now sits at her desk, engaged in a video call with a friendly male doctor. Her expression is one of relief and hope, feeling understood as she discusses her health. Natural light from a window illuminates her face. Realistic photo, eye-level, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, now looking re-energized and confident, walking briskly through a sunlit park. She wears stylish, comfortable activewear that fits perfectly, with a genuine smile of well-being. Dynamic and vibrant photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em imagens/vídeos autênticos de pessoas reais (não modelos) expressando emoções genuínas (frustração → esperança → confiança) em cenários do dia a dia, evitando 'antes e depois'. A copy é empática, reconhece a dor principal da persona ('metabolismo travado', frustração), posiciona a solução médica especializada como a saída e inclui uma chamada clara para agendamento via WhatsApp, utilizando 'suporte farmacológico seguro' ao invés de nomes de medicamentos.",
+    "contexto_landing": "A landing page foca em tratamento médico para perda de peso para mulheres que já tentaram de tudo. Aborda dores como roupas que não servem, alimentação por estresse e metabolismo lento. Apresenta o Dr. Daniel Araújo como uma autoridade empática que oferece um plano personalizado, incluindo, se necessário, suporte farmacológico. Os benefícios destacados são a recuperação da energia, confiança, autoestima e uma relação equilibrada com a comida. O CTA principal é para agendar uma consulta via WhatsApp."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Compulsão Alimentar e Ansiedade? Controle com apoio médico.",
+      "corpo": "O ciclo de estresse, comida e culpa parece não ter fim? Você não está sozinha. A alimentação emocional é uma barreira real para o emagrecimento, mas pode ser tratada. O Dr. Daniel Araújo oferece um acompanhamento médico que foca na raiz do problema. Com um plano terapêutico que pode incluir auxílio farmacológico para manejar a ansiedade, você pode finalmente construir uma relação de paz com a comida e alcançar seus objetivos de saúde. Dê o primeiro passo.",
+      "cta_texto": "Quero Ajuda Profissional"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 38 anos em três momentos. Primeiro, à noite, na cozinha, com uma expressão de ansiedade e conflito, prestes a comer um doce. Segundo, ela está sentada em um sofá confortável, praticando uma respiração profunda de olhos fechados, em um momento de autoconsciência. Terceiro, ela está rindo enquanto prepara uma refeição saudável e colorida em sua cozinha, mostrando uma relação feliz e tranquila com a comida.",
+      "prompt_estado_atual": "Photo of a 38-year-old woman in her kitchen at night, lit by the fridge light. Her face shows a mix of anxiety and exhaustion as she hesitantly reaches for a tub of ice cream. The mood is solitary and conflicted. Cinematic realism, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "The same woman, during the day, sitting on a comfortable sofa in her living room. Her eyes are closed, and she's taking a deep, calming breath, with one hand on her chest. The scene conveys a moment of mindfulness and taking control of her emotions. Soft, natural light, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, looking genuinely happy and relaxed, laughing as she chops fresh, colorful vegetables in her bright, clean kitchen. She is preparing a healthy meal with ease, symbolizing a peaceful and positive relationship with food. Vibrant, warm photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em imagens/vídeos autênticos de pessoas reais (não modelos) expressando emoções genuínas (frustração → esperança → confiança) em cenários do dia a dia, evitando 'antes e depois'. A copy é empática, reconhece a dor principal da persona ('metabolismo travado', frustração), posiciona a solução médica especializada como a saída e inclui uma chamada clara para agendamento via WhatsApp, utilizando 'suporte farmacológico seguro' ao invés de nomes de medicamentos.",
+    "contexto_landing": "A landing page foca em tratamento médico para perda de peso para mulheres que já tentaram de tudo. Aborda dores como roupas que não servem, alimentação por estresse e metabolismo lento. Apresenta o Dr. Daniel Araújo como uma autoridade empática que oferece um plano personalizado, incluindo, se necessário, suporte farmacológico. Os benefícios destacados são a recuperação da energia, confiança, autoestima e uma relação equilibrada com a comida. O CTA principal é para agendar uma consulta via WhatsApp."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Wegovy ou Mounjaro? Apenas um médico pode indicar o melhor.",
+      "corpo": "Você ouve falar sobre medicamentos para emagrecer, mas a dúvida e o medo da automedicação paralisam? A resposta não está no Google, mas em uma consulta médica especializada. O Dr. Daniel Araújo, nutrólogo, realiza uma avaliação completa para definir se o suporte farmacológico é para você e qual a opção mais segura e eficaz para o seu caso. Pare de adivinhar. Tenha um plano médico para emagrecer com segurança e resultados sustentáveis. Fale conosco.",
+      "cta_texto": "Saber Mais"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 40 anos. Na primeira imagem, ela olha para a tela do celular com uma expressão confusa e sobrecarregada, vendo informações conflitantes sobre medicamentos. Na segunda imagem, um close-up mostra as mãos de um médico (Dr. Daniel) explicando um plano de tratamento em um tablet para a paciente, que olha com atenção. Na terceira, a mulher está em uma loja de roupas, olhando-se no espelho com um sorriso satisfeito, experimentando uma peça que gosta.",
+      "prompt_estado_atual": "A 40-year-old woman sits on her couch, looking overwhelmed and confused as she scrolls through conflicting information about weight-loss drugs on her smartphone. The screen's glow illuminates her worried face. Realistic, slightly desaturated photo, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "Close-up shot focusing on a doctor's hands pointing to a personalized treatment plan on a tablet screen. The patient (the same woman) is visible but slightly out of focus, her expression shifting to one of clarity and understanding. Professional and reassuring atmosphere. Realistic photo, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman in a well-lit clothing store fitting room, looking at her reflection with a confident and happy smile. She is trying on a stylish outfit that fits her well, feeling good about herself. The photo captures a moment of renewed self-esteem. Bright, commercial-style photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em imagens/vídeos autênticos de pessoas reais (não modelos) expressando emoções genuínas (frustração → esperança → confiança) em cenários do dia a dia, evitando 'antes e depois'. A copy é empática, reconhece a dor principal da persona ('metabolismo travado', frustração), posiciona a solução médica especializada como a saída e inclui uma chamada clara para agendamento via WhatsApp, utilizando 'suporte farmacológico seguro' ao invés de nomes de medicamentos.",
+    "contexto_landing": "A landing page foca em tratamento médico para perda de peso para mulheres que já tentaram de tudo. Aborda dores como roupas que não servem, alimentação por estresse e metabolismo lento. Apresenta o Dr. Daniel Araújo como uma autoridade empática que oferece um plano personalizado, incluindo, se necessário, suporte farmacológico. Os benefícios destacados são a recuperação da energia, confiança, autoestima e uma relação equilibrada com a comida. O CTA principal é para agendar uma consulta via WhatsApp."
+  }
+]

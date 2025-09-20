@@ -13,11 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
+import contextlib
 import json
 import logging
 import re
 from collections.abc import AsyncGenerator
-from typing import Literal
+from typing import Any, Dict, Literal
 
 from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent
 from google.adk.agents.callback_context import CallbackContext
@@ -29,6 +31,11 @@ from pydantic import BaseModel, Field
 
 from .config import config
 from .tools.web_fetch import web_fetch_tool
+from .tools.generate_transformation_images import generate_transformation_images
+from .utils.json_tools import try_parse_json_string
+
+
+logger = logging.getLogger(__name__)
 from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
 from .callbacks.persist_outputs import persist_final_delivery
 from .schemas.storybrand import StoryBrandAnalysis
@@ -58,6 +65,7 @@ class AdCopy(BaseModel):
 class AdVisual(BaseModel):
     descricao_imagem: str  # MUDANÇA: era descricao
     prompt_estado_atual: str  # Prompt técnico (inglês) para o estado de dor
+    prompt_estado_intermediario: str  # Prompt técnico (inglês) para a ação imediata mantendo cenário/vestuário
     prompt_estado_aspiracional: str  # Prompt técnico (inglês) para o estado transformado
     aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
     # REMOVIDO: duracao (apenas imagens, sem vídeos)
@@ -297,6 +305,281 @@ class EnhancedStatusReporter(BaseAgent):
         yield Event(author=self.name, content=Content(parts=[Part(text=text)]))
 
 
+class ImageAssetsAgent(BaseAgent):
+    """Gera e anexa imagens consistentes ao JSON final."""
+
+    def __init__(self, name: str = "image_assets_agent") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+
+        # Debug: verificar o que está no state
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.info(f"ImageAssetsAgent: Keys in state: {list(state.keys())}")
+        logger.info(f"ImageAssetsAgent: final_code_delivery exists: {'final_code_delivery' in state}")
+
+        raw_delivery = state.get("final_code_delivery")
+
+        # Fallback: tentar ler do arquivo se não estiver no state
+        if not raw_delivery and state.get("final_delivery_local_path"):
+            try:
+                from pathlib import Path
+                local_path = Path(state["final_delivery_local_path"])
+                if local_path.exists():
+                    with local_path.open("r", encoding="utf-8") as f:
+                        raw_delivery = f.read()
+                    logger.info(f"ImageAssetsAgent: Loaded JSON from file: {local_path}")
+                    # Salvar de volta no state para próximos agentes
+                    state["final_code_delivery"] = raw_delivery
+            except Exception as e:
+                logger.warning(f"ImageAssetsAgent: Failed to load from file: {e}")
+
+        if not getattr(config, "enable_image_generation", True):
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text="ℹ️ Geração de imagens desativada pela configuração ENABLE_IMAGE_GENERATION."
+                )]),
+            )
+            return
+
+        if not raw_delivery:
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text="ℹ️ JSON final ausente; geração de imagens não executada.")]),
+            )
+            return
+
+        try:
+            variations: list[Dict[str, Any]]
+            if isinstance(raw_delivery, str):
+                parsed, parsed_value = try_parse_json_string(raw_delivery)
+                if not parsed:
+                    parsed_value = json.loads(raw_delivery)
+                variations = parsed_value
+            elif isinstance(raw_delivery, list):
+                variations = raw_delivery
+            else:
+                raise TypeError("Estrutura inesperada em final_code_delivery")
+        except (json.JSONDecodeError, TypeError) as exc:
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ JSON final inválido para geração de imagens: {exc}")]),
+            )
+            return
+
+        if not isinstance(variations, list) or not variations:
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text="ℹ️ Nenhuma variação encontrada para gerar imagens.")]),
+            )
+            return
+
+        total_variations = len(variations)
+        user_id = str(state.get("user_id") or "anonymous")
+        session_identifier = str(
+            getattr(ctx.session, "id", "")
+            or state.get("session_id")
+            or "nosession"
+        )
+
+        summary: list[Dict[str, Any]] = []
+
+        for idx, variation in enumerate(variations):
+            variation_number = idx + 1
+            visual = variation.setdefault("visual", {}) or {}
+
+            required_fields = [
+                "prompt_estado_atual",
+                "prompt_estado_intermediario",
+                "prompt_estado_aspiracional",
+            ]
+            missing_fields = [field for field in required_fields if not visual.get(field)]
+            if missing_fields:
+                message = (
+                    f"⚠️ Variação {variation_number}: campos ausentes para geração de imagens: "
+                    + ", ".join(missing_fields)
+                )
+                visual["image_generation_error"] = message
+                summary.append({
+                    "variation_index": idx,
+                    "status": "skipped",
+                    "missing_fields": missing_fields,
+                })
+                yield Event(author=self.name, content=Content(parts=[Part(text=message)]))
+                continue
+
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text=f"🎨 Iniciando geração de imagens para variação {variation_number}/{total_variations}."
+                )]),
+            )
+
+            progress_queue: asyncio.Queue[tuple[int, str]] = asyncio.Queue()
+
+            async def progress_callback(stage_idx: int, stage_label: str) -> None:
+                await progress_queue.put((stage_idx, stage_label))
+
+            metadata = {
+                "user_id": user_id,
+                "session_id": session_identifier,
+                "formato": variation.get("formato"),
+                "aspect_ratio": visual.get("aspect_ratio"),
+            }
+
+            task = asyncio.create_task(
+                generate_transformation_images(
+                    prompt_atual=visual["prompt_estado_atual"],
+                    prompt_intermediario=visual["prompt_estado_intermediario"],
+                    prompt_aspiracional=visual["prompt_estado_aspiracional"],
+                    variation_idx=idx,
+                    metadata=metadata,
+                    progress_callback=progress_callback,
+                )
+            )
+
+            progress_task = asyncio.create_task(progress_queue.get())
+            stage_labels = {
+                1: "estado atual",
+                2: "estado intermediário",
+                3: "estado aspiracional",
+            }
+
+            assets: Dict[str, Any] | None = None
+            error: str | None = None
+
+            try:
+                while True:
+                    done, _ = await asyncio.wait(
+                        {task, progress_task},
+                        return_when=asyncio.FIRST_COMPLETED,
+                    )
+
+                    if progress_task in done:
+                        stage_idx, stage_label = progress_task.result()
+                        pretty = stage_labels.get(stage_idx, stage_label)
+                        yield Event(
+                            author=self.name,
+                            content=Content(parts=[Part(
+                                text=f"✅ Variação {variation_number}: etapa {stage_idx}/3 ({pretty}) concluída."
+                            )]),
+                        )
+                        progress_queue.task_done()
+                        if task.done():
+                            # Task is done, get the result before breaking
+                            try:
+                                assets = task.result()
+                            except Exception as exc:  # pragma: no cover - depende de runtime externo
+                                error = str(exc)
+                            if progress_queue.empty():
+                                break
+                        else:
+                            progress_task = asyncio.create_task(progress_queue.get())
+
+                    if task in done:
+                        try:
+                            assets = task.result()
+                        except Exception as exc:  # pragma: no cover - depende de runtime externo
+                            error = str(exc)
+                        break
+            finally:
+                if not task.done():
+                    task.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await task
+                if progress_task and not progress_task.done():
+                    progress_task.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await progress_task
+                while not progress_queue.empty():
+                    stage_idx, stage_label = await progress_queue.get()
+                    pretty = stage_labels.get(stage_idx, stage_label)
+                    yield Event(
+                        author=self.name,
+                        content=Content(parts=[Part(
+                            text=f"✅ Variação {variation_number}: etapa {stage_idx}/3 ({pretty}) concluída."
+                        )]),
+                    )
+                    progress_queue.task_done()
+
+            if error or not assets:
+                # Debug: log what actually happened
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"Image generation failed for variation {idx}: error={error}, assets={assets}")
+
+                error_message = error or "Falha desconhecida na geração de imagens."
+                visual["image_generation_error"] = error_message
+                summary.append({
+                    "variation_index": idx,
+                    "status": "error",
+                    "error": error_message,
+                })
+                yield Event(
+                    author=self.name,
+                    content=Content(parts=[Part(
+                        text=f"❌ Falha na geração de imagens da variação {variation_number}: {error_message}"
+                    )]),
+                )
+                continue
+
+            visual.pop("image_generation_error", None)
+            visual["image_estado_atual_gcs"] = assets["estado_atual"]["gcs_uri"]
+            visual["image_estado_atual_url"] = assets["estado_atual"].get("signed_url", "")
+            visual["image_estado_intermediario_gcs"] = assets["estado_intermediario"]["gcs_uri"]
+            visual["image_estado_intermediario_url"] = assets["estado_intermediario"].get("signed_url", "")
+            visual["image_estado_aspiracional_gcs"] = assets["estado_aspiracional"]["gcs_uri"]
+            visual["image_estado_aspiracional_url"] = assets["estado_aspiracional"].get("signed_url", "")
+            if "meta" in assets:
+                visual["image_generation_meta"] = assets["meta"]
+
+            summary.append({
+                "variation_index": idx,
+                "status": "ok",
+                "assets": assets,
+            })
+
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text=f"🎉 Variação {variation_number}: imagens geradas e anexadas ao JSON."
+                )]),
+            )
+
+        try:
+            state["final_code_delivery"] = json.dumps(variations, ensure_ascii=False)
+        except Exception as exc:  # pragma: no cover
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Erro ao serializar JSON final com imagens: {exc}")]),
+            )
+            return
+
+        state["image_assets"] = summary
+
+        try:
+            persist_final_delivery(ctx)
+        except Exception as exc:  # pragma: no cover - persistência externa
+            logger.error("Falha ao persistir JSON atualizado com imagens: %s", exc, exc_info=True)
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text="⚠️ Imagens geradas, mas houve erro ao persistir a entrega final.""\n" + str(exc)
+                )]),
+            )
+            return
+
+        sucesso = sum(1 for item in summary if item.get("status") == "ok")
+        yield Event(
+            author=self.name,
+            content=Content(parts=[Part(
+                text=f"✅ Imagens geradas e salvas (variações bem-sucedidas: {sucesso}/{total_variations})."
+            )]),
+        )
+
 class TaskInitializer(BaseAgent):
     def __init__(self, name: str):
         super().__init__(name=name)
@@ -402,6 +685,9 @@ Observação: se houver um "foco" (ex.: campanha sazonal, liquidação), prioriz
     after_tool_callback=process_and_extract_sb7,  # Singular, sem lista
     output_key="landing_page_context"
 )
+
+
+image_assets_agent = ImageAssetsAgent()
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -571,9 +857,10 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
 - VISUAL_DRAFT:
   {
     "visual": {
-      "descricao_imagem": "Descrição em pt-BR narrando o contraste estado_atual (dor) → estado_aspiracional (transformação)...",
-      "prompt_estado_atual": "Prompt técnico em inglês para IA descrevendo o estado de dor (emoções, postura, cenário)...",
-      "prompt_estado_aspiracional": "Prompt técnico em inglês para IA descrevendo o estado transformado (emoções positivas, resultados visíveis, cenário)...",
+      "descricao_imagem": "Descrição em pt-BR narrando a sequência: estado_atual (dor) → estado_intermediario (decisão imediata) → estado_aspiracional (transformação)...",
+      "prompt_estado_atual": "Prompt técnico em inglês descrevendo o estado de dor (emoções, postura, cenário)...",
+      "prompt_estado_intermediario": "Prompt técnico em inglês mantendo cenário/vestuário e mostrando a ação imediata de mudança...",
+      "prompt_estado_aspiracional": "Prompt técnico em inglês descrevendo o estado transformado (emoções positivas, resultados visíveis, cenário)...",
       "aspect_ratio": "definido conforme especificação do formato"
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
@@ -640,13 +927,13 @@ Aplique critérios **por categoria**:
 
 - VISUAL_DRAFT:
   * Descrição visual com gancho, contexto e elementos on-screen
-  * Narrativa deve mostrar o contraste estado_atual (dor) → estado_aspiracional (transformação) e manter coerência com a persona/contexto
-  * Incluir prompts técnicos em inglês (`prompt_estado_atual`, `prompt_estado_aspiracional`) alinhados à narrativa e mostrando contraste honesto
+  * Narrativa deve mostrar a sequência: estado_atual (dor) → estado_intermediario (decisão imediata/mudança) → estado_aspiracional (transformação) mantendo coerência com a persona/contexto
+  * Incluir prompts técnicos em inglês (`prompt_estado_atual`, `prompt_estado_intermediario`, `prompt_estado_aspiracional`) alinhados à narrativa e mostrando evolução honesta
   * Aspect ratio coerente com o formato (conforme {format_specs_json}); aparência nativa do posicionamento
 
 - VISUAL_QA:
   * Avaliação honesta; se "ajustar", razões acionáveis
-  * Confirmar que descricao_imagem e os dois prompts (estado atual x aspiracional) são consistentes, verossímeis e acionáveis para IA
+  * Confirmar que descricao_imagem e os três prompts (estado atual, estado intermediario e aspiracional) são consistentes, verossímeis e acionáveis para IA
 
 - COMPLIANCE_QA:
   * Checagem de conformidade (Instagram; se saúde/medicina, tom responsável)
@@ -695,6 +982,7 @@ Responda com confirmação simples.
     after_agent_callback=collect_code_snippets_callback,
 )
 
+
 final_assembler = LlmAgent(
     model=config.critic_model,
     name="final_assembler",  # mantido
@@ -708,7 +996,7 @@ Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 - "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
 - "formato": usar {formato_anuncio} especificado pelo usuário
 - "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
-- "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_aspiracional", "aspect_ratio" } (sem duracao - apenas imagens)
+- "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_intermediario", "prompt_estado_aspiracional", "aspect_ratio" } (sem duracao - apenas imagens)
 - "cta_instagram": do COPY_DRAFT
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
@@ -737,7 +1025,7 @@ Critérios (deve ser **pass** se TODOS forem verdadeiros):
 1) JSON válido e lista com 3 objetos (3 variações).
 2) Chaves obrigatórias presentes:
    landing_page_url, formato, copy{headline,corpo,cta_texto}, 
-   visual{descricao_imagem,prompt_estado_atual,prompt_estado_aspiracional,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
+   visual{descricao_imagem,prompt_estado_atual,prompt_estado_intermediario,prompt_estado_aspiracional,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
 3) Enums:
    - formato ∈ {"Reels","Stories","Feed"}
    - aspect_ratio ∈ {"9:16","1:1","4:5","16:9"}
@@ -925,6 +1213,7 @@ execution_pipeline = SequentialAgent(
         EnhancedStatusReporter(name="status_reporter_assembly"),
         final_assembler,
         EscalationBarrier(name="final_validation_stage", agent=final_validation_loop),
+        image_assets_agent,
         EnhancedStatusReporter(name="status_reporter_final"),
     ],
 )

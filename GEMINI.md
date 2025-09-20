@@ -3,7 +3,7 @@ Coding Agent guidance:
 # Suas instruções estão em: 
 '/Users/institutorecriare/VSCodeProjects/facilitador/facilitador/contexto.md'
 
-O documento atual (GEMINI.md) contém a documentação oficial do Google ADK. Antes de ler esse documento você deve entender o projeto do documento 'contexto.md'.
+
 
 Sempre use o documento '/Users/institutorecriare/VSCodeProjects/facilitador/facilitador/.claude/agents/contextual-software-engineer.md' antes de responder as dúvidas do usuário. Ele visa garantir que você se mantenha con contexto.
 

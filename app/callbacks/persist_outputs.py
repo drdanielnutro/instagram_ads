@@ -1,3 +1,4 @@
+from collections.abc import MutableMapping
 import json
 import logging
 import os
@@ -10,12 +11,52 @@ from google.cloud import storage
 
 logger = logging.getLogger(__name__)
 
+from app.utils.json_tools import try_parse_json_string
+
 
 def _ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
+def _resolve_state(callback_context: Any) -> dict[str, Any]:
+    """Return the shared state dict from different callback context types."""
+
+    # CallbackContext exposes ``state`` directly.
+    state = getattr(callback_context, "state", None)
+    if isinstance(state, MutableMapping):
+        return state
+
+    # InvocationContext exposes ``session.state``.
+    session = getattr(callback_context, "session", None)
+    if session is not None:
+        session_state = getattr(session, "state", None)
+        if isinstance(session_state, MutableMapping):
+            return session_state
+
+    # CallbackContext stores InvocationContext in ``_invocation_context``.
+    invocation_ctx = getattr(callback_context, "_invocation_context", None)
+    if invocation_ctx is not None:
+        session = getattr(invocation_ctx, "session", None)
+        if session is not None:
+            session_state = getattr(session, "state", None)
+            if isinstance(session_state, MutableMapping):
+                return session_state
+
+    return {}
+
+
 def _safe_session_id(callback_context: Any) -> str:
+    try:
+        session = getattr(callback_context, "session", None)
+        if session is not None:
+            return (
+                getattr(session, "id", None)
+                or getattr(session, "session_id", None)
+                or "nosession"
+            )
+    except Exception:
+        pass
+
     try:
         sess = getattr(callback_context, "_invocation_context", None)
         if sess and getattr(sess, "session", None):
@@ -23,7 +64,9 @@ def _safe_session_id(callback_context: Any) -> str:
             return getattr(s, "id", None) or getattr(s, "session_id", None) or "nosession"
     except Exception:
         pass
-    return "nosession"
+
+    state = _resolve_state(callback_context)
+    return str(state.get("session_id", "nosession"))
 
 
 def _safe_user_id(callback_context: Any) -> str:
@@ -32,21 +75,28 @@ def _safe_user_id(callback_context: Any) -> str:
     Falls back to `state.get('user_id')` and finally 'anonymous'.
     """
     try:
+        sess = getattr(callback_context, "session", None)
+        if sess is not None:
+            uid = getattr(sess, "user_id", None)
+            if uid:
+                return str(uid)
+    except Exception:
+        pass
+
+    try:
         sess = getattr(callback_context, "_invocation_context", None)
         if sess and getattr(sess, "session", None):
             s = sess.session
             uid = getattr(s, "user_id", None)
             if uid:
-                return uid
+                return str(uid)
     except Exception:
         pass
-    try:
-        st = getattr(callback_context, "state", {}) or {}
-        uid = st.get("user_id")
-        if uid:
-            return str(uid)
-    except Exception:
-        pass
+
+    state = _resolve_state(callback_context)
+    uid = state.get("user_id")
+    if uid:
+        return str(uid)
     return "anonymous"
 
 
@@ -70,7 +120,7 @@ def persist_final_delivery(callback_context: Any) -> None:
     """
 
     try:
-        state = getattr(callback_context, "state", {}) or {}
+        state = _resolve_state(callback_context)
         payload = state.get("final_code_delivery")
         if not payload:
             logger.warning("persist_final_delivery: no final_code_delivery in state; skipping")
@@ -78,11 +128,13 @@ def persist_final_delivery(callback_context: Any) -> None:
 
         # Parse/validate JSON (string or list)
         if isinstance(payload, str):
-            try:
-                data_obj = json.loads(payload)
-            except json.JSONDecodeError:
-                # Not valid JSON -> wrap as string content
-                data_obj = payload
+            parsed, data_obj = try_parse_json_string(payload)
+            if not parsed:
+                try:
+                    data_obj = json.loads(payload)
+                except json.JSONDecodeError:
+                    # Not valid JSON -> wrap as string content
+                    data_obj = payload
         else:
             data_obj = payload
 

@@ -37,6 +37,7 @@ Adicionar a geração de nove imagens com transformação consistente (três por
   IMAGE_GENERATION_MAX_RETRIES=3
   IMAGE_TRANSFORMATION_STEPS=3
   IMAGE_INTERMEDIATE_PROMPT_TEMPLATE="...same outfit, same scene..."
+  ENABLE_IMAGE_GENERATION=true  # definir como false em ambientes que não podem acessar a API de imagens
   ```
 
 ### 4.2. Ferramenta de Transformação de Imagens

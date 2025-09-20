@@ -1,0 +1,155 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu metabolismo travou? A solução pode ser médica.",
+      "corpo": "Cansada de dietas que não funcionam e de sentir seu metabolismo parado? A causa pode ir além do que você come. O Dr. Daniel Araújo, médico nutrólogo, oferece uma avaliação completa para diagnosticar o problema. Se indicado, um tratamento medicamentoso pode ser a chave para destravar seu emagrecimento com segurança e acompanhamento. Recupere sua energia e faça as pazes com a balança.",
+      "cta_texto": "Agende sua avaliação médica."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher com expressão frustrada diante do espelho (estado atual). Em seguida, a mesma mulher em uma consulta, conversando com um médico atencioso e empático, mostrando um semblante de esperança (estado intermediário). Por fim, ela aparece confiante e com uma aparência saudável e feliz, vestindo roupas que lhe caem bem (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo of a 40-year-old woman looking frustrated at her reflection in a bedroom mirror, her clothes feel tight. The lighting is dim, her posture is slumped, conveying a sense of defeat. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Realistic photo of the same woman sitting in a modern, welcoming doctor's office. She is talking to a male doctor in his late 30s who is listening with an empathetic and reassuring expression. The lighting is brighter, symbolizing hope. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Realistic photo of the same woman smiling genuinely, with a healthy glow. She is dressed in stylish, comfortable clothes that fit well, exuding self-confidence and well-being in a brightly lit environment. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211141Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2cdb9d51d5e6f3e810bdd0eb32846f36dee3fd34e517879507ef8a72d90818bd25276cddc30d19b7baebac3f76a59fb283c8d20014707c8070c258441e0c03bea978b2d14b1a1344ff9be6a645ebee1022053a03c0ac6a71a3d60b2409a4ee3386477fa62c8db3b3b2d9c929e07e4cd63a6f7da80dec46a88713974fc6313444b6cd999fdc835017cac84c445dcbe6042f6cdb28b1a5000711e8336348cbb96952845ca51a77d89c03bbaa3b5d2074c86626d677d1963726257902e1f3087dd7520c2c2d641fbc72edf5a1e8bf69a010fb7ebe62681e5b6f15cd9a3977231877c032e7267f0b2607ebd53c0934ab52e95eddbd749c50f9f4056f61e6c8ae9244",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211205Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a563a2a39a265dc6cda912e031915e4897c0e4755c368ffad752ca52bf45edfda8f981a29194dddd955b157e6d9a48e535392f3522b8de4b9e59760817fcd0efa933c123d23d0bf238cdb9aaf5019d3dc9505f13091f7cb48cf0b71a48a9c432b863dd45d8c9f1d245bffa93b5c20a61ca407e3ec7f9a916e452a34149906ae6568be74914154e10f02da11fea1a53c443cf9ff49abb57be00e7d0ef31e70d84891143eead28950ead3b64585de527ff5dfa31db989e76ffc6607e0f8fc0d0834149947d8e150ebd0e8372f25b293a496eef0748f971adf6c3437588511244256821e5682a156f1f48d3153c22bca494da3e3063e773c11fdc15bc84dd4cdce1",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211227Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=7b2da400f38c939adfce08140673553ff6c93af20dc1916c54a57b245fc63111d922a6a57b82441219a2c7a71b1dd95784026075f2ffed380c721b18325216aa0976026edc574e76e56db4c18223fa9af1d4e4074f23b896a97cbafc279e27911af00c9ab6756f37636d8dc8784aa64cd76948f3243788ed0d15bbef90003aba49213ad20bd3f07e152c815c0f5b93e7b7aea75e23367c350ea7571ad6196a3bfadfc0e8db23cac17c4c81a8118f6a5c5836b7ab554a851f581c69afeb6900e60962e0e4450ec7be0d3ca62cd0d99aee626bc73f87ee2599a83551feaffd45de0dfa98611b8ac888f7fb34e2ca0364209d45843bebf7fecccdd692101de9cece",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 66.09178689100372
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Já tentou de tudo para emagrecer? Talvez a culpa não seja sua.",
+      "corpo": "Se mesmo com esforço seu metabolismo parece travado, a resposta pode não estar em mais uma dieta, e sim na medicina. Um médico nutrólogo pode investigar as causas reais da sua dificuldade de perder peso. Com o diagnóstico correto, o Dr. Daniel Araújo pode indicar um tratamento personalizado, incluindo suporte medicamentoso se necessário, para que você finalmente veja os resultados que merece. Chega de frustração.",
+      "cta_texto": "Descubra a abordagem médica."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher sentada no chão da cozinha à noite, com expressão de cansaço e culpa (estado atual). Depois, um close-up de sua mão segurando um celular, com determinação no olhar, agendando uma consulta (estado intermediário). Finalmente, a mesma mulher aparece em uma cozinha iluminada, preparando uma refeição saudável e sorrindo, em paz consigo mesma (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo of a woman in her late 30s sitting on her kitchen floor at night, surrounded by snack wrappers. Her expression is a mix of exhaustion and guilt. The scene is lit only by the refrigerator light. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Close-up photo focusing on the same woman's hands holding a smartphone. On the screen, a booking or contact page is visible. Her expression in the background is soft but determined, signifying a turning point. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Realistic photo of the same woman, now looking vibrant and peaceful, happily preparing a colorful and fresh meal in a bright, sunlit kitchen. She looks healthy and content. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_1.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211245Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=01d0e33f4695b977fe85b2a2868cf2edbfd9d67f511c517c4c9186a4c4f89f7fd39ba496a0224056ceeb53f468f4df25e1e90fff2dbb4e4f2e7fbb340c133104252eb29d2781fa56791cc28faf406c9971a9cb521ad8a399d737458fd885d7e8635fbe713fa567e89b20f9560ec77affa59b41796a5ceba6b1233c762dbd0e93e2bca30bb54f81b4c9413bc2fe2581b27128072e8d408583aa5cc10088bb53034d30297e92ea985e5b935119165f5b38b16b4fe837e5c81aa209bdf0a24442fb96cfdee96feda714cb26d0c201f6cfd245b621c31d1ab7c5e2bab97b1c24f02f83fb3421292cba372767a1a08b2a54ea1f4b54584182eb3d8e6396c876d077f3",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_1.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211305Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=8938a95aff6b664a15e639928634f7bb817fd44e16bae3c8ab49be0711724a369fd104a567fe3c2244a2a804048c5557c81817551c8243fd4a057df0f7d5fdf693173fd47fbfe26d9c4aa9b186375b46b9fc85d70af67dbf1aef874563280734c6ea1e94dd07b7f66f7743b357c57865a9b073fa6972da433e6cfd405de3683685ee8e3121b4bbc90909a695fa2e5fa0ffdfeed6367413adc79dcd2433bfa6d79a6afe05ce1f872e28163ec4bb98ac0d4918c073b6b3641fd04e7ae457bf2a391de76907f40e531119b0710b7cb964b56a7fd81b75fb756b5a5ff8630ad544e1bca060a93d616a75b95f7ebe0ba5f072c1c9eded1f56a17b94d0a50ea9c768a8",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_1.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211325Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=19e26f75fc2610279303dabfb9ce5f26aee826fb0f1cdeabb58b262073ca8e216eab7191261dce4b4a2aff9fcdff84f43c8728f191d40e04a299cdc633109e83c8d163fe92460bc963dba73f333ad401aa9291cedf1e8d098817ac06904aa736909ed2098d3c7d71e7edb2e8d95a70c915c94da48019c1abd4ad168ff245f3623f5f7ae52901f611d086dfe1c055546ae726576792510494e6766fba6322607f6516637b986683e3cd4dd0f4706f67371e3a77eaf8b874f34b31ab3774d9c5a8c852da9b77be24f1267aed3281ed07edfb0f93579bee51492f41795bb96bcb6a5fba9abc7a9ce3472132c9ef63b8213a7c2f590ee337bfcc64c7c2a0d53cfc73",
+      "image_generation_meta": {
+        "variation_idx": 1,
+        "duration_seconds": 58.34343741000339
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Emagrecimento real vai além da dieta. É ciência.",
+      "corpo": "Para um resultado que dura, é preciso entender seu corpo de verdade. Como médico nutrólogo, o Dr. Daniel Araújo usa a ciência para criar seu plano. Após uma avaliação detalhada do seu metabolismo, ele pode indicar tratamentos que vão da reeducação alimentar ao suporte farmacológico seguro, caso necessário. É o fim da briga com a balança e o começo de uma vida com mais saúde, confiança e disposição.",
+      "cta_texto": "Inicie sua jornada com apoio médico."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher com aparência exausta e desanimada em seu cotidiano (estado atual). Em seguida, uma imagem simbólica de uma balança sendo deixada de lado para calçar um tênis (estado intermediário). Na imagem final, ela está radiante e cheia de energia, rindo enquanto faz uma caminhada em um parque (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo, slightly desaturated tones. A 42-year-old woman is slumped on a sofa after a long day, looking tired and drained of energy. Her face shows weariness. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Symbolic photo. In the foreground, a pair of walking shoes are being put on. In the blurred background, a bathroom scale is left behind in a corner, representing a shift in focus from weight to health. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Vibrant, warm-toned realistic photo of the same woman, laughing heartily while walking with a friend in a beautiful park. She is full of life and energy, radiating health and happiness. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211337Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=61b5b5152718cf6431034f4759e0af663f330447284a176d0a707470120a8e004e23076823f79eb1f670763c2c84d0b11cefd5bcd5b2e879e1d85a288343debfc1087b83a47ef3419c95608bf155e2b0129ab908efd29a3e98ffb93fadc2f04b4b3e85dd0fe44ddeb955c691532415b4f0e29c556694167f9386537f1db81f42094e2c5678dcfb85dbf0a7b7ed56e7dd1a67825c9e991aa915e11174a6e85a9a0ba6f0f608fba6666f0f0077037c9cb88fe2eab3a663ccd26762779a86d31935d51d51d0286408f033e2c10fedf90c41ba7e07bec0b611c5f5d4e325c59034235aa0eadfc32ff261ec142128ff528728a1a3f62f5a7fa7c3a3c45bb543ddb2e4",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211357Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=408687b55f454c19a683fbe01ce2bab1e504a339dcae1d9e5b152cc4225ee61baf5d97c8da31155d45ea08e5b5b10cd867756291672f0cd3e27ce63cdb4402a0abf488f1a4aa382d6ccd8668c0e83d5fb08d2b222df02be3bc8c45efb69fbf7aa7af56ff4ed7c620312aba0f3aa70d6f8d62b35efc3fda8fbb8d3eac6c4360a696142bc0cc460068c3254ec43dc3d07cb15aa1afb93e186fac8319855f00f92b40021fe616fbf9f9c1882acee90ef3bdac88bce2c6202f004596f21ee2a2e53aeb4880a08f1ac78eb44be507da5e2ddce2eeaa3a7ac69d4da5f4e3c6be7e1301f3ed4483cb2dc4e0209cfe7ffdc9dea42c363755c07b2813ab344f557b95cf0d",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/db433571-4177-4508-a8be-7bb855f8accd/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T211416Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=670f90533c0f38409ec9cce7bb4f989b5121f834f3ac1e2b909615db14997adb1dc0f5687fb19dba55268b43df8db1b44b6206abcd886052cc6cbc1b1df9dafebc31bcbfd3d96d563ad7e33b2052a8007f1901c3b07a2bbe2806d238d1ee407c634b53c9b146ad1a99a51797f556e82ceb11e3e09727ae9319fab8fbade1c852ec9ea11d70a2d30d4e803c57d9d9930f9d3601fb59bcdd67d4c6984a93cddc7954a21063788c7f7c796a41d786f773aaa69cc1ba0c18f0127c02f2f81eda774eff7b632c6e3fc3200e407b750dbd13319560475bb873416b9b931fbebbb1ce35a17eaffd1ab47c7a7ad085598dfc50749dd7f70bba48f45af06e176181d205b0",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 50.834355195998796
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  }
+]

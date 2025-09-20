@@ -1,0 +1,125 @@
+[
+    {
+        "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+        "formato": "Feed",
+        "copy": {
+            "headline": "Compulsão e Peso: Solução Médica, Supervisão Especializada.",
+            "corpo": "Você se sente presa no ciclo de dietas sem resultados e a alimentação emocional domina? Se o metabolismo parece travado, é hora de uma abordagem médica. Com uma avaliação personalizada, o Dr. Daniel Araújo pode indicar estratégias que incluem, se necessário, o uso de Mounjaro ou Wegovy para manejar a compulsão, sempre com supervisão médica rigorosa. Recupere a confiança com um plano feito para você.",
+            "cta_texto": "Agende sua consulta e transforme sua jornada de bem-estar."
+        },
+        "visual": {
+            "descricao_imagem": "Uma mulher de 40 anos, com sobrepeso, em sua cozinha. Primeiro, ela olha para uma balança com frustração. Em seguida, sua expressão é de determinação, pesquisando em um tablet. Por fim, ela caminha em um parque, sorrindo, exalando confiança e saúde. A narrativa visual foca na mudança de atitude e bem-estar, não em perda de peso drástica.",
+            "prompt_estado_atual": "A 45-year-old woman, medium skin tone, slightly overweight, sits at a kitchen table, looking tired and frustrated. Her shoulders are slumped, and she gazes with a disheartened expression at a small, non-descript scale. Soft, slightly dim lighting. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_intermediario": "The same 45-year-old woman is now sitting upright at the same kitchen table. Her expression is focused and determined as she actively uses a tablet, taking the first step towards a solution. The lighting is subtly brighter, hinting at hope. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_aspiracional": "The same 45-year-old woman, now appearing more vibrant and healthy, exudes confidence with a genuine smile. She is outdoors, walking happily in a sunny park. Her posture is upright and energetic, reflecting renewed self-esteem. Bright, natural lighting. Realistic photograph, 4:5 aspect ratio.",
+            "aspect_ratio": "4:5"
+        },
+        "cta_instagram": "Enviar mensagem",
+        "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+        "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para o nicho de saúde e bem-estar feminino em Feed 4:5: Imagens autênticas de mulheres que transmitam superação e confiança (evitando 'antes/depois'), com headlines que abordam dores específicas ('metabolismo travado'). O copy aprofunda na solução médica personalizada, mencionando suporte farmacológico (como Mounjaro/Wegovy) sob supervisão profissional e empática, com CTA direto para agendamento via WhatsApp. Priorizar legibilidade e composição visual com texto minimalista sobreposto.",
+        "contexto_landing": {
+            "storybrand_persona": "mulher real",
+            "storybrand_dores": [
+                "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+                "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+            ],
+            "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+            "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+            "storybrand_beneficios": [
+                "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+                "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+                "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+                "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+                "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+            ],
+            "storybrand_transformacao": "progresso personalizado",
+            "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+            "storybrand_urgencia": [
+                "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+                "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+            ]
+        }
+    },
+    {
+        "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+        "formato": "Feed",
+        "copy": {
+            "headline": "Seu Metabolismo Travou? A Solução é Médica.",
+            "corpo": "Cansada de fazer tudo certo e não ver resultados na balança? A sensação de 'metabolismo travado' é real e frustrante. Chegou a hora de ter um diagnóstico preciso com um médico especialista. O Dr. Daniel Araújo pode investigar as causas e, se indicado, usar o apoio de tratamentos modernos como Mounjaro ou Wegovy para regular a saciedade e a ansiedade, sob acompanhamento seguro. Destrave seus resultados.",
+            "cta_texto": "Agende sua avaliação médica e entenda seu corpo."
+        },
+        "visual": {
+            "descricao_imagem": "Uma mulher de 40 anos em frente ao espelho, frustrada com uma calça jeans que não fecha. Em seguida, ela aparece em uma chamada de vídeo com um médico, com expressão de alívio. Por fim, ela se olha no mesmo espelho, sorrindo e confiante, vestindo a calça confortavelmente. O foco está na recuperação da autoestima.",
+            "prompt_estado_atual": "A 40-year-old woman in a bedroom, looking defeated in front of a mirror as she struggles to button a favorite pair of jeans that no longer fit. The lighting is intimate and slightly melancholic. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_intermediario": "The same woman, sitting comfortably at her desk, engaged in a video consultation on her laptop. Her expression is attentive and hopeful, feeling understood by the medical professional on screen. Natural indoor lighting. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_aspiracional": "The same woman, radiating confidence and joy, looking at herself in the same mirror, now wearing the jeans comfortably. The room is brightly lit by morning sun, symbolizing a new, positive chapter. Realistic photograph, 4:5 aspect ratio.",
+            "aspect_ratio": "4:5"
+        },
+        "cta_instagram": "Enviar mensagem",
+        "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+        "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para o nicho de saúde e bem-estar feminino em Feed 4:5: Imagens autênticas de mulheres que transmitam superação e confiança (evitando 'antes/depois'), com headlines que abordam dores específicas ('metabolismo travado'). O copy aprofunda na solução médica personalizada, mencionando suporte farmacológico (como Mounjaro/Wegovy) sob supervisão profissional e empática, com CTA direto para agendamento via WhatsApp. Priorizar legibilidade e composição visual com texto minimalista sobreposto.",
+        "contexto_landing": {
+            "storybrand_persona": "mulher real",
+            "storybrand_dores": [
+                "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+                "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+            ],
+            "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+            "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+            "storybrand_beneficios": [
+                "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+                "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+                "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+                "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+                "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+            ],
+            "storybrand_transformacao": "progresso personalizado",
+            "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+            "storybrand_urgencia": [
+                "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+                "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+            ]
+        }
+    },
+    {
+        "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+        "formato": "Feed",
+        "copy": {
+            "headline": "Emagrecimento sem Julgamento. Apenas Cuidado Médico.",
+            "corpo": "A luta contra a balança e a compulsão alimentar pode ser solitária. Você merece um espaço seguro e acolhedor para ser ouvida. O Dr. Daniel Araújo oferece um tratamento médico empático, que pode incluir suporte farmacológico (como Wegovy/Mounjaro) para ajudar a controlar a ansiedade e retomar o controle, sempre com acompanhamento próximo. Dê o primeiro passo por você.",
+            "cta_texto": "Converse com um especialista que te entende. Agende aqui."
+        },
+        "visual": {
+            "descricao_imagem": "Uma mulher à noite, olhando para a geladeira com ansiedade. Depois, a mesma mulher está em um ambiente calmo, praticando mindfulness, mostrando um momento de controle. Por fim, ela está em um jantar com amigos, rindo e desfrutando da comida e da companhia sem culpa. O foco é a liberdade do ciclo de compulsão.",
+            "prompt_estado_atual": "A woman in her late 30s stands in a dimly lit kitchen at night. The refrigerator door is open, casting a cool light on her face, which shows a mix of anxiety and internal conflict. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_intermediario": "The same woman, now in a calm, softly lit living room at dawn. She sits on a mat with her eyes closed in a moment of peaceful mindfulness, her posture relaxed, symbolizing her decision to regain control. Realistic photograph, 4:5 aspect ratio.",
+            "prompt_estado_aspiracional": "The same woman at a vibrant dinner party with friends, laughing genuinely. She holds a plate with a balanced meal, enjoying the food and the company with a look of pure, guilt-free happiness. Warm, inviting light. Realistic photograph, 4:5 aspect ratio.",
+            "aspect_ratio": "4:5"
+        },
+        "cta_instagram": "Enviar mensagem",
+        "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+        "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para o nicho de saúde e bem-estar feminino em Feed 4:5: Imagens autênticas de mulheres que transmitam superação e confiança (evitando 'antes/depois'), com headlines que abordam dores específicas ('metabolismo travado'). O copy aprofunda na solução médica personalizada, mencionando suporte farmacológico (como Mounjaro/Wegovy) sob supervisão profissional e empática, com CTA direto para agendamento via WhatsApp. Priorizar legibilidade e composição visual com texto minimalista sobreposto.",
+        "contexto_landing": {
+            "storybrand_persona": "mulher real",
+            "storybrand_dores": [
+                "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+                "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+            ],
+            "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+            "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+            "storybrand_beneficios": [
+                "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+                "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+                "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+                "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+                "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+            ],
+            "storybrand_transformacao": "progresso personalizado",
+            "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+            "storybrand_urgencia": [
+                "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+                "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+            ]
+        }
+    }
+]

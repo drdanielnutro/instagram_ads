@@ -1,0 +1,140 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "O Doce te Controla? Quebre o Ciclo Emocional.",
+      "corpo": "O dia foi estressante e o doce parece a única saída? Se você vive presa no ciclo de comer por ansiedade e depois sentir a culpa, saiba que existe um caminho. O comer emocional não é falta de vontade. Com o tratamento médico do Dr. Daniel Araújo, você retoma o controle, sem julgamentos e com um plano que entende sua rotina e trata a causa real do problema.",
+      "cta_texto": "Agende sua consulta e recupere sua paz com a comida."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher parece frustrada e cansada em seu sofá à noite, com uma caixa de chocolates à sua frente, simbolizando o ciclo da culpa. Após decidir buscar ajuda (imagem intermediária), ela é vista em paz e contente, lendo um livro, livre da compulsão e da ansiedade alimentar.",
+      "prompt_estado_atual": "A candid, realistic, medium shot of a woman in her 40s looking conflicted and tired, sitting on her sofa at night. In front of her on the coffee table is an open box of chocolates. The lighting is dim, highlighting her internal struggle and the feeling of being trapped in a cycle. Focus on her emotional expression of guilt and frustration. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A candid, realistic, medium close-up shot of the same woman from the previous image, same home setting, still conveying a sense of quiet introspection but with a subtle hint of newfound determination. She is now holding a smartphone, her thumb hovering over the screen, perhaps looking at a contact screen or a messenger app with a thoughtful, decided expression. The lighting is slightly brighter, suggesting a small shift towards hope or decision. Her posture is a bit more upright. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A serene and realistic medium shot of the same woman, looking peaceful and content while reading a book in a cozy, brightly lit armchair. The previous sense of conflict is gone, replaced by a calm confidence. She has a cup of tea beside her, suggesting a new, healthier coping mechanism. The focus is on her emotional freedom and tranquility. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213708Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=1356d9c98f9e4e6d5d5a20415bf58284893f029ad2cf58c0712a379a166571e1676cbc798ce1d1e13db05e5c502e28388bd29903f43d83e9e4372936eceeb43d1bd5e0838637271917862c6a9e51a526ec70c84d922239d8956a3d097160daeb5d02581b4c9f426e62e5dbeb15fac007863b05a763deb17e72b392b3dafe8a9600902f60fba06d4ebbe7923a4d5d5f1f2c2108b6f657f0690827d0cc76560442fbdeebdae8ec5794178071488770ca3ef0a4cca00edbcf61668d7145c3f32aad096c923cfbf58f327571244f94199b7bd7ab97641121b1ffb709a1f3152c5f15e84223ec9ea27c825eb72f1908796eb7a276af95b70a90bcdc4745e40b1d3b60",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213727Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=56953b4bfd12edd3fd38b8cc344a3ac3ca4753fe6f4750c61a2a111b4edff3e0f9f4d021a5aa1963b0f4f3aee28fbb77756a54198ad11d9c55b4a093497e4917b520537d02c9fdaa30638c90cc13e5f2980740fb1c46f56563a14f96e9a2b6693bfbac252261932d2a3c584913d2aa111a59c557d4a6edc106802688ce6fff4399acaac0a6b70e191b651c84a7359cd8026979773313801b7c28eb41869b896904b93dfe7ae7062485d39cadda636a77a9c124926c419ca219488c46ec95316f7ef88f6653787f5987620b1db0a6d8387685b185246d180e701bbb428f4753c8a1fa2ab8c3b0dbf53fb4c0bbcc275703e2c1acf4e5c85d323f043cf4e82d6ac5",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213746Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a1a3ec410745f8bd634ceeb47f027db3fee5d2b92570341937c7c419518f0a0807833b9f6b1cdd7c883e6fee9da14217115f4401ef85c31e6cd7ce070a831e520c6eb7c2186134fc9f0b835839fa4e8b318dfa8b8e468f330481d48974672ee10a5f9833d046efba66b7a7191945420f3add955b9648070b03758e8c1591bc850b186e0b5913814fc2060eb58a8019ddfc42a93d79a775dfa2f0eb4de75291eb0b30204c24a4bc75e9751dac094952f60b442f5262df409d8e39af2ad24b2aebf2581ec06fb71b8c34a5852c9af33d83012a9c6d3ab18ca90e072c7ebe491cbea0ba451a29b9c74698f1bb0d0311da5f15a049202300ce740894d2ac560c1b59",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 51.09581791600067
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed de alta performance (2024-2025) focam em autenticidade e conexão emocional. Padrões incluem: representação visual clara da dor (frustração, sobrecarga) contrastando com a transformação (confiança, leveza, bem-estar), uso de pessoas reais (ou que pareçam reais) com expressões emocionais genuínas, e textos sobrepostos que reforçam a mensagem-chave de solução e esperança, mantendo legibilidade e composição estética.",
+    "contexto_landing": {
+      "persona": "mulher real",
+      "dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa, em um espaço seguro, acolhedor e livre de julgamentos.",
+      "beneficios_chave": [
+        "Uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+        "Recuperar sua energia, sentir-se mais confiante e melhorar sua autoestima com resultados visíveis."
+      ],
+      "transformacao": "Progresso personalizado para uma vida mais equilibrada e plena.",
+      "urgencia": [
+        "Você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu Metabolismo Travou? A Solução pode ser Médica.",
+      "corpo": "Você se esforça, corta o que pode, mas a balança não se mexe? A frustração com um 'metabolismo travado' pode ter raízes mais profundas. Como Médico Nutrólogo, o Dr. Daniel Araújo investiga a causa real e, se necessário, utiliza suporte farmacológico seguro para destravar seus resultados, sua saúde e sua energia. Chega de tentativas frustradas.",
+      "cta_texto": "Agende uma avaliação médica completa."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher olha com desânimo para uma calça jeans que não serve mais, representando a frustração com o corpo que 'não responde'. Após o clique da decisão, ela se olha no espelho com um sorriso confiante, vestindo a mesma peça confortavelmente, simbolizando a autoestima e bem-estar recuperados.",
+      "prompt_estado_atual": "A realistic, over-the-shoulder shot of a woman in her 40s in her bedroom, looking frustrated at a pair of jeans she's holding that clearly won't fit. Her expression is one of deep disappointment and resignation, reflecting the feeling that her body isn't responding. The mood is heavy. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A candid, realistic, medium close-up shot of the same woman from the previous image, same home setting, still conveying a sense of quiet introspection but with a subtle hint of newfound determination. She is now holding a smartphone, her thumb hovering over the screen, perhaps looking at a contact screen or a messenger app with a thoughtful, decided expression. The lighting is slightly brighter, suggesting a small shift towards hope or decision. Her posture is a bit more upright. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A bright, joyful, realistic shot of the same woman looking at her reflection in a full-length mirror with a genuine smile of self-acceptance and confidence. She is comfortably wearing the same pair of jeans from the first image. The focus is on her renewed confidence and the feeling of being at home in her own body. Natural light fills the room. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_1.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213803Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=66be4da7bb847ce4f6969c7977568e8cc5244f01fa87e17ba0c7c50b51f103120c4f9a09d2585fe4a7e6b1a4ccb547e8b5865f70a4eb65ecbd918de7927c6e37a6d57c1fba42ceb817ed29ba2a4ff877d3a26a0afc4cdcde8e16e1cad450a59436ed8bead15f635d4291644d47456b71c888d0b352788322bb1606fb71d0dd146d3e6944204fafcf8a25f8db7651d1ea7c0688c24a7ce9524a828b4f1a090225515381d2f8141802b8649f39ab2a20d3fc12d684fbd97d550f7ba3ebd12023eb78d38f8015e4c4047402ea357b36340593146f992cb25ab96ea415c978d9aea984f3dfe614de21c16f0f6093cb18dd904cac63daba9399474a7f0d1a9a9310f3",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_1.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213823Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4be6bd1affb76973541b76b3a07389207b20265f61ffecbeeb39c169e6cf340fe63350ffabe5cc252e78c82694635b015251a02d4dda3b4a823225f4e488598f122fd258c9d7d0b9a461213751ee8d185aa0cc6c4f81360ed6c5b1e2f90e8cad1fcbefdb316a3bfef9a2d16864550ced906586f2d2aad40e89b3ed346fec85b146cf18ef28851d6a3abf89baf22a9c5b1911c00a9f0d6ef0fdaf0fb862dc4c06f944014710582275b9aa147174b769d41a730adaa984b4cfa42c3c571a8543bf576c5fbff94624442867243a28808c49a8bb02673aa17bce5696360f54ad678612988a03474e9088fa0530824955bc86fc7a43b78cbfe86cd35418c4221e9977",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_1.png",
+      "image_estado_aspiracional_url": "https://storagusae.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213840Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=1fcfd9340bab21f5642754a29bddcb092815dbed0f6004818707a15ff5790ac8d53a754f924b28c5ae1aa52588845d4f452881db5bd0ed236010581850ea7f31ac0618ce88a6302be6b103765a9563eda535e22287fb3999ea443213c774d873d5d2b9c0fd9e02a470bd1279221eeaf41a0126eec151531e17ff1e1a47421e21cb327744f878f379d331c927fbf45a9fef868eefecc8b8b4be284c8d48aadb2f5ee0c20a1362f0adfde9fbc416ca4fdd19b512a1c53ffceff8ac08af8f27d1996a85d6e3345a03a708081c95afbcd0998271e1a06b11147e21a6e815c638fffbfa1b94b37f6427c6a6528f249680cbc9092d88d31cb21e9bf58d51c7dd392139",
+      "image_generation_meta": {
+        "variation_idx": 1,
+        "duration_seconds": 54.44753588500316
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed de alta performance (2024-2025) focam em autenticidade e conexão emocional. Padrões incluem: representação visual clara da dor (frustração, sobrecarga) contrastando com a transformação (confiança, leveza, bem-estar), uso de pessoas reais (ou que pareçam reais) com expressões emocionais genuínas, e textos sobrepostos que reforçam a mensagem-chave de solução e esperança, mantendo legibilidade e composição estética.",
+    "contexto_landing": {
+      "persona": "mulher real",
+      "dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa, em um espaço seguro, acolhedor e livre de julgamentos.",
+      "beneficios_chave": [
+        "Uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+        "Recuperar sua energia, sentir-se mais confiante e melhorar sua autoestima com resultados visíveis."
+      ],
+      "transformacao": "Progresso personalizado para uma vida mais equilibrada e plena.",
+      "urgencia": [
+        "Você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Cansada de Julgamentos sobre seu Prato?",
+      "corpo": "\"É só ter força de vontade\". \"Come só um pedacinho\". Se você está cansada de se sentir sozinha e julgada na sua luta com a comida, encontre um espaço de acolhimento de verdade. O Dr. Daniel Araújo oferece um tratamento médico para o comer emocional baseado em empatia e escuta, livre de julgamentos. Você merece apoio especializado.",
+      "cta_texto": "Encontre o apoio que você precisa. Agende sua consulta."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher exibe um sorriso forçado em um evento social, sentindo-se desconfortável e julgada pela comida ao redor. Após o momento da decisão, a cena muda para um consultório acolhedor, onde ela conversa e se sente ouvida por um médico, transmitindo segurança e esperança.",
+      "prompt_estado_atual": "A realistic medium shot of a woman in her late 30s at a social gathering, a forced smile on her face. People around her are happily eating cake, but her expression shows discomfort and isolation. She feels observed and judged. The lighting is festive, but her personal mood is contrasted. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A candid, realistic, medium close-up shot of the same woman from the previous image, same home setting, still conveying a sense of quiet introspection but with a subtle hint of newfound determination. She is now holding a smartphone, her thumb hovering over the screen, perhaps looking at a contact screen or a messenger app with a thoughtful, decided expression. The lighting is slightly brighter, suggesting a small shift towards hope or decision. Her posture is a bit more upright. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A warm and professional shot from the patient's perspective, sitting in a modern, welcoming doctor's office. She is talking and looks visibly relieved and understood. Across from her, a male doctor in his 40s (partially visible, empathetic posture) is listening attentively. The atmosphere is safe, supportive, and hopeful. The focus is on the connection and the feeling of being heard. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213904Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=18ac4145f4437f5834c269c7b9ea29a6becc2d3623f97e19e7a96b89fc2174fdaf7ffccc39a7818c995bb8d8153f04a009dab6b076405e73db9f30eebc417142c4b2cb883dfe337c7fcfc0cd7fcd155a816ddf4686aba3dd9fff4189efbba6692dae8c69e7cdbab43b291ba65a1feb5425a54385e34b8e121073e075de6972e66587a8c7ebf087b39e06f42b19ab749ad1667ecd48510efc930a6035fddcd08581bef7b24df7108961a535e1d87fca2f8b2022722e8ae90c81581d8aa4f0c1687747d1c16f5d120d9b00a750f3706ff727347e453512dd74e231df86e4cf99136a05a554df147e141c7821c1efc2c3a40bae348ccb2d5fa35c70d4515365ad6f",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213940Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5d5f3781aab2fd4b6e33cc39f4491b26186ac4ce17ba7ea123e391d3e064b73221a9f35bc141668e0317b82405cba585cdd32adb53f184ed16fc265d1aed5e91e1cd791a26c9ba82a556186e693ce4b739b1c5090d882db519cbb6d70b0ce7e94a5b82f58542c95c0ae1b209afdca0ce213d52b7375ee776b25eddf6e7dfd73e19482e606a1c9441642d33665285977d470fa114d4c623382bf60dbb90fccf81242ab624f32fe2cfe948a6e3f7156d72176450b4b9b1e1b47f11d6422e7c822c9c742963bb1b47cd1d5a88ac7722138b50a55ba4cda322215a8da06d3814546c58dd956aaa4504c3078d7a0bb82e9c9ea9d3c82aaa9d543a16bc7637c21e83b5",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/863deafa-9650-44ee-b9cb-8e82b0df5601/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250920%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250920T213959Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0377e93bb3ee12a6b288cbaebae79acec7f81528945fbafe18b7ced94797f0a97c58f6cc742d587837afff02d0e9ccd44e70f46478cb3a85ddc278524d92c38ddd76ee914dd3ee6a4a90e6cef5a7283c9f142a8ae08fbc3cb8bc8c1347102bd78f571a1b34cb981076506ca1c9c1f96116ed086b10d9628e5da2bc6acb9549df0286384d86842e8ee4cdfc2e0a89e648f9a68438e3845dba218b88b82573dd02f027c95e6f65b16768e8389b2fa09fa29362fe34ed7b0cf70b84e5ae89aad1e64f1292a773de4ecfae8efb3d044490bceee02c0feec6472d461b56eb996d44b56ca12b16e45961e43819d98a4309ed7cf06762a4b4a4c0283f048214ebcd6e07",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 78.82908335099637
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed de alta performance (2024-2025) focam em autenticidade e conexão emocional. Padrões incluem: representação visual clara da dor (frustração, sobrecarga) contrastando com a transformação (confiança, leveza, bem-estar), uso de pessoas reais (ou que pareçam reais) com expressões emocionais genuínas, e textos sobrepostos que reforçam a mensagem-chave de solução e esperança, mantendo legibilidade e composição estética.",
+    "contexto_landing": {
+      "persona": "mulher real",
+      "dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa, em um espaço seguro, acolhedor e livre de julgamentos.",
+      "beneficios_chave": [
+        "Uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+        "Recuperar sua energia, sentir-se mais confiante e melhorar sua autoestima com resultados visíveis."
+      ],
+      "transformacao": "Progresso personalizado para uma vida mais equilibrada e plena.",
+      "urgencia": [
+        "Você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  }
+]

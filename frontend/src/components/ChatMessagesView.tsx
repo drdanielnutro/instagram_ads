@@ -1,14 +1,16 @@
 import type React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Copy, CopyCheck } from "lucide-react";
+import { Loader2, Copy, CopyCheck, RefreshCw, Sparkles } from "lucide-react";
 import { InputForm } from "@/components/InputForm";
 import { Button } from "@/components/ui/button";
-import { useState, ReactNode } from "react";
+import { useMemo, useState, ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import { cn } from "@/utils";
 import { Badge } from "@/components/ui/badge";
 import { ActivityTimeline } from "@/components/ActivityTimeline";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { StatPill } from "@/components/ui/stat-pill";
 
 // Markdown component props type from former ReportView
 type MdComponentProps = {
@@ -148,10 +150,12 @@ const HumanMessageBubble: React.FC<HumanMessageBubbleProps> = ({
   mdComponents,
 }) => {
   return (
-    <div className="text-white rounded-3xl break-words min-h-7 bg-neutral-700 max-w-[100%] sm:max-w-[90%] px-4 pt-3 rounded-br-lg">
-      <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
-        {message.content}
-      </ReactMarkdown>
+    <div className="max-w-full sm:max-w-[85%]">
+      <div className="rounded-3xl border border-border/70 bg-secondary/70 px-5 py-3 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_38px_-22px_rgba(10,16,28,0.55)]">
+        <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
+          {message.content}
+        </ReactMarkdown>
+      </div>
     </div>
   );
 };
@@ -192,10 +196,10 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
   if (shouldDisplayDirectly) {
     // Direct display - show content with copy button, and timeline if available
     return (
-      <div className="relative break-words flex flex-col w-full">
+      <div className="relative flex w-full flex-col gap-3">
         {/* Show timeline for interactive_planner_agent if available */}
         {shouldShowTimeline && agent === "interactive_planner_agent" && (
-          <div className="w-full mb-2">
+          <div className="w-full rounded-2xl border border-border/60 bg-muted/50 p-4">
             <ActivityTimeline 
               processedEvents={processedEvents}
               isLoading={isLoading}
@@ -205,18 +209,20 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
         )}
         <div className="flex items-start gap-3">
           <div className="flex-1">
-            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
-              {message.content}
-            </ReactMarkdown>
+            <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
+                {message.content}
+              </ReactMarkdown>
+            </div>
           </div>
           <button
             onClick={() => handleCopy(message.content, message.id)}
-            className="p-1 hover:bg-neutral-700 rounded"
+            className="rounded-full border border-border/60 bg-muted/60 p-2 text-muted-foreground transition hover:border-border hover:bg-muted/70"
           >
             {copiedMessageId === message.id ? (
-              <CopyCheck className="h-4 w-4 text-green-500" />
+              <CopyCheck className="h-4 w-4 text-emerald-400" />
             ) : (
-              <Copy className="h-4 w-4 text-neutral-400" />
+              <Copy className="h-4 w-4" />
             )}
           </button>
         </div>
@@ -225,8 +231,8 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
   } else if (shouldShowTimeline) {
     // First AI message with timeline only (no direct content display)
     return (
-      <div className="relative break-words flex flex-col w-full">
-        <div className="w-full">
+      <div className="relative flex w-full flex-col gap-3">
+        <div className="w-full rounded-2xl border border-border/60 bg-muted/50 p-4">
           <ActivityTimeline 
             processedEvents={processedEvents}
             isLoading={isLoading}
@@ -235,20 +241,22 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
         </div>
         {/* Only show accumulated content if it's not empty and not from research agents */}
         {message.content && message.content.trim() && agent !== "interactive_planner_agent" && (
-          <div className="flex items-start gap-3 mt-2">
+          <div className="mt-1 flex items-start gap-3">
             <div className="flex-1">
-              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
-                {message.content}
-              </ReactMarkdown>
+              <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+                <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
+                  {message.content}
+                </ReactMarkdown>
+              </div>
             </div>
             <button
               onClick={() => handleCopy(message.content, message.id)}
-              className="p-1 hover:bg-neutral-700 rounded"
+              className="rounded-full border border-border/60 bg-muted/60 p-2 text-muted-foreground transition hover:border-border hover:bg-muted/70"
             >
               {copiedMessageId === message.id ? (
-                <CopyCheck className="h-4 w-4 text-green-500" />
+                <CopyCheck className="h-4 w-4 text-emerald-400" />
               ) : (
-                <Copy className="h-4 w-4 text-neutral-400" />
+                <Copy className="h-4 w-4" />
               )}
             </button>
           </div>
@@ -258,21 +266,23 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
   } else {
     // Fallback for other messages - just show content
     return (
-      <div className="relative break-words flex flex-col w-full">
+      <div className="relative flex w-full flex-col">
         <div className="flex items-start gap-3">
           <div className="flex-1">
-            <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
-              {message.content}
-            </ReactMarkdown>
+            <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+              <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
+                {message.content}
+              </ReactMarkdown>
+            </div>
           </div>
           <button
             onClick={() => handleCopy(message.content, message.id)}
-            className="p-1 hover:bg-neutral-700 rounded"
+            className="rounded-full border border-border/60 bg-muted/60 p-2 text-muted-foreground transition hover:border-border hover:bg-muted/70"
           >
             {copiedMessageId === message.id ? (
-              <CopyCheck className="h-4 w-4 text-green-500" />
+              <CopyCheck className="h-4 w-4 text-emerald-400" />
             ) : (
-              <Copy className="h-4 w-4 text-neutral-400" />
+              <Copy className="h-4 w-4" />
             )}
           </button>
         </div>
@@ -317,102 +327,134 @@ export function ChatMessagesView({
     window.location.reload();
   };
 
-  // Find the ID of the last AI message
-  const lastAiMessage = messages.slice().reverse().find(m => m.type === "ai");
+  const firstHumanIndex = useMemo(
+    () => messages.findIndex((m) => m.type === "human"),
+    [messages]
+  );
+
+  const displayMessages = useMemo(() => {
+    if (firstHumanIndex < 0) {
+      return messages;
+    }
+    return messages.filter((message, idx) => !(message.type === "human" && idx === firstHumanIndex));
+  }, [messages, firstHumanIndex]);
+
+  const lastAiMessage = displayMessages.slice().reverse().find(m => m.type === "ai");
   const lastAiMessageId = lastAiMessage?.id;
+  const lastMessage = displayMessages.length > 0 ? displayMessages[displayMessages.length - 1] : null;
+
+  const aiMessagesCount = messages.filter((m) => m.type === "ai").length;
+  const humanMessagesCount = messages.filter((m) => m.type === "human").length;
+  const statusInfo = isLoading
+    ? { variant: "warning" as const, label: "Gerando anúncios" }
+    : aiMessagesCount > 0
+      ? { variant: "success" as const, label: "Sessão ativa" }
+      : { variant: "neutral" as const, label: "Aguardando briefing" };
 
   return (
-    <div className="flex flex-col h-full w-full">
-      {/* Header with New Chat button */}
-      <div className="border-b border-neutral-700 p-4 bg-neutral-800">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <h1 className="text-lg font-semibold text-neutral-100">Chat</h1>
-          <Button
-            onClick={handleNewChat}
-            variant="outline"
-            className="bg-neutral-700 hover:bg-neutral-600 text-neutral-100 border-neutral-600 hover:border-neutral-500"
-          >
-            New Chat
-          </Button>
+    <div className="flex h-full w-full">
+      <div className="flex h-full w-full flex-col rounded-[28px] border border-border/60 bg-surface/70 backdrop-blur-xl shadow-[0_40px_120px_-40px_rgba(8,12,24,0.65)]">
+        <div className="sticky top-[52px] z-30 border-b border-border/60 bg-surface/90 px-6 py-2 backdrop-blur-xl">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground/80">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                Orquestração de agentes
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-xl font-semibold text-foreground/95">Sessão de criação</h1>
+                <StatusBadge variant={statusInfo.variant}>{statusInfo.label}</StatusBadge>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <StatPill label="Mensagens IA" value={aiMessagesCount} muted />
+              <StatPill label="Mensagens humanas" value={humanMessagesCount} muted />
+              {websiteCount > 0 && (
+                <StatPill label="Fontes analisadas" value={websiteCount} muted />
+              )}
+              <Button
+                onClick={handleNewChat}
+                variant="outline"
+                className="gap-2 border-border/70 bg-secondary hover:bg-secondary/80"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Nova sessão
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="flex-1 flex flex-col w-full">
-        <ScrollArea ref={scrollAreaRef} className="flex-1 w-full">
-          <div className="p-4 md:p-6 space-y-2 max-w-4xl mx-auto">
-            {messages.map((message) => { // Removed index as it's not directly used for this logic
-              const eventsForMessage = message.type === "ai" ? (messageEvents.get(message.id) || []) : [];
-              
-              // Determine if the current AI message is the last one
-              const isCurrentMessageTheLastAiMessage = message.type === "ai" && message.id === lastAiMessageId;
+        <div className="flex-1">
+          <ScrollArea ref={scrollAreaRef} className="h-full">
+            <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-4xl flex-col justify-center gap-4 px-6 py-8">
+            {displayMessages.map((message) => {
+                const eventsForMessage = message.type === "ai" ? (messageEvents.get(message.id) || []) : [];
 
-              return (
-                <div
-                  key={message.id}
-                  className={`flex ${message.type === "human" ? "justify-end" : "justify-start"}`}
-                >
-                  {message.type === "human" ? (
-                    <HumanMessageBubble
-                      message={message}
-                      mdComponents={mdComponents}
-                    />
-                  ) : (
-                    <AiMessageBubble
-                      message={message}
-                      mdComponents={mdComponents}
-                      handleCopy={handleCopy}
-                      copiedMessageId={copiedMessageId}
-                      agent={message.agent}
-                      finalReportWithCitations={message.finalReportWithCitations}
-                      processedEvents={eventsForMessage}
-                      // MODIFIED: Pass websiteCount only if it's the last AI message
-                      websiteCount={isCurrentMessageTheLastAiMessage ? websiteCount : 0}
-                      // MODIFIED: Pass isLoading only if it's the last AI message and global isLoading is true
-                      isLoading={isCurrentMessageTheLastAiMessage && isLoading}
-                    />
-                  )}
-                </div>
-              );
-            })}
-            {/* This global "Thinking..." indicator appears below all messages if isLoading is true */}
-            {/* It's independent of the per-timeline isLoading state */}
+                // Determine if the current AI message is the last one
+                const isCurrentMessageTheLastAiMessage = message.type === "ai" && message.id === lastAiMessageId;
+
+                return (
+                  <div
+                    key={message.id}
+                    className={cn(
+                      "flex",
+                      message.type === "human" ? "justify-end" : "justify-start"
+                    )}
+                  >
+                    {message.type === "human" ? (
+                      <HumanMessageBubble
+                        message={message}
+                        mdComponents={mdComponents}
+                      />
+                    ) : (
+                      <AiMessageBubble
+                        message={message}
+                        mdComponents={mdComponents}
+                        handleCopy={handleCopy}
+                        copiedMessageId={copiedMessageId}
+                        agent={message.agent}
+                        finalReportWithCitations={message.finalReportWithCitations}
+                        processedEvents={eventsForMessage}
+                        websiteCount={isCurrentMessageTheLastAiMessage ? websiteCount : 0}
+                        isLoading={isCurrentMessageTheLastAiMessage && isLoading}
+                      />
+                    )}
+                  </div>
+                );
+              })}
             {isLoading && !lastAiMessage && messages.some(m => m.type === 'human') && (
-              <div className="flex justify-start">
-                <div className="flex items-center gap-2 text-neutral-400">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Thinking...</span>
+              <div className="flex justify-start pl-2">
+                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <span>Gerando...</span>
                 </div>
               </div>
             )}
-             {/* Show "Thinking..." if the last message is human and we are loading, 
-                 or if there's an active AI message that is the last one and we are loading.
-                 The AiMessageBubble's internal isLoading will handle its own spinner.
-                 This one is for the general loading state at the bottom.
-             */}
-            {isLoading && messages.length > 0 && messages[messages.length -1].type === 'human' && (
-                 <div className="flex justify-start pl-10 pt-2"> {/* Adjusted padding to align similarly to AI bubble */}
-                    <div className="flex items-center gap-2 text-neutral-400">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>Thinking...</span>
-                    </div>
+            {isLoading && lastMessage && lastMessage.type === 'human' && (
+              <div className="flex justify-start pl-10 pt-2">
+                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <span>Gerando...</span>
                 </div>
+              </div>
+            )}
+            </div>
+          </ScrollArea>
+        </div>
+        <div className="border-t border-border/60 bg-surface/80 px-6 py-5">
+          <div className="mx-auto max-w-3xl">
+            <InputForm onSubmit={onSubmit} isLoading={isLoading} context="chat" />
+            {isLoading && (
+              <div className="mt-4 flex justify-center">
+                <Button
+                  variant="ghost"
+                  onClick={onCancel}
+                  className="gap-2 text-destructive hover:text-destructive/80"
+                >
+                  Cancelar geração
+                </Button>
+              </div>
             )}
           </div>
-        </ScrollArea>
-      </div>
-      <div className="border-t border-neutral-700 p-4 w-full">
-        <div className="max-w-3xl mx-auto">
-          <InputForm onSubmit={onSubmit} isLoading={isLoading} context="chat" />
-          {isLoading && (
-            <div className="mt-4 flex justify-center">
-              <Button
-                variant="outline"
-                onClick={onCancel}
-                className="text-red-400 hover:text-red-300"
-              >
-                Cancel
-              </Button>
-            </div>
-          )}
         </div>
       </div>
     </div>

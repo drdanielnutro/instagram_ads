@@ -1,5 +1,9 @@
 # Plano Expandido — Duplo Prompt Visual (Estado Atual x Aspiracional)
 
+> **Nota atual (2025):** este plano foi estendido pelo `PLAN_THREE_STAGE_IMAGE_TRANSFORMATION.md`,
+> que adiciona o `prompt_estado_intermediario` e a geração de três imagens sequenciais.
+> As instruções abaixo permanecem como registro histórico do rollout inicial dos dois prompts.
+
 ## Objetivo
 Permitir que cada variação do anúncio traga dois prompts de imagem correlacionados:
 - **estado_atual_prompt**: representa o cliente/persona antes de contratar o serviço/produto.

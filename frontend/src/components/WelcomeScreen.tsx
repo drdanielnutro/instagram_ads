@@ -1,4 +1,8 @@
+import { ArrowRight, Sparkles } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { SectionCard } from "@/components/ui/section-card";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { InputForm } from "@/components/InputForm";
 
 interface WelcomeScreenProps {
@@ -13,43 +17,49 @@ export function WelcomeScreen({
   onCancel,
 }: WelcomeScreenProps) {
   return (
-    // This container fills the space provided by its parent layout (e.g., the left panel in a split view)
-    // and centers its content (the card) within itself.
-    <div className="flex-1 flex flex-col items-center justify-center p-4 overflow-hidden relative">
-      
-      {/* The "Card" Container */}
-      {/* This div now holds the card's styling: background, blur, padding, border, shadow, and hover effect */}
-      <div className="w-full max-w-2xl z-10
-                      bg-neutral-900/50 backdrop-blur-md 
-                      p-8 rounded-2xl border border-neutral-700 
-                      shadow-2xl shadow-black/60 
-                      transition-all duration-300 hover:border-neutral-600">
-        
-        {/* Header section of the card */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-white flex items-center justify-center gap-3">
-            ✨ Gerador de Anúncios Instagram (ADK + Vertex AI) 🚀
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 lg:px-8">
+      <div className="w-full max-w-4xl space-y-8 text-center">
+        <div className="flex flex-col items-center gap-3">
+          <StatusBadge
+            variant="info"
+            icon={<Sparkles className="h-4 w-4" />}
+          >
+            Instagram Ads com Vertex AI
+          </StatusBadge>
+          <h1 className="text-4xl font-semibold text-foreground/95 tracking-tight md:text-5xl">
+            Crie campanhas completas em minutos
           </h1>
-          <p className="text-lg text-neutral-300 max-w-md mx-auto">
-            Gere 3 variações de anúncio a partir da sua landing page, objetivo e formato (Reels, Stories ou Feed).
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Informe os elementos principais da campanha e receba automaticamente três variações alinhadas ao formato, persona e objetivo do anúncio.
           </p>
         </div>
 
-        {/* Input form section of the card */}
-        <div className="mt-8">
+        <SectionCard
+          className="text-left bg-card/95 border border-border/50 shadow-2xl backdrop-blur-sm"
+          title="Briefing do anúncio"
+          description="Preencha apenas o que tiver em mãos. O assistente complementa o restante."
+          headerAction={
+            <Button variant="outline" size="sm" type="button" className="gap-2 hover:border-primary/50 transition-colors">
+              <Sparkles className="h-4 w-4" />
+              Ver exemplo
+            </Button>
+          }
+          contentClassName="space-y-8 pb-8"
+        >
           <InputForm onSubmit={handleSubmit} isLoading={isLoading} context="homepage" />
           {isLoading && (
-            <div className="mt-4 flex justify-center">
+            <div className="mt-6 flex justify-end">
               <Button
-                variant="outline"
+                variant="ghost"
                 onClick={onCancel}
-                className="text-red-400 hover:text-red-300 hover:bg-red-900/20 border-red-700/50" // Enhanced cancel button
+                className="text-destructive hover:text-destructive/80 gap-2"
               >
-                Cancel
+                Cancelar geração
+                <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
           )}
-        </div>
+        </SectionCard>
       </div>
     </div>
   );

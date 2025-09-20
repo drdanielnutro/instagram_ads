@@ -5,6 +5,11 @@ Script de teste para validar as refatorações do sistema de anúncios
 
 import asyncio
 import json
+import os
+
+# Desativa geração de imagens durante os testes para evitar chamadas externas
+os.environ.setdefault("ENABLE_IMAGE_GENERATION", "false")
+
 from google.adk.invocation_context import session_maker
 from app.agent import complete_pipeline
 
@@ -61,6 +66,7 @@ async def test_ad_generation():
                             print(f"  - Tem contexto_landing: {'✓' if 'contexto_landing' in ad else '✗'}")
                             print(f"  - Tem descricao_imagem: {'✓' if ad.get('visual', {}).get('descricao_imagem') else '✗'}")
                             print(f"  - Tem prompt_estado_atual: {'✓' if ad.get('visual', {}).get('prompt_estado_atual') else '✗'}")
+                            print(f"  - Tem prompt_estado_intermediario: {'✓' if ad.get('visual', {}).get('prompt_estado_intermediario') else '✗'}")
                             print(f"  - Tem prompt_estado_aspiracional: {'✓' if ad.get('visual', {}).get('prompt_estado_aspiracional') else '✗'}")
                             print(f"  - Sem duração: {'✓' if 'duracao' not in ad.get('visual', {}) else '✗'}")
                     else:

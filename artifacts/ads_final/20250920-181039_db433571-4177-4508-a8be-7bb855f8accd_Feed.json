@@ -1,0 +1,125 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu metabolismo travou? A solução pode ser médica.",
+      "corpo": "Cansada de dietas que não funcionam e de sentir seu metabolismo parado? A causa pode ir além do que você come. O Dr. Daniel Araújo, médico nutrólogo, oferece uma avaliação completa para diagnosticar o problema. Se indicado, um tratamento medicamentoso pode ser a chave para destravar seu emagrecimento com segurança e acompanhamento. Recupere sua energia e faça as pazes com a balança.",
+      "cta_texto": "Agende sua avaliação médica."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher com expressão frustrada diante do espelho (estado atual). Em seguida, a mesma mulher em uma consulta, conversando com um médico atencioso e empático, mostrando um semblante de esperança (estado intermediário). Por fim, ela aparece confiante e com uma aparência saudável e feliz, vestindo roupas que lhe caem bem (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo of a 40-year-old woman looking frustrated at her reflection in a bedroom mirror, her clothes feel tight. The lighting is dim, her posture is slumped, conveying a sense of defeat. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Realistic photo of the same woman sitting in a modern, welcoming doctor's office. She is talking to a male doctor in his late 30s who is listening with an empathetic and reassuring expression. The lighting is brighter, symbolizing hope. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Realistic photo of the same woman smiling genuinely, with a healthy glow. She is dressed in stylish, comfortable clothes that fit well, exuding self-confidence and well-being in a brightly lit environment. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Já tentou de tudo para emagrecer? Talvez a culpa não seja sua.",
+      "corpo": "Se mesmo com esforço seu metabolismo parece travado, a resposta pode não estar em mais uma dieta, e sim na medicina. Um médico nutrólogo pode investigar as causas reais da sua dificuldade de perder peso. Com o diagnóstico correto, o Dr. Daniel Araújo pode indicar um tratamento personalizado, incluindo suporte medicamentoso se necessário, para que você finalmente veja os resultados que merece. Chega de frustração.",
+      "cta_texto": "Descubra a abordagem médica."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher sentada no chão da cozinha à noite, com expressão de cansaço e culpa (estado atual). Depois, um close-up de sua mão segurando um celular, com determinação no olhar, agendando uma consulta (estado intermediário). Finalmente, a mesma mulher aparece em uma cozinha iluminada, preparando uma refeição saudável e sorrindo, em paz consigo mesma (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo of a woman in her late 30s sitting on her kitchen floor at night, surrounded by snack wrappers. Her expression is a mix of exhaustion and guilt. The scene is lit only by the refrigerator light. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Close-up photo focusing on the same woman's hands holding a smartphone. On the screen, a booking or contact page is visible. Her expression in the background is soft but determined, signifying a turning point. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Realistic photo of the same woman, now looking vibrant and peaceful, happily preparing a colorful and fresh meal in a bright, sunlit kitchen. She looks healthy and content. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Emagrecimento real vai além da dieta. É ciência.",
+      "corpo": "Para um resultado que dura, é preciso entender seu corpo de verdade. Como médico nutrólogo, o Dr. Daniel Araújo usa a ciência para criar seu plano. Após uma avaliação detalhada do seu metabolismo, ele pode indicar tratamentos que vão da reeducação alimentar ao suporte farmacológico seguro, caso necessário. É o fim da briga com a balança e o começo de uma vida com mais saúde, confiança e disposição.",
+      "cta_texto": "Inicie sua jornada com apoio médico."
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher com aparência exausta e desanimada em seu cotidiano (estado atual). Em seguida, uma imagem simbólica de uma balança sendo deixada de lado para calçar um tênis (estado intermediário). Na imagem final, ela está radiante e cheia de energia, rindo enquanto faz uma caminhada em um parque (estado aspiracional).",
+      "prompt_estado_atual": "Realistic photo, slightly desaturated tones. A 42-year-old woman is slumped on a sofa after a long day, looking tired and drained of energy. Her face shows weariness. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Symbolic photo. In the foreground, a pair of walking shoes are being put on. In the blurred background, a bathroom scale is left behind in a corner, representing a shift in focus from weight to health. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Vibrant, warm-toned realistic photo of the same woman, laughing heartily while walking with a friend in a beautiful park. She is full of life and energy, radiating health and happiness. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) no Feed do Instagram para saúde/emagrecimento: visuais autênticos e empáticos (preferencialmente 4:5) que retratam mulheres reais em momentos de bem-estar e confiança. Copy foca em dores comuns (metabolismo lento, frustração com dietas), posiciona o médico nutrólogo como solução especializada e confiável, e promete transformação sustentável, com CTAs diretos para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar com resultados sustentáveis.",
+        "Recupere sua energia, sinta-se mais confiante e melhore sua autoestima.",
+        "Implemente mudanças que promovem saúde integral.",
+        "Mantenha um peso saudável e melhore seus exames laboratoriais."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…você segue sem achar uma solução que se encaixe na rotina corrida.",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa."
+      ]
+    }
+  }
+]

@@ -1,0 +1,125 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Travado? Controle a Compulsão com Apoio Médico.",
+      "corpo": "Cansada de dietas que não se encaixam na sua rotina corrida? Se o metabolismo parece travado e a alimentação emocional te consome, saiba que existe um caminho.\n\nCom o acompanhamento médico do Dr. Daniel Araújo, você pode ter um plano que entende sua vida. Descubra como tratamentos modernos (como Mounjaro e Wegovy), quando indicados e sob supervisão, podem ser a chave para manejar a compulsão e a ansiedade, de forma segura.\n\nChega de frustração. Recupere sua autoestima e uma relação saudável com a comida. Agende sua consulta.",
+      "cta_texto": "Agendar Consulta via WhatsApp"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem única que captura a jornada de transformação de uma mulher de 40 anos. A cena mostra a mulher em sua sala de estar, inicialmente com uma expressão cansada e ombros caídos, olhando para um lanche com culpa. A sua postura muda, ficando mais ereta e determinada enquanto olha para o celular, simbolizando a decisão de procurar ajuda. O estado final é ela em um parque, com um sorriso sereno, postura confiante e roupas confortáveis, irradiando bem-estar e equilíbrio, mostrando uma transformação de autoestima e não apenas física.",
+      "prompt_estado_atual": "A 40-year-old Brazilian woman, medium-complexion, with a slightly overweight body type, sits in her living room late evening. She looks tired, with a subtle frown on her face, and her shoulders are slightly slumped. She's wearing comfortable but somewhat ill-fitting home clothes. She holds a half-eaten snack, looking at it with a contemplative, slightly guilty expression. The lighting is soft. Realistic photo, natural colors. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "In the same scene, the same 40-year-old Brazilian woman sits up straighter. Her expression has shifted from weariness to focus. She is looking intently at her smartphone, symbolizing proactive decision-making. A subtle ray of light highlights her face, suggesting hope. The environment is identical, reinforcing continuity. Realistic photo, natural colors. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The final state of the same woman, now radiating confidence in a bright, open park. Her posture is upright and relaxed, with a genuine, serene smile. She is wearing stylish activewear that fits her well, suggesting a healthy, toned physique rather than drastic weight loss. The sun is shining, creating an atmosphere of peace and energy. Realistic photo, natural colors. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos Feed (4:5) de alta performance (2024-2025, Brasil) priorizam visuais autênticos e de alta qualidade que geram forte identificação. A copy é concisa e empática, com um gancho inicial que aborda as dores da persona (rotina corrida, alimentação emocional), seguida pela apresentação da solução médica e seus benefícios transformadores. O CTA para agendamento via WhatsApp é direto e visível, tudo otimizado para consumo rápido em mobile.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Sua Rotina é Corrida. Seu Tratamento Também Pode Ser.",
+      "corpo": "A cena se repete: um dia cheio, o cansaço e a comida como único refúgio. Se a culpa depois da compulsão é familiar para você, entenda que a solução não está em dietas restritivas que não cabem na sua vida.\n\nCom o Dr. Daniel Araújo, você encontra um tratamento médico que respeita sua agenda. Avaliamos o papel da ansiedade e da compulsão no seu ganho de peso e, se for o caso, utilizamos apoio farmacológico seguro (como Mounjaro ou Wegovy) para te ajudar a retomar o controle.\n\nConquiste um emagrecimento sustentável e paz com a comida. Clique para agendar.",
+      "cta_texto": "Agendar Primeira Avaliação"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem em formato de colagem ou split-screen. De um lado, uma mulher de 35 anos, com aparência cansada, em um escritório mal iluminado à noite, cercada por embalagens de delivery e snacks. Do outro lado, a mesma mulher, agora com uma expressão serena e um sorriso leve, em sua cozinha iluminada pela manhã, preparando uma fruta ou um iogurte. A imagem contrasta o caos da alimentação emocional com a calma do autocontrole recuperado.",
+      "prompt_estado_atual": "Left side of a 4:5 split-screen image: A 35-year-old woman with a tired expression sits at her desk late at night, the only light coming from her computer screen. She is surrounded by fast-food wrappers and looks stressed and overwhelmed. The mood is somber and chaotic. Realistic photo style.",
+      "prompt_estado_intermediario": "This is a two-state visual, so no intermediate prompt is needed. The transition is implied by the juxtaposition of the two final states.",
+      "prompt_estado_aspiracional": "Right side of a 4:5 split-screen image: The same 35-year-old woman, now looking refreshed and serene in a bright, clean kitchen during the morning. She is calmly preparing a simple, healthy breakfast, like cutting a papaya. She has a peaceful smile, conveying a sense of control and well-being. Realistic photo style.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos Feed (4:5) de alta performance (2024-2025, Brasil) priorizam visuais autênticos e de alta qualidade que geram forte identificação. A copy é concisa e empática, com um gancho inicial que aborda as dores da persona (rotina corrida, alimentação emocional), seguida pela apresentação da solução médica e seus benefícios transformadores. O CTA para agendamento via WhatsApp é direto e visível, tudo otimizado para consumo rápido em mobile.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Por que só dieta não funciona para você? A resposta pode ser médica.",
+      "corpo": "Se você já tentou de tudo e o peso sempre volta, a causa pode ir além da força de vontade. Fatores como ansiedade e compulsão alimentar precisam de uma abordagem médica, não apenas de um cardápio.\n\nO Dr. Daniel Araújo, médico nutrólogo, é o especialista que pode te ajudar. Após uma avaliação completa, ele pode indicar o tratamento mais eficaz para você, incluindo, quando necessário, medicamentos modernos que atuam na raiz do problema, com total segurança e acompanhamento.\n\nDê o passo que faltava. Agende uma consulta e entenda como a medicina pode transformar sua jornada.",
+      "cta_texto": "Saiba Mais e Agende"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem que transmite confiança e expertise médica. Em primeiro plano, vemos o close-up das mãos de uma paciente (mulher, 40-50 anos) gesticulando enquanto conversa, e à frente, desfocadas, as mãos de um médico (Dr. Daniel) em uma postura de escuta atenta sobre a mesa de um consultório acolhedor. A imagem evoca um ambiente seguro, profissional e de parceria.",
+      "prompt_estado_atual": "Uma foto com foco seletivo em um consultório médico acolhedor. Em primeiro plano, as mãos de uma mulher de 45 anos, com anéis discretos, estão gesticulando enquanto ela fala. Sua expressão facial (fora de foco no fundo) é de quem está desabafando. As mãos mostram um pouco da tensão da sua história. Iluminação suave e profissional. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A mesma cena, mas agora o foco está nas mãos do médico, que estão cruzadas sobre a mesa em uma pose de escuta atenta e calma. As mãos da paciente estão relaxadas no fundo, mostrando que ela se sente ouvida. A imagem transmite empatia e profissionalismo. Realistic photo, aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "Uma foto em close-up do rosto da mesma paciente, agora saindo do consultório. Ela tem um sorriso leve, de alívio e esperança. Seus olhos transmitem confiança. O fundo é o corredor claro e profissional da clínica. A imagem captura o momento exato após ela encontrar um plano e se sentir compreendida e segura. Realistic photo, natural lighting. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos Feed (4:5) de alta performance (2024-2025, Brasil) priorizam visuais autênticos e de alta qualidade que geram forte identificação. A copy é concisa e empática, com um gancho inicial que aborda as dores da persona (rotina corrida, alimentação emocional), seguida pela apresentação da solução médica e seus benefícios transformadores. O CTA para agendamento via WhatsApp é direto e visível, tudo otimizado para consumo rápido em mobile.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    }
+  }
+]

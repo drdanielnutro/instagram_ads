@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Travado? Controle a Compulsão com Médico.",
+      "corpo": "Sua rotina é corrida e o metabolismo parece não ajudar? Entendemos a frustração de tentar de tudo e não ver resultados. Com o Dr. Daniel Araújo (CRM 48645 | RQE: 44715), médico nutrólogo com 15 anos de experiência, você encontra um tratamento que realmente se encaixa na sua vida.\n\nFocado em combater a compulsão alimentar e a ansiedade que atrapalham seu emagrecimento, ele oferece uma solução médica personalizada. Isso pode incluir, quando necessário e sob sua rigorosa supervisão, o uso de medicamentos modernos como Mounjaro ou Wegovy.\n\nRecupere sua energia, confiança e autoestima com um plano que te apoia sem julgamentos. Sua transformação começa agora!",
+      "cta_texto": "Agende sua Consulta via WhatsApp"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem única dividida em três momentos para contar uma história. 1) Noite, cozinha: uma mulher de 40+ anos, com sobrepeso, frustrada e cansada, olha para um prato de comida com culpa. 2) Dia, escritório em casa: a mesma mulher, mais determinada, pesquisa em seu tablet, buscando uma solução. 3) Dia, parque: a mesma mulher, agora com aparência saudável e confiante, sorri enquanto caminha sob o sol.",
+      "prompt_estado_atual": "A realistic photo of a woman in her mid-40s, slightly overweight body type, visibly exhausted and frustrated after a long day, in her dimly lit home kitchen at night. Her shoulders are slumped, and she looks at a plate of comfort food with a conflicted expression mixing desire and guilt. Soft, melancholic lighting. Aspect ratio 4:5. Cinematic, realistic, high detail.",
+      "prompt_estado_intermediario": "A realistic photo of the same woman, mid-40s, now in her home office during the day. She has a more upright posture and a focused, hopeful expression, holding a tablet and researching a medical solution. Daylight streams through a window, and the room is tidy. Aspect ratio 4:5. Cinematic, realistic, high detail.",
+      "prompt_estado_aspiracional": "A realistic photo of the same woman, mid-40s, healthy and confident body type, outdoors in a sunny park. She is smiling genuinely, exuding energy and peace, wearing comfortable, stylish clothes that fit well. Vibrant, fresh colors. Aspect ratio 4:5. Cinematic, realistic, high detail.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025): Utilize visuais 4:5 de alta qualidade (fotos/vídeos de lifestyle com bem-estar ou ambiente clínico profissional) que transmitam confiança e empatia. Headlines impactantes (até 60 caracteres) que abordem diretamente a dor da persona, seguida por um texto que explique o método, construa autoridade e enfatize a supervisão médica. Finalize com um CTA claro, como 'Enviar Mensagem', para agendamentos via WhatsApp, focando na praticidade e transformação.",
+    "contexto_landing": "A persona é a 'mulher real', que sofre com a falta de orientação médica sobre opções farmacológicas e com a baixa autoestima. A proposta do Dr. Daniel Araújo é oferecer autoridade e empatia em um espaço acolhedor e sem julgamentos, promovendo um progresso personalizado para uma vida mais equilibrada, com mais energia e confiança. A urgência é sair do ciclo vicioso da alimentação emocional e não perder mais tempo com soluções que não se encaixam na rotina."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Rotina Corrida? Emagreça com Apoio Médico e sem Culpa.",
+      "corpo": "Para você, que vive na correria e já tentou de tudo: nós sabemos que a luta contra o peso vai além do prato. É sobre o estresse, a ansiedade e a falta de tempo. Por isso, o tratamento com o Dr. Daniel Araújo (CRM 48645 | RQE: 44715) é diferente.\n\nEm um ambiente acolhedor e livre de julgamentos, criamos um plano médico que respeita sua agenda e suas emoções. Se indicado, utilizamos ferramentas farmacológicas modernas (como Mounjaro ou Wegovy) com total segurança e supervisão, para te ajudar a retomar o controle.\n\nChega de culpa. É hora de ter um médico ao seu lado para alcançar resultados duradouros. Fale conosco!",
+      "cta_texto": "Quero um plano para mim"
+    },
+    "visual": {
+      "descricao_imagem": "Uma cena única e poderosa. Uma mulher de 40+ anos, com aparência real, sentada em um consultório médico moderno e iluminado. Ela conversa com o Dr. Daniel, que a escuta atentamente com uma expressão empática e profissional. A mulher, antes tensa, começa a relaxar, transmitindo uma sensação de alívio e esperança por finalmente ser compreendida.",
+      "prompt_estado_atual": "A realistic photo of a woman in her 40s at her messy work desk late at night, looking stressed and overwhelmed by her to-do list, a half-eaten snack nearby. The only light comes from her laptop screen, casting harsh shadows. Aspect ratio 4:5. Cinematic, moody lighting.",
+      "prompt_estado_intermediario": "A realistic photo of the same woman in a bright, modern, and welcoming doctor's office. She is talking, and the male doctor (Dr. Daniel) is listening intently with an empathetic and professional expression. The woman's posture is becoming more relaxed, a look of relief and hope on her face. Aspect ratio 4:5. Cinematic, soft natural light.",
+      "prompt_estado_aspiracional": "A realistic photo of the same woman, now looking refreshed and confident, enjoying a healthy lunch at a bright café with a friend. She is laughing, fully present in the moment, conveying a sense of freedom from food anxiety. Aspect ratio 4:5. Cinematic, vibrant, and warm.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025): Utilize visuais 4:5 de alta qualidade (fotos/vídeos de lifestyle com bem-estar ou ambiente clínico profissional) que transmitam confiança e empatia. Headlines impactantes (até 60 caracteres) que abordem diretamente a dor da persona, seguida por um texto que explique o método, construa autoridade e enfatize a supervisão médica. Finalize com um CTA claro, como 'Enviar Mensagem', para agendamentos via WhatsApp, focando na praticidade e transformação.",
+    "contexto_landing": "A persona é a 'mulher real', que sofre com a falta de orientação médica sobre opções farmacológicas e com a baixa autoestima. A proposta do Dr. Daniel Araújo é oferecer autoridade e empatia em um espaço acolhedor e sem julgamentos, promovendo um progresso personalizado para uma vida mais equilibrada, com mais energia e confiança. A urgência é sair do ciclo vicioso da alimentação emocional e não perder mais tempo com soluções que não se encaixam na rotina."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Mais Energia e Confiança: O Método Médico para Emagrecer.",
+      "corpo": "Imagine ter mais disposição para sua rotina e se sentir confiante novamente. Com o tratamento nutrológico do Dr. Daniel Araújo (CRM 48645 | RQE: 44715), você pode alcançar um emagrecimento saudável e sustentável, que vai além de dietas restritivas.\n\nNossa abordagem médica investiga as causas do ganho de peso, incluindo fatores como ansiedade e compulsão. Quando apropriado, o plano pode incluir o uso responsável de medicamentos avançados, como Wegovy ou Mounjaro, sempre com rigorosa supervisão para garantir sua segurança e eficácia.\n\nAssuma o controle do seu bem-estar com a orientação de um especialista. Agende sua consulta.",
+      "cta_texto": "Agendar Consulta Médica"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem que foca na transformação e confiança. Uma mulher de 40+ anos, com aparência profissional e energética, em seu ambiente de trabalho ou social. Ela está sorrindo, com postura ereta e segura. O foco não é a magreza, mas a vitalidade e o bem-estar que ela exala. A cena é limpa, bem iluminada e aspiracional, conectando o sucesso no tratamento à sua vida real.",
+      "prompt_estado_atual": "A woman in her 40s in her bedroom closet, looking defeated as she tries on a dress that no longer fits. The lighting is dim, and her expression is one of pure frustration and sadness. Aspect ratio 4:5. Realistic, emotional, cinematic.",
+      "prompt_estado_intermediario": "A close-up shot focusing on the hands of a professional doctor explaining a personalized treatment plan on a tablet to a patient. The screen shows graphs and data, emphasizing the scientific and personalized nature of the approach. The atmosphere is clinical but hopeful. Aspect ratio 4:5. Clean, high-tech, detailed.",
+      "prompt_estado_aspiracional": "A confident and energetic woman in her 40s, stylishly dressed, leading a meeting or giving a presentation in a modern office. She looks poised, healthy, and in control, commanding the room with her renewed vitality. The image is bright and professional. Aspect ratio 4:5. Cinematic, powerful, aspirational.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025): Utilize visuais 4:5 de alta qualidade (fotos/vídeos de lifestyle com bem-estar ou ambiente clínico profissional) que transmitam confiança e empatia. Headlines impactantes (até 60 caracteres) que abordem diretamente a dor da persona, seguida por um texto que explique o método, construa autoridade e enfatize a supervisão médica. Finalize com um CTA claro, como 'Enviar Mensagem', para agendamentos via WhatsApp, focando na praticidade e transformação.",
+    "contexto_landing": "A persona é a 'mulher real', que sofre com a falta de orientação médica sobre opções farmacológicas e com a baixa autoestima. A proposta do Dr. Daniel Araújo é oferecer autoridade e empatia em um espaço acolhedor e sem julgamentos, promovendo um progresso personalizado para uma vida mais equilibrada, com mais energia e confiança. A urgência é sair do ciclo vicioso da alimentação emocional e não perder mais tempo com soluções que não se encaixam na rotina."
+  }
+]

@@ -231,6 +231,9 @@ class AdCopy(BaseModel):
 
 class AdVisual(BaseModel):
     descricao_imagem: str  # Apenas imagens, sem vídeos
+    prompt_estado_atual: str
+    prompt_estado_intermediario: str
+    prompt_estado_aspiracional: str
     aspect_ratio: Literal["9:16", "1:1", "4:5", "16:9"]
 
 class AdItem(BaseModel):

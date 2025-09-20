@@ -1,0 +1,59 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo travado? Existe tratamento médico.",
+      "corpo": "Você se esforça, faz dieta, mas seu corpo parece não responder mais? A sensação de 'metabolismo travado' é real e frustrante. Com 15 anos de experiência, o Dr. Daniel Araújo oferece um tratamento nutrológico que vai além do óbvio, investigando as causas e, se indicado, utilizando opções farmacológicas modernas como Mounjaro e Wegovy sob rigoroso acompanhamento. Chega de frustração. Recupere o controle e veja os resultados que você merece.",
+      "cta_texto": "Agendar Avaliação Médica"
+    },
+    "visual": {
+      "descricao_imagem": "Narrativa visual da jornada de uma mulher de 30-55 anos. A primeira imagem mostra sua frustração ao tentar vestir uma calça que não serve mais. A segunda, um momento de decisão, pesquisando uma solução médica no celular. A terceira a exibe radiante e com energia, caminhando em um parque, focando no bem-estar e não na perda de peso explícita.",
+      "prompt_estado_atual": "A realistic Brazilian woman, late 30s, with a slightly overweight body type, sits on the edge of a bed in a softly lit bedroom. She holds a pair of jeans that are clearly too tight, her expression a mix of deep frustration and resignation. Her shoulders are slumped. Aspect ratio 4:5, cinematic photo.",
+      "prompt_estado_intermediario": "The same woman, now in comfortable clothes, sits at her kitchen table. She's looking at a smartphone with a focused, determined expression, as if she just found a hopeful solution. A cup of tea sits beside her, suggesting a moment of proactive self-care. The lighting is slightly brighter, more hopeful. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now visibly more energetic and confident, is walking through a sun-drenched park. She is smiling genuinely, dressed in stylish, comfortable clothes that fit well. The focus is on her radiant expression and posture, conveying a sense of freedom and well-being. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024-2025): Gancho direto na dor do público (ex: 'metabolismo travado', 'frustração com dietas'), seguido da apresentação da autoridade médica e sua experiência. Detalhamento da solução médica personalizada, incluindo a menção responsável de tratamentos farmacológicos modernos (ex: Mounjaro, Wegovy) quando clinicamente indicados, sempre sob supervisão. Ênfase na transformação pessoal e nos benefícios emocionais, além dos físicos, com um CTA claro para agendamento via WhatsApp.",
+    "contexto_landing": "A página de destino foca em mulheres que se sentem frustradas com tentativas de emagrecimento falhas, especialmente devido ao 'metabolismo travado' e alimentação emocional. A proposta de valor é o acompanhamento médico do Dr. Daniel Araújo, que oferece empatia, autoridade e, quando necessário, suporte farmacológico seguro para alcançar um progresso personalizado e sustentável, restaurando a autoestima e a energia."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Ansiedade e compulsão sabotam sua dieta?",
+      "corpo": "O ciclo de estresse, culpa e comida parece não ter fim? Você não está sozinha. O Dr. Daniel Araújo entende que o emagrecimento vai além das calorias. Como Médico Nutrólogo, ele oferece um plano que trata a causa da compulsão e ansiedade, utilizando, quando necessário, suporte farmacológico (como Wegovy ou Mounjaro) com segurança e supervisão. Dê o primeiro passo para uma relação de paz com a comida e com você mesma.",
+      "cta_texto": "Saiba Mais sobre o Tratamento"
+    },
+    "visual": {
+      "descricao_imagem": "Uma sequência visual focada no ciclo da alimentação emocional. A primeira imagem mostra uma mulher em um momento de estresse, olhando para a geladeira à noite. A segunda a retrata em uma consulta acolhedora (telemedicina ou presencial). A terceira a exibe desfrutando de uma refeição com amigos, de forma relaxada e feliz, simbolizando a paz com a comida.",
+      "prompt_estado_atual": "A woman in her 40s, looking stressed and tired, stands in a dimly lit kitchen at night, the light from the open refrigerator illuminating her conflicted face. She's holding the fridge door, hesitating. The scene conveys emotional turmoil and the pull of comfort food. Aspect ratio 4:5, realistic photo.",
+      "prompt_estado_intermediario": "Split screen or diptych. On one side, the same woman from the previous image. On the other, a calm, empathetic male doctor in his 40s (representing Dr. Daniel). They are in a video call, and she is speaking, feeling heard. Her expression is starting to shift from distressed to relieved. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman is now at a lively brunch table with friends, laughing and genuinely enjoying her food. The atmosphere is bright and social. Her posture is relaxed and open, showing she is present in the moment and free from the guilt previously associated with eating. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024-2025): Gancho direto na dor do público (ex: 'metabolismo travado', 'frustração com dietas'), seguido da apresentação da autoridade médica e sua experiência. Detalhamento da solução médica personalizada, incluindo a menção responsável de tratamentos farmacológicos modernos (ex: Mounjaro, Wegovy) quando clinicamente indicados, sempre sob supervisão. Ênfase na transformação pessoal e nos benefícios emocionais, além dos físicos, com um CTA claro para agendamento via WhatsApp.",
+    "contexto_landing": "A página de destino foca em mulheres que se sentem frustradas com tentativas de emagrecimento falhas, especialmente devido ao 'metabolismo travado' e alimentação emocional. A proposta de valor é o acompanhamento médico do Dr. Daniel Araújo, que oferece empatia, autoridade e, quando necessário, suporte farmacológico seguro para alcançar um progresso personalizado e sustentável, restaurando a autoestima e a energia."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Mounjaro ou Wegovy? Emagreça com segurança.",
+      "corpo": "Esses medicamentos são ferramentas poderosas, mas não são mágicos. O verdadeiro sucesso no emagrecimento vem com supervisão médica especializada. O Dr. Daniel Araújo (CRM 48645), com 15 anos de experiência, cria um plano individualizado que pode incluir suporte farmacológico, garantindo o uso correto e seguro para sua saúde. Não arrisque. Invista em um tratamento médico de verdade. Agende sua consulta.",
+      "cta_texto": "Agendar Consulta Segura"
+    },
+    "visual": {
+      "descricao_imagem": "O visual foca na clareza e autoridade médica. A primeira imagem mostra uma mulher confusa, cercada por informações conflitantes sobre dietas e medicamentos. A segunda é um close-up de um médico explicando um plano personalizado. A terceira exibe a mulher com uma expressão de alívio e controle, como se finalmente tivesse um caminho claro a seguir.",
+      "prompt_estado_atual": "A woman in her late 40s sits at a table, looking overwhelmed. In front of her are various diet books, supplement bottles, and a laptop screen with conflicting articles about weight-loss drugs. Her expression is one of confusion and fatigue. Aspect ratio 4:5, hyper-realistic.",
+      "prompt_estado_intermediario": "A clean, professional shot showing the hands of a doctor writing on a medical clipboard. The focus is on the act of creating a personalized, structured plan. The background is a calm, organized medical office. This image conveys expertise and bespoke care. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now looking calm and empowered in her living room. She's holding a single, simple piece of paper (her plan) and looking ahead with a confident, knowing smile. She is not overtly 'thinner', but her entire demeanor radiates relief, control, and self-assurance. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024-2025): Gancho direto na dor do público (ex: 'metabolismo travado', 'frustração com dietas'), seguido da apresentação da autoridade médica e sua experiência. Detalhamento da solução médica personalizada, incluindo a menção responsável de tratamentos farmacológicos modernos (ex: Mounjaro, Wegovy) quando clinicamente indicados, sempre sob supervisão. Ênfase na transformação pessoal e nos benefícios emocionais, além dos físicos, com um CTA claro para agendamento via WhatsApp.",
+    "contexto_landing": "A página de destino foca em mulheres que se sentem frustradas com tentativas de emagrecimento falhas, especialmente devido ao 'metabolismo travado' e alimentação emocional. A proposta de valor é o acompanhamento médico do Dr. Daniel Araújo, que oferece empatia, autoridade e, quando necessário, suporte farmacológico seguro para alcançar um progresso personalizado e sustentável, restaurando a autoestima e a energia."
+  }
+]
