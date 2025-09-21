@@ -28,7 +28,7 @@ export function NavigationFooter({
   const isLastStep = currentStep === totalSteps - 1;
 
   return (
-    <footer className="border-t border-border/60 pt-4">
+    <footer className="border-t border-border/60 pt-4 px-6 md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           <Button

@@ -23,7 +23,10 @@ export function WelcomeScreen({
 
   if (wizardEnabled) {
     return (
-      <div data-wizard-enabled>
+    <div
+      className="w-full flex justify-center px-6 md:px-12 xl:px-20"
+      data-wizard-enabled
+    >
         <WizardForm onSubmit={handleSubmit} isLoading={isLoading} onCancel={onCancel} />
       </div>
     );
