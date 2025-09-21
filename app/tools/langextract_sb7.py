@@ -68,6 +68,9 @@ class StoryBrandExtractor:
             Extract exact text from the content when possible.
             Provide meaningful attributes for context.
             Use Portuguese (pt-BR) for attributes when the source is in Portuguese.
+            If a StoryBrand element is not explicitly present, leave the corresponding field empty.
+            Do not fabricate or infer content that is absent in the landing page.
+            Only quote information that can be grounded in the provided text.
             """)
 
         # Criar exemplos para few-shot learning
@@ -198,8 +201,145 @@ class StoryBrandExtractor:
             ]
         ))
 
-        # Exemplo 2: Página de produto SaaS
+        # Exemplo 2: Landing institucional sem CTA explícito (ensina o modelo a deixar ACTION vazio)
         example2_text = """
+        A Clínica Horizonte atende mulheres que buscam reposição hormonal segura e acompanhamento humano.
+        Entendemos a insegurança de lidar com sintomas constantes sem uma equipe especializada.
+        Nosso corpo clínico reúne endocrinologistas reconhecidos e protocolos baseados em evidência.
+        Cada paciente passa por exames completos e um acompanhamento próximo com foco em longo prazo.
+        A clínica prioriza acolhimento, transparência e comunicação direta com as pacientes.
+        """
+
+        examples.append(lx.data.ExampleData(
+            text=example2_text,
+            extractions=[
+                lx.data.Extraction(
+                    extraction_class="character",
+                    extraction_text="mulheres",
+                    attributes={
+                        "description": "pacientes que buscam reposição hormonal",
+                        "stage": "enfrentando sintomas recorrentes"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="problem_internal",
+                    extraction_text="insegurança de lidar com sintomas constantes",
+                    attributes={
+                        "feeling": "insegurança",
+                        "symptom": "sintomas hormonais recorrentes"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="guide_authority",
+                    extraction_text="corpo clínico reúne endocrinologistas reconhecidos",
+                    attributes={
+                        "credentials": "endocrinologistas especializados",
+                        "evidence": "protocolos baseados em evidência"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="guide_empathy",
+                    extraction_text="Entendemos a insegurança",
+                    attributes={
+                        "acknowledgement": "reconhece os sintomas prolongados",
+                        "support": "acompanhamento humano"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="plan",
+                    extraction_text="Cada paciente passa por exames completos e acompanhamento",
+                    attributes={
+                        "steps": "2",
+                        "step1": "exames completos",
+                        "step2": "acompanhamento próximo"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="failure",
+                    extraction_text="sem uma equipe especializada",
+                    attributes={
+                        "risk": "seguir sem orientação médica",
+                        "impact": "sintomas permanecem"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="success",
+                    extraction_text="acolhimento, transparência e comunicação direta",
+                    attributes={
+                        "benefit": "acompanhamento contínuo",
+                        "transformation": "sensação de segurança e cuidado"
+                    }
+                )
+            ]
+        ))
+
+        # Exemplo 3: Landing sem plano estruturado (ensina a manter PLAN vazio)
+        example3_text = """
+        A Revista Urbanistas conta histórias de moradores que revitalizaram bairros abandonados.
+        Mostrar o impacto positivo de iniciativas comunitárias inspira outras cidades a agir.
+        Somos um coletivo de jornalistas e urbanistas que pesquisam políticas públicas e habitação.
+        Novas edições trazem guias culturais, mapas de memória e entrevistas com lideranças locais.
+        Assine para receber a próxima edição especial dedicada a mobilidade sustentável.
+        Não deixe sua cidade perder oportunidades de transformação social.
+        Cada relato prova que é possível viver em espaços mais humanos e seguros.
+        """
+
+        examples.append(lx.data.ExampleData(
+            text=example3_text,
+            extractions=[
+                lx.data.Extraction(
+                    extraction_class="character",
+                    extraction_text="moradores",
+                    attributes={
+                        "description": "habitantes engajados na revitalização",
+                        "location": "bairros urbanos abandonados"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="problem_external",
+                    extraction_text="bairros abandonados",
+                    attributes={
+                        "type": "degradação urbana",
+                        "effect": "perda de vitalidade comunitária"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="guide_authority",
+                    extraction_text="coletivo de jornalistas e urbanistas",
+                    attributes={
+                        "credentials": "especialistas em políticas públicas",
+                        "experience": "pesquisam habitação e mobilidade"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="action_primary",
+                    extraction_text="Assine para receber a próxima edição",
+                    attributes={
+                        "type": "assinatura",
+                        "urgency": "próxima edição especial"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="failure",
+                    extraction_text="Não deixe sua cidade perder oportunidades",
+                    attributes={
+                        "risk": "perder oportunidades de transformação",
+                        "threat": "cidades ficam estagnadas"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="success",
+                    extraction_text="possível viver em espaços mais humanos e seguros",
+                    attributes={
+                        "benefit": "espaços humanos",
+                        "transformation": "cidades seguras"
+                    }
+                )
+            ]
+        ))
+
+        # Exemplo 4: Página de produto SaaS (completo)
+        example4_text = """
         Marketing teams struggling with content creation spend hours on repetitive tasks.
         We understand the pressure to produce quality content at scale.
         Our AI platform, trusted by Fortune 500 companies, automates your workflow.
@@ -210,7 +350,7 @@ class StoryBrandExtractor:
         """
 
         examples.append(lx.data.ExampleData(
-            text=example2_text,
+            text=example4_text,
             extractions=[
                 lx.data.Extraction(
                     extraction_class="character",
@@ -266,6 +406,14 @@ class StoryBrandExtractor:
                     attributes={
                         "urgency": "today",
                         "risk": "free trial"
+                    }
+                ),
+                lx.data.Extraction(
+                    extraction_class="action_secondary",
+                    extraction_text="Watch a demo video",
+                    attributes={
+                        "type": "demo",
+                        "channel": "video"
                     }
                 ),
                 lx.data.Extraction(
@@ -446,14 +594,23 @@ class StoryBrandExtractor:
 
             # Plan
             elif ext_class == 'plan':
-                storybrand['plan']['description'] = ext_attrs.get('steps', '') + ' steps'
-                # Extrair passos individuais dos atributos
+                # Preencher somente quando houver conteúdo real.
+                plan_steps_attr = ext_attrs.get('steps')
+                if plan_steps_attr:
+                    storybrand['plan']['description'] = plan_steps_attr
+                elif ext_text:
+                    storybrand['plan']['description'] = ext_text
+
                 steps = []
                 for key, value in ext_attrs.items():
-                    if key.startswith('step'):
+                    if key.startswith('step') and value:
                         steps.append(value)
-                storybrand['plan']['steps'] = steps if steps else [ext_text]
-                storybrand['plan']['evidence'].append(ext_text)
+                if not steps and ext_text:
+                    steps.append(ext_text)
+                if steps:
+                    storybrand['plan']['steps'] = steps
+                if ext_text:
+                    storybrand['plan']['evidence'].append(ext_text)
                 storybrand['plan']['confidence'] = 0.85
                 elements_found.add('plan')
 
