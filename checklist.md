@@ -8,7 +8,7 @@
 ## 1. Configuração da Flag
 - [x] Adicionar `VITE_ENABLE_WIZARD=false` em `frontend/.env.example` (e replicar em `.env.local` quando necessário)
 - [x] Documentar a flag em `frontend/README.md` explicando finalidade, uso e necessidade de reiniciar `npm run dev`
-- [ ] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
+- [x] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
 
 ## 2. Preservação da UI Atual
 - [ ] Revisar e confirmar que `frontend/src/components/InputForm.tsx` permanece inalterado

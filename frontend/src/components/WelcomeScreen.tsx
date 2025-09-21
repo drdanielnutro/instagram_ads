@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/ui/section-card";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { InputForm } from "@/components/InputForm";
+import { isWizardEnabled } from "@/utils/featureFlags";
 
 interface WelcomeScreenProps {
   handleSubmit: (query: string) => void;
@@ -16,8 +17,13 @@ export function WelcomeScreen({
   isLoading,
   onCancel,
 }: WelcomeScreenProps) {
+  const wizardEnabled = isWizardEnabled();
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-12 lg:px-8">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-12 lg:px-8"
+      data-wizard-enabled={wizardEnabled}
+    >
       <div className="w-full max-w-4xl space-y-8 text-center">
         <div className="flex flex-col items-center gap-3">
           <StatusBadge
