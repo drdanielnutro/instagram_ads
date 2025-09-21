@@ -1,0 +1,86 @@
+# Checklist – Componente de Preview de Anúncios
+
+## 1. Ativação do Preview
+- [ ] Adicionar `VITE_ENABLE_ADS_PREVIEW=false` em `frontend/.env.example`
+- [ ] Documentar a flag em `frontend/README.md`
+- [ ] Implementar helper `isPreviewEnabled` em `frontend/src/utils/featureFlags.ts`
+- [ ] Exibir botão `Preview` em `App.tsx` quando `deliveryMeta?.ok` estiver verdadeiro
+- [ ] Implementar handler `openPreview` que inicia o fluxo do modal
+- [ ] Realizar GET em `/api/delivery/final/download?user_id=<...>&session_id=<...>`
+- [ ] Tratar respostas inline (JSON direto) e assinadas (`{ signed_url }`), normalizando para um único objeto
+- [ ] Invocar parsing do JSON final e acionar abertura do modal
+
+## 2. Estrutura Simplificada (MVP)
+- [ ] Criar arquivo `frontend/src/components/AdsPreview.tsx` concentrando o MVP
+- [ ] Postergar extração de subcomponentes até a necessidade de refatoração
+
+## 3. Componente Principal
+- [ ] Declarar `AdsPreviewProps` com `userId`, `sessionId`, `isOpen`, `onClose`
+- [ ] Definir estados internos (`variations`, `currentVariation`, `currentImageIndex`, `isFetchingPreview`, `imageErrors`)
+- [ ] Garantir importação de `Button`, `Badge`, `Card`, `CardContent`, `CardHeader`, `CardTitle`, `ScrollArea`, `Tabs`, `TabsList`, `TabsTrigger`
+
+## 4. Layout do Modal
+- [ ] Configurar `Dialog.Root`/`Dialog.Content` com tokens (`bg-card`, `border-border`, `shadow` etc.)
+- [ ] Criar cabeçalho com título e botão de fechar (`variant="ghost"`)
+- [ ] Renderizar lista dinâmica de variações via `Tabs` quando houver mais de uma
+- [ ] Dispor conteúdo principal em layout responsivo (`ScrollArea` para dispositivo e textos)
+- [ ] Incluir rodapé com botão “Recarregar dados” (`variant="outline"`)
+
+## 5. Renderização por Formato
+- [ ] Implementar `renderFeedDevice` usando moldura 4:5/1:1 com `ImageCarousel`
+- [ ] Implementar `renderVerticalDevice` com moldura arredondada e faixas de “safe zone”
+- [ ] Adicionar cards auxiliares para CTA/explicações conforme formato
+- [ ] Registrar observação sobre fallback textual enquanto não houver URLs de imagem
+
+## 6. Componente Carrossel
+- [ ] Criar `ImageCarousel` recebendo lista opcional de imagens e aspecto
+- [ ] Exibir placeholder temático quando não houver URLs disponíveis
+- [ ] Ajustar botões/dots com tokens do tema
+- [ ] Destacar etapa atual (Estado Atual / Intermediário / Aspiracional)
+
+## 7. Área de Textos
+- [ ] Estruturar cards para copy (headline, corpo, CTA com `Badge`)
+- [ ] Exibir metadados (formato, CTA IG, fluxo, link da landing)
+- [ ] Apresentar descrição visual e prompts usando `PromptBlock`
+- [ ] Criar blocos colapsáveis (detalhes) para referências e StoryBrand
+
+## 8. Fetch e Atualização de Dados
+- [ ] Resetar estados ao abrir modal (`variations`, índices, erros)
+- [ ] Tentar endpoint principal, depois URL assinada se existir
+- [ ] Parsear resposta (string/JSON) e garantir que `variations` seja sempre array
+- [ ] Encerrar com controle de loading e tratamento de erros (toast/log)
+
+## 9. Tratamento de Erros de Imagem
+- [ ] Mapear falhas por combinação variação+imagem
+- [ ] Exibir placeholder com mensagem/ação “Tentar novamente”
+- [ ] Reutilizar `fetchPreviewData()` para recarregar imagens
+
+## 10. Responsividade
+- [ ] Suportar modal fullscreen em mobile com layout vertical
+- [ ] Centralizar conteúdo e limitar altura (`md:h-[90vh]`) em desktop
+- [ ] Garantir navegação confortável em diferentes breakpoints
+
+## 11. Integração em `App.tsx`
+- [ ] Adicionar estado `showPreview`
+- [ ] Adicionar botão “Preview” ao lado de “Baixar JSON” na toolbar somente quando `isPreviewEnabled()`
+- [ ] Reutilizar `handleDownloadFinal` existente para downloads
+- [ ] Renderizar `AdsPreview` conectado aos estados/props corretos
+
+## 12. Tipos TypeScript
+- [ ] Criar `frontend/src/types/ad-preview.ts` com `VisualInfo` e `AdVariation`
+- [ ] Atualizar consumidores para usar os novos tipos
+
+## 13. Helpers
+- [ ] Implementar `getAspectRatioClass`, `isVerticalFormat`, `getVariationImages`
+- [ ] Exportar `isPreviewEnabled` via `featureFlags.ts` 
+- [ ] Documentar comportamento futuro para URLs de imagem
+- [ ] Disponibilizar `PromptBlock` para reutilização nos cards de texto
+
+## 14. Estilos e Temas
+- [ ] Garantir uso de tokens do tema escuro (`bg-card`, `border-border`, etc.)
+- [ ] Aplicar sombras e bordas arredondadas alinhadas ao wizard
+- [ ] Utilizar variações com opacidade para profundidade
+
+## 15. Considerações Finais
+- [ ] Validar aderência ao MVP e extensibilidade pós-MVP
+- [ ] Revisar consistência com guidelines do projeto e dados do JSON final
