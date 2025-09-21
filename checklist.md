@@ -11,7 +11,7 @@
 - [x] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
 
 ## 2. Preservação da UI Atual
-- [ ] Revisar e confirmar que `frontend/src/components/InputForm.tsx` permanece inalterado
+- [x] Revisar e confirmar que `frontend/src/components/InputForm.tsx` permanece inalterado
 - [ ] Revisar e confirmar que `frontend/src/components/WelcomeScreen.tsx` mantém o markup atual para o modo clássico
 - [ ] Revisar e confirmar que `frontend/src/App.tsx`, `ChatMessagesView.tsx` e `ActivityTimeline.tsx` não foram modificados além da integração da flag
 
