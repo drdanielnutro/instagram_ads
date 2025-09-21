@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/ui/section-card";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { InputForm } from "@/components/InputForm";
-import { isWizardEnabled } from "@/utils/featureFlags";
+import { WizardForm } from "@/components/WizardForm";
 
 interface WelcomeScreenProps {
   handleSubmit: (query: string) => void;
@@ -17,7 +17,17 @@ export function WelcomeScreen({
   isLoading,
   onCancel,
 }: WelcomeScreenProps) {
-  const wizardEnabled = isWizardEnabled();
+  const wizardEnabled = (import.meta.env.VITE_ENABLE_WIZARD ?? "false")
+    .toString()
+    .toLowerCase() === "true";
+
+  if (wizardEnabled) {
+    return (
+      <div data-wizard-enabled>
+        <WizardForm onSubmit={handleSubmit} isLoading={isLoading} onCancel={onCancel} />
+      </div>
+    );
+  }
 
   return (
     <div
