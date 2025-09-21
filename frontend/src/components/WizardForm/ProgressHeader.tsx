@@ -53,15 +53,23 @@ export function ProgressHeader({
                 isCompleted && !isActive && 'border-primary/50 bg-primary/10 text-primary',
               )}
             >
-              <div
-                className={cn(
-                  'flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold',
-                  isActive && 'border-primary/40 bg-primary text-primary-foreground',
-                  isCompleted && !isActive && 'border-primary/40 bg-primary/90 text-primary-foreground',
-                  !isActive && !isCompleted && 'border-border/80 bg-card text-muted-foreground',
-                )}
-              >
-                {index + 1}
+              <div className="flex items-center gap-2">
+                <div
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold',
+                    isActive && 'border-primary/40 bg-primary text-primary-foreground',
+                    isCompleted && !isActive && 'border-primary/40 bg-primary/90 text-primary-foreground',
+                    !isActive && !isCompleted && 'border-border/80 bg-card text-muted-foreground',
+                  )}
+                >
+                  {index + 1}
+                </div>
+                <step.icon
+                  className={cn(
+                    'h-4 w-4 text-muted-foreground transition-colors',
+                    (isActive || isCompleted) && 'text-primary',
+                  )}
+                />
               </div>
               <div className="flex flex-col">
                 <span className="font-medium text-foreground/90">{step.title}</span>

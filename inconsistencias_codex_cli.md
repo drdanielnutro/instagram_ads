@@ -13,13 +13,15 @@
 - **Justificativa:** Todos os arquivos descritos na tarefa foram criados nas localizações esperadas, incluindo `frontend/src/components/WizardForm/WizardForm.tsx`, `ProgressHeader.tsx`, `StepCard.tsx`, `NavigationFooter.tsx`, os seis arquivos em `steps/`, além de `frontend/src/types/wizard.types.ts`, `frontend/src/constants/wizard.constants.ts` e `frontend/src/utils/wizard.utils.ts`, cada um contendo o código correspondente (ex.: `frontend/src/components/WizardForm/WizardForm.tsx:1-120`).
 
 ## Tarefa 4 – Implementação dos Tipos, Constantes e Utilitários
-- **Conclusão:** incorreta.
-- **Inconsistência:** A função `formatSubmitPayload` monta cada linha usando o título legível do passo (`${step.title}: ...`) em vez da chave esperada pelo backend (`campo: valor`). Com isso, o payload enviado pelo wizard diverge do formato que o backend aceita.
-- **Evidências:** implementação atual em `frontend/src/utils/wizard.utils.ts:107-121`; contraste com o formato correto ainda usado pelo formulário clássico em `frontend/src/components/InputForm.tsx:69-83`.
+- **Conclusão:** corrigida.
+- **Inconsistência original:** A função `formatSubmitPayload` montava cada linha usando o título legível do passo (`${step.title}: ...`) em vez da chave esperada pelo backend (`campo: valor`).
+- **Evidências anteriores:** implementação antiga em `frontend/src/utils/wizard.utils.ts` contrastava com o formato correto produzido pelo formulário clássico em `frontend/src/components/InputForm.tsx:69-83`.
+- **Ajuste aplicado:** `frontend/src/utils/wizard.utils.ts:107-119` agora usa `step.id` para emitir `campo: valor`, garantindo compatibilidade com o backend.
 
 ## Tarefa 5 – Implementação dos Componentes do Wizard
-- **Conclusão:** correta, exceto pela dependência da utilidade citada na tarefa 4.
-- **Justificativa:** `WizardForm` gerencia estado, navegação, submit e renderização condicional (`frontend/src/components/WizardForm/WizardForm.tsx:27-116`); `ProgressHeader`, `StepCard` e `NavigationFooter` implementam os comportamentos especificados (`frontend/src/components/WizardForm/ProgressHeader.tsx:1-56`, `StepCard.tsx:1-22`, `NavigationFooter.tsx:1-63`). Cada step contém a UX solicitada, com validações, dicas e indicadores (`LandingPageStep.tsx:1-47`, `ObjectiveStep.tsx:1-45`, `FormatStep.tsx:1-47`, `ProfileStep.tsx:1-37`, `FocusStep.tsx:1-38`, `ReviewStep.tsx:1-48`). O único problema funcional identificado decorre da inconsistência de `formatSubmitPayload` (tarefa 4).
+- **Conclusão:** corrigida.
+- **Ajuste principal:** `frontend/src/components/WizardForm/ProgressHeader.tsx:29-56` agora exibe os ícones de cada etapa juntamente com o número e título, alinhando o componente ao contrato visual definido no plano e eliminando a divergência apontada na revisão anterior.
+- **Demais componentes:** `WizardForm`, `StepCard`, `NavigationFooter` e todos os steps mantêm o comportamento previsto após a atualização (`WizardForm.tsx:27-116`, `StepCard.tsx:1-22`, `NavigationFooter.tsx:1-63`, arquivos em `steps/`).
 
 ## Tarefa 6 – Integração Condicional na WelcomeScreen
 - **Conclusão:** correta.

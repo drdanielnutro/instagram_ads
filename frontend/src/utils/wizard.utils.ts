@@ -110,12 +110,13 @@ export function formatSubmitPayload(formState: WizardFormState): string {
       return [];
     }
 
-    const value = formState[step.id].trim();
+    const fieldId = step.id as keyof WizardFormState;
+    const value = formState[fieldId].trim();
     if (!value) {
       return [];
     }
 
-    return [`${step.title}: ${value}`];
+    return [`${fieldId}: ${value}`];
   });
 
   return lines.join('\n');

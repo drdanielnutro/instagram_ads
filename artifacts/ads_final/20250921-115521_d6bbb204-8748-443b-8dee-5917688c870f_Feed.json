@@ -1,0 +1,125 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "O ciclo estresse-comida-culpa pode ter um fim.",
+      "corpo": "Aquele doce depois de um dia difícil, seguido pela culpa. A roupa que não serve mais e a sensação de que seu metabolismo travou. Se você se identifica, saiba que não está sozinha e a solução não é outra dieta restritiva.\n\nO comer emocional precisa de um tratamento médico sério. Com o Dr. Daniel Araújo, você terá um plano que entende sua realidade, sem julgamentos e com suporte farmacológico seguro se necessário, para quebrar esse ciclo e recuperar sua paz.",
+      "cta_texto": "Dê o primeiro passo para se libertar"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher em um momento de vulnerabilidade no sofá com doces, em transição para uma cena de esperança em um ambiente acolhedor, e finalmente, uma imagem dela ao ar livre, transmitindo paz interior e liberdade do ciclo de compulsão.",
+      "prompt_estado_atual": "Foto realista de uma mulher de 35 anos sentada em seu sofá à noite. A única luz vem de um abajur, criando um ambiente melancólico. Sua expressão é de cansaço e culpa enquanto olha para uma caixa de chocolates na mesinha de centro. Fotografia cinematográfica, cores quentes e sombrias. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A mesma mulher, agora na sala de espera de um consultório médico bem iluminado e calmo. Ela segura uma xícara de chá, seu olhar é pensativo, mas com um traço de esperança, como se estivesse aguardando uma consulta que pode mudar sua vida. A luz é suave e natural. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A mesma mulher, agora em um parque durante o dia, caminhando com um sorriso sereno. Ela não está fazendo exercícios, apenas desfrutando do momento. A imagem transmite uma sensação de leveza, bem-estar e liberdade mental, com a luz do sol brilhando suavemente. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em visuais autênticos e que geram identificação com a dor da persona, seguidos da representação da transformação (confiança, bem-estar). Imagens de alta qualidade, sem excesso de texto sobreposto, que transmitam empatia e esperança, com rostos expressivos e ambientes acolhedores. Preferência por aspecto 4:5 para maximizar visibilidade no feed.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    },
+    "aspect_ratio": "4:5"
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Não é dieta. É tratamento médico para emagrecer.",
+      "corpo": "Já tentou contar calorias, chás milagrosos e dietas da moda? A verdade é que a compulsão por doces e o metabolismo lento podem ter raízes que dietas comuns não alcançam.\n\nUm médico nutrólogo investiga as causas e pode usar auxílio farmacológico seguro para tratar a ansiedade e a compulsão. O Dr. Daniel Araújo (CRM 48645) oferece um tratamento especializado para você, finalmente, recuperar o controle da sua saúde e bem-estar.",
+      "cta_texto": "Agende sua consulta médica"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher frustrada com uma fita métrica, em transição para uma cena de diálogo empático em um consultório (sem mostrar o rosto do médico) e, finalmente, olhando-se no espelho com um sorriso confiante e satisfeito.",
+      "prompt_estado_atual": "Close-up no rosto de uma mulher real de 40 anos, com uma expressão de frustração enquanto se olha no espelho do banheiro. Ao lado, sobre a pia, uma fita métrica e vários potes de suplementos. A iluminação é dura e direta, vinda de cima. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A mesma mulher sentada em um consultório médico moderno e acolhedor. A câmera está posicionada sobre o ombro dela, focando em suas mãos enquanto conversa. Não vemos o rosto do médico, apenas sua presença empática. A cena sugere um diálogo de confiança. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A mesma mulher, em casa, com uma iluminação suave e natural vinda da janela. Ela se olha no espelho do quarto, mas desta vez com um sorriso genuíno de autoconfiança. Ela não está se medindo, apenas ajeitando o cabelo, feliz com o que vê. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em visuais autênticos e que geram identificação com a dor da persona, seguidos da representação da transformação (confiança, bem-estar). Imagens de alta qualidade, sem excesso de texto sobreposto, que transmitam empatia e esperança, com rostos expressivos e ambientes acolhedores. Preferência por aspecto 4:5 para maximizar visibilidade no feed.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    },
+    "aspect_ratio": "4:5"
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Sua nova relação com a comida começa aqui.",
+      "corpo": "Imagine não pensar em comida o tempo todo. Ter energia para o dia a dia e voltar a usar as roupas que você ama, com confiança. Essa não precisa ser uma realidade distante.\n\nCom o tratamento médico para o comer emocional do Dr. Daniel Araújo, você recebe um plano personalizado que respeita sua rotina e seus desafios, para uma transformação real e duradoura. Recupere sua autoestima e a sua paz.",
+      "cta_texto": "Comece sua transformação hoje"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher desanimada em frente ao seu guarda-roupa, sentindo que nada serve. A transição mostra ela tomando uma decisão em seu computador. A cena final a revela feliz e confiante, escolhendo uma roupa que ama, pronta para viver.",
+      "prompt_estado_atual": "Uma mulher real de costas para a câmera, parada em frente a um guarda-roupa aberto e cheio de roupas. Sua postura é de desânimo, com os ombros caídos, transmitindo a frustração de sentir que nada lhe cai bem. O quarto está em meia-luz. Foto realista e emotiva. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A mesma mulher sentada em uma cadeira confortável, com um notebook no colo, pesquisando ativamente. Seu rosto, iluminado pela tela, mostra foco e uma decisão sendo tomada. O ambiente é seu quarto, mas agora mais organizado e com luz clara vindo da janela. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A mesma mulher, sorrindo, em frente ao mesmo guarda-roupa. Ela está vestindo uma roupa que claramente a deixa feliz e confiante, pronta para sair. A luz do dia inunda o quarto, e a cena exala energia positiva, autoestima e liberdade. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) focam em visuais autênticos e que geram identificação com a dor da persona, seguidos da representação da transformação (confiança, bem-estar). Imagens de alta qualidade, sem excesso de texto sobreposto, que transmitam empatia e esperança, com rostos expressivos e ambientes acolhedores. Preferência por aspecto 4:5 para maximizar visibilidade no feed.",
+    "contexto_landing": {
+      "storybrand_persona": "mulher real",
+      "storybrand_dores": [
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "uma solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar. Reconheça cada vitória e superação como etapas fundamentais do seu processo de transformação. resultados sustentáveis.",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis.",
+        "Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos.",
+        "Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão."
+      ],
+      "storybrand_transformacao": "progresso personalizado",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "…e você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída."
+      ]
+    },
+    "aspect_ratio": "4:5"
+  }
+]
