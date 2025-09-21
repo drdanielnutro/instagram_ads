@@ -6,7 +6,7 @@
 > - `[x]` = done
 
 ## 1. Configuração da Flag
-- [ ] Adicionar `VITE_ENABLE_WIZARD=false` em `frontend/.env.example` (e replicar em `.env.local` quando necessário)
+- [x] Adicionar `VITE_ENABLE_WIZARD=false` em `frontend/.env.example` (e replicar em `.env.local` quando necessário)
 - [ ] Documentar a flag em `frontend/README.md` explicando finalidade, uso e necessidade de reiniciar `npm run dev`
 - [ ] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
 
