@@ -55,3 +55,87 @@
 - **`renderVerticalDevice`:** O plano descrevia as "safe zones" como overlays semitransparentes (`bg-background/35`, `bg-background/40`) para indicar áreas onde a UI do Instagram poderia sobrepor o vídeo. A implementação trocou esses overlays por caixas de texto com bordas (`border-primary/40 bg-primary/10`) que descrevem as safe zones, uma abordagem visualmente diferente e que não simula o efeito de sobreposição. Além disso, o `Card` com a nota explicativa (`💡 Em formatos verticais...`) também foi omitido.
 - **Cards Auxiliares:** Como consequência dos pontos anteriores, os cards auxiliares com a copy do anúncio (para o feed) e a nota explicativa (para o vertical) não foram implementados como planejado.
 
+## 6. Componente Carrossel
+
+**Conclusão:** PARCIALMENTE CORRETO
+
+**Justificativa:** A navegação do carrossel foi implementada de forma diferente da planejada, e outros elementos visuais foram alterados.
+
+- **Navegação:** O plano detalhava uma navegação com botões de seta (`←`/`→`) nas laterais da imagem e `dots` na parte inferior. **Esta navegação foi completamente substituída.** A implementação atual usa uma lista de botões de texto (`Estado atual`, `Intermediário`, `Aspiracional`) abaixo da imagem. Embora funcional, é uma UI diferente da que foi especificada.
+- **Placeholder:** O placeholder para imagens ausentes foi implementado, mas em vez de um texto genérico, ele exibe o prompt correspondente, o que é uma melhoria funcional.
+- **Destaque de Etapa:** O plano sugeria um texto no canto superior esquerdo da imagem para indicar a etapa. A implementação destaca o botão de texto ativo na navegação inferior, o que cumpre o mesmo objetivo de forma diferente.
+
+## 7. Área de Textos
+
+**Conclusão:** INCORRETO
+
+**Justificativa:** A estrutura da área de textos foi reorganizada e diverge do plano em vários pontos, embora a maioria dos dados esteja presente.
+
+- **Metadados:** O plano especificava um card de Metadados com os campos `Formato`, `CTA Instagram`, `Fluxo` e `Landing`. A implementação moveu o campo `Referências` para dentro deste card e **omitiu o campo `CTA Instagram`**.
+- **Descrição Visual:** O plano localizava a `descricao_imagem` em um card junto com os prompts. A implementação moveu a descrição para um card separado dentro da área do dispositivo (`renderFeedDevice`/`renderVerticalDevice`), quebrando a estrutura de conteúdo planejada.
+- **Blocos Colapsáveis:** O item da checklist `[ ] Criar blocos colapsáveis (detalhes) para referências e StoryBrand` está desmarcado, mas a implementação também não segue o plano para este ponto. Em vez de usar tags `<details>` para criar seções que podem ser expandidas, a implementação exibe os campos "Referências" e "StoryBrand & Contexto" em cards estáticos e sempre visíveis. Isso contradiz o objetivo de manter a interface mais limpa, permitindo ao usuário expandir apenas as informações que deseja ver.
+
+## 8. Fetch e Atualização de Dados
+
+**Conclusão:** CORRETO
+
+**Justificativa:** O fluxo de busca e atualização de dados foi implementado conforme o plano.
+
+- Os estados são resetados corretamente ao abrir/fechar o modal.
+- A lógica de fetch trata o endpoint principal e a URL assinada.
+- A resposta é parseada de forma segura e normalizada para um array.
+- O controle de loading e o tratamento de erros (com mensagem para o usuário) estão presentes.
+
+## 9. Tratamento de Erros de Imagem
+
+**Conclusão:** CORRETO
+
+**Justificativa:** O tratamento de erro para imagens funciona como especificado.
+
+- As falhas de carregamento de imagem são mapeadas por variação e índice.
+- Um placeholder com mensagem de erro e um botão "Tentar novamente" é exibido no lugar da imagem que falhou.
+- O botão de re-tentativa aciona a função `fetchPreviewData` novamente.
+
+## 10. Responsividade
+
+**Conclusão:** CORRETO
+
+**Justificativa:** O layout do modal é totalmente responsivo, seguindo as diretrizes do plano para mobile e desktop.
+
+## 11. Integração em `App.tsx`
+
+**Conclusão:** CORRETO
+
+**Justificativa:** A integração do componente `AdsPreview` no `App.tsx` foi feita corretamente.
+
+- O estado `showPreview` controla a visibilidade.
+- O botão "Preview" aparece condicionalmente, protegido pela feature flag.
+- O componente é renderizado com todas as props necessárias (`userId`, `sessionId`, `isOpen`, `onClose`).
+
+## 12. Tipos TypeScript
+
+**Conclusão:** CORRETO
+
+**Justificativa:** Os tipos foram criados e utilizados. A implementação real é mais robusta que a do plano, tornando todas as propriedades opcionais para lidar com respostas de API potencialmente incompletas, o que é uma melhoria.
+
+## 13. Helpers
+
+**Conclusão:** PARCIALMENTE CORRETO
+
+**Justificativa:** A maioria dos helpers foi implementada, mas um não foi disponibilizado para reutilização como planejado.
+
+- **Correto:** As funções `getAspectRatioClass`, `isVerticalFormat`, `getVariationImages` e `isPreviewEnabled` foram implementadas e funcionam como esperado.
+- **Incorreto:** O item `[ ] Disponibilizar PromptBlock para reutilização nos cards de texto` está desmarcado na checklist e, de fato, o componente `PromptBlock` foi definido localmente dentro de `AdsPreview.tsx` e não foi exportado, impedindo sua reutilização em outros locais.
+
+## 14. Estilos e Temas
+
+**Conclusão:** CORRETO
+
+**Justificativa:** Embora os itens na checklist estivessem desmarcados, a verificação do código confirma que a implementação utiliza consistentemente os tokens de tema do projeto (cores, opacidade, bordas, sombras), alinhando-se ao design do wizard.
+
+## 15. Considerações Finais
+
+**Conclusão:** NÃO APLICÁVEL
+
+**Justificativa:** Estes itens da checklist são conceituais e não correspondem a tarefas de implementação de código que possam ser verificadas.
+
