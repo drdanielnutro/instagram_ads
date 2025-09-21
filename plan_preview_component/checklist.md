@@ -1,14 +1,14 @@
 # Checklist – Componente de Preview de Anúncios
 
 ## 1. Ativação do Preview
-- [ ] Adicionar `VITE_ENABLE_ADS_PREVIEW=false` em `frontend/.env.example`
-- [ ] Documentar a flag em `frontend/README.md`
-- [ ] Implementar helper `isPreviewEnabled` em `frontend/src/utils/featureFlags.ts`
-- [ ] Exibir botão `Preview` em `App.tsx` quando `deliveryMeta?.ok` estiver verdadeiro
-- [ ] Implementar handler `openPreview` que inicia o fluxo do modal
-- [ ] Realizar GET em `/api/delivery/final/download?user_id=<...>&session_id=<...>`
-- [ ] Tratar respostas inline (JSON direto) e assinadas (`{ signed_url }`), normalizando para um único objeto
-- [ ] Invocar parsing do JSON final e acionar abertura do modal
+- [x] Adicionar `VITE_ENABLE_ADS_PREVIEW=false` em `frontend/.env.example`
+- [x] Documentar a flag em `frontend/README.md`
+- [x] Implementar helper `isPreviewEnabled` em `frontend/src/utils/featureFlags.ts`
+- [x] Exibir botão `Preview` em `App.tsx` quando `deliveryMeta?.ok` estiver verdadeiro
+- [x] Implementar handler `openPreview` que inicia o fluxo do modal
+- [x] Realizar GET em `/api/delivery/final/download?user_id=<...>&session_id=<...>`
+- [x] Tratar respostas inline (JSON direto) e assinadas (`{ signed_url }`), normalizando para um único objeto
+- [x] Invocar parsing do JSON final e acionar abertura do modal
 
 ## 2. Estrutura Simplificada (MVP)
 - [ ] Criar arquivo `frontend/src/components/AdsPreview.tsx` concentrando o MVP
