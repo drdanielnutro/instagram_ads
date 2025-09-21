@@ -32,3 +32,7 @@ export function isWizardEnabled(defaultValue = false): boolean {
   return readBooleanFlag("VITE_ENABLE_WIZARD", defaultValue);
 }
 
+export function isPreviewEnabled(defaultValue = false): boolean {
+  return readBooleanFlag("VITE_ENABLE_ADS_PREVIEW", defaultValue);
+}
+

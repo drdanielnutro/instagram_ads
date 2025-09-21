@@ -1,8 +1,10 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
+import { AdsPreview } from "@/components/AdsPreview";
 import { Button } from "@/components/ui/button";
 import { ChatMessagesView } from "@/components/ChatMessagesView";
+import { isPreviewEnabled } from "@/utils/featureFlags";
 
 // Update DisplayData to be a string type
 type DisplayData = string | null;
@@ -54,9 +56,19 @@ export default function App() {
   const [preflightEnabled, setPreflightEnabled] = useState<boolean>(true);
   const [deliveryMeta, setDeliveryMeta] = useState<any | null>(null);
   const [deliveryChecking, setDeliveryChecking] = useState<boolean>(false);
+  const [showPreview, setShowPreview] = useState(false);
   const currentAgentRef = useRef('');
   const accumulatedTextRef = useRef("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const previewEnabled = useMemo(() => isPreviewEnabled(), []);
+  const handleClosePreview = useCallback(() => setShowPreview(false), []);
+  const openPreview = useCallback(() => {
+    if (!previewEnabled || !deliveryMeta?.ok || !userId || !sessionId) {
+      return;
+    }
+    setShowPreview(true);
+  }, [deliveryMeta, previewEnabled, sessionId, userId]);
+  const canOpenPreview = Boolean(previewEnabled && deliveryMeta?.ok && userId && sessionId);
 
   // Initialize preflight from env (default ON)
   useEffect(() => {
@@ -65,6 +77,12 @@ export default function App() {
       setPreflightEnabled(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (!deliveryMeta?.ok) {
+      setShowPreview(false);
+    }
+  }, [deliveryMeta]);
 
   const retryWithBackoff = async (
     fn: () => Promise<any>,
@@ -649,6 +667,15 @@ export default function App() {
             >
               {deliveryChecking ? 'Verificando…' : 'Atualizar' }
             </Button>
+            {previewEnabled && (
+              <Button
+                onClick={openPreview}
+                disabled={!canOpenPreview}
+                className={`${!canOpenPreview ? 'bg-neutral-700 text-neutral-300 cursor-not-allowed' : 'bg-indigo-500 hover:bg-indigo-600 text-white'} text-xs`}
+              >
+                Preview
+              </Button>
+            )}
             <Button
               onClick={handleDownloadFinal}
               disabled={!deliveryMeta || !deliveryMeta.ok}
@@ -695,6 +722,14 @@ export default function App() {
             />
           )}
         </div>
+        {previewEnabled && userId && sessionId && (
+          <AdsPreview
+            userId={userId}
+            sessionId={sessionId}
+            isOpen={showPreview}
+            onClose={handleClosePreview}
+          />
+        )}
       </main>
     </div>
   );
