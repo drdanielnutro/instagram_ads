@@ -7,7 +7,7 @@
 
 ## 1. Configuração da Flag
 - [x] Adicionar `VITE_ENABLE_WIZARD=false` em `frontend/.env.example` (e replicar em `.env.local` quando necessário)
-- [ ] Documentar a flag em `frontend/README.md` explicando finalidade, uso e necessidade de reiniciar `npm run dev`
+- [x] Documentar a flag em `frontend/README.md` explicando finalidade, uso e necessidade de reiniciar `npm run dev`
 - [ ] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
 
 ## 2. Preservação da UI Atual
