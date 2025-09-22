@@ -6,32 +6,32 @@
 > - `[x]` = done
 
 ## 1. Análise e Preparação
-- [ ] Revisar o arquivo `frontend/src/components/WizardForm/WizardForm.tsx`
-- [ ] Confirmar a estrutura atual do JSX (linha 224-246)
-- [ ] Validar que o problema de overflow existe atualmente
-- [ ] Criar backup do arquivo atual antes das alterações
-- [ ] Testar o comportamento atual com conteúdo longo para documentar o problema
+- [x] Revisar o arquivo `frontend/src/components/WizardForm/WizardForm.tsx`
+- [x] Confirmar a estrutura atual do JSX (linha 224-246)
+- [x] Validar que o problema de overflow existe atualmente
+- [x] Criar backup do arquivo atual antes das alterações
+- [x] Testar o comportamento atual com conteúdo longo para documentar o problema
 
 ## 2. Implementação da Correção
 ### 2.1. Localização do Código
-- [ ] Localizar o método `return` do componente `WizardForm`
-- [ ] Identificar a estrutura do container principal (linha ~225)
-- [ ] Identificar a posição do `<StepCard>` (linha ~232)
+- [x] Localizar o método `return` do componente `WizardForm`
+- [x] Identificar a estrutura do container principal (linha ~225)
+- [x] Identificar a posição do `<StepCard>` (linha ~232)
 
 ### 2.2. Aplicação da Refatoração
-- [ ] Adicionar o wrapper `<div>` ao redor do `<StepCard>`
-- [ ] Aplicar a classe `flex-1` ao novo wrapper
-- [ ] Aplicar a classe `min-h-0` ao novo wrapper
-- [ ] Aplicar a classe `overflow-y-auto` ao novo wrapper
-- [ ] Garantir que o `<StepCard>` está completamente dentro do novo wrapper
-- [ ] Verificar indentação e formatação do código
+- [x] Adicionar o wrapper `<div>` ao redor do `<StepCard>`
+- [x] Aplicar a classe `flex-1` ao novo wrapper
+- [x] Aplicar a classe `min-h-0` ao novo wrapper
+- [x] Aplicar a classe `overflow-y-auto` ao novo wrapper
+- [x] Garantir que o `<StepCard>` está completamente dentro do novo wrapper
+- [x] Verificar indentação e formatação do código
 
 ## 3. Validação da Estrutura
 ### 3.1. Verificação do Código
-- [ ] Confirmar que `<ProgressHeader>` permanece como primeiro filho direto
-- [ ] Confirmar que o novo wrapper div está como segundo filho direto
-- [ ] Confirmar que `<NavigationFooter>` permanece como terceiro filho direto
-- [ ] Validar que a estrutura segue o padrão:
+- [x] Confirmar que `<ProgressHeader>` permanece como primeiro filho direto
+- [x] Confirmar que o novo wrapper div está como segundo filho direto
+- [x] Confirmar que `<NavigationFooter>` permanece como terceiro filho direto
+- [x] Validar que a estrutura segue o padrão:
   ```tsx
   <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6">
     <ProgressHeader ... />
@@ -45,10 +45,10 @@
   ```
 
 ### 3.2. Verificação das Classes CSS
-- [ ] Confirmar que `flex-1` está aplicado corretamente ao wrapper
-- [ ] Confirmar que `min-h-0` está presente (crucial para funcionamento)
-- [ ] Confirmar que `overflow-y-auto` está configurado
-- [ ] Verificar que não há conflitos com classes existentes
+- [x] Confirmar que `flex-1` está aplicado corretamente ao wrapper
+- [x] Confirmar que `min-h-0` está presente (crucial para funcionamento)
+- [x] Confirmar que `overflow-y-auto` está configurado
+- [x] Verificar que não há conflitos com classes existentes
 
 ## 4. Testes Funcionais
 ### 4.1. Testes de Layout
