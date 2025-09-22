@@ -22,10 +22,6 @@ interface AdsPreviewProps {
   onClose: () => void;
 }
 
-interface FetchSignedUrlResponse {
-  signed_url?: string;
-}
-
 export interface PromptBlockProps {
   label: string;
   text?: string;
@@ -392,7 +388,12 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
     setFetchError(null);
     setImageErrors(new Map());
 
-    const baseUrl = `/api/delivery/final/download?user_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`;
+    const params = new URLSearchParams({
+      user_id: userId,
+      session_id: sessionId,
+      inline: "1",
+    });
+    const baseUrl = `/api/delivery/final/download?${params.toString()}`;
 
     try {
       const response = await fetch(baseUrl);
@@ -404,19 +405,7 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
       let payload: unknown;
 
       if (contentType.includes("application/json")) {
-        const data = await response.json();
-        const maybeSigned = data as FetchSignedUrlResponse;
-        if (maybeSigned?.signed_url) {
-          const signedResponse = await fetch(maybeSigned.signed_url);
-          const signedContentType = signedResponse.headers.get("content-type") ?? "";
-          if (signedContentType.includes("application/json")) {
-            payload = await signedResponse.json();
-          } else {
-            payload = safeJsonParse(await signedResponse.text());
-          }
-        } else {
-          payload = data;
-        }
+        payload = await response.json();
       } else {
         payload = safeJsonParse(await response.text());
       }
