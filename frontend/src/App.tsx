@@ -667,7 +667,7 @@ export default function App() {
             >
               {deliveryChecking ? 'Verificando…' : 'Atualizar' }
             </Button>
-            {previewEnabled && (
+            {previewEnabled && deliveryMeta?.ok && (
               <Button
                 onClick={openPreview}
                 disabled={!canOpenPreview}

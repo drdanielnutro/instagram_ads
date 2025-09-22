@@ -5,7 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AdVariation } from "@/types/ad-preview";
+import {
+  AdVariation,
+  AspectRatio,
+  ContextInfo,
+  CopyInfo,
+  VisualInfo,
+  VariationFormat,
+} from "@/types/ad-preview";
 import { cn } from "@/utils";
 
 interface AdsPreviewProps {
@@ -19,7 +26,7 @@ interface FetchSignedUrlResponse {
   signed_url?: string;
 }
 
-interface PromptBlockProps {
+export interface PromptBlockProps {
   label: string;
   text?: string;
 }
@@ -38,8 +45,89 @@ interface ImageCarouselProps {
 }
 
 const VARIATION_TAB_CLASS = "rounded-lg data-[state=active]:bg-card/80 data-[state=active]:text-foreground";
+const FALLBACK_FORMAT: VariationFormat = "Feed";
+const FALLBACK_ASPECT_RATIO: AspectRatio = "4:5";
 
-function PromptBlock({ label, text }: PromptBlockProps) {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function coerceString(value: unknown, fallback = ""): string {
+  return typeof value === "string" ? value : fallback;
+}
+
+function coerceAspectRatio(value: unknown): AspectRatio {
+  if (value === "9:16" || value === "1:1" || value === "4:5") {
+    return value as AspectRatio;
+  }
+  return FALLBACK_ASPECT_RATIO;
+}
+
+function coerceFormat(value: unknown): VariationFormat {
+  if (value === "Reels" || value === "Stories" || value === "Feed") {
+    return value as VariationFormat;
+  }
+  return FALLBACK_FORMAT;
+}
+
+function coerceImages(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((item): item is string => typeof item === "string" && item.length > 0);
+}
+
+function buildCopy(raw: unknown): CopyInfo {
+  const copy = isRecord(raw) ? raw : {};
+  return {
+    headline: coerceString(copy.headline),
+    corpo: coerceString(copy.corpo),
+    cta_texto: coerceString(copy.cta_texto),
+  };
+}
+
+function buildVisual(raw: unknown): VisualInfo {
+  const visual = isRecord(raw) ? raw : {};
+  return {
+    descricao_imagem: coerceString(visual.descricao_imagem),
+    prompt_estado_atual: coerceString(visual.prompt_estado_atual),
+    prompt_estado_intermediario: coerceString(visual.prompt_estado_intermediario),
+    prompt_estado_aspiracional: coerceString(visual.prompt_estado_aspiracional),
+    aspect_ratio: coerceAspectRatio(visual.aspect_ratio),
+    // Futuro: o backend irá popular visual.images com as URLs finais para o carrossel.
+    images: coerceImages(visual.images),
+  };
+}
+
+function buildContext(raw: unknown): ContextInfo {
+  if (typeof raw === "string" || Array.isArray(raw) || isRecord(raw)) {
+    return raw as ContextInfo;
+  }
+  return "";
+}
+
+function sanitizeVariation(raw: unknown): AdVariation | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+
+  const copy = buildCopy(raw.copy);
+  const visual = buildVisual(raw.visual);
+
+  return {
+    landing_page_url: coerceString(raw.landing_page_url),
+    formato: coerceFormat(raw.formato),
+    copy,
+    visual,
+    cta_instagram: coerceString(raw.cta_instagram),
+    fluxo: coerceString(raw.fluxo),
+    referencia_padroes: coerceString(raw.referencia_padroes),
+    contexto_landing: buildContext(raw.contexto_landing),
+  };
+}
+
+export function PromptBlock({ label, text }: PromptBlockProps) {
   if (!text) {
     return null;
   }
@@ -65,7 +153,25 @@ function ImageCarousel({
   isLoading,
 }: ImageCarouselProps) {
   const hasImages = images.length > 0;
+  const totalSlides = Math.max(prompts.length, hasImages ? images.length : 1);
+  const stageLabel = prompts[currentIndex]?.label ?? "Descrição visual";
   const activePrompt = prompts[currentIndex];
+  const imageSrc = images[currentIndex];
+
+  const canGoPrev = currentIndex > 0;
+  const canGoNext = currentIndex < totalSlides - 1;
+
+  const handlePrev = () => {
+    if (canGoPrev) {
+      onIndexChange(currentIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (canGoNext) {
+      onIndexChange(currentIndex + 1);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -75,6 +181,27 @@ function ImageCarousel({
           aspectRatioClass,
         )}
       >
+        <div className="absolute left-4 top-4 z-10 rounded-full border border-border/60 bg-background/80 px-3 py-1 text-xs font-medium text-foreground/80">
+          {stageLabel}
+        </div>
+        <button
+          type="button"
+          onClick={handlePrev}
+          disabled={!canGoPrev}
+          aria-label="Visual anterior"
+          className="absolute left-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border/60 bg-background/80 text-sm text-foreground transition disabled:opacity-30"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={!canGoNext}
+          aria-label="Próximo visual"
+          className="absolute right-3 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border/60 bg-background/80 text-sm text-foreground transition disabled:opacity-30"
+        >
+          →
+        </button>
         {isLoading ? (
           <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground/80">
             Carregando preview…
@@ -88,10 +215,10 @@ function ImageCarousel({
               Tentar novamente
             </Button>
           </div>
-        ) : hasImages ? (
+        ) : hasImages && imageSrc ? (
           <img
             key={`${variationIndex}-${currentIndex}`}
-            src={images[currentIndex]}
+            src={imageSrc}
             alt={`Variação ${variationIndex + 1} - imagem ${currentIndex + 1}`}
             className="h-full w-full object-cover"
             onError={() => onImageError(currentIndex)}
@@ -108,6 +235,22 @@ function ImageCarousel({
         )}
         {!hasImages && (
           <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-border/40" />
+        )}
+        {totalSlides > 1 && (
+          <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+            {Array.from({ length: totalSlides }).map((_, index) => (
+              <button
+                key={`${variationIndex}-dot-${index}`}
+                type="button"
+                onClick={() => onIndexChange(index)}
+                aria-label={`Ir para ${prompts[index]?.label ?? `etapa ${index + 1}`}`}
+                className={cn(
+                  "h-2 w-2 rounded-full border border-border/60 transition",
+                  index === currentIndex ? "bg-primary" : "bg-primary/30",
+                )}
+              />
+            ))}
+          </div>
         )}
       </div>
       {(hasImages || prompts.length > 1) && (
@@ -139,22 +282,26 @@ function normalizeVariations(payload: unknown): AdVariation[] {
   }
 
   const normalizedPayload = typeof payload === "string" ? safeJsonParse(payload) : payload;
+  let variationSource: unknown[] | null = null;
 
   if (Array.isArray(normalizedPayload)) {
-    return normalizedPayload as AdVariation[];
-  }
-
-  if (typeof normalizedPayload === "object" && normalizedPayload !== null) {
-    const maybeVariations = (normalizedPayload as Record<string, unknown>).variations
-      ?? (normalizedPayload as Record<string, unknown>).variacoes
-      ?? (normalizedPayload as Record<string, unknown>).ads;
-
+    variationSource = normalizedPayload;
+  } else if (isRecord(normalizedPayload)) {
+    const maybeVariations = normalizedPayload.variations ?? normalizedPayload.variacoes ?? normalizedPayload.ads;
     if (Array.isArray(maybeVariations)) {
-      return maybeVariations as AdVariation[];
+      variationSource = maybeVariations;
+    } else {
+      variationSource = [normalizedPayload];
     }
   }
 
-  return [];
+  if (!Array.isArray(variationSource)) {
+    return [];
+  }
+
+  return variationSource
+    .map((item) => sanitizeVariation(item))
+    .filter((item): item is AdVariation => Boolean(item));
 }
 
 function safeJsonParse(value: string): unknown {
@@ -187,19 +334,14 @@ function isVerticalFormat(formato?: string): boolean {
 }
 
 function getVariationImages(variation?: AdVariation): string[] {
-  if (!variation?.visual) {
+  if (!variation) {
     return [];
   }
 
-  const maybeImages = (variation.visual as Record<string, unknown>).images;
-  if (!Array.isArray(maybeImages)) {
-    return [];
-  }
-
-  return maybeImages.filter((url): url is string => typeof url === "string" && url.length > 0);
+  return variation.visual.images;
 }
 
-function getContextEntries(contexto: unknown): { label: string; value: string }[] {
+function getContextEntries(contexto: ContextInfo): { label: string; value: string }[] {
   if (!contexto) {
     return [];
   }
@@ -314,7 +456,7 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
   }, [activeVariation]);
 
   const variationImages = useMemo(() => getVariationImages(activeVariation), [activeVariation]);
-  const aspectRatioClass = getAspectRatioClass(activeVariation?.visual?.aspect_ratio);
+  const aspectRatioClass = getAspectRatioClass(activeVariation?.visual.aspect_ratio);
   const hasImageError = imageErrors.get(`${currentVariation}-${currentImageIndex}`) ?? false;
 
   useEffect(() => {
@@ -331,14 +473,14 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
   }, [currentVariation]);
 
   const renderFeedDevice = () => (
-    <div className="flex h-full flex-col justify-between gap-6 p-6">
+    <div className="flex h-full flex-col gap-6 p-6">
       <div>
         <p className="text-sm font-medium text-muted-foreground/80">Dispositivo (Feed)</p>
       </div>
       <ImageCarousel
         variationIndex={currentVariation}
         images={variationImages}
-        prompts={prompts.length ? prompts : [{ label: "Descrição", text: activeVariation?.visual?.descricao_imagem }]}
+        prompts={prompts.length ? prompts : [{ label: "Descrição", text: activeVariation.visual.descricao_imagem }]}
         aspectRatioClass={aspectRatioClass}
         currentIndex={currentImageIndex}
         onIndexChange={setCurrentImageIndex}
@@ -347,12 +489,26 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
         hasError={hasImageError}
         isLoading={isFetchingPreview}
       />
-      <div className="rounded-2xl border border-border/50 bg-background/60 p-4">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground/70">Descrição visual</p>
-        <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line">
-          {activeVariation?.visual?.descricao_imagem || "Os prompts descrevem a sequência sugerida para o criativo."}
-        </p>
-      </div>
+      <Card className="rounded-2xl border border-border/60 bg-card/80 shadow-sm">
+        <CardContent className="space-y-4 py-6">
+          <div className="space-y-2">
+            <h3 className="text-base font-semibold text-foreground/90">
+              {activeVariation.copy.headline || "Headline não informada"}
+            </h3>
+            <p className="text-sm text-muted-foreground whitespace-pre-line">
+              {activeVariation.copy.corpo || "O corpo do anúncio será exibido aqui quando disponível."}
+            </p>
+          </div>
+          <Button size="lg" className="w-full md:w-auto">
+            {activeVariation.copy.cta_texto || activeVariation.cta_instagram || "Definir CTA"}
+          </Button>
+          {variationImages.length === 0 && (
+            <p className="text-xs text-muted-foreground/80">
+              Enquanto as imagens não chegam pelo backend, utilize os prompts abaixo como referência visual.
+            </p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -362,13 +518,10 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
         <p className="text-sm font-medium text-muted-foreground/80">Dispositivo (Vertical)</p>
       </div>
       <div className="relative">
-        <div className="pointer-events-none absolute inset-x-8 top-10 z-10 h-12 rounded-full border border-primary/40 bg-primary/10 text-center text-xs leading-[3rem] text-primary">
-          Safe zone — texto principal
-        </div>
         <ImageCarousel
           variationIndex={currentVariation}
           images={variationImages}
-          prompts={prompts.length ? prompts : [{ label: "Descrição", text: activeVariation?.visual?.descricao_imagem }]}
+          prompts={prompts.length ? prompts : [{ label: "Descrição", text: activeVariation.visual.descricao_imagem }]}
           aspectRatioClass={aspectRatioClass}
           currentIndex={currentImageIndex}
           onIndexChange={setCurrentImageIndex}
@@ -377,16 +530,29 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
           hasError={hasImageError}
           isLoading={isFetchingPreview}
         />
-        <div className="pointer-events-none absolute inset-x-8 bottom-10 z-10 h-12 rounded-full border border-primary/40 bg-primary/10 text-center text-xs leading-[3rem] text-primary">
-          Safe zone — CTA / logo
+        <div className="pointer-events-none absolute inset-0">
+          <div className="flex justify-center">
+            <div className="mt-8 rounded-full border border-border/60 bg-background/40 px-4 py-2 text-xs font-medium text-muted-foreground/80">
+              Safe zone — texto principal
+            </div>
+          </div>
+          <div className="absolute bottom-8 left-1/2 w-[calc(100%-4rem)] -translate-x-1/2 rounded-full border border-border/60 bg-background/45 px-4 py-2 text-center text-xs font-medium text-muted-foreground/80">
+            Safe zone — CTA / logo
+          </div>
         </div>
       </div>
-      <div className="rounded-2xl border border-border/50 bg-background/60 p-4">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground/70">Descrição visual</p>
-        <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line">
-          {activeVariation?.visual?.descricao_imagem || "Utilize as zonas destacadas para manter textos legíveis em formatos verticais."}
-        </p>
-      </div>
+      <Card className="rounded-2xl border border-border/50 bg-muted/30">
+        <CardContent className="space-y-2 py-4 text-sm text-muted-foreground">
+          <p>
+            💡 Em formatos verticais, a interface do Instagram sobrepõe elementos do criativo. Use o preview para garantir que textos fiquem dentro das áreas seguras.
+          </p>
+          {variationImages.length === 0 && (
+            <p>
+              Enquanto não houver imagens renderizadas, utilize os prompts e descrições abaixo para guiar a produção manual.
+            </p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -425,17 +591,17 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
               Copy principal
             </Badge>
             <CardTitle className="text-lg text-foreground/90">
-              {activeVariation.copy?.headline || "Headline não informada"}
+              {activeVariation.copy.headline || "Headline não informada"}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground whitespace-pre-line">
-              {activeVariation.copy?.corpo || "O corpo do anúncio será exibido aqui quando disponível."}
+              {activeVariation.copy.corpo || "O corpo do anúncio será exibido aqui quando disponível."}
             </p>
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase tracking-wide text-muted-foreground/80">CTA</span>
               <Badge className="bg-primary/10 text-primary">
-                {activeVariation.copy?.cta_texto || activeVariation.cta_instagram || "Definir CTA"}
+                {activeVariation.copy.cta_texto || activeVariation.cta_instagram || "Definir CTA"}
               </Badge>
             </div>
           </CardContent>
@@ -451,47 +617,75 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
               <p className="mt-1 text-foreground/80">{activeVariation.formato || "—"}</p>
             </div>
             <div>
+              <p className="text-xs uppercase tracking-wide text-muted-foreground/70">CTA Instagram</p>
+              <p className="mt-1 text-foreground/80">{activeVariation.cta_instagram || "—"}</p>
+            </div>
+            <div>
               <p className="text-xs uppercase tracking-wide text-muted-foreground/70">Fluxo</p>
               <p className="mt-1 text-foreground/80">{activeVariation.fluxo || "—"}</p>
             </div>
             <div className="md:col-span-2">
               <p className="text-xs uppercase tracking-wide text-muted-foreground/70">Landing Page</p>
-              <p className="mt-1 break-words text-primary/90">
-                {activeVariation.landing_page_url || "Sem URL cadastrada"}
-              </p>
-            </div>
-            <div className="md:col-span-2">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground/70">Referências</p>
-              <p className="mt-1 whitespace-pre-line text-muted-foreground/90">
-                {activeVariation.referencia_padroes || "Referências visuais serão exibidas aqui."}
-              </p>
+              {activeVariation.landing_page_url ? (
+                <a
+                  href={activeVariation.landing_page_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-1 inline-block break-words text-primary underline"
+                >
+                  Abrir página
+                </a>
+              ) : (
+                <p className="mt-1 text-foreground/70">Sem URL cadastrada</p>
+              )}
             </div>
           </CardContent>
         </Card>
 
         <Card className="border-border/60 bg-card/70">
           <CardHeader>
-            <CardTitle className="text-base text-foreground/90">Prompts visuais</CardTitle>
+            <CardTitle className="text-base text-foreground/90">Prompts e descrição visual</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {prompts.length > 0 ? (
-              prompts.map((prompt) => (
-                <PromptBlock key={prompt.label} label={prompt.label} text={prompt.text} />
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground/80">
-                Os prompts detalhados serão exibidos quando fornecidos pelo backend.
+          <CardContent className="space-y-4">
+            <section>
+              <h4 className="text-xs uppercase tracking-wide text-muted-foreground/80">Descrição visual</h4>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-pre-line">
+                {activeVariation.visual.descricao_imagem || "Os prompts detalhados serão exibidos quando fornecidos pelo backend."}
               </p>
-            )}
+            </section>
+            <section className="space-y-3">
+              {prompts.length > 0 ? (
+                prompts.map((prompt) => (
+                  <PromptBlock key={prompt.label} label={prompt.label} text={prompt.text} />
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground/80">
+                  Os prompts detalhados serão exibidos quando fornecidos pelo backend.
+                </p>
+              )}
+            </section>
           </CardContent>
         </Card>
 
+        {activeVariation.referencia_padroes && (
+          <details className="group rounded-2xl border border-border/60 bg-card/70 px-6 py-4">
+            <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-foreground/90 list-none">
+              Referências e padrões
+              <span className="transition-transform group-open:rotate-180">⌃</span>
+            </summary>
+            <div className="pt-4 text-sm text-muted-foreground whitespace-pre-line">
+              {activeVariation.referencia_padroes}
+            </div>
+          </details>
+        )}
+
         {contextEntries.length > 0 && (
-          <Card className="border-border/60 bg-card/70">
-            <CardHeader>
-              <CardTitle className="text-base text-foreground/90">StoryBrand & Contexto</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-sm text-muted-foreground">
+          <details className="group rounded-2xl border border-border/60 bg-card/70 px-6 py-4">
+            <summary className="flex cursor-pointer items-center justify-between text-sm font-medium text-foreground/90 list-none">
+              StoryBrand & Contexto
+              <span className="transition-transform group-open:rotate-180">⌃</span>
+            </summary>
+            <div className="space-y-4 pt-4 text-sm text-muted-foreground">
               {contextEntries.map((entry) => (
                 <div key={entry.label} className="space-y-1 rounded-xl border border-border/40 bg-background/50 px-4 py-3">
                   <span className="text-xs uppercase tracking-wide text-muted-foreground/80">
@@ -500,8 +694,8 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
                   <p className="whitespace-pre-line text-muted-foreground/90">{entry.value}</p>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+          </details>
         )}
       </div>
     );

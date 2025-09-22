@@ -42,7 +42,7 @@
 - [x] Estruturar cards para copy (headline, corpo, CTA com `Badge`)
 - [x] Exibir metadados (formato, CTA IG, fluxo, link da landing)
 - [x] Apresentar descrição visual e prompts usando `PromptBlock`
-- [ ] Criar blocos colapsáveis (detalhes) para referências e StoryBrand
+- [x] Criar blocos colapsáveis (detalhes) para referências e StoryBrand
 
 ## 8. Fetch e Atualização de Dados
 - [x] Resetar estados ao abrir modal (`variations`, índices, erros)
@@ -73,14 +73,14 @@
 ## 13. Helpers
 - [x] Implementar `getAspectRatioClass`, `isVerticalFormat`, `getVariationImages`
 - [x] Exportar `isPreviewEnabled` via `featureFlags.ts`
-- [ ] Documentar comportamento futuro para URLs de imagem
-- [ ] Disponibilizar `PromptBlock` para reutilização nos cards de texto
+- [x] Documentar comportamento futuro para URLs de imagem
+- [x] Disponibilizar `PromptBlock` para reutilização nos cards de texto
 
 ## 14. Estilos e Temas
-- [ ] Garantir uso de tokens do tema escuro (`bg-card`, `border-border`, etc.)
-- [ ] Aplicar sombras e bordas arredondadas alinhadas ao wizard
-- [ ] Utilizar variações com opacidade para profundidade
+- [x] Garantir uso de tokens do tema escuro (`bg-card`, `border-border`, etc.)
+- [x] Aplicar sombras e bordas arredondadas alinhadas ao wizard
+- [x] Utilizar variações com opacidade para profundidade
 
 ## 15. Considerações Finais
-- [ ] Validar aderência ao MVP e extensibilidade pós-MVP
-- [ ] Revisar consistência com guidelines do projeto e dados do JSON final
+- [x] Validar aderência ao MVP e extensibilidade pós-MVP
+- [x] Revisar consistência com guidelines do projeto e dados do JSON final

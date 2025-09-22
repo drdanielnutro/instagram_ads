@@ -23,3 +23,9 @@ Controla o modal de preview das variações finais geradas pelo pipeline.
 - **Reinicialização necessária:** após alterar a flag, reinicie `npm run dev` para que o Vite recarregue as variáveis de ambiente.
 
 > ℹ️ A flag nasce desativada para facilitar rollback imediato caso o preview apresente inconsistências.
+
+## Validação do Preview de Anúncios
+
+- MVP revisado manualmente com os dados de saída atuais do endpoint `/api/delivery/final/download`, confirmando aderência ao plano de UX definido em `PLAN_PREVIEW_COMPONENT.md`.
+- Layout, tokens de tema e responsividade alinhados às diretrizes existentes do projeto (mesmos padrões do wizard), garantindo comportamento consistente em mobile e desktop.
+- O modal pode ser desligado rapidamente via `VITE_ENABLE_ADS_PREVIEW=false`, servindo como mecanismo de rollback enquanto o rollout gradual (staging → produção) é conduzido.
