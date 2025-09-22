@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu Metabolismo Parece Travado?",
+      "corpo": "As dietas que antes funcionavam já não dão resultado? Se você se sente frustrada com a balança e suspeita que seu metabolismo está lento, saiba que a solução pode não estar no prato, mas na medicina.\n\nCom o tratamento médico do Dr. Daniel Araújo (Médico Nutrólogo, CRM 48645), investigamos as causas hormonais e metabólicas que dificultam seu emagrecimento. Criamos um plano que respeita seu corpo e sua rotina.\n\nRecupere o controle e sua confiança. Agende uma consulta e dê o primeiro passo para uma saúde duradoura.",
+      "cta_texto": "Agendar consulta médica"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher na faixa dos 40 anos demonstra frustração ao se olhar no espelho (estado atual). Em um segundo momento, ela aparece em uma consulta, conversando com um médico que a escuta atentamente (estado intermediário). Por fim, ela é vista em um ambiente social, rindo com amigos, vestindo roupas que a deixam confiante e feliz (estado aspiracional).",
+      "prompt_estado_atual": "Photo of a 40-year-old Brazilian woman looking disheartened at her reflection in a full-body mirror in her bedroom. She's wearing simple home clothes. The lighting is soft and melancholic. Focus on her expression of frustration. Realistic style. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman, now sitting in a calm and modern medical office, having an attentive conversation with a male doctor. Her expression is transitioning from worried to hopeful, feeling heard and understood. The doctor is empathetic. Soft, professional lighting. Realistic style. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now looking vibrant and joyful, laughing with friends at an outdoor café. She is wearing a stylish, comfortable outfit that shows her confidence. The scene is filled with bright, natural light, conveying happiness and health. Realistic photo. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para Feed 4:5 priorizam imagens/vídeos de alta qualidade com pessoas reais em cenários aspiracionais ou que representem a dor/solução. Copy focada em um gancho direto para a dor da persona ('Você se identifica?'), seguida de empatia e apresentação clara da solução médica com autoridade e um CTA único e visível.",
+    "contexto_landing": "Cliente Ideal: mulheres que buscam saúde e bem-estar. Dores: A tensão constante pode desencadear sérias questões físicas e psicológicas; sentimento de desvalorização e baixa autoestima. Proposta/Guia: Acompanhamento médico do Dr. Daniel Araújo com empatia. Benefícios: solução funcional, controle do bem-estar, energia, confiança, prevenção de doenças, equilíbrio metabólico, relação saudável com a comida. Transformação: saúde concreta e duradoura. CTA: Começar a jornada para uma vida equilibrada. Urgência: Ficar presa no ciclo de alimentação emocional e perder a oportunidade de tratamentos farmacológicos eficazes."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Cansada de Se Sentir Sem Energia e Inchada?",
+      "corpo": "Aquele cansaço que não passa e a dificuldade para emagrecer podem ser sinais de que seu metabolismo precisa de ajuda médica. Não é falta de esforço.\n\nO Dr. Daniel Araújo, Médico Nutrólogo, oferece um tratamento que vai além da dieta, identificando e tratando as causas do seu quadro. Com um plano médico personalizado, você pode reequilibrar seu corpo de dentro para fora.\n\nImagine ter energia para o seu dia e se sentir bem no seu corpo novamente. Clique para saber mais e agendar sua avaliação.",
+      "cta_texto": "Saiba mais sobre o tratamento"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher com aparência cansada está sentada no sofá ao final do dia, sentindo-se esgotada (estado atual). Em um segundo momento, ela está em casa, durante uma teleconsulta em seu notebook, com uma expressão de quem está encontrando respostas (estado intermediário). Na cena final, ela está praticando ioga em um parque ao amanhecer, com uma postura energizada e sorriso sereno (estado aspiracional).",
+      "prompt_estado_atual": "Photo of a woman in her late 30s sitting on a sofa in a dimly lit living room, looking exhausted and drained. She's rubbing her temples, with a posture that denotes fatigue. Realistic style, moody lighting. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman, in the same living room but with brighter morning light, is sitting on the sofa with a laptop. She's engaged in a video call with a doctor, her expression is focused and relieved, as if she's finally understanding her condition. Realistic style. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now full of life, practicing yoga in a beautiful park during sunrise. She has an energetic posture and a serene smile on her face, dressed in comfortable activewear. The lighting is warm and golden, symbolizing new beginnings and vitality. Realistic photo. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para Feed 4:5 priorizam imagens/vídeos de alta qualidade com pessoas reais em cenários aspiracionais ou que representem a dor/solução. Copy focada em um gancho direto para a dor da persona ('Você se identifica?'), seguida de empatia e apresentação clara da solução médica com autoridade e um CTA único e visível.",
+    "contexto_landing": "Cliente Ideal: mulheres que buscam saúde e bem-estar. Dores: A tensão constante pode desencadear sérias questões físicas e psicológicas; sentimento de desvalorização e baixa autoestima. Proposta/Guia: Acompanhamento médico do Dr. Daniel Araújo com empatia. Benefícios: solução funcional, controle do bem-estar, energia, confiança, prevenção de doenças, equilíbrio metabólico, relação saudável com a comida. Transformação: saúde concreta e duradoura. CTA: Começar a jornada para uma vida equilibrada. Urgência: Ficar presa no ciclo de alimentação emocional e perder a oportunidade de tratamentos farmacológicos eficazes."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Tratamento Médico para Emagrecimento Feminino",
+      "corpo": "Se dietas restritivas e soluções rápidas já te frustraram, está na hora de uma abordagem séria. O ganho de peso pode ter causas complexas que só um tratamento médico especializado pode corrigir.\n\nO Dr. Daniel Araújo (Médico Nutrólogo, CRM 48645) oferece um acompanhamento seguro e eficaz. Realizamos uma investigação completa da sua saúde para criar um plano com base científica, que pode incluir otimização hormonal e suporte nutricional.\n\nSua saúde é a prioridade. Invista em um método que funciona. Agende sua consulta.",
+      "cta_texto": "Agendar avaliação médica"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher olha para um resultado de exame com expressão preocupada (estado atual). Em um segundo momento, um close-up mostra as mãos do médico explicando algo sobre um papel, transmitindo calma e expertise (estado intermediário). A cena final mostra a mulher com uma expressão tranquila e saudável, em um ambiente limpo e iluminado, simbolizando paz e saúde recuperada.",
+      "prompt_estado_atual": "Close-up photo of a woman's concerned and confused face as she looks at a medical report in her hands. The background is slightly out of focus. The lighting creates soft shadows, highlighting her worry. Realistic, empathetic tone. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Over-the-shoulder shot of a male doctor's hands pointing to a detail on a medical chart on a desk, explaining it to the patient (woman). The shot conveys guidance, expertise, and reassurance without showing faces clearly. Clean, professional setting. Realistic style. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A beautiful, serene portrait of the same woman, now looking directly at the camera with a calm, confident smile. She looks healthy and at peace. The background is simple and bright, like a well-lit room. The focus is on her expression of renewed well-being. Realistic photo. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) para Feed 4:5 priorizam imagens/vídeos de alta qualidade com pessoas reais em cenários aspiracionais ou que representem a dor/solução. Copy focada em um gancho direto para a dor da persona ('Você se identifica?'), seguida de empatia e apresentação clara da solução médica com autoridade e um CTA único e visível.",
+    "contexto_landing": "Cliente Ideal: mulheres que buscam saúde e bem-estar. Dores: A tensão constante pode desencadear sérias questões físicas e psicológicas; sentimento de desvalorização e baixa autoestima. Proposta/Guia: Acompanhamento médico do Dr. Daniel Araújo com empatia. Benefícios: solução funcional, controle do bem-estar, energia, confiança, prevenção de doenças, equilíbrio metabólico, relação saudável com a comida. Transformação: saúde concreta e duradoura. CTA: Começar a jornada para uma vida equilibrada. Urgência: Ficar presa no ciclo de alimentação emocional e perder a oportunidade de tratamentos farmacológicos eficazes."
+  }
+]

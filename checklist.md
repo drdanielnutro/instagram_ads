@@ -1,108 +1,101 @@
-# Checklist de Implementação – Refatoração Container Responsivo do Wizard
+# Checklist de Implementação – Correção do Preview de Anúncios
 
 > Convenção de status: substitua manualmente o marcador de cada item conforme avança.
 > - `[ ]` = pending (padrão)
 > - `[>]` = in progress
 > - `[x]` = done
 
-## 1. Análise e Preparação
-- [x] Revisar o arquivo `frontend/src/components/WizardForm/WizardForm.tsx`
-- [x] Confirmar a estrutura atual do JSX (linha 224-246)
-- [x] Validar que o problema de overflow existe atualmente
-- [x] Criar backup do arquivo atual antes das alterações
-- [x] Testar o comportamento atual com conteúdo longo para documentar o problema
+## 1. Análise do Problema
+- [ ] Confirmar que o JSON no GCS possui campos `image_estado_atual_url`, `image_estado_intermediario_url`, `image_estado_aspiracional_url`
+- [ ] Verificar que o campo `images[]` não existe no JSON atual
+- [ ] Confirmar que a função `getVariationImages` busca apenas em `visual.images`
+- [ ] Documentar que o problema é incompatibilidade de estrutura de dados
 
-## 2. Implementação da Correção
-### 2.1. Localização do Código
-- [x] Localizar o método `return` do componente `WizardForm`
-- [x] Identificar a estrutura do container principal (linha ~225)
-- [x] Identificar a posição do `<StepCard>` (linha ~232)
+## 2. Preparação para Correção
+- [ ] Abrir o arquivo `frontend/src/components/AdsPreview.tsx`
+- [ ] Localizar a função `getVariationImages` (linhas 336-342)
+- [ ] Criar backup do código atual antes das alterações
+- [ ] Verificar que o parâmetro `inline: "1"` está presente no fetchPreviewData (linha 403)
 
-### 2.2. Aplicação da Refatoração
-- [x] Adicionar o wrapper `<div>` ao redor do `<StepCard>`
-- [x] Aplicar a classe `flex-1` ao novo wrapper
-- [x] Aplicar a classe `min-h-0` ao novo wrapper
-- [x] Aplicar a classe `overflow-y-auto` ao novo wrapper
-- [x] Garantir que o `<StepCard>` está completamente dentro do novo wrapper
-- [x] Verificar indentação e formatação do código
+## 3. Implementação da Modificação
+### 3.1. Aplicar a Correção
+- [ ] Adicionar verificação de `variation.visual` no início da função
+- [ ] Manter a verificação do campo `images[]` para compatibilidade futura
+- [ ] Adicionar fallback para buscar campos individuais de URL
+- [ ] Implementar a ordem correta: estado_atual → estado_intermediario → estado_aspiracional
+- [ ] Adicionar cast `as any` para acessar campos extras sem quebrar tipos
 
-## 3. Validação da Estrutura
-### 3.1. Verificação do Código
-- [x] Confirmar que `<ProgressHeader>` permanece como primeiro filho direto
-- [x] Confirmar que o novo wrapper div está como segundo filho direto
-- [x] Confirmar que `<NavigationFooter>` permanece como terceiro filho direto
-- [x] Validar que a estrutura segue o padrão:
-  ```tsx
-  <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6">
-    <ProgressHeader ... />
-    <div className="flex-1 min-h-0 overflow-y-auto">
-      <StepCard ...>
-        {renderStepContent()}
-      </StepCard>
-    </div>
-    <NavigationFooter ... />
-  </div>
-  ```
+### 3.2. Código a Implementar
+- [ ] Substituir o código atual da função `getVariationImages`
+- [ ] Verificar indentação e formatação
+- [ ] Confirmar que a função retorna `string[]` em todos os casos
+- [ ] Validar que retorna array vazio se não encontrar dados
 
-### 3.2. Verificação das Classes CSS
-- [x] Confirmar que `flex-1` está aplicado corretamente ao wrapper
-- [x] Confirmar que `min-h-0` está presente (crucial para funcionamento)
-- [x] Confirmar que `overflow-y-auto` está configurado
-- [x] Verificar que não há conflitos com classes existentes
+## 4. Validação da Implementação
+### 4.1. Verificar Estrutura do Código
+- [ ] Confirmar que a função é retrocompatível
+- [ ] Verificar que primeiro tenta `visual.images`
+- [ ] Confirmar que depois busca campos individuais como fallback
+- [ ] Validar que mantém a ordem lógica das imagens
 
-## 4. Testes Funcionais
-### 4.1. Testes de Layout
-- [ ] Testar em viewport desktop (1920x1080)
-- [ ] Testar em viewport tablet (768x1024)
-- [ ] Testar em viewport mobile (375x667)
-- [ ] Verificar que `NavigationFooter` permanece sempre visível
-- [ ] Verificar que `ProgressHeader` permanece sempre visível
+### 4.2. Verificar Tipos TypeScript
+- [ ] Confirmar que não há erros de compilação TypeScript
+- [ ] Verificar que o uso de `as any` está localizado
+- [ ] Confirmar que a assinatura da função não mudou
+- [ ] Validar que o tipo de retorno continua sendo `string[]`
 
-### 4.2. Testes de Overflow
-- [ ] Adicionar conteúdo longo em um step e verificar scroll
-- [ ] Testar com mensagens de erro visíveis
-- [ ] Verificar que apenas a área central possui scroll
-- [ ] Confirmar que a barra de scroll aparece apenas quando necessário
-- [ ] Testar navegação entre steps com diferentes alturas de conteúdo
+## 5. Testes Funcionais
+### 5.1. Reiniciar e Testar
+- [ ] Executar `make dev` para reiniciar o frontend
+- [ ] Aguardar compilação sem erros
+- [ ] Abrir o navegador em http://localhost:5173/app/
+- [ ] Fazer uma requisição completa para gerar anúncios
 
-### 4.3. Testes de Interação
-- [ ] Verificar que botões do `NavigationFooter` permanecem acessíveis
-- [ ] Testar navegação com teclado (Tab, Shift+Tab)
-- [ ] Verificar que o scroll reseta ao mudar de step
-- [ ] Testar comportamento com zoom do navegador (75%, 100%, 125%)
+### 5.2. Testar Preview
+- [ ] Clicar no botão "Preview" quando disponível
+- [ ] Verificar que o modal abre sem erros
+- [ ] Confirmar que as 3 imagens aparecem no carrossel
+- [ ] Testar navegação entre as imagens (Estado Atual, Intermediário, Aspiracional)
 
-## 5. Validação Cross-Browser
-- [ ] Testar no Chrome/Chromium
-- [ ] Testar no Firefox
-- [ ] Testar no Safari (se disponível)
-- [ ] Testar no Edge
-- [ ] Verificar comportamento do scroll em cada navegador
+### 5.3. Validar Funcionalidades
+- [ ] Verificar que os botões de navegação lateral funcionam
+- [ ] Confirmar que os dots indicadores aparecem e funcionam
+- [ ] Verificar que os labels das etapas estão corretos
+- [ ] Testar navegação entre diferentes variações (se houver múltiplas)
 
-## 6. Performance e Acessibilidade
-- [ ] Verificar que não há repaint/reflow desnecessário
-- [ ] Confirmar que o scroll é suave e responsivo
-- [ ] Testar com leitor de tela (se aplicável)
-- [ ] Verificar que foco do teclado não fica preso no scroll
+## 6. Verificação de Console
+- [ ] Abrir DevTools (F12)
+- [ ] Verificar aba Console para erros JavaScript
+- [ ] Confirmar ausência de erros relacionados a `images`
+- [ ] Verificar que não há warnings de tipos TypeScript
 
-## 7. Build e Deploy
-- [ ] Executar `npm run build` no frontend
-- [ ] Verificar que não há erros de compilação
-- [ ] Testar a build em modo produção
-- [ ] Executar testes automatizados (se existirem)
+## 7. Testes de Regressão
+- [ ] Verificar que textos (headline, corpo, CTA) continuam aparecendo
+- [ ] Confirmar que metadados são exibidos corretamente
+- [ ] Testar que blocos colapsáveis funcionam (Referências, StoryBrand)
+- [ ] Verificar que o botão "Recarregar dados" funciona
 
 ## 8. Documentação
-- [ ] Atualizar comentários no código se necessário
-- [ ] Documentar a mudança no commit message
-- [ ] Registrar a correção em changelog/release notes se aplicável
+- [ ] Adicionar comentário na função explicando o fallback
+- [ ] Documentar que o campo `visual.images` será usado no futuro
+- [ ] Registrar a data da correção no código se necessário
 - [ ] Atualizar documentação técnica se existir
 
-## 9. Rollback Plan
-- [ ] Documentar como reverter a mudança se necessário
-- [ ] Manter backup do arquivo original
-- [ ] Preparar comando git revert se usando versionamento
+## 9. Commit e Versionamento
+- [ ] Executar `git add frontend/src/components/AdsPreview.tsx`
+- [ ] Criar commit com mensagem descritiva da correção
+- [ ] Fazer push para o branch atual
+- [ ] Verificar CI/CD se aplicável
 
-## 10. Sign-off Final
-- [ ] Code review por outro desenvolvedor (se aplicável)
-- [ ] QA aprova a correção
-- [ ] Deploy em ambiente de staging
-- [ ] Validação final em produção
+## 10. Validação Final
+- [ ] Testar em diferentes navegadores se possível
+- [ ] Confirmar que o preview funciona consistentemente
+- [ ] Verificar que não há degradação de performance
+- [ ] Marcar a tarefa como concluída na documentação do projeto
+
+---
+
+**Observações:**
+- CORS já foi resolvido pelo Codex Cloud com o parâmetro `inline=true`
+- Esta correção foca apenas no mapeamento de campos
+- A solução é retrocompatível e preparada para mudanças futuras
