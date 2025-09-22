@@ -330,33 +330,11 @@ function isVerticalFormat(formato?: string): boolean {
 }
 
 function getVariationImages(variation?: AdVariation): string[] {
-  if (!variation || !variation.visual) {
+  if (!variation) {
     return [];
   }
 
-  // Primeiro tenta usar o campo images se existir (compatibilidade futura)
-  if (variation.visual.images && Array.isArray(variation.visual.images)) {
-    return variation.visual.images;
-  }
-
-  const images: string[] = [];
-  const visual = variation.visual as any;
-
-  // Fallback: procura campos individuais de URL (formato atual do backend)
-  // Ordem mantida: estado_atual → estado_intermediario → estado_aspiracional
-  if (visual.image_estado_atual_url) {
-    images.push(visual.image_estado_atual_url);
-  }
-
-  if (visual.image_estado_intermediario_url) {
-    images.push(visual.image_estado_intermediario_url);
-  }
-
-  if (visual.image_estado_aspiracional_url) {
-    images.push(visual.image_estado_aspiracional_url);
-  }
-
-  return images;
+  return variation.visual.images;
 }
 
 function getContextEntries(contexto: ContextInfo): { label: string; value: string }[] {
