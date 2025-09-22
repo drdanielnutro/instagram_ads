@@ -100,3 +100,15 @@
 - Esta correção foca apenas no mapeamento de campos
 - A solução é retrocompatível e preparada para mudanças futuras
 - Testes manuais do preview não foram executados neste ambiente; executar localmente para validar comportamento visual.
+
+---
+
+## 11. StoryBrand Fallback — Checklist mínima
+- [ ] Inserir gate após `landing_page_analyzer` preservando `PlanningOrRunSynth` no caminho feliz
+- [ ] Ler score de `state.storybrand_analysis.completeness_score` (fallback: `landing_page_context.storybrand_completeness`)
+- [ ] Condicionar ativação por `config.min_storybrand_completeness` e flag `ENABLE_STORYBRAND_FALLBACK`
+- [ ] Definir formato de `state.storybrand_gate_metrics` (score, threshold, decisão, timestamp)
+- [ ] Documentar mapeamento 16→7 para compilar `StoryBrandAnalysis`
+- [ ] Ajustar extractor/backend e Wizard para novos campos opcionais (empresa, o que faz, sexo)
+- [ ] Garantir que o fallback atualize `storybrand_analysis.completeness_score` no fim
+- [ ] Alinhar documentação em `AGENTS.md` e checklist oficial
