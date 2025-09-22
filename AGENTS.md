@@ -37,7 +37,6 @@
 
 ## Checklist Primeiro, Código Depois
 - Antes de iniciar qualquer tarefa, abra `checklist.md` na raiz do projeto e identifique a próxima entrada marcada como `pending`. Se houver uma entrada `in progress`, confirme se ela já foi concluída; caso contrário, retome essa tarefa primeiro.
-- Para tarefas relacionadas ao preview, utilize também `plan_preview_component/checklist.md` e selecione o item correspondente.
 - Assim que assumir uma tarefa `pending`, atualize seu status para `in progress` diretamente em `checklist.md` antes de executar qualquer ação.
-- Em seguida, consulte `PLAN_PREVIEW_COMPONENT.md` e extraia apenas a descrição da tarefa correspondente para orientar a implementação.
-- Execute a tarefa por completo seguindo as instruções do plano. Ao finalizar, marque a entrada correspondente em `checklist.md` (e, quando aplicável, em `plan_preview_component/checklist.md`) como `done` e registre a conclusão na sua resposta.
+- Em seguida, consulte `refatoracao_container_ui_inicial.md` e extraia apenas a descrição da tarefa correspondente para orientar a implementação.
+- Execute a tarefa por completo seguindo as instruções do plano. Ao finalizar, marque a entrada correspondente em `checklist.md` como `done` e registre a conclusão na sua resposta.
