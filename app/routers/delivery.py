@@ -6,7 +6,7 @@ from datetime import timedelta
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from google.cloud import storage
 
 
@@ -52,7 +52,11 @@ def get_final_meta(user_id: str = Query(...), session_id: str = Query(...)):
 
 
 @router.get("/final/download")
-def download_final(user_id: str = Query(...), session_id: str = Query(...)):
+def download_final(
+    user_id: str = Query(...),
+    session_id: str = Query(...),
+    inline: bool = Query(False),
+):
     """Provide access to the final delivery via Signed URL (GCS) or local stream.
 
     - If meta includes a GCS URI, generate a short-lived v4 Signed URL and return it.
@@ -75,6 +79,17 @@ def download_final(user_id: str = Query(...), session_id: str = Query(...)):
             client = storage.Client(project=os.getenv("GOOGLE_CLOUD_PROJECT"))
             bucket = client.bucket(bucket_name)
             blob = bucket.blob(blob_name)
+            if inline:
+                try:
+                    payload = blob.download_as_bytes()
+                except Exception:
+                    logger.exception(
+                        "Failed to download inline payload for %s. Falling back to Signed URL.",
+                        gcs_uri,
+                    )
+                else:
+                    return Response(content=payload, media_type="application/json")
+
             url = blob.generate_signed_url(
                 version="v4",
                 expiration=timedelta(seconds=600),
@@ -95,6 +110,18 @@ def download_final(user_id: str = Query(...), session_id: str = Query(...)):
     # Fallback to local stream
     local_path = meta.get("final_delivery_local_path")
     if local_path and Path(local_path).exists():
+        if inline:
+            try:
+                payload = Path(local_path).read_bytes()
+            except Exception:
+                logger.exception(
+                    "Failed to read local inline payload for session %s from %s.",
+                    session_id,
+                    local_path,
+                )
+            else:
+                return Response(content=payload, media_type="application/json")
+
         return FileResponse(path=local_path, media_type="application/json", filename=filename)
 
     raise HTTPException(status_code=404, detail="No artifact available for download")
