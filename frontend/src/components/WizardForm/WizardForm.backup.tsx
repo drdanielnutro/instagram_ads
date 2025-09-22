@@ -229,9 +229,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
           completedSteps={completedSteps}
         />
 
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
-        </div>
+        <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
 
         <NavigationFooter
           currentStep={currentStep}
