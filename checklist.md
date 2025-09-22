@@ -1,71 +1,108 @@
-# Checklist de Implementação – Wizard UI com Feature Flag
+# Checklist de Implementação – Refatoração Container Responsivo do Wizard
 
 > Convenção de status: substitua manualmente o marcador de cada item conforme avança.
 > - `[ ]` = pending (padrão)
 > - `[>]` = in progress
 > - `[x]` = done
 
-## 1. Configuração da Flag
-- [x] Adicionar `VITE_ENABLE_WIZARD=false` em `frontend/.env.example` (e replicar em `.env.local` quando necessário)
-- [x] Documentar a flag em `frontend/README.md` explicando finalidade, uso e necessidade de reiniciar `npm run dev`
-- [x] Garantir leitura segura da flag (normalização para booleano) nos arquivos que dependem dela
+## 1. Análise e Preparação
+- [ ] Revisar o arquivo `frontend/src/components/WizardForm/WizardForm.tsx`
+- [ ] Confirmar a estrutura atual do JSX (linha 224-246)
+- [ ] Validar que o problema de overflow existe atualmente
+- [ ] Criar backup do arquivo atual antes das alterações
+- [ ] Testar o comportamento atual com conteúdo longo para documentar o problema
 
-## 2. Preservação da UI Atual
-- [x] Revisar e confirmar que `frontend/src/components/InputForm.tsx` permanece inalterado
-- [x] Revisar e confirmar que `frontend/src/components/WelcomeScreen.tsx` mantém o markup atual para o modo clássico
-- [x] Revisar e confirmar que `frontend/src/App.tsx`, `ChatMessagesView.tsx` e `ActivityTimeline.tsx` não foram modificados além da integração da flag
+## 2. Implementação da Correção
+### 2.1. Localização do Código
+- [ ] Localizar o método `return` do componente `WizardForm`
+- [ ] Identificar a estrutura do container principal (linha ~225)
+- [ ] Identificar a posição do `<StepCard>` (linha ~232)
 
-## 3. Estrutura de Pastas e Arquivos Novos
-- [x] Criar diretório `frontend/src/components/WizardForm/steps`
-- [x] Criar arquivo `frontend/src/types/wizard.types.ts`
-- [x] Criar arquivo `frontend/src/constants/wizard.constants.ts`
-- [x] Criar arquivo `frontend/src/utils/wizard.utils.ts`
-- [x] Criar arquivo `frontend/src/components/WizardForm/index.ts`
-- [x] Criar arquivo `frontend/src/components/WizardForm/WizardForm.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/ProgressHeader.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/StepCard.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/NavigationFooter.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/LandingPageStep.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/ObjectiveStep.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/FormatStep.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/ProfileStep.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/FocusStep.tsx`
-- [x] Criar arquivo `frontend/src/components/WizardForm/steps/ReviewStep.tsx`
+### 2.2. Aplicação da Refatoração
+- [ ] Adicionar o wrapper `<div>` ao redor do `<StepCard>`
+- [ ] Aplicar a classe `flex-1` ao novo wrapper
+- [ ] Aplicar a classe `min-h-0` ao novo wrapper
+- [ ] Aplicar a classe `overflow-y-auto` ao novo wrapper
+- [ ] Garantir que o `<StepCard>` está completamente dentro do novo wrapper
+- [ ] Verificar indentação e formatação do código
 
-## 4. Implementação dos Tipos, Constantes e Utilitários
-- [x] Preencher `wizard.types.ts` com as interfaces `WizardFormState`, `WizardValidationErrors`, `ValidationRule` e `WizardStep`
-- [x] Preencher `wizard.constants.ts` com `WIZARD_INITIAL_STATE`, `WIZARD_STEPS`, `OBJETIVO_OPTIONS` e `FORMATO_OPTIONS`
-- [x] Implementar `wizard.utils.ts` com as funções `validateStepField`, `getCompletedSteps`, `canProceed`, `validateForm` e `formatSubmitPayload`
+## 3. Validação da Estrutura
+### 3.1. Verificação do Código
+- [ ] Confirmar que `<ProgressHeader>` permanece como primeiro filho direto
+- [ ] Confirmar que o novo wrapper div está como segundo filho direto
+- [ ] Confirmar que `<NavigationFooter>` permanece como terceiro filho direto
+- [ ] Validar que a estrutura segue o padrão:
+  ```tsx
+  <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6">
+    <ProgressHeader ... />
+    <div className="flex-1 min-h-0 overflow-y-auto">
+      <StepCard ...>
+        {renderStepContent()}
+      </StepCard>
+    </div>
+    <NavigationFooter ... />
+  </div>
+  ```
 
-## 5. Implementação dos Componentes do Wizard
-- [x] Implementar lógica principal em `WizardForm.tsx` (state, navegação, submit, renderização condicional dos steps)
-- [x] Implementar `ProgressHeader.tsx` exibindo stepper e progresso
-- [x] Implementar `StepCard.tsx` como container padrão dos conteúdos dos steps
-- [x] Implementar `NavigationFooter.tsx` com botões Voltar/Próximo/Gerar e botão Cancelar quando `isLoading`
-- [x] Implementar `LandingPageStep.tsx` com input, dicas e tratamento de erros
-- [x] Implementar `ObjectiveStep.tsx` com cards selecionáveis baseados em `OBJETIVO_OPTIONS`
-- [x] Implementar `FormatStep.tsx` com cards selecionáveis baseados em `FORMATO_OPTIONS`
-- [x] Implementar `ProfileStep.tsx` com textarea, contador de caracteres e validação visual
-- [x] Implementar `FocusStep.tsx` com textarea opcional e indicação de campo
-- [x] Implementar `ReviewStep.tsx` listando dados finais e botões “Editar”
+### 3.2. Verificação das Classes CSS
+- [ ] Confirmar que `flex-1` está aplicado corretamente ao wrapper
+- [ ] Confirmar que `min-h-0` está presente (crucial para funcionamento)
+- [ ] Confirmar que `overflow-y-auto` está configurado
+- [ ] Verificar que não há conflitos com classes existentes
 
-## 6. Integração Condicional na WelcomeScreen
-- [x] Importar `WizardForm` e `InputForm` em `frontend/src/components/WelcomeScreen.tsx`
-- [x] Ler e normalizar `VITE_ENABLE_WIZARD` no topo do arquivo
-- [x] Renderizar `WizardForm` quando a flag estiver ativa e manter o markup atual quando desativada
+## 4. Testes Funcionais
+### 4.1. Testes de Layout
+- [ ] Testar em viewport desktop (1920x1080)
+- [ ] Testar em viewport tablet (768x1024)
+- [ ] Testar em viewport mobile (375x667)
+- [ ] Verificar que `NavigationFooter` permanece sempre visível
+- [ ] Verificar que `ProgressHeader` permanece sempre visível
 
-## 7. Verificações de Estilo e Tokens
-- [x] Garantir uso exclusivo de classes já suportadas (ex.: `bg-card`, `border-border`, `text-muted-foreground`)
-- [x] Adicionar novos tokens em `global.css` apenas se necessário, sem sobrescrever existentes
+### 4.2. Testes de Overflow
+- [ ] Adicionar conteúdo longo em um step e verificar scroll
+- [ ] Testar com mensagens de erro visíveis
+- [ ] Verificar que apenas a área central possui scroll
+- [ ] Confirmar que a barra de scroll aparece apenas quando necessário
+- [ ] Testar navegação entre steps com diferentes alturas de conteúdo
 
-## 8. Testes e QA
-- [>] Testar fluxo completo com flag desativada (`VITE_ENABLE_WIZARD=false`)
-- [ ] Testar fluxo completo com flag ativada (`VITE_ENABLE_WIZARD=true`), incluindo validações, cancelamento e envio
-- [ ] Testar responsividade (mobile e desktop) e navegação por teclado no wizard
-- [ ] Executar `npm run build` com flag desativada
-- [ ] Executar `npm run build` com flag ativada
+### 4.3. Testes de Interação
+- [ ] Verificar que botões do `NavigationFooter` permanecem acessíveis
+- [ ] Testar navegação com teclado (Tab, Shift+Tab)
+- [ ] Verificar que o scroll reseta ao mudar de step
+- [ ] Testar comportamento com zoom do navegador (75%, 100%, 125%)
 
-## 9. Rollout e Documentação
-- [ ] Planejar rollout (staging → produção → canary → GA) conforme seção 9 do plano
-- [ ] Atualizar documentação de suporte/comunicação interna após validação
-- [ ] Registrar instruções de rollback (desligar flag e reiniciar frontend)
+## 5. Validação Cross-Browser
+- [ ] Testar no Chrome/Chromium
+- [ ] Testar no Firefox
+- [ ] Testar no Safari (se disponível)
+- [ ] Testar no Edge
+- [ ] Verificar comportamento do scroll em cada navegador
+
+## 6. Performance e Acessibilidade
+- [ ] Verificar que não há repaint/reflow desnecessário
+- [ ] Confirmar que o scroll é suave e responsivo
+- [ ] Testar com leitor de tela (se aplicável)
+- [ ] Verificar que foco do teclado não fica preso no scroll
+
+## 7. Build e Deploy
+- [ ] Executar `npm run build` no frontend
+- [ ] Verificar que não há erros de compilação
+- [ ] Testar a build em modo produção
+- [ ] Executar testes automatizados (se existirem)
+
+## 8. Documentação
+- [ ] Atualizar comentários no código se necessário
+- [ ] Documentar a mudança no commit message
+- [ ] Registrar a correção em changelog/release notes se aplicável
+- [ ] Atualizar documentação técnica se existir
+
+## 9. Rollback Plan
+- [ ] Documentar como reverter a mudança se necessário
+- [ ] Manter backup do arquivo original
+- [ ] Preparar comando git revert se usando versionamento
+
+## 10. Sign-off Final
+- [ ] Code review por outro desenvolvedor (se aplicável)
+- [ ] QA aprova a correção
+- [ ] Deploy em ambiente de staging
+- [ ] Validação final em produção
