@@ -221,8 +221,8 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
   }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, touched]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background px-4 md:px-10 py-8">
-      <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6">
+    <div className="h-screen flex flex-col bg-background px-4 md:px-10 py-8 overflow-hidden">
+      <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6 min-h-0">
         <ProgressHeader
           steps={WIZARD_STEPS}
           currentStep={currentStep}
