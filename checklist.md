@@ -60,7 +60,7 @@
 
 ## 8. Testes e QA
 - [>] Testar fluxo completo com flag desativada (`VITE_ENABLE_WIZARD=false`)
-- [ ] Testar fluxo completo com flag ativada (`VITE_ENABLE_WIZARD=true`), incluindo validações, cancelamento e envio
+- [x] Testar fluxo completo com flag ativada (`VITE_ENABLE_WIZARD=true`), incluindo validações, cancelamento e envio
 - [ ] Testar responsividade (mobile e desktop) e navegação por teclado no wizard
 - [ ] Executar `npm run build` com flag desativada
 - [ ] Executar `npm run build` com flag ativada
