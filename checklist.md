@@ -21,8 +21,8 @@
 - [ ] Especificar claramente onde as novas classes (`StoryBrandQualityGate`, pipelines e utilitários) viverão no projeto.
 
 ## 4. Mapeamento das 16 Seções → `StoryBrandAnalysis` (7 elementos)
-- [ ] Adicionar ao plano um mapeamento explícito de cada uma das 16 seções narrativas para os campos de `StoryBrandAnalysis` (ex.: `exposition_1` → `character.description`; `problem_external` → `problem.types.external`; `plan` → `plan.steps`).
-- [ ] Definir como o `fallback_storybrand_compiler` consolidará as 16 saídas no objeto Pydantic final e validará o schema.
+- [>] Adicionar ao plano um mapeamento explícito de cada uma das 16 seções narrativas para os campos de `StoryBrandAnalysis` (ex.: `exposition_1` → `character.description`; `problem_external` → `problem.types.external`; `plan` → `plan.steps`).
+- [>] Definir como o `fallback_storybrand_compiler` consolidará as 16 saídas no objeto Pydantic final e validará o schema.
 
 ## 5. Observabilidade e Métricas
 - [ ] Definir no plano o formato JSON de `state['storybrand_gate_metrics']` (campos mínimos: `score`, `threshold`, `path`, `timestamp`).

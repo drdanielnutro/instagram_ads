@@ -3,35 +3,46 @@
 
 #### **1. Objetivos e Princípios**
 - **Garantir resiliência:** Ativar um pipeline de reconstrução completa e de alta fidelidade do StoryBrand sempre que a análise automatizada inicial da landing page não atingir o limiar de qualidade pré-definido. O objetivo é eliminar a dependência da qualidade do conteúdo de origem, garantindo um output de excelência em todos os cenários.
-- **Preservar eficiência:** Manter o fluxo de execução atual e otimizado (landing page analysis → planning → execution) para todos os casos em que o `storybrand_completeness_score` for satisfatório. Isso equilibra o custo computacional e a latência, aplicando o processo mais intensivo apenas quando estritamente necessário.
+- **Preservar eficiência:** Manter o fluxo de execução atual e otimizado (landing page analysis → planning → execution) para todos os casos em que o score de completude (`storybrand_analysis.completeness_score` ou `landing_page_context.storybrand_completeness`) for satisfatório. Isso equilibra o custo computacional e a latência, aplicando o processo mais intensivo apenas quando estritamente necessário.
 - **Contratos de Estado Claros:** Definir um "contrato de dados" rigoroso. Ambos os caminhos, o "feliz" e o de "recuperação", devem obrigatoriamente popular o mesmo conjunto de chaves no `session.state`. Isso garante que os agentes subsequentes possam consumir os dados de forma agnóstica, permitindo uma retomada de fluxo transparente e desacoplada.
 - **Observabilidade e Melhoria Contínua:** Implementar um sistema de logging e métricas detalhado. As decisões do agente "gate", as iterações e os resultados do pipeline de fallback devem ser registrados para permitir a depuração, a auditoria de qualidade e o ajuste futuro do limiar de ativação.
 
 #### **2. Pontos de Integração no `agent.py`**
 - A integração será feita no pipeline principal, `complete_pipeline`, definido no arquivo `app/agent.py`.
 - Um novo agente customizado, `StoryBrandQualityGate`, será inserido na lista de `sub_agents` do `complete_pipeline`, posicionado imediatamente após o agente `landing_page_analyzer`.
-- O `StoryBrandQualityGate` receberá como dependências (argumentos em seu construtor) os dois pipelines que ele orquestrará: o `planning_pipeline` (para o "caminho feliz") e o novo `fallback_storybrand_pipeline` (para o "caminho de recuperação").
+- O `StoryBrandQualityGate` receberá como dependências (argumentos em seu construtor) os dois caminhos que ele orquestrará: o `PlanningOrRunSynth` (para o "caminho feliz") e o novo `fallback_storybrand_pipeline` (para o "caminho de recuperação").
 - A lógica interna do `StoryBrandQualityGate` deve ser implementada para ler o valor do limiar diretamente do objeto de configuração, `config.min_storybrand_completeness`, garantindo que qualquer override via variável de ambiente seja respeitado automaticamente.
 
 #### **3. StoryBrandQualityGate (BaseAgent Customizado)**
 - **Arquivo sugerido:** `app/agents/storybrand_gate.py`.
 - **Implementação:** A classe `StoryBrandQualityGate` herdará de `google.adk.agents.BaseAgent`.
 - **Método `_run_async_impl`:** Este método conterá a lógica central de roteamento.
-  - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. A primeira ação será ler a chave `state['storybrand_completeness_score']` e verificar a presença de `state['storybrand_analysis']`.
+  - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. Ler `score = state.get('storybrand_analysis', {}).get('completeness_score')` com fallback em `state.get('landing_page_context', {}).get('storybrand_completeness')`. Verificar também a presença de `state['storybrand_analysis']` quando aplicável.
   - **Lógica de Decisão e Logging:** Com base no score, o agente determinará o caminho a seguir (`"happy_path"` ou `"fallback"`). Esta decisão, juntamente com metadados relevantes (score obtido, limiar utilizado, timestamp), será registrada em `state['storybrand_gate_metrics']` para fins de observabilidade. Logs estruturados (`logger.info`) serão emitidos para auditoria em tempo real.
   - **Invocação Condicional:**
-    - Se `score >= config.min_storybrand_completeness`, o agente invocará o pipeline `planning_pipeline` passando o `InvocationContext` atual (`async for event in self.planning_pipeline.run_async(ctx): yield event`).
+    - Se `score >= config.min_storybrand_completeness`, o agente invocará o `PlanningOrRunSynth` passando o `InvocationContext` atual (`async for event in self.planning_or_synth.run_async(ctx): yield event`).
     - Caso contrário, ele invocará o `fallback_storybrand_pipeline`.
-  - **Fallback Forçado por Segurança:** Uma verificação de segurança será implementada. Se a chave `storybrand_completeness_score` não existir no estado ou contiver um valor inválido (ex: `None` ou não numérico), o agente acionará o pipeline de fallback por padrão para garantir que o sistema nunca prossiga com dados de qualidade incerta.
+  - **Fallback Forçado por Segurança:** Uma verificação de segurança será implementada. Se o score estiver ausente/inválido, o agente acionará o pipeline de fallback por padrão para garantir que o sistema nunca prossiga com dados de qualidade incerta.
+
+#### **3.1 Regras de Mapeamento 16→7 (Compilador)**
+- O compilador consolidará as 16 seções narrativas no schema `StoryBrandAnalysis` seguindo estas regras:
+  - `character.description` ← `state['storybrand_character']`; `evidence` inclui o próprio texto; `confidence≈0.9` quando presente.
+  - `problem.types.external|internal|philosophical` ← `state['storybrand_problem_*']`; `problem.description` = síntese de `exposition_1`, `inciting_incident_1`, `exposition_2`, `inciting_incident_2`, `unmet_needs_summary` (fallback: concatenação dos tipos); `evidence` inclui os tipos; `confidence≈0.9`.
+  - `guide.description` prioriza `state['storybrand_value_proposition']` e agrega autoridade de `state['storybrand_guide']`; `authority` ← `storybrand_guide`; `empathy` pode permanecer vazio se não explicitado; `evidence` inclui ambos.
+  - `plan.steps` e `plan.description` extraídos de `state['storybrand_plan']` (quebra por linhas/marcadores); `evidence` inclui o texto.
+  - `action.primary` e `action.secondary` extraídos das primeiras linhas de `state['storybrand_action']`.
+  - `failure.description` e `failure.consequences[0]` ← `state['storybrand_failure']`; `evidence` idem.
+  - `success.description` ← `state['storybrand_success']`; `success.transformation` ← `state['storybrand_identity']`; `benefits` das linhas de `success` (fallback: lista unitária).
+  - `metadata.text_length` computado a partir da soma dos textos-fonte; `completeness_score = 1.0` (pós‑fallback), e sincronização com `landing_page_context.storybrand_completeness = 1.0`.
 
 #### **4. Fallback StoryBrand Pipeline (SequentialAgent)**
 - **Arquivo sugerido:** `app/agents/storybrand_fallback.py`.
 - **Estrutura:** Será um `SequentialAgent` robusto, contendo a sequência de sub-agentes que executam a reconstrução completa.
 - **Sub-agentes principais:**
   1. `fallback_input_initializer` (BaseAgent): Um agente lógico que garante que as chaves de estado necessárias para o fallback (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) existam no `state`, inicializando-as com valores padrão (ex: strings vazias) se estiverem ausentes.
-  2. `fallback_input_collector` (LlmAgent): Sua missão é popular os três inputs essenciais. Ele tentará preenchê-los a partir de `state['landing_page_analysis']`. Ele não deve inferir "persona" ou "tom", pois estes são derivados da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
+  2. `fallback_input_collector` (LlmAgent): Sua missão é popular os três inputs essenciais. Ele tentará preenchê-los a partir de `state['landing_page_context']`. Ele não deve inferir "persona" ou "tom", pois estes são derivados da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
   3. `section_pipeline_runner` (BaseAgent): O orquestrador interno do fallback. Ele carregará a configuração de todas as 16 seções do StoryBrand e executará, em um loop, o bloco de agentes reutilizáveis (preparador de contexto + escritor de seção + loop de revisão) para cada seção, garantindo a construção incremental e coerente.
-  4. `fallback_storybrand_compiler` (BaseAgent): Após a conclusão bem-sucedida de todos os loops de revisão, este agente lógico compilará as 16 seções individuais aprovadas em uma única e rica estrutura de dados, garantindo que o "Contrato de Estado" com os 8 campos principais seja cumprido.
+  4. `fallback_storybrand_compiler` (BaseAgent): Após a conclusão bem-sucedida de todos os loops de revisão, este agente lógico compilará as 16 seções individuais aprovadas em uma única e rica estrutura de dados, garantindo que o "Contrato de Estado" com os 8 campos principais seja cumprido. Implementação de referência: `app/agents/fallback_compiler.py` (segue as regras da seção 3.1).
   5. `fallback_quality_reporter` (BaseAgent, opcional): Um agente final que resume os metadados da execução do fallback (número de iterações por seção, feedbacks do revisor, etc.) e os salva em `state['storybrand_recovery_report']` para análise de qualidade.
 
 #### **5. Configuração das Seções**
@@ -76,7 +87,7 @@
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
   - Popular `state['storybrand_analysis']` com um objeto compatível com o schema Pydantic `StoryBrandAnalysis` definido em `app/schemas/storybrand.py`. **Nenhuma alteração no schema original é necessária.**
   - Popular `state['storybrand_summary']` e `state['storybrand_ad_context']` usando os métodos `.to_summary()` e `.to_ad_context()` do objeto Pydantic `StoryBrandAnalysis` instanciado.
-  - Definir `state['storybrand_completeness']` com um valor alto (ex: 1.0) para prevenir loops de recuperação acidentais.
+  - Atualizar `storybrand_analysis['completeness_score'] = 1.0` e sincronizar `landing_page_context['storybrand_completeness'] = 1.0` para prevenir loops de recuperação acidentais.
   - Opcionalmente, salvar os metadados da recuperação em `state['storybrand_recovery_report']`.
 
 #### **10. Ajustes em `app/config.py`**
@@ -99,7 +110,7 @@
   - Simular uma execução completa do `fallback_storybrand_pipeline`, mockando as respostas dos `LlmAgents` para verificar se o fluxo de estado, os loops e o contrato de estado final funcionam como esperado.
   - Garantir que o "caminho feliz" permanece funcional e não é afetado pelas novas mudanças.
 - **Testes Manuais (QA):**
-  - Executar o sistema, forçando um `storybrand_completeness_score` baixo (via debug ou configuração), e observar os logs e o resultado final para validar a qualidade e o comportamento do fallback.
+  - Executar o sistema, forçando um score baixo (ex.: `storybrand_analysis.completeness_score`), e observar os logs e o resultado final para validar a qualidade e o comportamento do fallback.
   - Testar casos de borda, como a ausência dos inputs essenciais (`sexo_cliente_alvo`, etc.).
 
 #### **13. Documentação**

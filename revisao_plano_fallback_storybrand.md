@@ -2,8 +2,13 @@
 
 ## 1. Sumário Executivo
 - O plano propõe corretamente posicionar um gate de qualidade após o `landing_page_analyzer`, reutilizando o limiar centralizado em `config.min_storybrand_completeness` e preservando as chaves já consumidas pelos agentes subsequentes. Porém, vários detalhes operacionais se apoiam em chaves de estado inexistentes (`storybrand_completeness_score`, `landing_page_analysis`) ou ignoram componentes consolidados (`PlanningOrRunSynth`).
-- A estrutura sugerida para o fallback (16 seções com prompts dedicados) não descreve como o resultado volta ao schema `StoryBrandAnalysis` com 7 elementos + metadados, impedindo a compilação prometida sem um mapeamento explícito.
+- [Resolvido] A estrutura sugerida para o fallback (16 seções com prompts dedicados) carecia de mapeamento 16→7. Implementamos o `FallbackStorybrandCompiler` em `app/agents/fallback_compiler.py`, que compila as 16 seções no schema `StoryBrandAnalysis` com `completeness_score=1.0` e sincroniza `landing_page_context.storybrand_completeness`.
 - Há dependências cruzadas não tratadas: novos campos exigem mudanças coordenadas no frontend e no extractor backend, diretórios indicados não existem e o plano de documentação/checklists diverge do processo atual descrito em `AGENTS.md`.
+
+### Atualizações Implementadas
+- Novo pacote: `app/agents/`.
+- Novo agente: `FallbackStorybrandCompiler` com mapeamento 16→7 (gera `storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context`).
+- Nenhuma alteração de pipeline ainda: o agente não está conectado; fluxo atual permanece inalterado.
 
 ## 2. Itens Corretos e Consistentes
 - **Uso do limiar de qualidade já exposto em `config.min_storybrand_completeness`** — A leitura direta da configuração mantém a coerência com `DevelopmentConfiguration` (`app/config.py`, linhas 34-71) e permite override por ambiente. Isso garante que o fallback seja acionado com o mesmo parâmetro usado hoje para validar a análise inicial.
@@ -31,9 +36,11 @@
 - **Uso da chave `state['landing_page_analysis']`** — O fallback propõe extrair dados dessa chave, mas o `landing_page_analyzer` salva o resultado em `landing_page_context` (`app/agent.py`, linhas 626-688). Não existe `landing_page_analysis` no estado.
   - Impacto: os inputs essenciais (`nome_empresa`, etc.) permaneceriam vazios mesmo quando a análise trouxe dados.
   - **Correção Sugerida**: ler de `landing_page_context` e documentar como derivar os campos necessários a partir das chaves existentes.
-- **Mapeamento ausente das 16 seções para `StoryBrandAnalysis`** — O schema (`app/schemas/storybrand.py`, linhas 82-176) define 7 elementos principais + metadados. O plano lista 16 seções narrativas sem explicar como convergem para os campos obrigatórios (`character`, `problem`, `guide`, etc.).
-  - Impacto: o `fallback_storybrand_compiler` não tem regras para instanciar `StoryBrandAnalysis`, falhando na validação Pydantic.
-  - **Correção Sugerida**: descrever explicitamente o mapeamento (ex.: `exposition_1` → `character.description`, `problem_external` → `problem.types.external`, `plan` → `plan.steps`).
+- [Resolvido] **Mapeamento das 16 seções para `StoryBrandAnalysis`** — Implementado via `FallbackStorybrandCompiler` (`app/agents/fallback_compiler.py`). O compilador:
+  - Sintetiza `problem.description` a partir de `exposition_*`, `inciting_*`, `unmet_needs_summary` e usa `problem_external/internal/philosophical` em `problem.types` e `evidence`.
+  - Define `guide.description` priorizando `value_proposition` e agrega autoridade do `guide`; preenche `plan.steps` e CTAs a partir de `plan` e `action`.
+  - Preenche `evidence`/`confidence` básicos, `success.benefits/transformation` e `metadata.text_length`.
+  - Persiste `storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context` e sincroniza `landing_page_context.storybrand_completeness = 1.0`.
 - **Definir `state['storybrand_completeness'] = 1.0` como garantia** — Essa chave hoje só aparece dentro de `landing_page_context`; nenhum agente lê um valor na raiz do estado.
   - Impacto: falsa sensação de bloqueio de loops. Se o gate continuar usando o score de `storybrand_analysis`, o fallback pode ser reexecutado.
   - **Correção Sugerida**: atualizar `storybrand_analysis['completeness_score']` ao final da recompilação e, opcionalmente, sincronizar `landing_page_context['storybrand_completeness']`.
@@ -53,8 +60,8 @@
 - **Seção 1 — Objetivos e Princípios**: Viável após corrigir a leitura do score; limiar e chaves já existem.
 - **Seção 2 — Pontos de Integração em `agent.py`**: Parcialmente viável. É necessário reutilizar `PlanningOrRunSynth` e definir onde viverá o novo agente (módulo existente ou pacote novo preparado).
 - **Seção 3 — StoryBrandQualityGate**: Viável após corrigir as chaves do estado e definir a estrutura de logging (`storybrand_gate_metrics`).
-- **Seção 4 — Fallback StoryBrand Pipeline**: Baixa viabilidade enquanto os inputs dependerem de `landing_page_analysis` e o compilador não tiver o mapeamento 16→7.
-- **Seção 5 — Configuração das Seções**: Bloqueada até existir mapeamento claro entre seções e o schema `StoryBrandAnalysis`.
+- **Seção 4 — Fallback StoryBrand Pipeline**: Viável após corrigir a origem de dados para `landing_page_context` e com o compilador 16→7 já implementado. Continua dependendo da coleta dos novos campos no frontend/extractor quando o fallback for ativado.
+- **Seção 5 — Configuração das Seções**: Parcialmente desbloqueada pelo mapeamento 16→7. Ainda requer catalogar nomes de chaves no estado e a lista final das 16 seções com seus prompts.
 - **Seção 6 — Loop de Revisão Compartilhado**: Viável; já existem `LoopAgent`s no projeto, mas falta especificar onde armazenar resultados intermediários.
 - **Seção 7 — Prompts Necessários**: Viável se o diretório for criado e houver estratégia de carregamento dos arquivos.
 - **Seção 8 — Coleta de Inputs Essenciais**: Requer coordenação entre frontend e extractor; viável após definir dados opcionais e validações.
