@@ -450,6 +450,9 @@ export interface WizardValidationErrors {
 **Arquivo**: `frontend/src/constants/wizard.constants.ts`
 
 ```typescript
+// Flag de rollout (build-time)
+export const ENABLE_NEW_FIELDS = import.meta.env.VITE_ENABLE_NEW_FIELDS === 'true';
+
 export const WIZARD_INITIAL_STATE: WizardFormState = {
   // Existentes...
   landing_page_url: '',
@@ -471,18 +474,23 @@ export const SEXO_CLIENTE_OPTIONS = [
 ] as const;
 
 // Adicionar novos steps após landing_page_url
-export const WIZARD_STEPS: WizardStep[] = [
+const BASE_STEPS: WizardStep[] = [
   {
     id: 'landing_page_url',
     // ...existente
   },
+  // ...steps existentes até 'review'
+];
+
+// Steps adicionais condicionados à flag
+const EXTRA_STEPS: WizardStep[] = [
   // NOVO STEP 2
   {
     id: 'nome_empresa',
-    title: 'Qual é o nome da empresa?',
+        title: 'Qual é o nome da empresa?',
     subtitle: 'Passo 2',
     description: 'Informe o nome da empresa anunciante',
-    icon: Building,
+        icon: Building2, // usar Building2 para compatibilidade com lucide-react
     validationRules: [
       {
         field: 'nome_empresa',
@@ -508,7 +516,7 @@ export const WIZARD_STEPS: WizardStep[] = [
     title: 'O que a empresa faz?',
     subtitle: 'Passo 3',
     description: 'Descreva brevemente o negócio ou serviço principal',
-    icon: Briefcase,
+        icon: Briefcase,
     validationRules: [
       {
         field: 'o_que_a_empresa_faz',
@@ -557,6 +565,10 @@ export const WIZARD_STEPS: WizardStep[] = [
   },
   // ...resto dos steps
 ];
+
+export const WIZARD_STEPS: WizardStep[] = ENABLE_NEW_FIELDS
+  ? [...EXTRA_STEPS.filter(s => s.id !== 'review'), ...BASE_STEPS]
+  : BASE_STEPS;
 ```
 
 #### 5.2.3 Criar Componentes de Step
@@ -608,6 +620,8 @@ export function CompanyInfoStep({
 **Novo arquivo**: `frontend/src/components/WizardForm/steps/GenderTargetStep.tsx`
 
 ```tsx
+// Observação: se o projeto não tiver shadcn/ui, reutilize os componentes já existentes.
+// Exemplo abaixo assume RadioGroup/Label disponíveis. Caso contrário, use buttons/select nativos.
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { SEXO_CLIENTE_OPTIONS } from '@/constants/wizard.constants';
@@ -745,12 +759,16 @@ class UserInputExtractor:
         self.project = os.getenv("GOOGLE_CLOUD_PROJECT")
         self.location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
+        # Flags de rollout (runtime)
+        ENABLE_NEW_INPUT_FIELDS = os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
+        PREFLIGHT_SHADOW_MODE = os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
+
         # ATUALIZAR PROMPT
         self.prompt = (
             "From the user text below, extract exactly these fields if present: "
-            "landing_page_url (http/https), objetivo_final, perfil_cliente, "
-            "formato_anuncio, foco, nome_empresa, o_que_a_empresa_faz, "
-            "sexo_cliente_alvo (masculino/feminino/neutro). "
+            "landing_page_url (http/https), objetivo_final, perfil_cliente, formato_anuncio, foco"
+            + (", nome_empresa, o_que_a_empresa_faz, sexo_cliente_alvo (masculino/feminino/neutro)" if (ENABLE_NEW_INPUT_FIELDS or PREFLIGHT_SHADOW_MODE) else "")
+            + ". "
             "Use exact user wording for values when present. Do not invent. "
             "If a field is not present, leave empty. "
             "Normalize common synonyms only in attributes (not extraction_text)."
@@ -839,6 +857,9 @@ class UserInputExtractor:
         return examples
 
     def _convert(self, langextract_result: Any) -> Dict[str, Any]:
+        logger = logging.getLogger(__name__)
+        ENABLE_NEW_INPUT_FIELDS = os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
+        PREFLIGHT_SHADOW_MODE = os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
         # ADICIONAR NOVOS CAMPOS
         data: Dict[str, Optional[str]] = {
             "landing_page_url": None,
@@ -846,17 +867,22 @@ class UserInputExtractor:
             "perfil_cliente": None,
             "formato_anuncio": None,
             "foco": None,
-            # NOVOS
-            "nome_empresa": None,
-            "o_que_a_empresa_faz": None,
-            "sexo_cliente_alvo": None,
+        }
+        # Novos campos somente quando habilitados (ou em shadow mode)
+        if ENABLE_NEW_INPUT_FIELDS or PREFLIGHT_SHADOW_MODE:
+            data.update({
+                "nome_empresa": None,
+                "o_que_a_empresa_faz": None,
+                "sexo_cliente_alvo": None,
+            })
         }
 
         normalized: Dict[str, Optional[str]] = {
             "formato_anuncio_norm": None,
             "objetivo_final_norm": None,
-            # NOVO
-            "sexo_cliente_alvo_norm": None,
+        }
+        if ENABLE_NEW_INPUT_FIELDS or PREFLIGHT_SHADOW_MODE:
+            normalized.update({"sexo_cliente_alvo_norm": None})
         }
 
         # Processar extrações
@@ -870,7 +896,7 @@ class UserInputExtractor:
                     data[cls] = txt
 
                 # Normalização de gênero
-                if cls == "sexo_cliente_alvo":
+                if (ENABLE_NEW_INPUT_FIELDS or PREFLIGHT_SHADOW_MODE) and cls == "sexo_cliente_alvo":
                     norm_value = attrs.get("normalized", txt.lower())
                     # Mapeamento de sinônimos
                     gender_map = {
@@ -890,7 +916,7 @@ class UserInputExtractor:
                     normalized["sexo_cliente_alvo_norm"] = gender_map.get(norm_value, "neutro")
 
         # Aplicar default para sexo_cliente_alvo se não fornecido
-        if not normalized.get("sexo_cliente_alvo_norm"):
+        if (ENABLE_NEW_INPUT_FIELDS or PREFLIGHT_SHADOW_MODE) and not normalized.get("sexo_cliente_alvo_norm"):
             normalized["sexo_cliente_alvo_norm"] = "neutro"
 
         # Validação - campos obrigatórios existentes
@@ -900,17 +926,17 @@ class UserInputExtractor:
             if not data.get(field):
                 errors.append({"field": field, "message": f"Campo obrigatório faltando: {field}"})
 
-        # Novos campos são opcionais, mas logar se ausentes
-        optional_with_defaults = {
-            "nome_empresa": "Empresa",
-            "o_que_a_empresa_faz": "Serviços profissionais",
-            "sexo_cliente_alvo": "neutro",
-        }
-
-        for field, default in optional_with_defaults.items():
-            if not data.get(field):
-                logger.info(f"Campo opcional '{field}' não fornecido, usando default: '{default}'")
-                data[field] = default
+        # Novos campos: opcionais e com defaults apenas quando habilitados
+        if ENABLE_NEW_INPUT_FIELDS:
+            optional_with_defaults = {
+                "nome_empresa": "Empresa",
+                "o_que_a_empresa_faz": "",
+                "sexo_cliente_alvo": "neutro",
+            }
+            for field, default in optional_with_defaults.items():
+                if not data.get(field):
+                    logger.info(f"Campo opcional '{field}' não fornecido, usando default: '{default}'")
+                    data[field] = default
 
         return {
             "success": len(errors) == 0,
@@ -925,24 +951,42 @@ class UserInputExtractor:
 **Arquivo**: `app/server.py:220-233`
 
 ```python
-# Montar estado inicial para a sessão ADK
+ENABLE_NEW_INPUT_FIELDS = os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
+PREFLIGHT_SHADOW_MODE = os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
+
+# Montar estado inicial para a sessão ADK (sempre os campos atuais)
 initial_state = {
     "landing_page_url": data.get("landing_page_url"),
     "objetivo_final": (norm.get("objetivo_final_norm") or data.get("objetivo_final")),
     "perfil_cliente": data.get("perfil_cliente"),
     "formato_anuncio": formato,
     "foco": data.get("foco") or "",
-    # NOVOS CAMPOS
-    "nome_empresa": data.get("nome_empresa") or "Empresa",
-    "o_que_a_empresa_faz": data.get("o_que_a_empresa_faz") or "",
-    "sexo_cliente_alvo": norm.get("sexo_cliente_alvo_norm") or "neutro",
-    # Plano fixo e specs por formato
     "implementation_plan": plan,
     "format_specs": specs,
     "format_specs_json": specs_json,
-    # Sinalizador para pular o planner
     "planning_mode": "fixed",
 }
+
+# Incluir novos campos apenas quando habilitados
+if ENABLE_NEW_INPUT_FIELDS:
+    initial_state.update({
+        "nome_empresa": (data.get("nome_empresa") or "Empresa"),
+        "o_que_a_empresa_faz": (data.get("o_que_a_empresa_faz") or ""),
+        "sexo_cliente_alvo": (norm.get("sexo_cliente_alvo_norm") or "neutro"),
+    })
+
+# Shadow mode: apenas loga se extraídos, sem incluir no estado
+if PREFLIGHT_SHADOW_MODE:
+    try:
+        logger.log_struct({
+            "event": "preflight_new_fields_shadow",
+            "enabled": ENABLE_NEW_INPUT_FIELDS,
+            "nome_empresa_present": bool(data.get("nome_empresa")),
+            "o_que_faz_present": bool(data.get("o_que_a_empresa_faz")),
+            "sexo_alvo": norm.get("sexo_cliente_alvo_norm"),
+        }, severity="INFO")
+    except Exception:
+        pass
 ```
 
 ### 5.4 Integração com Pipeline ADK
@@ -1113,7 +1157,7 @@ def test_preflight_with_new_fields():
 
 ### 7.1 Segurança
 
-1. **Validação de Input**: Todos os campos passam por validação no frontend e backend
+1. **Validação de Input**: Todos os campos passam por validação no frontend e backend; novos campos são opcionais e guardados por flags.
 2. **Sanitização**: LangExtract não executa código, apenas extrai texto
 3. **Limites de Caracteres**: Previnem ataques de buffer overflow
 4. **URLs Validadas**: Apenas http/https aceitos
@@ -1129,9 +1173,11 @@ def test_preflight_with_new_fields():
 
 ### 8.1 Estratégia de Migração
 
-1. **Fase 1**: Deploy backend com campos opcionais e defaults
-2. **Fase 2**: Deploy frontend com novos campos
-3. **Fase 3**: Ativar validações mais restritivas
+1. **Fase 1**: Deploy backend com flags `ENABLE_NEW_INPUT_FIELDS=false` e `PREFLIGHT_SHADOW_MODE=true` (default). Nenhuma mudança no initial_state; apenas logs.
+2. **Fase 2**: Deploy frontend com `VITE_ENABLE_NEW_FIELDS=false` (steps ocultos). Smoke tests.
+3. **Fase 3**: Ativar `VITE_ENABLE_NEW_FIELDS=true` para subset de usuários (se aplicável) e observar métricas.
+4. **Fase 4**: Ativar `ENABLE_NEW_INPUT_FIELDS=true` no backend para incluir campos no `initial_state`.
+5. **Fase 5**: (Opcional) Desligar `PREFLIGHT_SHADOW_MODE` após estabilização.
 
 ### 8.2 Retrocompatibilidade
 
@@ -1145,7 +1191,7 @@ def test_preflight_with_new_fields():
 ### 9.1 Métricas a Rastrear
 
 ```python
-# app/server.py - adicionar logs
+# app/server.py - adicionar logs (com shadow mode)
 logger.log_struct({
     "event": "preflight_new_fields",
     "nome_empresa_provided": bool(data.get("nome_empresa")),
@@ -1169,19 +1215,20 @@ logger.log_struct({
 ## 10. Roadmap de Implementação
 
 ### Sprint 1 - Backend Foundation (3 dias)
-- [ ] Atualizar UserInputExtractor com novos campos
-- [ ] Adicionar exemplos de treinamento para LangExtract
-- [ ] Implementar normalização de gênero
+- [ ] Introduzir flags `ENABLE_NEW_INPUT_FIELDS` e `PREFLIGHT_SHADOW_MODE` (default: false/true)
+- [ ] Atualizar UserInputExtractor com suporte condicionado às flags
+- [ ] Adicionar exemplos de treinamento para LangExtract (habilitados apenas com flags)
+- [ ] Implementar normalização de gênero (sob flags)
 - [ ] Testes unitários do extractor
-- [ ] Deploy em staging
+- [ ] Deploy em staging com `ENABLE_NEW_INPUT_FIELDS=false`, `PREFLIGHT_SHADOW_MODE=true`
 
 ### Sprint 2 - Frontend Implementation (5 dias)
-- [ ] Atualizar types e constants
-- [ ] Criar componentes de step
-- [ ] Integrar no WizardForm
+- [ ] Atualizar types e constants (introduzir `VITE_ENABLE_NEW_FIELDS` e gating)
+- [ ] Criar componentes de step (atrás da flag)
+- [ ] Integrar no WizardForm (atrás da flag)
 - [ ] Implementar validações
 - [ ] Testes de componente
-- [ ] Testes E2E
+- [ ] Testes E2E (com flag on/off)
 
 ### Sprint 3 - Integration & Testing (3 dias)
 - [ ] Testes de integração completos
