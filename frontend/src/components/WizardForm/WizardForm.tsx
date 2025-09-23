@@ -25,6 +25,8 @@ import { FormatStep } from './steps/FormatStep';
 import { ProfileStep } from './steps/ProfileStep';
 import { FocusStep } from './steps/FocusStep';
 import { ReviewStep } from './steps/ReviewStep';
+import { CompanyInfoStep } from './steps/CompanyInfoStep';
+import { GenderTargetStep } from './steps/GenderTargetStep';
 
 type WizardField = keyof WizardFormState;
 
@@ -189,6 +191,28 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             error={touched.has('objetivo_final') ? errors.objetivo_final : undefined}
           />
         );
+      case 'nome_empresa':
+        return (
+          <CompanyInfoStep
+            variant="name"
+            value={formState.nome_empresa}
+            onChange={value => handleFieldChange('nome_empresa', value)}
+            error={touched.has('nome_empresa') ? errors.nome_empresa : undefined}
+          />
+        );
+      case 'o_que_a_empresa_faz':
+        return (
+          <CompanyInfoStep
+            variant="description"
+            value={formState.o_que_a_empresa_faz}
+            onChange={value => handleFieldChange('o_que_a_empresa_faz', value)}
+            error={
+              touched.has('o_que_a_empresa_faz')
+                ? errors.o_que_a_empresa_faz
+                : undefined
+            }
+          />
+        );
       case 'formato_anuncio':
         return (
           <FormatStep
@@ -211,6 +235,16 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             value={formState.foco}
             onChange={value => handleFieldChange('foco', value)}
             error={touched.has('foco') ? errors.foco : undefined}
+          />
+        );
+      case 'sexo_cliente_alvo':
+        return (
+          <GenderTargetStep
+            value={formState.sexo_cliente_alvo}
+            onChange={value => handleFieldChange('sexo_cliente_alvo', value)}
+            error={
+              touched.has('sexo_cliente_alvo') ? errors.sexo_cliente_alvo : undefined
+            }
           />
         );
       case 'review':
