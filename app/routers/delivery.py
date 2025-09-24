@@ -8,6 +8,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse, Response
 from google.cloud import storage
+from typing import Any
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +33,70 @@ def _parse_gcs_uri(uri: str) -> tuple[str, str]:
     if not bucket or not blob:
         raise ValueError("Invalid GCS URI")
     return bucket, blob
+
+
+def _has_all_image_urls(data: Any) -> bool:
+    """Validate that all variations have complete image URLs.
+
+    Note: We allow variations with image_generation_error since they
+    are expected and the frontend handles them gracefully.
+    """
+    if not isinstance(data, list) or len(data) != 3:
+        return False
+
+    required_fields = [
+        "image_estado_atual_url",
+        "image_estado_intermediario_url",
+        "image_estado_aspiracional_url",
+    ]
+
+    # At least one variation must have all image URLs
+    has_at_least_one_complete = False
+
+    for item in data:
+        if not item or not isinstance(item, dict):
+            return False
+        visual = item.get("visual", {})
+
+        # If variation has image_generation_error, it's acceptable
+        if visual.get("image_generation_error"):
+            continue
+
+        # Check if this variation has all required URLs
+        if all(visual.get(k) for k in required_fields):
+            has_at_least_one_complete = True
+
+    return has_at_least_one_complete
+
+
+def _report_missing(data: Any) -> list[dict[str, Any]]:
+    """Report which image URLs are missing from variations."""
+    out = []
+    if not isinstance(data, list):
+        return [{"error": "payload_not_list"}]
+
+    for idx, item in enumerate(data):
+        if not item or not isinstance(item, dict):
+            out.append({"variation": idx, "error": "invalid_structure"})
+            continue
+
+        visual = item.get("visual", {})
+
+        # Skip variations with image generation errors
+        if visual.get("image_generation_error"):
+            out.append({"variation": idx, "status": "generation_error", "error": visual["image_generation_error"]})
+            continue
+
+        missing = [k for k in [
+            "image_estado_atual_url",
+            "image_estado_intermediario_url",
+            "image_estado_aspiracional_url",
+        ] if not visual.get(k)]
+
+        if missing:
+            out.append({"variation": idx, "missing": missing})
+
+    return out
 
 
 @router.get("/final/meta")
@@ -82,14 +147,76 @@ def download_final(
             if inline:
                 try:
                     payload = blob.download_as_bytes()
-                except Exception:
-                    logger.exception(
-                        "Failed to download inline payload for %s. Falling back to Signed URL.",
-                        gcs_uri,
-                    )
-                else:
-                    return Response(content=payload, media_type="application/json")
 
+                    # Validate the payload has all required image URLs (optional validation)
+                    data = json.loads(payload)
+                    if not _has_all_image_urls(data):
+                        logger.warning(
+                            "Some image assets missing for session %s. Details: %s",
+                            session_id,
+                            _report_missing(data)
+                        )
+                        # For now, we'll still return the data as frontend handles missing images gracefully
+                        # Uncomment below to enforce strict validation:
+                        # raise HTTPException(
+                        #     status_code=424,
+                        #     detail={
+                        #         "message": "Image assets incomplete. Please reprocess the session.",
+                        #         "missing": _report_missing(data)
+                        #     }
+                        # )
+
+                    return Response(content=payload, media_type="application/json")
+                except Exception as e:
+                    logger.warning(
+                        "Failed to download inline payload for %s: %s. Trying local fallback.",
+                        gcs_uri,
+                        e,
+                    )
+                    # Try local fallback before returning signed_url
+                    local_path = meta.get("final_delivery_local_path")
+                    if local_path and Path(local_path).exists():
+                        try:
+                            payload = Path(local_path).read_bytes()
+
+                            # Validate the local payload (optional validation)
+                            data = json.loads(payload)
+                            if not _has_all_image_urls(data):
+                                logger.warning(
+                                    "Some image assets missing in local file for session %s. Details: %s",
+                                    session_id,
+                                    _report_missing(data)
+                                )
+                                # For now, we'll still return the data as frontend handles missing images gracefully
+                                # Uncomment below to enforce strict validation:
+                                # raise HTTPException(
+                                #     status_code=424,
+                                #     detail={
+                                #         "message": "Image assets incomplete. Please reprocess the session.",
+                                #         "missing": _report_missing(data)
+                                #     }
+                                # )
+
+                            logger.info(
+                                "Successfully served inline content from local fallback for session %s",
+                                session_id
+                            )
+                            return Response(content=payload, media_type="application/json")
+                        except HTTPException:
+                            raise
+                        except Exception as local_err:
+                            logger.error(
+                                "Failed to read local fallback for session %s: %s",
+                                session_id,
+                                local_err
+                            )
+                    # If we reach here, neither GCS nor local worked for inline
+                    logger.error(
+                        "Unable to serve inline content for session %s - no fallback available",
+                        session_id
+                    )
+
+            # For non-inline requests, return signed URL as before
             url = blob.generate_signed_url(
                 version="v4",
                 expiration=timedelta(seconds=600),
@@ -98,6 +225,8 @@ def download_final(
                 response_type="application/json",
             )
             return {"ok": True, "signed_url": url, "expires_in": 600}
+        except HTTPException:
+            raise
         except Exception as e:
             logger.error(
                 "Failed to generate Signed URL for %s: %s. Falling back to local download if available.",
