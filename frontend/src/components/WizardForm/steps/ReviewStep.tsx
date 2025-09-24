@@ -22,6 +22,11 @@ export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
           const fieldId = step.id as keyof WizardFormState;
           const value = formState[fieldId].trim();
           const isEmpty = value.length === 0;
+          const displayValue = isEmpty
+            ? step.id === 'sexo_cliente_alvo'
+              ? 'Neutro (padrão)'
+              : 'Não preenchido'
+            : value;
 
           return (
             <div
@@ -44,9 +49,9 @@ export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
               <div className="flex flex-col items-start gap-3 sm:w-1/2">
                 <div className="rounded-lg bg-background/80 px-3 py-2 text-sm text-foreground/90">
                   {isEmpty ? (
-                    <span className="italic text-muted-foreground">Não preenchido</span>
+                    <span className="italic text-muted-foreground">{displayValue}</span>
                   ) : (
-                    <span className="whitespace-pre-wrap break-words">{value}</span>
+                    <span className="whitespace-pre-wrap break-words">{displayValue}</span>
                   )}
                 </div>
                 <Button

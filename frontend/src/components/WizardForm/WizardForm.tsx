@@ -25,6 +25,8 @@ import { FormatStep } from './steps/FormatStep';
 import { ProfileStep } from './steps/ProfileStep';
 import { FocusStep } from './steps/FocusStep';
 import { ReviewStep } from './steps/ReviewStep';
+import { CompanyInfoStep } from './steps/CompanyInfoStep';
+import { GenderTargetStep } from './steps/GenderTargetStep';
 
 type WizardField = keyof WizardFormState;
 
@@ -189,6 +191,28 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             error={touched.has('objetivo_final') ? errors.objetivo_final : undefined}
           />
         );
+      case 'nome_empresa':
+        return (
+          <CompanyInfoStep
+            field="nome_empresa"
+            value={formState.nome_empresa}
+            error={errors.nome_empresa}
+            touched={touched.has('nome_empresa')}
+            onChange={value => handleFieldChange('nome_empresa', value)}
+            onBlur={() => markFieldTouched('nome_empresa')}
+          />
+        );
+      case 'o_que_a_empresa_faz':
+        return (
+          <CompanyInfoStep
+            field="o_que_a_empresa_faz"
+            value={formState.o_que_a_empresa_faz}
+            error={errors.o_que_a_empresa_faz}
+            touched={touched.has('o_que_a_empresa_faz')}
+            onChange={value => handleFieldChange('o_que_a_empresa_faz', value)}
+            onBlur={() => markFieldTouched('o_que_a_empresa_faz')}
+          />
+        );
       case 'formato_anuncio':
         return (
           <FormatStep
@@ -213,12 +237,22 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             error={touched.has('foco') ? errors.foco : undefined}
           />
         );
+      case 'sexo_cliente_alvo':
+        return (
+          <GenderTargetStep
+            value={formState.sexo_cliente_alvo}
+            error={errors.sexo_cliente_alvo}
+            touched={touched.has('sexo_cliente_alvo')}
+            onChange={value => handleFieldChange('sexo_cliente_alvo', value)}
+            onBlur={() => markFieldTouched('sexo_cliente_alvo')}
+          />
+        );
       case 'review':
         return <ReviewStep formState={formState} onEdit={handleEditStep} />;
       default:
         return null;
     }
-  }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, touched]);
+  }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, markFieldTouched, touched]);
 
   return (
     <div className="h-screen flex flex-col bg-background px-4 md:px-10 py-8 overflow-hidden">

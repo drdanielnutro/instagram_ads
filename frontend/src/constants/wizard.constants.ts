@@ -1,10 +1,13 @@
 import {
+  Briefcase,
+  Building2,
   CheckCircle,
   Layout,
   LinkIcon,
   Sparkles,
   Target,
   Users,
+  Venus,
 } from 'lucide-react';
 
 import type { WizardFormState, WizardStep } from '@/types/wizard.types';
@@ -15,6 +18,9 @@ export const WIZARD_INITIAL_STATE: WizardFormState = {
   formato_anuncio: '',
   perfil_cliente: '',
   foco: '',
+  nome_empresa: '',
+  o_que_a_empresa_faz: '',
+  sexo_cliente_alvo: '',
 };
 
 export const OBJETIVO_OPTIONS = [
@@ -32,130 +38,243 @@ export const FORMATO_OPTIONS = [
 
 const objetivoValues = new Set<string>(OBJETIVO_OPTIONS.map(option => option.value));
 const formatoValues = new Set<string>(FORMATO_OPTIONS.map(option => option.value));
+const sexoClienteValues = new Set<string>(['masculino', 'feminino', 'neutro']);
+const enableNewFields = (import.meta.env.VITE_ENABLE_NEW_FIELDS ?? 'false') === 'true';
 
-export const WIZARD_STEPS: WizardStep[] = [
+export const SEXO_CLIENTE_OPTIONS = [
   {
-    id: 'landing_page_url',
-    title: 'Qual é a página de destino?',
-    subtitle: 'Passo 1',
-    description: 'Informe a URL principal onde as pessoas devem chegar após clicarem no anúncio.',
-    icon: LinkIcon,
-    validationRules: [
-      {
-        field: 'landing_page_url',
-        validate: value => {
-          const trimmedValue = value.trim();
-          if (!trimmedValue) {
-            return 'Informe a URL da página de destino.';
-          }
+    value: 'masculino',
+    label: 'Masculino',
+    description: 'Comunicação direcionada para homens',
+  },
+  {
+    value: 'feminino',
+    label: 'Feminino',
+    description: 'Tom e referências voltados para mulheres',
+  },
+  {
+    value: 'neutro',
+    label: 'Neutro/Misto',
+    description: 'Público diversificado',
+  },
+] as const;
 
-          try {
-            const parsedUrl = new URL(trimmedValue);
-            if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
-              return 'Utilize URLs iniciadas com http:// ou https://';
-            }
-          } catch (error) {
-            return 'Digite uma URL válida, incluindo http(s)://';
-          }
+const landingPageStep: WizardStep = {
+  id: 'landing_page_url',
+  title: 'Qual é a página de destino?',
+  description:
+    'Informe a URL principal onde as pessoas devem chegar após clicarem no anúncio.',
+  icon: LinkIcon,
+  validationRules: [
+    {
+      field: 'landing_page_url',
+      validate: value => {
+        const trimmedValue = value.trim();
+        if (!trimmedValue) {
+          return 'Informe a URL da página de destino.';
+        }
 
+        try {
+          const parsedUrl = new URL(trimmedValue);
+          if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+            return 'Utilize URLs iniciadas com http:// ou https://';
+          }
+        } catch (error) {
+          return 'Digite uma URL válida, incluindo http(s)://';
+        }
+
+        return null;
+      },
+    },
+  ],
+};
+
+const nomeEmpresaStep: WizardStep = {
+  id: 'nome_empresa',
+  title: 'Qual é o nome da empresa?',
+  description: 'Informe como a marca deve ser citada nos criativos e mensagens.',
+  icon: Building2,
+  validationRules: [
+    {
+      field: 'nome_empresa',
+      validate: value => {
+        const trimmed = value.trim();
+        if (!trimmed) {
+          return 'Informe o nome da empresa ou marca.';
+        }
+        if (trimmed.length < 2) {
+          return 'Use ao menos 2 caracteres para o nome da empresa.';
+        }
+        if (trimmed.length > 100) {
+          return 'O nome da empresa deve ter no máximo 100 caracteres.';
+        }
+        return null;
+      },
+    },
+  ],
+};
+
+const descricaoEmpresaStep: WizardStep = {
+  id: 'o_que_a_empresa_faz',
+  title: 'O que a empresa oferece?',
+  description:
+    'Descreva a proposta de valor ou principais serviços de forma objetiva.',
+  icon: Briefcase,
+  validationRules: [
+    {
+      field: 'o_que_a_empresa_faz',
+      validate: value => {
+        const trimmed = value.trim();
+        if (!trimmed) {
+          return 'Explique brevemente o que a empresa faz.';
+        }
+        if (trimmed.length < 10) {
+          return 'Use pelo menos 10 caracteres para descrever a empresa.';
+        }
+        if (trimmed.length > 200) {
+          return 'Resuma a descrição em até 200 caracteres.';
+        }
+        return null;
+      },
+    },
+  ],
+};
+
+const objetivoStep: WizardStep = {
+  id: 'objetivo_final',
+  title: 'Qual é o objetivo principal?',
+  description: 'Escolha o resultado desejado para medir o sucesso da campanha.',
+  icon: Target,
+  validationRules: [
+    {
+      field: 'objetivo_final',
+      validate: value => {
+        if (!value.trim()) {
+          return 'Selecione um objetivo para a campanha.';
+        }
+
+        if (!objetivoValues.has(value)) {
+          return 'Escolha um objetivo disponível na lista.';
+        }
+
+        return null;
+      },
+    },
+  ],
+};
+
+const formatoStep: WizardStep = {
+  id: 'formato_anuncio',
+  title: 'Qual formato será utilizado?',
+  description:
+    'Selecione o formato que melhor se adapta ao criativo e ao canal escolhido.',
+  icon: Layout,
+  validationRules: [
+    {
+      field: 'formato_anuncio',
+      validate: value => {
+        if (!value.trim()) {
+          return 'Selecione um formato de anúncio.';
+        }
+
+        if (!formatoValues.has(value)) {
+          return 'Escolha um formato válido.';
+        }
+
+        return null;
+      },
+    },
+  ],
+};
+
+const perfilStep: WizardStep = {
+  id: 'perfil_cliente',
+  title: 'Descreva o público ideal',
+  description: 'Resuma quem é o cliente ideal, dores, desejos e comportamentos.',
+  icon: Users,
+  validationRules: [
+    {
+      field: 'perfil_cliente',
+      validate: value => {
+        const trimmed = value.trim();
+        if (!trimmed) {
+          return 'Descreva brevemente o público do anúncio.';
+        }
+
+        if (trimmed.length < 20) {
+          return 'Use pelo menos 20 caracteres para detalhar o público.';
+        }
+
+        if (trimmed.length > 500) {
+          return 'Resuma o perfil em no máximo 500 caracteres.';
+        }
+
+        return null;
+      },
+    },
+  ],
+};
+
+const sexoClienteStep: WizardStep = {
+  id: 'sexo_cliente_alvo',
+  title: 'Existe um gênero predominante?',
+  description:
+    'Selecione caso haja comunicação direcionada a um gênero específico (opcional).',
+  icon: Venus,
+  isOptional: true,
+  validationRules: [
+    {
+      field: 'sexo_cliente_alvo',
+      validate: value => {
+        const trimmed = value.trim();
+        if (!trimmed) {
           return null;
-        },
+        }
+        if (!sexoClienteValues.has(trimmed)) {
+          return 'Escolha entre masculino, feminino ou neutro.';
+        }
+        return null;
       },
-    ],
-  },
-  {
-    id: 'objetivo_final',
-    title: 'Qual é o objetivo principal?',
-    subtitle: 'Passo 2',
-    description: 'Escolha o resultado desejado para medir o sucesso da campanha.',
-    icon: Target,
-    validationRules: [
-      {
-        field: 'objetivo_final',
-        validate: value => {
-          if (!value.trim()) {
-            return 'Selecione um objetivo para a campanha.';
-          }
+    },
+  ],
+};
 
-          if (!objetivoValues.has(value)) {
-            return 'Escolha um objetivo disponível na lista.';
-          }
+const focoStep: WizardStep = {
+  id: 'foco',
+  title: 'Algum foco específico?',
+  description:
+    'Compartilhe diferenciais, promoções ou mensagens obrigatórias (opcional).',
+  icon: Sparkles,
+  isOptional: true,
+  validationRules: [
+    {
+      field: 'foco',
+      validate: () => null,
+    },
+  ],
+};
 
-          return null;
-        },
-      },
-    ],
-  },
-  {
-    id: 'formato_anuncio',
-    title: 'Qual formato será utilizado?',
-    subtitle: 'Passo 3',
-    description: 'Selecione o formato que melhor se adapta ao criativo e ao canal escolhido.',
-    icon: Layout,
-    validationRules: [
-      {
-        field: 'formato_anuncio',
-        validate: value => {
-          if (!value.trim()) {
-            return 'Selecione um formato de anúncio.';
-          }
+const reviewStep: WizardStep = {
+  id: 'review',
+  title: 'Revise antes de gerar',
+  description:
+    'Confira os dados informados e edite qualquer etapa antes de gerar os anúncios.',
+  icon: CheckCircle,
+};
 
-          if (!formatoValues.has(value)) {
-            return 'Escolha um formato válido.';
-          }
-
-          return null;
-        },
-      },
-    ],
-  },
-  {
-    id: 'perfil_cliente',
-    title: 'Descreva o público ideal',
-    subtitle: 'Passo 4',
-    description: 'Resuma quem é o cliente ideal, dores, desejos e comportamentos.',
-    icon: Users,
-    validationRules: [
-      {
-        field: 'perfil_cliente',
-        validate: value => {
-          const trimmed = value.trim();
-          if (!trimmed) {
-            return 'Descreva brevemente o público do anúncio.';
-          }
-
-          if (trimmed.length < 20) {
-            return 'Use pelo menos 20 caracteres para detalhar o público.';
-          }
-
-          if (trimmed.length > 500) {
-            return 'Resuma o perfil em no máximo 500 caracteres.';
-          }
-
-          return null;
-        },
-      },
-    ],
-  },
-  {
-    id: 'foco',
-    title: 'Algum foco específico?',
-    subtitle: 'Passo 5',
-    description: 'Compartilhe diferenciais, promoções ou mensagens obrigatórias (opcional).',
-    icon: Sparkles,
-    isOptional: true,
-    validationRules: [
-      {
-        field: 'foco',
-        validate: () => null,
-      },
-    ],
-  },
-  {
-    id: 'review',
-    title: 'Revise antes de gerar',
-    subtitle: 'Passo 6',
-    description: 'Confira os dados informados e edite qualquer etapa antes de gerar os anúncios.',
-    icon: CheckCircle,
-  },
+const orderedSteps: WizardStep[] = [
+  landingPageStep,
+  ...(enableNewFields ? [nomeEmpresaStep, descricaoEmpresaStep] : []),
+  objetivoStep,
+  formatoStep,
+  perfilStep,
+  ...(enableNewFields ? [sexoClienteStep] : []),
+  focoStep,
+  reviewStep,
 ];
+
+export const WIZARD_STEPS: WizardStep[] = orderedSteps.map((step, index) => ({
+  ...step,
+  subtitle: `Passo ${index + 1}`,
+}));
+

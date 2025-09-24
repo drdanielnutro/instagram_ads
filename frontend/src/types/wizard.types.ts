@@ -6,6 +6,9 @@ export interface WizardFormState {
   formato_anuncio: string;
   perfil_cliente: string;
   foco: string;
+  nome_empresa: string;
+  o_que_a_empresa_faz: string;
+  sexo_cliente_alvo: string;
 }
 
 export interface WizardValidationErrors {
@@ -14,6 +17,9 @@ export interface WizardValidationErrors {
   formato_anuncio?: string;
   perfil_cliente?: string;
   foco?: string;
+  nome_empresa?: string;
+  o_que_a_empresa_faz?: string;
+  sexo_cliente_alvo?: string;
 }
 
 export interface ValidationRule {
