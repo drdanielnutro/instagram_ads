@@ -76,14 +76,14 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## 📊 Comparação entre Frontend e API Direta
 
-| Aspecto | Frontend | API Direta |
-|---------|----------|------------|
-| **Session ID** | UUID gerado automaticamente | Você cria manualmente |
-| **User ID** | Fixo: "u_999" | Você define (ex: "user1") |
-| **Formato de Entrada** | Texto simples (chave: valor) | JSON complexo |
-| **Endpoint** | Frontend escolhe automaticamente | Você especifica (/run ou /run_sse) |
-| **Streaming** | Automático (SSE) | Você controla |
-| **Complexidade** | Baixa (só digitar) | Alta (gerenciar sessões) |
+| Aspecto                | Frontend                         | API Direta                         |
+| ---------------------- | -------------------------------- | ---------------------------------- |
+| **Session ID**         | UUID gerado automaticamente      | Você cria manualmente              |
+| **User ID**            | Fixo: "u_999"                    | Você define (ex: "user1")          |
+| **Formato de Entrada** | Texto simples (chave: valor)     | JSON complexo                      |
+| **Endpoint**           | Frontend escolhe automaticamente | Você especifica (/run ou /run_sse) |
+| **Streaming**          | Automático (SSE)                 | Você controla                      |
+| **Complexidade**       | Baixa (só digitar)               | Alta (gerenciar sessões)           |
 
 ## 🔐 Autenticação Local (Vertex AI)
 
@@ -288,7 +288,38 @@ GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
 LANGEXTRACT_API_KEY=sua-chave-gemini  # Opcional
 ARTIFACTS_BUCKET=gs://instagram-ads-472021-facilitador-logs-data   # uso interno do ADK
 DELIVERIES_BUCKET=gs://instagram-ads-472021-deliveries             # JSON final (frontend via Signed URL)
+# Flags de novos campos (backend)
+ENABLE_NEW_INPUT_FIELDS=false
+PREFLIGHT_SHADOW_MODE=true
 ```
+
+## Sistema de Flags (Frontend e Backend)
+
+### Backend (runtime, .env)
+- **ENABLE_NEW_INPUT_FIELDS** (default: false)
+  - false: /run_preflight não inclui novos campos no initial_state (retrocompatível).
+  - true: inclui `nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo` (com defaults) no initial_state.
+- **PREFLIGHT_SHADOW_MODE** (default: true)
+  - true: extrai/loga novos campos sem incluí-los no initial_state (observação segura).
+  - false: ignora completamente a extração dos novos campos quando ENABLE_NEW_INPUT_FIELDS=false.
+
+Fases sugeridas:
+1) Segurança: ENABLE_NEW_INPUT_FIELDS=false, PREFLIGHT_SHADOW_MODE=true.
+2) Ativar inclusão: ENABLE_NEW_INPUT_FIELDS=true (após validar métricas), manter SHADOW por alguns dias.
+3) Estabilizado: PREFLIGHT_SHADOW_MODE=false (opcional, reduz custo).
+
+### Frontend (build-time, frontend/.env.local)
+- **VITE_ENABLE_WIZARD**
+  - false: Wizard oculto.
+  - true: Wizard visível.
+- **VITE_ENABLE_NEW_FIELDS**
+  - false: novos steps/campos ocultos (payload não inclui linhas novas).
+  - true: steps/campos visíveis e enviados no payload.
+
+Fases sugeridas:
+1) Backend com SHADOW on e NEW_INPUT_FIELDS off; frontend com VITE_ENABLE_NEW_FIELDS=false.
+2) Habilitar UI: VITE_ENABLE_NEW_FIELDS=true para subset; observar erros/telemetria.
+3) Habilitar fim-a-fim: ENABLE_NEW_INPUT_FIELDS=true; depois avaliar desligar SHADOW.
 
 ## Execução
 

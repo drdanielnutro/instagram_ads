@@ -1,0 +1,83 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Trate o Comer Emocional. Emagreça Sem Culpa.",
+      "corpo": "Você luta para emagrecer, mas a compulsão por doces e o comer emocional sabotam seus esforços? Sente a culpa após cada mordida e o metabolismo parece não reagir?\n\nÉ hora de uma solução médica que realmente funciona. O Dr. Daniel Araújo (CRM 48645) oferece um tratamento especializado para diagnosticar e tratar os gatilhos da alimentação. Com um plano que respeita sua rotina, e se necessário, auxílio farmacológico seguro, você pode reequilibrar sua relação com a comida.\n\nRecupere o controle e renove sua autoestima com resultados duradouros. Sua jornada para um bem-estar pleno começa agora.",
+      "cta_texto": "Agende Sua Consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem mostrando a jornada de uma mulher. Primeiro, ela está sentada em um sofá, olhando para um doce com frustração. Em seguida, ela aparece determinada, agendando uma consulta pelo celular. Por fim, ela caminha ao ar livre, com um sorriso confiante, representando paz e bem-estar.",
+      "prompt_estado_atual": "A 35-year-old woman sits on a sofa in a cozy home environment, her expression shows frustration and a hint of guilt. She holds a chocolate bar, looking down at it with a disheartened posture. The scene conveys an internal struggle. Aspect ratio 4:5, soft natural light, realistic photography.",
+      "prompt_estado_intermediario": "The same woman is now sitting at a table, her expression is focused and hopeful. She is holding a smartphone, actively booking an appointment on a medical website. A soft light highlights her face, showing determination as she takes the first step. Aspect ratio 4:5, natural lighting, realistic photography.",
+      "prompt_estado_aspiracional": "The same woman, now radiant and confident, walks gracefully in a sunlit park. She wears comfortable clothes that fit well. A genuine smile brightens her face, reflecting peace with her eating habits and renewed self-confidence. The scene is bright and airy. Aspect ratio 4:5, vibrant natural light, realistic photography.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172304Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9d7f0bbb4741c5e2ff19780b926fa9c48caf76ad3b4e3b381d68a2df9a4e2a202d6428d0945ad3c2f63ab93beb1a70f88bbb4cd8576bdb3ca72e9eaac04bde6e35a429fc7900436531e5b257f901ba34f313f38cfa65e86c4e584b4642b4f5bcaaff7866ae7d943a08f9e09a714091a2813427581aa551e672b3525ace49ed5906270cfacc8e273fbcc3de3db7dbab8af4fa2dcdf1505c53f563f4830ab6b224ee2b2fcd74b20a33710a87baf93c6d27aad843f5e9c8929c67efdca37264bf3ec07d120f0e7b2d7b1fab0e59c7c939c4929f39d570c7e0aed1467b29815ebfaa9afd5526d8784b621ccc5227c8f9f97f0f4c2cdfe7eb7c09dc57917a24aeda62",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172318Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5c55619b9f5267bf596945e6e18e75b0f36734d34f4c109baf451d6fa33372f7264cc07d381177f5175b759e2bb7115c618ebf770fea55b18da8a0ef870a9a94fe1bfbb07ace3d70bae9aa69121b294dfa215187b996403310d0a3814c9b9c476d2c87462d79b2a60983c8c04f465bfe5f4a1090778ff7ad0e7378d0daaa7a29af67ab8172be09df7f81b6313956d046038924c0fcb745d5dac12adcc6e32cef1e8d2249ea0f9072cf92053e2b7db95ff1abfc8b75cd2a4b8b4a6e5a943b3bce36cf104557be5c85eddd6cf9c1ea482b968e63060d15ab09d5bd73621c1860b648c56959778d96f13af21a25383ce8a9e0192a9243f9b9cdde47dff47c4237bf",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172335Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=1d9eae1bca02e61caedd7fd2c5c129cee2aebb79f7828cf2ac256b52769c52bee25aab0abfcdfa11e16a6f3f7336f92f71fb75b12b828615b4ed98815a54d24bd2b333517197eca5575ad7de2540642e27f7101fafce6968da0babf64cc04a4ac3cb7b13d29efaf898aeae21dada716e5462b44bb88fcbdc2d790f992433b00beb241c7511966b0fb6a58d62d5582629e2e472d5085d8597cd4e924447a7a4d7b662455a5fbb81f5443147d83bad61f012cd0f0a307c70077f85837835ab526d4813b63b549a31545d82ef9d4d62ca324867f532d5b0124f27e66f42e270e1bfd92ded3235e0f3d59c1999e3640062a0b9b253c0b1f618135c76adfbfc5e2b48",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 42.724784895000994
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Recupere o Controle da Sua Alimentação.",
+      "corpo": "A vontade de comer doces parece maior que sua força de vontade? Isso não é falta de disciplina. O comer emocional tem causa e tratamento médico.\n\nCom o diagnóstico correto, é possível quebrar o ciclo de compulsão e culpa. O Dr. Daniel Araújo, Médico Nutrólogo, desenvolve um plano de ação focado na sua saúde e rotina, utilizando abordagens médicas seguras para restaurar seu equilíbrio.\n\nChega de lutar sozinha. Dê o primeiro passo para uma relação saudável com a comida e recupere sua confiança.",
+      "cta_texto": "Saiba Mais e Agende"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher em três fases. Inicialmente, ela olha para uma despensa cheia de doces com um olhar de conflito. Depois, ela está em uma consulta online, atenta e esperançosa. Finalmente, ela está em um café com uma amiga, rindo e comendo de forma saudável, demonstrando uma nova liberdade social e alimentar.",
+      "prompt_estado_atual": "A woman in her late 30s stands in her kitchen, pantry door open, filled with snacks and sweets. Her face shows a mix of desire and conflict, feeling stuck. The lighting is slightly moody. Aspect ratio 4:5, realistic photo.",
+      "prompt_estado_intermediario": "The same woman sits in a well-lit living room, engaged in a professional video consultation on her laptop. Her expression is attentive and relieved, as if she's finally being understood. Aspect ratio 4:5, bright indoor lighting, realistic photo.",
+      "prompt_estado_aspiracional": "The same woman is laughing with a friend at a bright, modern cafe. On the table, there are healthy food options and coffee. Her body language is relaxed and joyful, showing she has a healthy relationship with food and social life. Aspect ratio 4:5, vibrant and warm light, realistic photo.",
+      "aspect_ratio": "4:5",
+      "image_generation_error": "Falha na geração de imagem após 3 tentativas: Resposta do modelo não contém dados de imagem."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Lento? A Causa Pode Ser Emocional.",
+      "corpo": "Se mesmo com esforço seu metabolismo parece travado e a compulsão por doces vence, a resposta pode não estar na dieta, mas na medicina.\n\nO comer emocional afeta seus hormônios e seu bem-estar. Como Médico Nutrólogo, o Dr. Daniel Araújo investiga a fundo as causas do seu desequilíbrio para criar um tratamento personalizado que funciona de verdade, com suporte contínuo e seguro.\n\nÉ hora de destravar seus resultados e se sentir bem novamente. Agende uma consulta e inicie sua transformação.",
+      "cta_texto": "Comece Sua Transformação"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher em um processo de redescoberta. Primeiro, ela olha para a balança com desânimo. Depois, ela está em casa, lendo um artigo no tablet com uma expressão de 'eureka'. Por fim, ela está em um provador de roupas, sorrindo para o espelho, feliz com sua imagem e autoconfiança.",
+      "prompt_estado_atual": "A woman in her 30s stands in a bathroom, looking down at a scale with a clear expression of frustration and resignation. The scene feels private and disheartening. Aspect ratio 4:5, clean but somber lighting, realistic photography.",
+      "prompt_estado_intermediario": "The same woman is sitting comfortably on her couch, reading on a tablet. Her face lights up with a look of realization and hope, as if she just found a crucial piece of information. Aspect ratio 4:5, warm and inviting home lighting.",
+      "prompt_estado_aspiracional": "The same woman is in a brightly lit, stylish clothing store fitting room. She is trying on a dress and smiling confidently at her reflection, feeling good in her own skin. The focus is on her happy expression, not her body size. Aspect ratio 4:5, bright and clean light, realistic photography.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172412Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=3c2852b9c373ee3dac2a5b2de3466c3e65af477d5a4112f6931a9496db974aaacf16f0e3e2ef9167c2da8f551edbf424250330830e98676cd6973bda527ae128fc2a5035e744b3886d7e3cf27e4c4db2c5baab754550ca060706b372476a958424e194cdd2db8b880ed3bc795a7ee773c82b431b3d9b58de2e2c5949432c5d8af0cee9b39df4895fdc01aa75e8f13101fc58b424871e5a9f47f1ef49fe0543e5c71c0e57c7f2af4dfbbfbd55c8857e895295f5b0784076cb8865f1d5007f1f4555efa1cf0864d1e5b09565bcc9be81deb5f6dedc41576e879e836f65068b65a8377e15d22743666b09d8b7addeb7632d9aca313d97c93c9a0c2ca2c6cbb7308f",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172430Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b0f1c9e7c3250182ec28ca1c9f1f96d6024ab47c98ac306746abd6b99df925dea7848adf93d87613fe01b56d24e3ed2df590c04d2e9dc409655c47d75860245a5c75076ec40a9b49d2bac42a2e8721819ca965ec6c12b05ade820fd4144b78d7c6b9498d81ff40262b8d9db734e417655660cc6e6b5429d06f583de69f9b1d2eaaf938439c82b98ef4c559ef6f482b2353496a4d97592290a2173c47bc2ce428dd02f8a4f2a20a267f3d57eb98f08e2de111c41f5dcdddd313db9bbd6ad429f597ab15a1657cd6cdd16503d98ac0e074c1fc920ef3787175ac1c03aa793252a7a053d28abf7d71b141862e44923749aca04d2f3e6cc4d46562d1f08bb3302ba3",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/f0d666cb-4839-47ca-8277-ea77e69e5881/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250923%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250923T172447Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=6ef4cb44ffe082d11098ef79af47f4c79a6cc6195f7f40c56e927eb3fa301945fe3ce96dca5e275ef9bf1e23f2603dce4a0c7c82dd579d687d8a45306386324e0c3dcd246a87db0cff9d5324e3d60137e59708b06f643139de9b860ee9500bc63b76e650dac2e0bd982ad53513def5a1e7bbfa5bc8a31928d10a0fb0c13515ea2fea0a393a57f12682e28aae30691bd56ca2ea2ffb0eec36e5de3003e2e6851f937d5ae079279c97f15861d5341a9230a7bf9cdd63fc68dd294ee20ce768e4bdf51e55d3dfc7643441427d45e4d2897182663b7754371df21260355def82982ebb53d07b9849cbb3646e78d00525a4e84c0b578d2dffd6f12289699717ea796f",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 46.486159799000234
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  }
+]

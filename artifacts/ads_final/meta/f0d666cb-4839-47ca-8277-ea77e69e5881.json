@@ -1,0 +1,10 @@
+{
+  "filename": "20250923-142447_f0d666cb-4839-47ca-8277-ea77e69e5881_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-09-23T17:24:49Z",
+  "size_bytes": 16155,
+  "final_delivery_local_path": "artifacts/ads_final/20250923-142447_f0d666cb-4839-47ca-8277-ea77e69e5881_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/f0d666cb-4839-47ca-8277-ea77e69e5881/20250923-142447_f0d666cb-4839-47ca-8277-ea77e69e5881_Feed.json",
+  "user_id": "u_999",
+  "session_id": "f0d666cb-4839-47ca-8277-ea77e69e5881"
+}

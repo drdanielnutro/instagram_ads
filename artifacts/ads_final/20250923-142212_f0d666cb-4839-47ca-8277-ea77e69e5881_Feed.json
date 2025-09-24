@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Trate o Comer Emocional. Emagreça Sem Culpa.",
+      "corpo": "Você luta para emagrecer, mas a compulsão por doces e o comer emocional sabotam seus esforços? Sente a culpa após cada mordida e o metabolismo parece não reagir?\n\nÉ hora de uma solução médica que realmente funciona. O Dr. Daniel Araújo (CRM 48645) oferece um tratamento especializado para diagnosticar e tratar os gatilhos da alimentação. Com um plano que respeita sua rotina, e se necessário, auxílio farmacológico seguro, você pode reequilibrar sua relação com a comida.\n\nRecupere o controle e renove sua autoestima com resultados duradouros. Sua jornada para um bem-estar pleno começa agora.",
+      "cta_texto": "Agende Sua Consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem mostrando a jornada de uma mulher. Primeiro, ela está sentada em um sofá, olhando para um doce com frustração. Em seguida, ela aparece determinada, agendando uma consulta pelo celular. Por fim, ela caminha ao ar livre, com um sorriso confiante, representando paz e bem-estar.",
+      "prompt_estado_atual": "A 35-year-old woman sits on a sofa in a cozy home environment, her expression shows frustration and a hint of guilt. She holds a chocolate bar, looking down at it with a disheartened posture. The scene conveys an internal struggle. Aspect ratio 4:5, soft natural light, realistic photography.",
+      "prompt_estado_intermediario": "The same woman is now sitting at a table, her expression is focused and hopeful. She is holding a smartphone, actively booking an appointment on a medical website. A soft light highlights her face, showing determination as she takes the first step. Aspect ratio 4:5, natural lighting, realistic photography.",
+      "prompt_estado_aspiracional": "The same woman, now radiant and confident, walks gracefully in a sunlit park. She wears comfortable clothes that fit well. A genuine smile brightens her face, reflecting peace with her eating habits and renewed self-confidence. The scene is bright and airy. Aspect ratio 4:5, vibrant natural light, realistic photography.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Recupere o Controle da Sua Alimentação.",
+      "corpo": "A vontade de comer doces parece maior que sua força de vontade? Isso não é falta de disciplina. O comer emocional tem causa e tratamento médico.\n\nCom o diagnóstico correto, é possível quebrar o ciclo de compulsão e culpa. O Dr. Daniel Araújo, Médico Nutrólogo, desenvolve um plano de ação focado na sua saúde e rotina, utilizando abordagens médicas seguras para restaurar seu equilíbrio.\n\nChega de lutar sozinha. Dê o primeiro passo para uma relação saudável com a comida e recupere sua confiança.",
+      "cta_texto": "Saiba Mais e Agende"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher em três fases. Inicialmente, ela olha para uma despensa cheia de doces com um olhar de conflito. Depois, ela está em uma consulta online, atenta e esperançosa. Finalmente, ela está em um café com uma amiga, rindo e comendo de forma saudável, demonstrando uma nova liberdade social e alimentar.",
+      "prompt_estado_atual": "A woman in her late 30s stands in her kitchen, pantry door open, filled with snacks and sweets. Her face shows a mix of desire and conflict, feeling stuck. The lighting is slightly moody. Aspect ratio 4:5, realistic photo.",
+      "prompt_estado_intermediario": "The same woman sits in a well-lit living room, engaged in a professional video consultation on her laptop. Her expression is attentive and relieved, as if she's finally being understood. Aspect ratio 4:5, bright indoor lighting, realistic photo.",
+      "prompt_estado_aspiracional": "The same woman is laughing with a friend at a bright, modern cafe. On the table, there are healthy food options and coffee. Her body language is relaxed and joyful, showing she has a healthy relationship with food and social life. Aspect ratio 4:5, vibrant and warm light, realistic photo.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Lento? A Causa Pode Ser Emocional.",
+      "corpo": "Se mesmo com esforço seu metabolismo parece travado e a compulsão por doces vence, a resposta pode não estar na dieta, mas na medicina.\n\nO comer emocional afeta seus hormônios e seu bem-estar. Como Médico Nutrólogo, o Dr. Daniel Araújo investiga a fundo as causas do seu desequilíbrio para criar um tratamento personalizado que funciona de verdade, com suporte contínuo e seguro.\n\nÉ hora de destravar seus resultados e se sentir bem novamente. Agende uma consulta e inicie sua transformação.",
+      "cta_texto": "Comece Sua Transformação"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher em um processo de redescoberta. Primeiro, ela olha para a balança com desânimo. Depois, ela está em casa, lendo um artigo no tablet com uma expressão de 'eureka'. Por fim, ela está em um provador de roupas, sorrindo para o espelho, feliz com sua imagem e autoconfiança.",
+      "prompt_estado_atual": "A woman in her 30s stands in a bathroom, looking down at a scale with a clear expression of frustration and resignation. The scene feels private and disheartening. Aspect ratio 4:5, clean but somber lighting, realistic photography.",
+      "prompt_estado_intermediario": "The same woman is sitting comfortably on her couch, reading on a tablet. Her face lights up with a look of realization and hope, as if she just found a crucial piece of information. Aspect ratio 4:5, warm and inviting home lighting.",
+      "prompt_estado_aspiracional": "The same woman is in a brightly lit, stylish clothing store fitting room. She is trying on a dress and smiling confidently at her reflection, feeling good in her own skin. The focus is on her happy expression, not her body size. Aspect ratio 4:5, bright and clean light, realistic photography.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Imagens autênticas (4:5) que retratam a dor inicial (frustração com alimentação) e aspiram à transformação (bem-estar, confiança). Headlines diretas e empáticas. Copy concisa, focada em benefícios e diferenciais médicos, com CTA claro para agendamento.",
+    "contexto_landing": "A landing page é voltada para mulheres que se sentem frustradas com tentativas de emagrecimento e lutam contra a alimentação emocional. A proposta de valor é um tratamento médico especializado com o Dr. Daniel Araújo, que oferece uma solução empática e eficaz, focada em restaurar o controle e o bem-estar, em vez de apenas contar calorias."
+  }
+]
