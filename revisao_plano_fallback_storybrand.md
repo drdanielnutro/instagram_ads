@@ -21,29 +21,16 @@
   - Evidências no código: definição dos loops com `LoopAgent` em `app/agent.py`.
 
 ## 3. Inconsistências Encontradas
-- **Leitura de `state['storybrand_completeness_score']`** — A chave não é produzida em nenhum ponto. O callback `process_and_extract_sb7` grava o score como `analysis.completeness_score` dentro de `storybrand_analysis` e duplica o valor em `storybrand_completeness` dentro de `landing_page_context`; não há `storybrand_completeness_score` na raiz do estado.
-  - Impacto: o gate jamais encontraria o score e acionaria o fallback em 100% das execuções.
-  - Evidências no código: `app/callbacks/landing_page_callbacks.py`, linhas 108-155; `app/agent.py`, linhas 662-678.
-  - Relação com ADK: `InvocationContext.session.state` retorna `dict`; acessar uma chave inexistente levanta `KeyError` ou retorna `None`, comprometendo o roteamento.
-  - **Correção Sugerida**: ler `score = ctx.session.state.get('storybrand_analysis', {}).get('completeness_score')` e, se ausente, reutilizar `ctx.session.state.get('landing_page_context', {}).get('storybrand_completeness')` antes de forçar o fallback.
-- **Ignorar o agente `PlanningOrRunSynth`** — O plano sugere que o gate invoque diretamente `planning_pipeline`, mas o `complete_pipeline` atual delega a decisão entre planejamento completo e apenas síntese ao agente `PlanningOrRunSynth` (`app/agent.py`, linhas 264-280 e 1221-1229).
-  - Impacto: sessões com `planning_mode="fixed"` ou cenários onde apenas o sintetizador deveria rodar seriam encaminhadas para o pipeline errado.
-  - Relação com ADK: `PlanningOrRunSynth` encapsula dois sub-agentes e já recebe o `InvocationContext`; removê-lo requer refatoração estrutural.
-  - **Correção Sugerida**: injetar o próprio `PlanningOrRunSynth` no gate e reutilizar sua interface `run_async`, preservando o comportamento atual.
-- **Estrutura inexistente `app/agents/...`** — Todos os agentes vivem hoje em `app/agent.py` e em subpacotes existentes (`app/callbacks`, `app/tools`). Não há diretório `app/agents` inicializado.
-  - Impacto: imports quebrados até que o pacote seja criado e registrado.
-  - **Correção Sugerida**: ou planejar a criação de `app/agents/__init__.py` com ajustes de import, ou definir explicitamente que novas classes ficarão em módulos existentes como `app/agent.py` ou um novo módulo registrado no pacote atual.
-- **Uso da chave `state['landing_page_analysis']`** — O fallback propõe extrair dados dessa chave, mas o `landing_page_analyzer` salva o resultado em `landing_page_context` (`app/agent.py`, linhas 626-688). Não existe `landing_page_analysis` no estado.
-  - Impacto: os inputs essenciais (`nome_empresa`, etc.) permaneceriam vazios mesmo quando a análise trouxe dados.
-  - **Correção Sugerida**: ler de `landing_page_context` e documentar como derivar os campos necessários a partir das chaves existentes.
+- [Resolvido] **Leitura de `state['storybrand_completeness_score']`** — O plano foi ajustado para usar `state['storybrand_analysis']['completeness_score']` com fallback para `state['landing_page_context']['storybrand_completeness']`, exatamente como o callback `process_and_extract_sb7` já produz (`app/callbacks/landing_page_callbacks.py:111-134`).
+- [Resolvido] **Ignorar o agente `PlanningOrRunSynth`** — O documento agora orienta o gate a receber o próprio `PlanningOrRunSynth` como dependência e a reutilizar `run_async`, preservando a lógica existente (`aprimoramento_plano_storybrand_v2.md:13-24`; `app/agent.py:260-278`).
+- [Resolvido] **Estrutura inexistente `app/agents/...`** — O pacote `app/agents/` foi criado e contém o `FallbackStorybrandCompiler`, viabilizando a organização proposta e mantendo os imports válidos (`app/agents/__init__.py:1-5`; `app/agents/fallback_compiler.py:1-214`).
+- [Resolvido] **Uso da chave `state['landing_page_analysis']`** — As referências do plano passaram a apontar para `landing_page_context`, alinhadas ao que o `landing_page_analyzer` já persiste (`app/agent.py:626-687`; `aprimoramento_plano_storybrand_v2.md:6-24`).
 - [Resolvido] **Mapeamento das 16 seções para `StoryBrandAnalysis`** — Implementado via `FallbackStorybrandCompiler` (`app/agents/fallback_compiler.py`). O compilador:
   - Sintetiza `problem.description` a partir de `exposition_*`, `inciting_*`, `unmet_needs_summary` e usa `problem_external/internal/philosophical` em `problem.types` e `evidence`.
   - Define `guide.description` priorizando `value_proposition` e agrega autoridade do `guide`; preenche `plan.steps` e CTAs a partir de `plan` e `action`.
   - Preenche `evidence`/`confidence` básicos, `success.benefits/transformation` e `metadata.text_length`.
   - Persiste `storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context` e sincroniza `landing_page_context.storybrand_completeness = 1.0`.
-- **Definir `state['storybrand_completeness'] = 1.0` como garantia** — Essa chave hoje só aparece dentro de `landing_page_context`; nenhum agente lê um valor na raiz do estado.
-  - Impacto: falsa sensação de bloqueio de loops. Se o gate continuar usando o score de `storybrand_analysis`, o fallback pode ser reexecutado.
-  - **Correção Sugerida**: atualizar `storybrand_analysis['completeness_score']` ao final da recompilação e, opcionalmente, sincronizar `landing_page_context['storybrand_completeness']`.
+- [Resolvido] **Definir `state['storybrand_completeness'] = 1.0` como garantia** — O compilador atualiza `storybrand_analysis['completeness_score'] = 1.0` e sincroniza `landing_page_context['storybrand_completeness'] = 1.0`, evitando loops desnecessários (`app/agents/fallback_compiler.py:200-214`).
 - [Resolvido] **Novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) alinhados com frontend/back-end** — Wizard, extractor e preflight já persistem essas chaves com normalização e defaults.
 - **Checklist e documentação em caminhos divergentes** — O plano prevê `checklists/storybrand_fallback.md`, mas o processo atual documentado em `AGENTS.md` exige atualizar `checklist.md` na raiz.
   - Impacto: risco de equipes seguirem checklists diferentes ou ignorarem o fluxo “Checklist Primeiro, Código Depois”.
@@ -56,7 +43,7 @@
 
 ## 5. Viabilidade de Implementação (por tema)
 - **Seção 1 — Objetivos e Princípios**: Viável após corrigir a leitura do score; limiar e chaves já existem.
-- **Seção 2 — Pontos de Integração em `agent.py`**: Parcialmente viável. É necessário reutilizar `PlanningOrRunSynth` e definir onde viverá o novo agente (módulo existente ou pacote novo preparado).
+- **Seção 2 — Pontos de Integração em `agent.py`**: Viável; o plano já prevê o gate reutilizando `PlanningOrRunSynth`, restando apenas implementar a classe no módulo escolhido (`app/agent.py` ou `app/agents/storybrand_gate.py`).
 - **Seção 3 — StoryBrandQualityGate**: Viável após corrigir as chaves do estado e definir a estrutura de logging (`storybrand_gate_metrics`).
 - **Seção 4 — Fallback StoryBrand Pipeline**: Viável após corrigir a origem de dados para `landing_page_context` e com o compilador 16→7 já implementado. Continua dependendo da coleta dos novos campos no frontend/extractor quando o fallback for ativado.
 - **Seção 5 — Configuração das Seções**: Parcialmente desbloqueada pelo mapeamento 16→7. Ainda requer catalogar nomes de chaves no estado e a lista final das 16 seções com seus prompts.

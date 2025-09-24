@@ -94,13 +94,14 @@ const nomeEmpresaStep: WizardStep = {
   title: 'Qual é o nome da empresa?',
   description: 'Informe como a marca deve ser citada nos criativos e mensagens.',
   icon: Building2,
+  isOptional: true,
   validationRules: [
     {
       field: 'nome_empresa',
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return 'Informe o nome da empresa ou marca.';
+          return null;
         }
         if (trimmed.length < 2) {
           return 'Use ao menos 2 caracteres para o nome da empresa.';
@@ -120,13 +121,14 @@ const descricaoEmpresaStep: WizardStep = {
   description:
     'Descreva a proposta de valor ou principais serviços de forma objetiva.',
   icon: Briefcase,
+  isOptional: true,
   validationRules: [
     {
       field: 'o_que_a_empresa_faz',
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return 'Explique brevemente o que a empresa faz.';
+          return null;
         }
         if (trimmed.length < 10) {
           return 'Use pelo menos 10 caracteres para descrever a empresa.';
@@ -277,4 +279,3 @@ export const WIZARD_STEPS: WizardStep[] = orderedSteps.map((step, index) => ({
   ...step,
   subtitle: `Passo ${index + 1}`,
 }));
-

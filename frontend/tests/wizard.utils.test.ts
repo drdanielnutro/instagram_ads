@@ -53,3 +53,24 @@ describe('formatSubmitPayload', () => {
     expect(payload).toContain('sexo_cliente_alvo: neutro');
   });
 });
+
+describe('wizard navigation with optional fields', () => {
+  it('allows proceeding without filling optional company fields', async () => {
+    vi.stubEnv('VITE_ENABLE_NEW_FIELDS', 'true');
+    const { canProceed } = await import('@/utils/wizard.utils');
+    const { WIZARD_INITIAL_STATE, WIZARD_STEPS } = await import(
+      '@/constants/wizard.constants'
+    );
+
+    const stepIndexes = [
+      WIZARD_STEPS.findIndex(step => step.id === 'nome_empresa'),
+      WIZARD_STEPS.findIndex(step => step.id === 'o_que_a_empresa_faz'),
+    ];
+
+    stepIndexes.forEach(index => {
+      expect(index).toBeGreaterThan(-1);
+      const errors: Record<string, string | undefined> = {};
+      expect(canProceed(index, { ...WIZARD_INITIAL_STATE }, errors)).toBe(true);
+    });
+  });
+});

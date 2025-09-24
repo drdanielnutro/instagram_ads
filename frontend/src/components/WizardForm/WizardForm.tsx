@@ -270,11 +270,11 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
   }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, markFieldTouched, touched]);
 
   return (
-    <div className="h-screen flex flex-col bg-background px-4 md:px-10 py-8 overflow-hidden">
+    <div className="w-full h-screen flex flex-col bg-background overflow-hidden">
       {/* Layout responsivo: coluna única no mobile; sidebar + conteúdo no desktop */}
-      <div className="w-full flex-1 min-h-0 lg:flex lg:flex-row lg:gap-6">
+      <div className="w-full h-full flex lg:flex-row">
         {/* Sidebar / Header de progresso */}
-        <aside className="hidden lg:block w-80 flex-shrink-0 border-r border-border/60 pr-4">
+        <aside className="hidden lg:block w-80 flex-shrink-0 border-r border-border/60 p-6">
           <ProgressHeader
             steps={WIZARD_STEPS}
             currentStep={currentStep}
@@ -287,7 +287,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
         </aside>
 
         {/* Coluna da direita: conteúdo principal */}
-        <div className="flex-1 flex flex-col min-h-0 min-w-0">
+        <div className="flex-1 flex flex-col min-h-0 min-w-0 p-6">
           {/* Toggle e header no mobile */}
           <MobileToggle
             open={isMobileSidebarOpen}
@@ -308,7 +308,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             </div>
           )}
 
-          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto">
+          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto flex items-center">
             <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
           </div>
 
