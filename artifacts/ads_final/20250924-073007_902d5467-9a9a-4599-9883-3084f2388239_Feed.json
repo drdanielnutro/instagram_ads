@@ -1,0 +1,122 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Vigor e Saúde: Emagreça sem abrir mão da sua cerveja.",
+      "corpo": "Cansado de dietas frustradas que só te privam e não entregam resultados? Sente falta de pique, vigor e energia, impactando até seu desempenho? A cervejinha do final de semana não precisa ser a vilã da sua saúde!\n\nCom um plano médico sério, baseado em ciência e adaptado ao seu estilo de vida, o Dr. Daniel Araújo (Nutrólogo | CRM 48645) te ajuda a recuperar o controle, com foco em equilíbrio hormonal e resultados duradouros. Chega de 'gurus' e soluções temporárias.",
+      "cta_texto": "Agendar Avaliação Médica"
+    },
+    "visual": {
+      "descricao_imagem": "Homem na faixa dos 40 anos, com expressão de cansaço, sentado no sofá com uma cerveja, refletindo. Em seguida, ele aparece mais determinado, buscando no celular o contato do Dr. Daniel. Por fim, o mesmo homem, visivelmente mais em forma e confiante, desfruta de um churrasco com amigos, segurando uma cerveja com aspecto saudável e cheio de vigor.",
+      "prompt_estado_atual": "A 40-year-old Caucasian man, slightly overweight with a visible belly, sits slumped on a living room sofa. He holds a bottle of beer loosely, his gaze distant and troubled, reflecting quiet frustration and concern. The atmosphere is dim, conveying a sense of stagnation. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same 40-year-old man, in the same living room, now sits upright with a focused expression, actively looking at his smartphone which displays a professional medical contact page. The beer bottle is on the table, indicating a shift in priority. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now leaner and energetic, smiles genuinely at a backyard barbecue with friends. He holds a beer in a relaxed manner, but his overall physique is healthy and toned, exuding confidence and vitality. The lighting is bright and social. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Desempenho em queda? Recupere seu vigor.",
+      "corpo": "A rotina pesada está minando sua energia, disposição e até o desempenho na vida pessoal? Isso não é 'coisa da idade'. É um sinal de que seu corpo precisa de um ajuste médico.\n\nCom um diagnóstico preciso de exames e foco no equilíbrio hormonal, o Dr. Daniel Araújo cria um plano para restaurar sua vitalidade de verdade, de forma segura e adaptada a você. Assuma o controle e recupere a confiança para qualquer desafio.",
+      "cta_texto": "Agende sua Consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Homem com aparência cansada em uma mesa de trabalho à noite. Depois, ele está em uma consulta online, conversando com o médico com uma expressão de esperança. Finalmente, o mesmo homem, renovado e enérgico, lidera uma reunião de negócios com confiança.",
+      "prompt_estado_atual": "A 40-year-old man in business casual attire sits at his desk late at night, looking drained and frustrated, rubbing his temples. The screen glow illuminates his tired face, suggesting low productivity and burnout. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Close-up on the same man, now looking engaged during a video call on his laptop. He is speaking with a professional-looking doctor. His expression shows hope and determination as he decides to take action. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now looking sharp, lean, and confident, stands at the head of a conference table, actively leading a meeting. He exudes energy and authority. Bright, modern office environment. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Chega de 'gurus'. Emagreça com um Médico.",
+      "corpo": "Já gastou tempo e dinheiro com dietas da moda, suplementos duvidosos e promessas vazias? Essas soluções genéricas ignoram a causa real do problema: seu metabolismo e seus hormônios.\n\nO tratamento médico com o Dr. Daniel Araújo começa com um diagnóstico completo para criar um plano que funciona para o SEU corpo. Chega de tentativas frustradas. Invista em um método científico, seguro e com acompanhamento real para ter resultados que duram.",
+      "cta_texto": "Saiba Mais"
+    },
+    "visual": {
+      "descricao_imagem": "Homem confuso olhando para anúncios de 'soluções mágicas' no celular. Em seguida, ele é visto em um ambiente clínico, conversando com o Dr. Daniel, que lhe mostra um exame. Por fim, o homem está tranquilo, pedalando ao ar livre, com um sorriso de alívio e bem-estar.",
+      "prompt_estado_atual": "A man in his late 30s looks overwhelmed, scrolling through his phone in a dimly lit room. The screen shows flashy ads for fad diets and miracle pills. His expression is one of confusion and skepticism. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "In a professional and clean medical office, the man sits across from a calm, authoritative doctor (Dr. Daniel) who is explaining something on a medical chart. The man is listening intently, a look of clarity replacing his confusion. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now looking healthy and fit, is confidently riding a bicycle on a scenic outdoor path. He has a genuine smile of relief and freedom, enjoying his newfound health. Sunny, natural light. Aspect ratio 4:5."
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  }
+]

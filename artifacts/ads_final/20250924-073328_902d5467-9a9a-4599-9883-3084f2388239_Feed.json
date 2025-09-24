@@ -1,0 +1,155 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Vigor e Saúde: Emagreça sem abrir mão da sua cerveja.",
+      "corpo": "Cansado de dietas frustradas que só te privam e não entregam resultados? Sente falta de pique, vigor e energia, impactando até seu desempenho? A cervejinha do final de semana não precisa ser a vilã da sua saúde!\n\nCom um plano médico sério, baseado em ciência e adaptado ao seu estilo de vida, o Dr. Daniel Araújo (Nutrólogo | CRM 48645) te ajuda a recuperar o controle, com foco em equilíbrio hormonal e resultados duradouros. Chega de 'gurus' e soluções temporárias.",
+      "cta_texto": "Agendar Avaliação Médica"
+    },
+    "visual": {
+      "descricao_imagem": "Homem na faixa dos 40 anos, com expressão de cansaço, sentado no sofá com uma cerveja, refletindo. Em seguida, ele aparece mais determinado, buscando no celular o contato do Dr. Daniel. Por fim, o mesmo homem, visivelmente mais em forma e confiante, desfruta de um churrasco com amigos, segurando uma cerveja com aspecto saudável e cheio de vigor.",
+      "prompt_estado_atual": "A 40-year-old Caucasian man, slightly overweight with a visible belly, sits slumped on a living room sofa. He holds a bottle of beer loosely, his gaze distant and troubled, reflecting quiet frustration and concern. The atmosphere is dim, conveying a sense of stagnation. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same 40-year-old man, in the same living room, now sits upright with a focused expression, actively looking at his smartphone which displays a professional medical contact page. The beer bottle is on the table, indicating a shift in priority. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now leaner and energetic, smiles genuinely at a backyard barbecue with friends. He holds a beer in a relaxed manner, but his overall physique is healthy and toned, exuding confidence and vitality. The lighting is bright and social. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103131Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2cfc11a4865637f362ee90d7bf7053dcb5b4b408ab35a9493c3ebdec18190ad2a0df291e28953e9431f496c11ec4e7dc16d7d18657c7bd509f64a6dd685b6fe78174604be7171d1a0e3b894bbd143e640eeefbbdf0b63cf38e870a428f115702085d8e7c32d52907cec6167bbe52f7321bbbf1928038f05a82cdcdea49ab0aff8a60921b489625a8d8035f7cbacae939d48bcc1adb65e68e8461dcaf8244f5d4af9553475bd3f80f5df421f17b01becf1ccd425bea2e0efdd492434cdd451b34b70aa8c715ec6903e5865bb880fa61e7cfb5e0607f38cf06eefcac87102f04301a1066565a38485ac3e049d872bcdd28abb4ddd9558a789500ae7a08aa28cc29",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103147Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=56e6eafc04003d2d4a736ba82791190de6c2d464a74016a187c056b22db4c644818286f06ce60fc67dbc4d3ea1b83eacd4823e8660c15bdc42ef27679ddca1b0e061f6c53d00f1e49ac97b26f1575ea53d8afa5de4b939a4a41da49477e20e5ce84773c7ca40aa3e620a5049c6b2210e651564e483afc6a77e7200aab553aacc5b985c87b62c562db4adb3eb35876304b582e9aa9293037d9ebc19c51d722640a9290003b4b80973a56ddf93a8801d82c72232e5f962082867cef5a0a55fed0a2f2331ee5bb0d2b163e92f872cb6b25c2d942ffc453b79e6e466b51e22dd91e08e940aa48b969bf7eb9be5b3084738f5dfe4091cdb9ef55bd8c216250a6a7da0",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103204Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=031773ae15c07b428b0ff9a13793e93e9a5eef2ed5af348897a5082caa918ec9e6cac9fc14d1d3c5a400ac4f2de111687370c2b7cde884215240f261c2836c8f68466e46d4ad244099afebe83c1da8b5116e8bee05b7f2e4f6cc12e80ce90d6fa4fd3d731e1d47fa5bb8a326d5a71dfc568b8151aed5f2bdce0df6bf5f6783631a95ef72b00bc384f2c7a71653e67bc210e0f1c7754aaf9ba800120c03b20c6916214dab60fbceea781ea72775c46522f9adb7fbb72a6e5a8a4d17faa9cc2807d6291b84981c5e1d0d35e1c22e53030a621e488e31d64b5a098204de375e2c3140f546ee1576cdba3aa6086c2ece33dacbeb9d508c15e54bced21dccab53d3e5",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 44.401419570000144
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Desempenho em queda? Recupere seu vigor.",
+      "corpo": "A rotina pesada está minando sua energia, disposição e até o desempenho na vida pessoal? Isso não é 'coisa da idade'. É um sinal de que seu corpo precisa de um ajuste médico.\n\nCom um diagnóstico preciso de exames e foco no equilíbrio hormonal, o Dr. Daniel Araújo cria um plano para restaurar sua vitalidade de verdade, de forma segura e adaptada a você. Assuma o controle e recupere a confiança para qualquer desafio.",
+      "cta_texto": "Agende sua Consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Homem com aparência cansada em uma mesa de trabalho à noite. Depois, ele está em uma consulta online, conversando com o médico com uma expressão de esperança. Finalmente, o mesmo homem, renovado e enérgico, lidera uma reunião de negócios com confiança.",
+      "prompt_estado_atual": "A 40-year-old man in business casual attire sits at his desk late at night, looking drained and frustrated, rubbing his temples. The screen glow illuminates his tired face, suggesting low productivity and burnout. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Close-up on the same man, now looking engaged during a video call on his laptop. He is speaking with a professional-looking doctor. His expression shows hope and determination as he decides to take action. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now looking sharp, lean, and confident, stands at the head of a conference table, actively leading a meeting. He exudes energy and authority. Bright, modern office environment. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_1.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103214Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=25e15bb87edd36d5eca2f6db9f11af70b7c0e6c21c6f3bd9b26048952f5b3eea83228a259f27b71346e6c595257d66c910a036b5ae52cf83b2f8f136dca3e3b6e6dd5e27aa36c280f0d454085e4e91007c5e08c7dca87a0832a11eed577f07a59a3f7c4520430baceb3b56e477f4ce9db73e5956df8766221e4ca805807ee5fd7022b25824e8cf74dfd3c47d33a63492232b846991cdd956edde1cb4edca4bb867c17bb45888ad57f8ad6cae892f556c26dc87e21f521f15e0a9ff7e3fe539dd47766a16ce99c3a12c7a3f9dd797ee9e383457a201946d76d501b9551b2d95c0f10d0e624b5dba7afbc4a65aec22d9a3f3c6815ef978659e801de5719b0cce15",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_1.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103229Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b410ced503baf1647862b21c14a3dc66bc49b7b4fc648457d09b983a88e5d4c58200475d6c6ec5b16ef13b9753b39a784fd615765aae8408bfee5f9c242a73fae7ba9eff15a5e6501f94a8cf8cb2f6d4656c9e1bca382bcaa823270fef86cc953aa68f1d2261377cbe9ab17a1afdbb26d71913e95de462eaf0c517368feb34279ab64f2c046fa4c56efcd8f401f5478e4588eb047b699f3cbbaaa36a9ae1cbc99aebf98904c03b32eaaeacfe70f87928abe64ba3050310b62f3b90d9471b04db8b747fc2ba0be79b05971491cc6b80942014fcfd682123fc4cdd4575929fd4fae6d453e8a4f216d2822ad615b3f7d776fa20af000530c6f63201ed5d4596d9cb",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_1.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103245Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4f7d847dbe32ba6e6758e84d42798367ba3d451226b8c244942f76f22be5a91b181e88e8c072b41b78ed2bf6776c62dec6f33a4f97ddbea26cbcd22fe3b14a313b482b3e10a672a155614d7b59736ce856459d6cd571da482205e856d5797a7872088edef71a583378a5adc39aa5bc6f781fb7023108ee8c5927ed6082c7da70f3cd1ff155eb60743a95cc44189009ff7626a40626d7ef21b2226a3c03e547051e7b27bea75e8a71d09eddace7a7ec893f7525c8432c4b246253b7b0665310874dfced67495c8d733fec90c3e5d4ce13a75ad488b508d0dc0c2e6d042f09b1bd3b9cce7b06ec0804722eae0691912bfb2f578ea40e321a45dc248100c4201bb8",
+      "image_generation_meta": {
+        "variation_idx": 1,
+        "duration_seconds": 40.904129279999324
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Chega de 'gurus'. Emagreça com um Médico.",
+      "corpo": "Já gastou tempo e dinheiro com dietas da moda, suplementos duvidosos e promessas vazias? Essas soluções genéricas ignoram a causa real do problema: seu metabolismo e seus hormônios.\n\nO tratamento médico com o Dr. Daniel Araújo começa com um diagnóstico completo para criar um plano que funciona para o SEU corpo. Chega de tentativas frustradas. Invista em um método científico, seguro e com acompanhamento real para ter resultados que duram.",
+      "cta_texto": "Saiba Mais"
+    },
+    "visual": {
+      "descricao_imagem": "Homem confuso olhando para anúncios de 'soluções mágicas' no celular. Em seguida, ele é visto em um ambiente clínico, conversando com o Dr. Daniel, que lhe mostra um exame. Por fim, o homem está tranquilo, pedalando ao ar livre, com um sorriso de alívio e bem-estar.",
+      "prompt_estado_atual": "A man in his late 30s looks overwhelmed, scrolling through his phone in a dimly lit room. The screen shows flashy ads for fad diets and miracle pills. His expression is one of confusion and skepticism. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "In a professional and clean medical office, the man sits across from a calm, authoritative doctor (Dr. Daniel) who is explaining something on a medical chart. The man is listening intently, a look of clarity replacing his confusion. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same man, now looking healthy and fit, is confidently riding a bicycle on a scenic outdoor path. He has a genuine smile of relief and freedom, enjoying his newfound health. Sunny, natural light. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103256Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b45b71c06432fb61f62c8ec646cdac2e31b81092897f8920146b8c1f57d95f980f786c09919cfe7eadf600c357d522ce1733f22410dd688829a5ced8c1544d1a839d672a558782dc36368ce05333de06a8d0e7b78825708e1ce597a0b32e165512c61764109018b67a024ffbdcf676a3890c7e2a2b979716bdff9955b1961b0f445d4f651e8bbca68c0a1a1f91b3a32835e491971a52884cf5dbdaade0d633e2d221d77271042aacf0fed3547a58a9652d3e5fa368ee3cdc086e26e4d8fb652aea55f3e26055cf0261646525f2d712d0c007b82afdc725f3059c861cbab5deb55f2e59492d70100d7741fde32affa202ce85fb133dddeda43c874c3b02a23f6e",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103313Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=684ed68728585e74c59dfdb5e80d3c264a372f5406a579b671e5abaf5804e8522b3d7b67047ea6ffb882c2c22fecb1c8cdffb769c16679dc1d11e843dc903d05fcec6b2822c92ee0efe0622e97ba3631c3356ed3f145d465620c668fb52fc0906cfb3588fb50c64ad96e3793e0693f64d2e462aa84bd2472686152d27ddcb84310e00a72b1854e190df0c645276f5464525f04447b42e37f601344128bdf0a0ac19124c5329418962b40d8ecdcb1a84074f661fa10ff999b24852be96448d58a8dc5e61133db2ac9ee7bc093fe7313690a2490cbf7e643baf58cb26cb95439a375f732089f39e2313cb408622a20f86c74925dc198d7772530d8d06e88de9cd7",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/902d5467-9a9a-4599-9883-3084f2388239/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T103328Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9275151c4b7951ccdf5aff2e43f51feb48b6f9dd9ebbbfc4041478876d13e8a0bd3f1f4d67f01c3520ec987017b79c6f8ba9ba97a9cf4e0dea2b665d5d8214811d8a5ae566bbd4be7d19f4e40d5fbd91189f7b27418b0ca598c27b95c73bfd3e4e0c92496643c6e02d94c884d24dfd339bcf7ddd4e59af2d92a5c416bc486d384585ed02abb0b0ff0d51dfd66ddf039c08c3b1b7ea134053b690132108e9098e72cb9e895c9fcffda31a63b9229d570fc879d8d574fb8c5b4953191a11f839f11a13f8ba2f2dcf77c0afad33df33df5b480f760b653452f6a32533373ad97a0a40cedbc602ff31c9783e21bf6b65504a8fcbaaf9c83d075759caeef8b440600e",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 42.8724155350028
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed 4:5 com alta performance em 2024-2025 focam em visuais autênticos que contam uma micro-história de transformação (da dor à aspiração). Preferem cenas que geram identificação e evocam sentimentos de bem-estar ou superação, com mínima sobreposição de texto e um CTA visualmente integrado.",
+    "contexto_landing": {
+      "storybrand_persona": "paciente",
+      "storybrand_dores": [
+        "falta de controle da sua saúde",
+        "tentativas frustradas"
+      ],
+      "storybrand_proposta": "Autoridade: plano médico sério e personalizado",
+      "storybrand_autoridade": "plano médico sério e personalizado",
+      "storybrand_beneficios": [
+        "O tratamento médico para perda de peso promove um progresso real, tanto na sua saúde quanto na sua vida!",
+        "potencializar sua saúde, com abordagens médicas avançadas que garantem um tratamento seguro e eficaz. recuperar sua energia, vitalidade e disposição, além de potencializar a perda de peso. restaurar sua energia, confiança e vigor. melhorar a libido, elevar sua vitalidade e garantir resultados duradouros para o seu bem-estar.",
+        "Recupere a disposição para o trabalho, a família e os projetos que realmente importam.",
+        "Assuma o controle da sua saúde e sinta a segurança de estar pronto para qualquer desafio.",
+        "Viva mais e melhor — com qualidade, presença e força para sua família e seus negócios."
+      ],
+      "storybrand_transformacao": "controle da saúde",
+      "storybrand_cta_principal": "Agende sua consulta agora",
+      "storybrand_urgencia": [
+        "Dietas que cortam tudo o que você gosta são insustentáveis a longo prazo. Essas dietas favorecem que você volte a ganhar peso! Treinos que não consideram sua sobrecarga de trabalho tendem a provocar mais lesões e a estagnar seus resultados! Suplementos mal indicados, além de desperdiçarem seu dinheiro, podem provocar ganho de peso! Profissionais duvidosos que oferecem soluções mágicas sem base científica e sem a segurança de um acompanhamento médico podem colocar sua saúde em sério risco!",
+        "Ao contrário de abordagens genéricas"
+      ]
+    }
+  }
+]

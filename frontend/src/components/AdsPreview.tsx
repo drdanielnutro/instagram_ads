@@ -85,14 +85,26 @@ function buildCopy(raw: unknown): CopyInfo {
 
 function buildVisual(raw: unknown): VisualInfo {
   const visual = isRecord(raw) ? raw : {};
+
+  // URLs individuais vindas do backend (quando não houver visual.images)
+  const urlAtual = coerceString((visual as any).image_estado_atual_url);
+  const urlInter = coerceString((visual as any).image_estado_intermediario_url);
+  const urlAsp = coerceString((visual as any).image_estado_aspiracional_url);
+  const imagesFromFields = [urlAtual, urlInter, urlAsp].filter(
+    (u) => typeof u === "string" && u.length > 0,
+  );
+
+  // Se o backend já fornecer visual.images, respeitar; senão, usar as três URLs acima
+  const imagesArray = coerceImages((visual as any).images);
+  const finalImages = imagesArray.length > 0 ? imagesArray : imagesFromFields;
+
   return {
     descricao_imagem: coerceString(visual.descricao_imagem),
     prompt_estado_atual: coerceString(visual.prompt_estado_atual),
     prompt_estado_intermediario: coerceString(visual.prompt_estado_intermediario),
     prompt_estado_aspiracional: coerceString(visual.prompt_estado_aspiracional),
     aspect_ratio: coerceAspectRatio(visual.aspect_ratio),
-    // Futuro: o backend irá popular visual.images com as URLs finais para o carrossel.
-    images: coerceImages(visual.images),
+    images: finalImages,
   };
 }
 
