@@ -1,10 +1,16 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { formatSubmitPayload } from '@/utils/wizard.utils';
-import { WIZARD_INITIAL_STATE } from '@/constants/wizard.constants';
+afterEach(() => {
+  vi.unstubAllEnvs();
+  vi.resetModules();
+});
 
 describe('formatSubmitPayload', () => {
-  it('includes new fields when provided', () => {
+  it('includes new fields when provided', async () => {
+    vi.stubEnv('VITE_ENABLE_NEW_FIELDS', 'true');
+    const { formatSubmitPayload } = await import('@/utils/wizard.utils');
+    const { WIZARD_INITIAL_STATE } = await import('@/constants/wizard.constants');
+
     const state = {
       ...WIZARD_INITIAL_STATE,
       landing_page_url: 'https://example.com',
@@ -26,7 +32,11 @@ describe('formatSubmitPayload', () => {
     expect(payload).toContain('sexo_cliente_alvo: masculino');
   });
 
-  it('applies neutro default when gender is empty', () => {
+  it('applies neutro default when gender is empty', async () => {
+    vi.stubEnv('VITE_ENABLE_NEW_FIELDS', 'true');
+    const { formatSubmitPayload } = await import('@/utils/wizard.utils');
+    const { WIZARD_INITIAL_STATE } = await import('@/constants/wizard.constants');
+
     const state = {
       ...WIZARD_INITIAL_STATE,
       landing_page_url: 'https://example.com',

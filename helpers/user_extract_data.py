@@ -46,15 +46,35 @@ class UserInputExtractor:
         self.project = os.getenv("GOOGLE_CLOUD_PROJECT")
         self.location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
-        # Prompt para extração dos campos mínimos
-        self.prompt = (
-            "From the user text below, extract exactly these fields if present: "
-            "landing_page_url (http/https), objetivo_final, perfil_cliente, formato_anuncio, foco, "
-            "nome_empresa, o_que_a_empresa_faz, sexo_cliente_alvo. "
-            "Use exact user wording for values when present. Do not invent. If a field is not present, leave empty. "
-            "Normalize common synonyms only in attributes (not extraction_text). "
-            "For sexo_cliente_alvo, map synonyms to masculino|feminino|neutro when possible."
+        self.enable_new_input_fields = (
+            os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
         )
+        self.preflight_shadow_mode = (
+            os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
+        )
+
+        include_new_fields = self.enable_new_input_fields or self.preflight_shadow_mode
+
+        base_prompt = (
+            "From the user text below, extract exactly these fields if present: "
+            "landing_page_url (http/https), objetivo_final, perfil_cliente, formato_anuncio, foco"
+        )
+        if include_new_fields:
+            base_prompt += (
+                ", nome_empresa, o_que_a_empresa_faz, sexo_cliente_alvo (masculino/feminino/neutro)"
+            )
+        base_prompt += (
+            ". Use exact user wording for values when present. Do not invent. "
+            "If a field is not present, leave empty. "
+            "Normalize common synonyms only in attributes (not extraction_text)."
+        )
+        if include_new_fields:
+            base_prompt += (
+                " For sexo_cliente_alvo, map synonyms to masculino|feminino|neutro when possible."
+            )
+
+        # Prompt para extração dos campos mínimos
+        self.prompt = base_prompt
 
     def _examples(self) -> List[lx.data.ExampleData]:
         examples: List[lx.data.ExampleData] = []
@@ -263,22 +283,33 @@ class UserInputExtractor:
             pass
         return converted
 
+
+
     def _convert(self, langextract_result: Any) -> Dict[str, Any]:
+        include_new_fields = self.enable_new_input_fields or self.preflight_shadow_mode
+
         data: Dict[str, Optional[str]] = {
             "landing_page_url": None,
             "objetivo_final": None,
             "perfil_cliente": None,
             "formato_anuncio": None,
             "foco": None,
-            "nome_empresa": None,
-            "o_que_a_empresa_faz": None,
-            "sexo_cliente_alvo": None,
         }
+        if include_new_fields:
+            data.update(
+                {
+                    "nome_empresa": None,
+                    "o_que_a_empresa_faz": None,
+                    "sexo_cliente_alvo": None,
+                }
+            )
+
         normalized: Dict[str, Optional[str]] = {
             "formato_anuncio_norm": None,
             "objetivo_final_norm": None,
-            "sexo_cliente_alvo_norm": "neutro",
         }
+        if include_new_fields:
+            normalized.update({"sexo_cliente_alvo_norm": None})
 
         # Mapear extrações
         if hasattr(langextract_result, "extractions"):
@@ -289,11 +320,17 @@ class UserInputExtractor:
                 if cls in data and txt:
                     data[cls] = txt.strip()
                 if cls == "formato_anuncio":
-                    normalized["formato_anuncio_norm"] = self._normalize_formato(attrs.get("normalized") or txt)
+                    normalized["formato_anuncio_norm"] = self._normalize_formato(
+                        attrs.get("normalized") or txt
+                    )
                 if cls == "objetivo_final":
-                    normalized["objetivo_final_norm"] = self._normalize_objetivo(attrs.get("normalized") or txt)
-                if cls == "sexo_cliente_alvo":
-                    normalized["sexo_cliente_alvo_norm"] = self._normalize_sexo(attrs.get("normalized") or txt)
+                    normalized["objetivo_final_norm"] = self._normalize_objetivo(
+                        attrs.get("normalized") or txt
+                    )
+                if include_new_fields and cls == "sexo_cliente_alvo":
+                    normalized["sexo_cliente_alvo_norm"] = self._normalize_sexo(
+                        attrs.get("normalized") or txt
+                    )
 
         try:
             logger.debug(
@@ -312,20 +349,42 @@ class UserInputExtractor:
 
         fmt = normalized["formato_anuncio_norm"]
         if fmt not in {"Reels", "Stories", "Feed"}:
-            errors.append({
-                "field": "formato_anuncio",
-                "message": "Valor não suportado. Use Reels|Stories|Feed."
-            })
+            errors.append(
+                {
+                    "field": "formato_anuncio",
+                    "message": "Valor não suportado. Use Reels|Stories|Feed.",
+                }
+            )
 
         obj = normalized["objetivo_final_norm"]
         if not obj:
-            errors.append({
-                "field": "objetivo_final",
-                "message": "Objetivo final ausente/ambíguo. Ex.: agendamentos|leads|vendas|contato."
-            })
+            errors.append(
+                {
+                    "field": "objetivo_final",
+                    "message": "Objetivo final ausente/ambíguo. Ex.: agendamentos|leads|vendas|contato.",
+                }
+            )
 
         if not data["perfil_cliente"]:
             errors.append({"field": "perfil_cliente", "message": "Perfil/Persona ausente."})
+
+        if include_new_fields and not normalized.get("sexo_cliente_alvo_norm"):
+            normalized["sexo_cliente_alvo_norm"] = "neutro"
+
+        if self.enable_new_input_fields:
+            optional_with_defaults = {
+                "nome_empresa": "Empresa",
+                "o_que_a_empresa_faz": "",
+                "sexo_cliente_alvo": "neutro",
+            }
+            for field, default in optional_with_defaults.items():
+                if not data.get(field):
+                    logger.info(
+                        "Campo opcional '%s' não fornecido, usando default: '%s'",
+                        field,
+                        default,
+                    )
+                    data[field] = default
 
         success = len(errors) == 0
         return {
@@ -334,7 +393,6 @@ class UserInputExtractor:
             "normalized": normalized,
             "errors": errors,
         }
-
     @staticmethod
     def _normalize_formato(value: str | None) -> Optional[str]:
         if not value:

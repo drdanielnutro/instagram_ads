@@ -32,7 +32,9 @@ def patch_langextract(monkeypatch):
     return _apply
 
 
-def test_extract_user_input_returns_new_fields(patch_langextract):
+def test_extract_user_input_returns_new_fields(patch_langextract, monkeypatch):
+    monkeypatch.setenv('ENABLE_NEW_INPUT_FIELDS', 'true')
+    monkeypatch.setenv('PREFLIGHT_SHADOW_MODE', 'false')
     patch_langextract(
         [
             DummyExtraction("landing_page_url", "https://example.com"),
@@ -56,7 +58,9 @@ def test_extract_user_input_returns_new_fields(patch_langextract):
     assert result["normalized"]["sexo_cliente_alvo_norm"] == "feminino"
 
 
-def test_extract_user_input_gender_default_neutro(patch_langextract):
+def test_extract_user_input_gender_default_neutro(patch_langextract, monkeypatch):
+    monkeypatch.setenv('ENABLE_NEW_INPUT_FIELDS', 'true')
+    monkeypatch.setenv('PREFLIGHT_SHADOW_MODE', 'false')
     patch_langextract(
         [
             DummyExtraction("landing_page_url", "https://example.com"),
@@ -71,5 +75,5 @@ def test_extract_user_input_gender_default_neutro(patch_langextract):
     result = extract_user_input("dummy text")
 
     assert result["normalized"]["sexo_cliente_alvo_norm"] == "neutro"
-    assert result["data"].get("sexo_cliente_alvo") is None
+    assert result["data"].get("sexo_cliente_alvo") == "neutro"
     assert result["success"] is True

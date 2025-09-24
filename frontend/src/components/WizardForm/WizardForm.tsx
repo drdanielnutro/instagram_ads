@@ -194,23 +194,23 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
       case 'nome_empresa':
         return (
           <CompanyInfoStep
-            variant="name"
+            field="nome_empresa"
             value={formState.nome_empresa}
+            error={errors.nome_empresa}
+            touched={touched.has('nome_empresa')}
             onChange={value => handleFieldChange('nome_empresa', value)}
-            error={touched.has('nome_empresa') ? errors.nome_empresa : undefined}
+            onBlur={() => markFieldTouched('nome_empresa')}
           />
         );
       case 'o_que_a_empresa_faz':
         return (
           <CompanyInfoStep
-            variant="description"
+            field="o_que_a_empresa_faz"
             value={formState.o_que_a_empresa_faz}
+            error={errors.o_que_a_empresa_faz}
+            touched={touched.has('o_que_a_empresa_faz')}
             onChange={value => handleFieldChange('o_que_a_empresa_faz', value)}
-            error={
-              touched.has('o_que_a_empresa_faz')
-                ? errors.o_que_a_empresa_faz
-                : undefined
-            }
+            onBlur={() => markFieldTouched('o_que_a_empresa_faz')}
           />
         );
       case 'formato_anuncio':
@@ -241,10 +241,10 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
         return (
           <GenderTargetStep
             value={formState.sexo_cliente_alvo}
+            error={errors.sexo_cliente_alvo}
+            touched={touched.has('sexo_cliente_alvo')}
             onChange={value => handleFieldChange('sexo_cliente_alvo', value)}
-            error={
-              touched.has('sexo_cliente_alvo') ? errors.sexo_cliente_alvo : undefined
-            }
+            onBlur={() => markFieldTouched('sexo_cliente_alvo')}
           />
         );
       case 'review':
@@ -252,7 +252,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
       default:
         return null;
     }
-  }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, touched]);
+  }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, markFieldTouched, touched]);
 
   return (
     <div className="h-screen flex flex-col bg-background px-4 md:px-10 py-8 overflow-hidden">
