@@ -60,7 +60,7 @@ Objetivo: adicionar campos opcionais `nome_empresa`, `o_que_a_empresa_faz`, `sex
 
 ## 8) Rollout e flags
 - [x] Rollout em duas fases: (1) backend primeiro; (2) frontend depois.
-- [ ] Opcional: adicionar flag `VITE_ENABLE_NEW_FIELDS` para esconder os novos steps até finalizar o rollout.
+- [x] Opcional: adicionar flag `VITE_ENABLE_NEW_FIELDS` para esconder os novos steps até finalizar o rollout.
 
 ## 9) Documentação
 - [x] Atualizar README com os novos campos e exemplo de payload.

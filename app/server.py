@@ -217,36 +217,69 @@ def run_preflight(payload: dict = Body(...)) -> dict:
     except Exception:
         pass
 
+    enable_new_input_fields = (
+        os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
+    )
+    preflight_shadow_mode = (
+        os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
+    )
+
     nome_empresa = (data.get("nome_empresa") or "").strip()
     descricao_empresa = (data.get("o_que_a_empresa_faz") or "").strip()
-    sexo_alvo_norm = (norm.get("sexo_cliente_alvo_norm") or "neutro").strip() or "neutro"
+    sexo_alvo_norm = (norm.get("sexo_cliente_alvo_norm") or "").strip()
+    sexo_alvo_effective = sexo_alvo_norm or "neutro"
 
-    try:
-        logger.log_struct(
-            {
-                "event": "preflight_new_fields",
-                "nome_empresa_provided": bool(nome_empresa),
-                "o_que_faz_provided": bool(descricao_empresa),
-                "sexo_alvo": sexo_alvo_norm,
-                "defaults_used": {
-                    "nome_empresa": not nome_empresa,
-                    "o_que_a_empresa_faz": not descricao_empresa,
-                    "sexo_cliente_alvo": sexo_alvo_norm == "neutro",
+    if preflight_shadow_mode:
+        try:
+            logger.log_struct(
+                {
+                    "event": "preflight_new_fields_shadow",
+                    "enabled": enable_new_input_fields,
+                    "nome_empresa_present": bool(nome_empresa),
+                    "o_que_faz_present": bool(descricao_empresa),
+                    "sexo_alvo": sexo_alvo_norm or "",
                 },
-            },
-            severity="INFO",
-        )
-    except Exception:
-        pass
-    try:
-        py_logger.info(
-            "[preflight] new_fields nome_empresa?=%s o_que?=%s sexo=%s",
-            bool(nome_empresa),
-            bool(descricao_empresa),
-            sexo_alvo_norm,
-        )
-    except Exception:
-        pass
+                severity="INFO",
+            )
+        except Exception:
+            pass
+        try:
+            py_logger.info(
+                "[preflight] shadow_new_fields nome_empresa?=%s o_que?=%s sexo=%s",
+                bool(nome_empresa),
+                bool(descricao_empresa),
+                sexo_alvo_norm or "",
+            )
+        except Exception:
+            pass
+
+    if enable_new_input_fields:
+        try:
+            logger.log_struct(
+                {
+                    "event": "preflight_new_fields",
+                    "nome_empresa_provided": bool(nome_empresa),
+                    "o_que_faz_provided": bool(descricao_empresa),
+                    "sexo_alvo": sexo_alvo_effective,
+                    "defaults_used": {
+                        "nome_empresa": not nome_empresa,
+                        "o_que_faz": not descricao_empresa,
+                        "sexo_alvo": sexo_alvo_effective == "neutro",
+                    },
+                },
+                severity="INFO",
+            )
+        except Exception:
+            pass
+        try:
+            py_logger.info(
+                "[preflight] new_fields nome_empresa?=%s o_que?=%s sexo=%s",
+                bool(nome_empresa),
+                bool(descricao_empresa),
+                sexo_alvo_effective,
+            )
+        except Exception:
+            pass
 
     # Montar estado inicial para a sessão ADK
     initial_state = {
@@ -255,9 +288,6 @@ def run_preflight(payload: dict = Body(...)) -> dict:
         "perfil_cliente": data.get("perfil_cliente"),
         "formato_anuncio": formato,
         "foco": data.get("foco") or "",
-        "nome_empresa": nome_empresa or "Empresa",
-        "o_que_a_empresa_faz": descricao_empresa or "",
-        "sexo_cliente_alvo": sexo_alvo_norm or "neutro",
         # Plano fixo e specs por formato
         "implementation_plan": plan,
         "format_specs": specs,
@@ -265,6 +295,15 @@ def run_preflight(payload: dict = Body(...)) -> dict:
         # Sinalizador para pular o planner (será usado em fase 2)
         "planning_mode": "fixed",
     }
+
+    if enable_new_input_fields:
+        initial_state.update(
+            {
+                "nome_empresa": nome_empresa or "Empresa",
+                "o_que_a_empresa_faz": descricao_empresa or "",
+                "sexo_cliente_alvo": sexo_alvo_effective,
+            }
+        )
 
     response = {
         "success": True,

@@ -11,7 +11,14 @@ describe('Wizard steps', () => {
   it('renders company name step', () => {
     expect(() =>
       renderToString(
-        <CompanyInfoStep variant="name" value="Empresa" onChange={noop} error={undefined} />,
+        <CompanyInfoStep
+          field="nome_empresa"
+          value="Empresa"
+          error={undefined}
+          touched={false}
+          onChange={noop}
+          onBlur={noop}
+        />,
       ),
     ).not.toThrow();
   });
@@ -20,10 +27,12 @@ describe('Wizard steps', () => {
     expect(() =>
       renderToString(
         <CompanyInfoStep
-          variant="description"
+          field="o_que_a_empresa_faz"
           value="Consultoria especializada"
-          onChange={noop}
           error={undefined}
+          touched={false}
+          onChange={noop}
+          onBlur={noop}
         />,
       ),
     ).not.toThrow();
@@ -32,7 +41,13 @@ describe('Wizard steps', () => {
   it('renders gender target step', () => {
     expect(() =>
       renderToString(
-        <GenderTargetStep value="masculino" onChange={noop} error={undefined} />,
+        <GenderTargetStep
+          value="masculino"
+          error={undefined}
+          touched={false}
+          onChange={noop}
+          onBlur={noop}
+        />,
       ),
     ).not.toThrow();
   });

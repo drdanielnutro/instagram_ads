@@ -6,11 +6,29 @@ import { cn } from '@/utils';
 
 interface GenderTargetStepProps {
   value: string;
-  onChange: (value: string) => void;
   error?: string;
+  touched: boolean;
+  onChange: (value: string) => void;
+  onBlur: () => void;
 }
 
-export function GenderTargetStep({ value, onChange, error }: GenderTargetStepProps) {
+export function GenderTargetStep({
+  value,
+  error,
+  touched,
+  onChange,
+  onBlur,
+}: GenderTargetStepProps) {
+  const handleSelect = (option: string) => {
+    onChange(option);
+    onBlur();
+  };
+
+  const handleClear = () => {
+    onChange('');
+    onBlur();
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -31,7 +49,7 @@ export function GenderTargetStep({ value, onChange, error }: GenderTargetStepPro
             <button
               key={option.value}
               type="button"
-              onClick={() => onChange(option.value)}
+              onClick={() => handleSelect(option.value)}
               className={cn(
                 'flex flex-col items-start gap-1 rounded-2xl border px-4 py-4 text-left transition-all',
                 'bg-card/80 hover:border-primary/60 hover:bg-primary/5',
@@ -45,11 +63,11 @@ export function GenderTargetStep({ value, onChange, error }: GenderTargetStepPro
         })}
       </div>
 
-      <Button type="button" variant="ghost" size="sm" className="self-start text-xs" onClick={() => onChange('')}>
+      <Button type="button" variant="ghost" size="sm" className="self-start text-xs" onClick={handleClear}>
         Limpar seleção
       </Button>
 
-      {error && (
+      {touched && error && (
         <div className="flex items-center gap-2 rounded-lg border border-destructive/60 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           <AlertCircle className="h-4 w-4" />
           {error}
