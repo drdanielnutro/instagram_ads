@@ -36,10 +36,11 @@ def _parse_gcs_uri(uri: str) -> tuple[str, str]:
 
 
 def _has_all_image_urls(data: Any) -> bool:
-    """Validate that all variations have complete image URLs.
+    """Validate that ALL variations have complete image URLs (strict).
 
-    Note: We allow variations with image_generation_error since they
-    are expected and the frontend handles them gracefully.
+    - Exige exatamente 3 variações
+    - Cada variação deve conter as três URLs: atual, intermediário e aspiracional
+    - Qualquer presença de `image_generation_error` invalida a entrega
     """
     if not isinstance(data, list) or len(data) != 3:
         return False
@@ -50,23 +51,17 @@ def _has_all_image_urls(data: Any) -> bool:
         "image_estado_aspiracional_url",
     ]
 
-    # At least one variation must have all image URLs
-    has_at_least_one_complete = False
-
     for item in data:
         if not item or not isinstance(item, dict):
             return False
         visual = item.get("visual", {})
-
-        # If variation has image_generation_error, it's acceptable
+        # Rejeita variações com erro de geração
         if visual.get("image_generation_error"):
-            continue
+            return False
+        if not all(visual.get(k) for k in required_fields):
+            return False
 
-        # Check if this variation has all required URLs
-        if all(visual.get(k) for k in required_fields):
-            has_at_least_one_complete = True
-
-    return has_at_least_one_complete
+    return True
 
 
 def _report_missing(data: Any) -> list[dict[str, Any]]:
@@ -156,15 +151,14 @@ def download_final(
                             session_id,
                             _report_missing(data)
                         )
-                        # For now, we'll still return the data as frontend handles missing images gracefully
-                        # Uncomment below to enforce strict validation:
-                        # raise HTTPException(
-                        #     status_code=424,
-                        #     detail={
-                        #         "message": "Image assets incomplete. Please reprocess the session.",
-                        #         "missing": _report_missing(data)
-                        #     }
-                        # )
+                        # Enforce strict validation
+                        raise HTTPException(
+                            status_code=424,
+                            detail={
+                                "message": "Image assets incomplete. Please reprocess the session.",
+                                "missing": _report_missing(data)
+                            }
+                        )
 
                     return Response(content=payload, media_type="application/json")
                 except Exception as e:
@@ -187,15 +181,14 @@ def download_final(
                                     session_id,
                                     _report_missing(data)
                                 )
-                                # For now, we'll still return the data as frontend handles missing images gracefully
-                                # Uncomment below to enforce strict validation:
-                                # raise HTTPException(
-                                #     status_code=424,
-                                #     detail={
-                                #         "message": "Image assets incomplete. Please reprocess the session.",
-                                #         "missing": _report_missing(data)
-                                #     }
-                                # )
+                                # Enforce strict validation
+                                raise HTTPException(
+                                    status_code=424,
+                                    detail={
+                                        "message": "Image assets incomplete. Please reprocess the session.",
+                                        "missing": _report_missing(data)
+                                    }
+                                )
 
                             logger.info(
                                 "Successfully served inline content from local fallback for session %s",
@@ -217,14 +210,15 @@ def download_final(
                     )
 
             # For non-inline requests, return signed URL as before
-            url = blob.generate_signed_url(
-                version="v4",
-                expiration=timedelta(seconds=600),
-                method="GET",
-                response_disposition=f'attachment; filename="{filename}"',
-                response_type="application/json",
-            )
-            return {"ok": True, "signed_url": url, "expires_in": 600}
+            if not inline:
+                url = blob.generate_signed_url(
+                    version="v4",
+                    expiration=timedelta(seconds=600),
+                    method="GET",
+                    response_disposition=f'attachment; filename="{filename}"',
+                    response_type="application/json",
+                )
+                return {"ok": True, "signed_url": url, "expires_in": 600}
         except HTTPException:
             raise
         except Exception as e:
