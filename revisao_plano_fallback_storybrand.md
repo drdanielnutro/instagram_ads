@@ -44,9 +44,7 @@
 - **Definir `state['storybrand_completeness'] = 1.0` como garantia** — Essa chave hoje só aparece dentro de `landing_page_context`; nenhum agente lê um valor na raiz do estado.
   - Impacto: falsa sensação de bloqueio de loops. Se o gate continuar usando o score de `storybrand_analysis`, o fallback pode ser reexecutado.
   - **Correção Sugerida**: atualizar `storybrand_analysis['completeness_score']` ao final da recompilação e, opcionalmente, sincronizar `landing_page_context['storybrand_completeness']`.
-- **Novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) sem alinhamento com frontend/back-end** — O wizard do frontend (`frontend/src/constants/wizard.constants.ts`) e o extractor (`helpers/user_extract_data.py`) não conhecem essas chaves.
-  - Impacto: o fallback nunca receberá os dados prometidos; o initializer precisaria sempre preencher com strings vazias.
-  - **Correção Sugerida**: detalhar as mudanças necessárias no wizard (estado inicial, validação, submissão) e na extração de dados, inclusive quais valores serão aceitos para `sexo_cliente_alvo`.
+- [Resolvido] **Novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) alinhados com frontend/back-end** — Wizard, extractor e preflight já persistem essas chaves com normalização e defaults.
 - **Checklist e documentação em caminhos divergentes** — O plano prevê `checklists/storybrand_fallback.md`, mas o processo atual documentado em `AGENTS.md` exige atualizar `checklist.md` na raiz.
   - Impacto: risco de equipes seguirem checklists diferentes ou ignorarem o fluxo “Checklist Primeiro, Código Depois”.
   - **Correção Sugerida**: alinhar com o fluxo vigente (atualizar `checklist.md` ou documentar claramente como o novo arquivo se integra ao processo oficial).

@@ -23,9 +23,12 @@ O sistema está travando ao processar requisições com o campo `foco`. O travam
 2. **Digite no campo de texto**:
 ```
 landing_page_url: https://seusite.com.br/pagina
+nome_empresa: Clínica Bem Viver
+o_que_a_empresa_faz: Clínica de nutrição e emagrecimento saudável
 objetivo_final: agendamentos
-perfil_cliente: descrição da persona e suas dores
 formato_anuncio: Reels
+perfil_cliente: descrição da persona e suas dores
+sexo_cliente_alvo: masculino
 foco: liquidação de inverno
 ```
 
@@ -97,6 +100,11 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## Refatorações Recentes
 
+### 2025-09-16 - Campos opcionais no preflight/wizard
+- ✅ Novos campos opcionais `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` no extractor, preflight e wizard
+- ✅ Normalização de gênero com default `neutro`
+- ✅ Validações e testes cobrindo os novos passos do formulário e payloads
+
 ### 2025-09-15 - Preflight + Planos fixos + Persistência JSON
 - ✅ Preflight no servidor (LangExtract/Vertex) valida/normaliza entrada e injeta plano fixo por formato
 - ✅ Bypass do planejamento dinâmico; `context_synthesizer` ainda roda para gerar `{feature_briefing}`
@@ -120,6 +128,11 @@ curl -X POST http://localhost:8000/run_sse \
 - ✅ **Apenas imagens**: Removido suporte a vídeos (campo `duracao` eliminado)
 - ✅ **Loops de qualidade aumentados**: 7-10 iterações (antes eram 3-5)
 - ✅ **Novo campo `contexto_landing`**: Armazena contexto extraído da landing page
+
+### Rollout recomendado dos novos campos
+- **Fase 1 – Backend**: publicar o extractor atualizado mantendo `ENABLE_NEW_INPUT_FIELDS=false` e observar o log estruturado `preflight_new_fields`.
+- **Fase 2 – Frontend**: disponibilizar o wizard com os novos passos em ambientes internos com `VITE_ENABLE_NEW_FIELDS=false` para validação.
+- **Fase 3 – Liberação total**: ativar `VITE_ENABLE_NEW_FIELDS=true` e `ENABLE_NEW_INPUT_FIELDS=true` após o período de monitoramento.
 
 ## Arquitetura do Sistema
 
@@ -151,7 +164,10 @@ Extrai campos estruturados da entrada do usuário:
 - `perfil_cliente`: Persona/storybrand do público-alvo
 - `formato_anuncio`: **"Reels", "Stories" ou "Feed"** (controlado pelo usuário)
 
-**Campo opcional**:
+**Campos opcionais**:
+- `nome_empresa`: Como a marca deve ser citada nos criativos (default: "Empresa")
+- `o_que_a_empresa_faz`: Resumo da proposta de valor/serviços da empresa
+- `sexo_cliente_alvo`: masculino | feminino | neutro (default quando vazio)
 - `foco`: Tema ou gancho da campanha (ex: "liquidação de inverno")
 
 Observação: No modo “preflight”, a extração/normalização ocorre no servidor antes do ADK. Se inválido, o servidor responde 422 com os erros e o ADK não é acionado.

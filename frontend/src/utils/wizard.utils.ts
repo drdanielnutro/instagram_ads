@@ -113,6 +113,9 @@ export function formatSubmitPayload(formState: WizardFormState): string {
     const fieldId = step.id as keyof WizardFormState;
     const value = formState[fieldId].trim();
     if (!value) {
+      if (fieldId === 'sexo_cliente_alvo') {
+        return [`${fieldId}: neutro`];
+      }
       return [];
     }
 
