@@ -28,6 +28,20 @@ import { ReviewStep } from './steps/ReviewStep';
 import { CompanyInfoStep } from './steps/CompanyInfoStep';
 import { GenderTargetStep } from './steps/GenderTargetStep';
 
+// Botões simples sem dependências extras
+function MobileToggle({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label="Abrir/fechar lista de passos"
+      onClick={onToggle}
+      className="lg:hidden mb-3 inline-flex items-center gap-2 rounded-md border border-border/60 bg-card/70 px-3 py-2 text-sm"
+    >
+      {open ? 'Fechar passos' : 'Ver passos'}
+    </button>
+  );
+}
+
 type WizardField = keyof WizardFormState;
 
 interface WizardFormProps {
@@ -42,6 +56,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
     useState<WizardFormState>(WIZARD_INITIAL_STATE);
   const [errors, setErrors] = useState<WizardValidationErrors>({});
   const [touched, setTouched] = useState<Set<WizardField>>(new Set());
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
 
@@ -256,28 +271,59 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
 
   return (
     <div className="h-screen flex flex-col bg-background px-4 md:px-10 py-8 overflow-hidden">
-      <div className="mx-auto w-full max-w-4xl lg:max-w-5xl flex-1 flex flex-col gap-6 min-h-0">
-        <ProgressHeader
-          steps={WIZARD_STEPS}
-          currentStep={currentStep}
-          completedSteps={completedSteps}
-        />
+      {/* Layout responsivo: coluna única no mobile; sidebar + conteúdo no desktop */}
+      <div className="w-full flex-1 min-h-0 lg:flex lg:flex-row lg:gap-6">
+        {/* Sidebar / Header de progresso */}
+        <aside className="hidden lg:block w-80 flex-shrink-0 border-r border-border/60 pr-4">
+          <ProgressHeader
+            steps={WIZARD_STEPS}
+            currentStep={currentStep}
+            completedSteps={completedSteps}
+            orientation="vertical"
+            onStepClick={(idx) => {
+              setCurrentStep(idx);
+            }}
+          />
+        </aside>
 
-        <div className="flex-1 min-h-0 overflow-y-auto">
-          <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
+        {/* Coluna da direita: conteúdo principal */}
+        <div className="flex-1 flex flex-col min-h-0 min-w-0">
+          {/* Toggle e header no mobile */}
+          <MobileToggle
+            open={isMobileSidebarOpen}
+            onToggle={() => setIsMobileSidebarOpen((v) => !v)}
+          />
+          {isMobileSidebarOpen && (
+            <div className="lg:hidden mb-4 rounded-xl border border-border/60 bg-card/70 p-4">
+              <ProgressHeader
+                steps={WIZARD_STEPS}
+                currentStep={currentStep}
+                completedSteps={completedSteps}
+                orientation="vertical"
+                onStepClick={(idx) => {
+                  setCurrentStep(idx);
+                  setIsMobileSidebarOpen(false);
+                }}
+              />
+            </div>
+          )}
+
+          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto">
+            <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
+          </div>
+
+          <NavigationFooter
+            currentStep={currentStep}
+            totalSteps={WIZARD_STEPS.length}
+            onNext={handleNext}
+            onBack={handleBack}
+            onSubmit={handleSubmit}
+            onCancel={onCancel}
+            canProceed={canProceed(currentStep, formState, errors)}
+            isLoading={isLoading}
+            isOptional={Boolean(currentWizardStep?.isOptional)}
+          />
         </div>
-
-        <NavigationFooter
-          currentStep={currentStep}
-          totalSteps={WIZARD_STEPS.length}
-          onNext={handleNext}
-          onBack={handleBack}
-          onSubmit={handleSubmit}
-          onCancel={onCancel}
-          canProceed={canProceed(currentStep, formState, errors)}
-          isLoading={isLoading}
-          isOptional={Boolean(currentWizardStep?.isOptional)}
-        />
       </div>
     </div>
   );

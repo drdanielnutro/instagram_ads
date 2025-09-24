@@ -10,8 +10,8 @@ export function StepCard({ step, children }: StepCardProps) {
   return (
     <section
       className={cn(
-        'bg-card border border-border/60 rounded-2xl shadow-lg',
-        'p-8 flex flex-col gap-6',
+        'bg-card border border-border/60 rounded-2xl shadow-lg relative',
+        'p-8 flex flex-col gap-6 w-full',
       )}
     >
       <header className="flex items-start gap-4">

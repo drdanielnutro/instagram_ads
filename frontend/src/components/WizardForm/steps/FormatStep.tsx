@@ -12,11 +12,11 @@ interface FormatStepProps {
 export function FormatStep({ value, onChange, error }: FormatStepProps) {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 relative">
         <p className="text-sm text-muted-foreground">
           Escolha o formato que combina com o criativo disponível e o posicionamento onde deseja anunciar.
         </p>
-        <LayoutDashboard className="hidden h-8 w-8 text-primary/80 sm:block" />
+        <LayoutDashboard className="hidden h-8 w-8 text-primary/80 sm:block sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2" />
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">

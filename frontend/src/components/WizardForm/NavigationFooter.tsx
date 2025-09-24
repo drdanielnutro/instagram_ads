@@ -31,15 +31,17 @@ export function NavigationFooter({
     <footer className="border-t border-border/60 pt-4 px-6 md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <Button
-            type="button"
-            variant="ghost"
-            className="gap-2 text-muted-foreground hover:text-foreground"
-            disabled={isFirstStep || isLoading}
-            onClick={onBack}
-          >
-            Voltar
-          </Button>
+          {!isFirstStep && (
+            <Button
+              type="button"
+              variant="ghost"
+              className="gap-2 text-muted-foreground hover:text-foreground"
+              disabled={isLoading}
+              onClick={onBack}
+            >
+              Voltar
+            </Button>
+          )}
           <span className="hidden text-xs uppercase tracking-wider text-muted-foreground/80 md:inline">
             Passo {Math.min(currentStep + 1, totalSteps)} de {totalSteps}
           </span>
