@@ -36,7 +36,7 @@
 - Extend or modify the pipeline in `app/agent.py` and expose endpoints via `app/server.py`. Keep utilities in `app/utils/` with unit tests alongside behavior changes.
 
 ## Checklist Primeiro, Código Depois
-- Antes de iniciar qualquer tarefa, abra `checklist_frontend.md` na raiz do projeto e identifique a próxima entrada marcada como `pending`. Se houver uma entrada `in progress`, confirme se ela já foi concluída; caso contrário, retome essa tarefa primeiro.
-- Assim que assumir uma tarefa `pending`, atualize seu status para `in progress` diretamente em `checklist_frontend.md` antes de executar qualquer ação.
-- Em seguida, consulte `refatoracao_campos_entrada.md` e extraia apenas a descrição da tarefa correspondente para orientar a implementação.
-- Execute a tarefa por completo seguindo as instruções do plano. Ao finalizar, marque a entrada correspondente em `checklist_frontend.md` como `done` e registre a conclusão na sua resposta.
+- Antes de iniciar qualquer tarefa relacionada ao StoryBrand fallback, abra o checklist principal `checklist.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
+- Em seguida, consulte o plano `aprimoramento_plano_storybrand_v2.md` e, se aplicável, o plano complementar específico (ex.: `plano_campos_obrigatorios_storybrand.md`) para entender o contexto da tarefa.
+- Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
+- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist.md` e registre o resultado na sua resposta/PR.

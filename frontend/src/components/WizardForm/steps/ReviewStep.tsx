@@ -22,11 +22,7 @@ export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
           const fieldId = step.id as keyof WizardFormState;
           const value = formState[fieldId].trim();
           const isEmpty = value.length === 0;
-          const displayValue = isEmpty
-            ? step.id === 'sexo_cliente_alvo'
-              ? 'Neutro (padrão)'
-              : 'Não preenchido'
-            : value;
+          const displayValue = isEmpty ? 'Não preenchido' : value;
 
           return (
             <div

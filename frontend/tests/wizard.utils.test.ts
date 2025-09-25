@@ -32,7 +32,7 @@ describe('formatSubmitPayload', () => {
     expect(payload).toContain('sexo_cliente_alvo: masculino');
   });
 
-  it('applies neutro default when gender is empty', async () => {
+  it('omits empty fields from payload including sexo_cliente_alvo', async () => {
     vi.stubEnv('VITE_ENABLE_NEW_FIELDS', 'true');
     const { formatSubmitPayload } = await import('@/utils/wizard.utils');
     const { WIZARD_INITIAL_STATE } = await import('@/constants/wizard.constants');
@@ -50,27 +50,29 @@ describe('formatSubmitPayload', () => {
 
     const payload = formatSubmitPayload(state);
 
-    expect(payload).toContain('sexo_cliente_alvo: neutro');
+    expect(payload).not.toContain('sexo_cliente_alvo');
   });
 });
 
-describe('wizard navigation with optional fields', () => {
-  it('allows proceeding without filling optional company fields', async () => {
+describe('wizard navigation with required fields', () => {
+  it('blocks proceeding when required fields are empty', async () => {
     vi.stubEnv('VITE_ENABLE_NEW_FIELDS', 'true');
     const { canProceed } = await import('@/utils/wizard.utils');
     const { WIZARD_INITIAL_STATE, WIZARD_STEPS } = await import(
       '@/constants/wizard.constants'
     );
 
-    const stepIndexes = [
-      WIZARD_STEPS.findIndex(step => step.id === 'nome_empresa'),
-      WIZARD_STEPS.findIndex(step => step.id === 'o_que_a_empresa_faz'),
-    ];
+    const requiredSteps = [
+      'nome_empresa',
+      'o_que_a_empresa_faz',
+      'sexo_cliente_alvo',
+    ] as const;
 
-    stepIndexes.forEach(index => {
+    requiredSteps.forEach(stepId => {
+      const index = WIZARD_STEPS.findIndex(step => step.id === stepId);
       expect(index).toBeGreaterThan(-1);
       const errors: Record<string, string | undefined> = {};
-      expect(canProceed(index, { ...WIZARD_INITIAL_STATE }, errors)).toBe(true);
+      expect(canProceed(index, { ...WIZARD_INITIAL_STATE }, errors)).toBe(false);
     });
   });
 });

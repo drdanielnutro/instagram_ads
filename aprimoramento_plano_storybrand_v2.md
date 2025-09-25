@@ -80,8 +80,8 @@
 
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** A classe `UserInputExtractor` e seu prompt serão atualizados para reconhecer e extrair os três novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) do input do usuário. O schema de saída será expandido para incluí-los.
-- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). A configuração `WIZARD_STEPS` será atualizada para incluir os campos quando a flag estiver ativa, preferencialmente usando um componente de seleção (radio/dropdown) para `sexo_cliente_alvo` que ofereça somente as opções `masculino` e `feminino`. A lógica de submissão do formulário será ajustada para enviar esses dados ao backend quando disponíveis.
-- **Opcionalidade controlada:** Os novos campos no frontend continuarão opcionais para preservar a fluidez do caminho feliz, mas o fallback exige que `sexo_cliente_alvo` esteja normalizado em `masculino` ou `feminino`. Caso o usuário não forneça essa informação, o `fallback_input_collector` tentará normalizar a partir do contexto; se falhar, o pipeline será interrompido com erro explícito, impedindo a geração de um StoryBrand de baixa qualidade.
+- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). Quando a flag estiver ativa, os passos serão tratados como obrigatórios: o wizard bloqueará o avanço/enviar enquanto os três campos não forem preenchidos e validados (plano específico do frontend detalhará as regras de UX).
+- **Pré-condição para o fallback:** O pipeline parte do pressuposto de que `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` já chegaram válidos ao backend. O `fallback_input_collector` apenas verifica e normaliza sinônimos; se qualquer campo permanecer ausente ou inválido, o fallback interromperá a execução com erro explícito, evitando a produção de um StoryBrand inconsistente.
 
 #### **9. Contrato de Estado Pós-Fallback**
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
@@ -177,9 +177,9 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
 - Valor final obrigatório: `masculino` ou `feminino`. O sistema não aceitará variantes “neutras”.
 - Normalização:
   - O `UserInputExtractor` e o `fallback_input_collector` devem mapear entradas comuns (`homem`, `homens`, `masc`, `mulher`, `mulheres`, `fem`) para os dois valores canônicos.
-  - Entradas inválidas ou vazias ativam o `fallback_input_collector`, que tentará inferir o sexo a partir de `state['landing_page_context']` (busca de pistas linguísticas, CTAs, pronomes, etc.).
+  - Caso o backend receba um valor vazio ou não normalizável (violação da UI), o `fallback_input_collector` registrará a inconsistência e abortará imediatamente o fluxo; não haverá tentativa de inferência baseada em contexto.
 - Política de falha:
-  - Se, após a tentativa de normalização e inferência, o valor permanecer indefinido, o pipeline de fallback será interrompido com erro explícito (`RuntimeError` ou equivalente) e um registro será incluído em `storybrand_audit_trail`. A execução aborta para garantir a qualidade do resultado.
+  - Se, após a normalização, o valor permanecer indefinido, o pipeline de fallback será interrompido com erro explícito (`RuntimeError` ou equivalente) e um registro será incluído em `storybrand_audit_trail`. A execução aborta para garantir a qualidade do resultado.
 - Efeito prático:
   - O valor final controla apenas a seleção do prompt do `section_reviewer` (`review_masculino.txt` ou `review_feminino.txt`). Os demais agentes escreverão com base no contexto completo do negócio.
 

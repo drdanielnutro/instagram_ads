@@ -1,7 +1,6 @@
 import { AlertCircle, Venus } from 'lucide-react';
 
 import { SEXO_CLIENTE_OPTIONS } from '@/constants/wizard.constants';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/utils';
 
 interface GenderTargetStepProps {
@@ -24,21 +23,16 @@ export function GenderTargetStep({
     onBlur();
   };
 
-  const handleClear = () => {
-    onChange('');
-    onBlur();
-  };
-
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground/90">
           <Venus className="h-4 w-4 text-primary/70" />
-          Há foco em um gênero específico?
+          Qual o gênero predominante do público?
         </div>
         <p className="text-sm text-muted-foreground">
-          Selecione apenas se a comunicação do anúncio estiver direcionada para um público majoritariamente masculino ou
-          feminino. Caso contrário, mantenha como neutro.
+          <span className="text-destructive">*</span> Esta informação é obrigatória para personalizar a comunicação e
+          alimentar o fallback de StoryBrand. Escolha o gênero predominante do público-alvo.
         </p>
       </div>
 
@@ -62,10 +56,6 @@ export function GenderTargetStep({
           );
         })}
       </div>
-
-      <Button type="button" variant="ghost" size="sm" className="self-start text-xs" onClick={handleClear}>
-        Limpar seleção
-      </Button>
 
       {touched && error && (
         <div className="flex items-center gap-2 rounded-lg border border-destructive/60 bg-destructive/10 px-3 py-2 text-sm text-destructive">

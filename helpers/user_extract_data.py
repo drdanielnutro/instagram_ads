@@ -61,7 +61,8 @@ class UserInputExtractor:
         )
         if include_new_fields:
             base_prompt += (
-                ", nome_empresa, o_que_a_empresa_faz, sexo_cliente_alvo (masculino/feminino/neutro)"
+                ", nome_empresa (obrigatório), o_que_a_empresa_faz (obrigatório), "
+                "sexo_cliente_alvo (obrigatório; somente masculino ou feminino)"
             )
         base_prompt += (
             ". Use exact user wording for values when present. Do not invent. "
@@ -70,7 +71,8 @@ class UserInputExtractor:
         )
         if include_new_fields:
             base_prompt += (
-                " For sexo_cliente_alvo, map synonyms to masculino|feminino|neutro when possible."
+                " Para sexo_cliente_alvo, mapeie qualquer sinônimo para masculino ou feminino. "
+                "Nunca retorne neutro ou valores vazios para campos obrigatórios."
             )
 
         # Prompt para extração dos campos mínimos
@@ -140,7 +142,7 @@ class UserInputExtractor:
             "perfil: executivos 30-45 com pouco tempo\n"
             "nome da empresa: Agência Exemplo\n"
             "Descrição: Agência de marketing digital para profissionais autônomos\n"
-            "público: todos os gêneros\n"
+            "público: homens autônomos e consultores\n"
         )
         examples.append(
             lx.data.ExampleData(
@@ -170,8 +172,8 @@ class UserInputExtractor:
                     ),
                     lx.data.Extraction(
                         extraction_class="sexo_cliente_alvo",
-                        extraction_text="todos os gêneros",
-                        attributes={"normalized": "neutro"},
+                        extraction_text="homens autônomos",
+                        attributes={"normalized": "masculino"},
                     ),
                 ],
             )
@@ -368,23 +370,54 @@ class UserInputExtractor:
         if not data["perfil_cliente"]:
             errors.append({"field": "perfil_cliente", "message": "Perfil/Persona ausente."})
 
-        if include_new_fields and not normalized.get("sexo_cliente_alvo_norm"):
-            normalized["sexo_cliente_alvo_norm"] = "neutro"
-
         if self.enable_new_input_fields:
-            optional_with_defaults = {
-                "nome_empresa": "Empresa",
-                "o_que_a_empresa_faz": "",
-                "sexo_cliente_alvo": "neutro",
-            }
-            for field, default in optional_with_defaults.items():
-                if not data.get(field):
-                    logger.info(
-                        "Campo opcional '%s' não fornecido, usando default: '%s'",
-                        field,
-                        default,
-                    )
-                    data[field] = default
+            nome_empresa = (data.get("nome_empresa") or "").strip()
+            descricao = (data.get("o_que_a_empresa_faz") or "").strip()
+            sexo_norm = (normalized.get("sexo_cliente_alvo_norm") or "").strip()
+
+            if not nome_empresa or len(nome_empresa) < 2:
+                errors.append(
+                    {
+                        "field": "nome_empresa",
+                        "message": "Nome da empresa é obrigatório (mínimo 2 caracteres).",
+                    }
+                )
+            elif len(nome_empresa) > 100:
+                errors.append(
+                    {
+                        "field": "nome_empresa",
+                        "message": "Nome da empresa deve ter no máximo 100 caracteres.",
+                    }
+                )
+            else:
+                data["nome_empresa"] = nome_empresa
+
+            if not descricao or len(descricao) < 10:
+                errors.append(
+                    {
+                        "field": "o_que_a_empresa_faz",
+                        "message": "Descrição da empresa é obrigatória (mínimo 10 caracteres).",
+                    }
+                )
+            elif len(descricao) > 200:
+                errors.append(
+                    {
+                        "field": "o_que_a_empresa_faz",
+                        "message": "Descrição da empresa deve ter no máximo 200 caracteres.",
+                    }
+                )
+            else:
+                data["o_que_a_empresa_faz"] = descricao
+
+            if sexo_norm not in {"masculino", "feminino"}:
+                errors.append(
+                    {
+                        "field": "sexo_cliente_alvo",
+                        "message": "sexo_cliente_alvo é obrigatório (masculino ou feminino).",
+                    }
+                )
+            else:
+                normalized["sexo_cliente_alvo_norm"] = sexo_norm
 
         success = len(errors) == 0
         return {
@@ -426,13 +459,13 @@ class UserInputExtractor:
         return value
 
     @staticmethod
-    def _normalize_sexo(value: str | None) -> str:
+    def _normalize_sexo(value: str | None) -> Optional[str]:
         if not value:
-            return "neutro"
+            return None
 
         v = value.strip().lower()
         if not v:
-            return "neutro"
+            return None
 
         masculino_aliases = {
             "masculino",
@@ -440,39 +473,24 @@ class UserInputExtractor:
             "homens",
             "macho",
             "publico masculino",
+            "male",
+            "men",
         }
         feminino_aliases = {
             "feminino",
             "mulher",
             "mulheres",
             "publico feminino",
-        }
-        neutro_aliases = {
-            "neutro",
-            "todos",
-            "ambos",
-            "todos os gêneros",
-            "todos os generos",
-            "misto",
-            "geral",
-            "qualquer",
+            "female",
+            "women",
         }
 
-        if v in masculino_aliases:
+        if v in masculino_aliases or "masc" in v or "homem" in v:
             return "masculino"
-        if v in feminino_aliases:
+        if v in feminino_aliases or "fem" in v or "mulher" in v:
             return "feminino"
-        if v in neutro_aliases:
-            return "neutro"
 
-        if "masc" in v or "homem" in v:
-            return "masculino"
-        if "fem" in v or "mulher" in v:
-            return "feminino"
-        if any(token in v for token in ["neut", "todos", "ambos", "misto", "qualquer"]):
-            return "neutro"
-
-        return "neutro"
+        return None
 
 
 def extract_user_input(raw_text: str) -> Dict[str, Any]:

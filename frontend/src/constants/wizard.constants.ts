@@ -38,7 +38,7 @@ export const FORMATO_OPTIONS = [
 
 const objetivoValues = new Set<string>(OBJETIVO_OPTIONS.map(option => option.value));
 const formatoValues = new Set<string>(FORMATO_OPTIONS.map(option => option.value));
-const sexoClienteValues = new Set<string>(['masculino', 'feminino', 'neutro']);
+const sexoClienteValues = new Set<string>(['masculino', 'feminino']);
 const enableNewFields = (import.meta.env.VITE_ENABLE_NEW_FIELDS ?? 'false') === 'true';
 
 export const SEXO_CLIENTE_OPTIONS = [
@@ -51,11 +51,6 @@ export const SEXO_CLIENTE_OPTIONS = [
     value: 'feminino',
     label: 'Feminino',
     description: 'Tom e referências voltados para mulheres',
-  },
-  {
-    value: 'neutro',
-    label: 'Neutro/Misto',
-    description: 'Público diversificado',
   },
 ] as const;
 
@@ -92,16 +87,15 @@ const landingPageStep: WizardStep = {
 const nomeEmpresaStep: WizardStep = {
   id: 'nome_empresa',
   title: 'Qual é o nome da empresa?',
-  description: 'Informe como a marca deve ser citada nos criativos e mensagens.',
+  description: 'Informe como a marca deve ser citada nos criativos e mensagens (obrigatório).',
   icon: Building2,
-  isOptional: true,
   validationRules: [
     {
       field: 'nome_empresa',
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return null;
+          return 'O nome da empresa é obrigatório.';
         }
         if (trimmed.length < 2) {
           return 'Use ao menos 2 caracteres para o nome da empresa.';
@@ -119,16 +113,15 @@ const descricaoEmpresaStep: WizardStep = {
   id: 'o_que_a_empresa_faz',
   title: 'O que a empresa oferece?',
   description:
-    'Descreva a proposta de valor ou principais serviços de forma objetiva.',
+    'Descreva a proposta de valor ou principais serviços de forma objetiva (obrigatório).',
   icon: Briefcase,
-  isOptional: true,
   validationRules: [
     {
       field: 'o_que_a_empresa_faz',
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return null;
+          return 'Descreva o que a empresa faz.';
         }
         if (trimmed.length < 10) {
           return 'Use pelo menos 10 caracteres para descrever a empresa.';
@@ -219,21 +212,20 @@ const perfilStep: WizardStep = {
 
 const sexoClienteStep: WizardStep = {
   id: 'sexo_cliente_alvo',
-  title: 'Existe um gênero predominante?',
+  title: 'Qual o gênero predominante do público?',
   description:
-    'Selecione caso haja comunicação direcionada a um gênero específico (opcional).',
+    'Selecione o gênero para personalizar a comunicação do anúncio (obrigatório).',
   icon: Venus,
-  isOptional: true,
   validationRules: [
     {
       field: 'sexo_cliente_alvo',
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return null;
+          return 'Selecione o gênero predominante do público.';
         }
         if (!sexoClienteValues.has(trimmed)) {
-          return 'Escolha entre masculino, feminino ou neutro.';
+          return 'Escolha entre masculino ou feminino.';
         }
         return null;
       },

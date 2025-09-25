@@ -92,12 +92,12 @@ def test_preflight_includes_new_fields(preflight_client_factory, monkeypatch):
     assert initial_state['sexo_cliente_alvo'] == 'masculino'
 
 
-def test_preflight_uses_defaults_for_missing_fields(preflight_client_factory, monkeypatch):
+def test_preflight_returns_422_when_required_fields_missing(preflight_client_factory, monkeypatch):
     client, server = preflight_client_factory(enable_new_fields=True, shadow_mode=False)
 
     def fake_extract_user_input(_text):
         return {
-            'success': True,
+            'success': False,
             'data': {
                 'landing_page_url': 'https://example.com',
                 'objetivo_final': 'vendas',
@@ -113,19 +113,19 @@ def test_preflight_uses_defaults_for_missing_fields(preflight_client_factory, mo
                 'objetivo_final_norm': 'vendas',
                 'sexo_cliente_alvo_norm': None,
             },
-            'errors': [],
+            'errors': [
+                {'field': 'nome_empresa', 'message': 'Nome da empresa é obrigatório (mínimo 2 caracteres).'},
+                {'field': 'o_que_a_empresa_faz', 'message': 'Descrição da empresa é obrigatória (mínimo 10 caracteres).'},
+                {'field': 'sexo_cliente_alvo', 'message': 'sexo_cliente_alvo é obrigatório (masculino ou feminino).'},
+            ],
         }
 
     monkeypatch.setattr(server, 'extract_user_input', fake_extract_user_input)
 
     response = client.post('/run_preflight', json={'text': 'dummy'})
-    assert response.status_code == 200
+    assert response.status_code == 422
     payload = response.json()
-
-    initial_state = payload['initial_state']
-    assert initial_state['nome_empresa'] == 'Empresa'
-    assert initial_state['o_que_a_empresa_faz'] == ''
-    assert initial_state['sexo_cliente_alvo'] == 'neutro'
+    assert payload['detail']['errors'][0]['field'] == 'nome_empresa'
 
 
 def test_preflight_excludes_new_fields_when_disabled(preflight_client_factory, monkeypatch):

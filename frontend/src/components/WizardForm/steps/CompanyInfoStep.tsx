@@ -21,23 +21,26 @@ const fieldConfig: Record<CompanyField, {
   Icon: typeof Building2;
   hint?: string;
   multiline?: boolean;
+  required: boolean;
 }> = {
   nome_empresa: {
     label: 'Nome da empresa ou marca',
     description:
-      'Esse nome será usado nos textos do anúncio. Utilize a forma como o público já reconhece a marca.',
-    placeholder: 'Ex.: Clínica Bem Viver',
+      'Esse nome será usado nos textos do anúncio e no fallback de StoryBrand. Utilize a forma como o público já reconhece a marca.',
+    placeholder: 'Ex.: Clínica Bem Viver (obrigatório)',
     Icon: Building2,
     multiline: false,
+    required: true,
   },
   o_que_a_empresa_faz: {
     label: 'Como você descreve a empresa?',
     description:
-      'Resuma o que a empresa faz, principais produtos ou serviços em uma frase objetiva.',
-    placeholder: 'Ex.: Clínica de nutrição especializada em emagrecimento saudável',
+      'Resuma o que a empresa faz para que o fallback tenha contexto de alta qualidade.',
+    placeholder: 'Ex.: Clínica de nutrição especializada em emagrecimento saudável (obrigatório)',
     Icon: Briefcase,
     hint: 'Dica: mencione diferenciais, público atendido ou resultados que reforcem a autoridade da empresa.',
     multiline: true,
+    required: true,
   },
 };
 
@@ -49,14 +52,17 @@ export function CompanyInfoStep({
   onChange,
   onBlur,
 }: CompanyInfoStepProps) {
-  const { label, description, placeholder, Icon, hint, multiline } = fieldConfig[field];
+  const { label, description, placeholder, Icon, hint, multiline, required } = fieldConfig[field];
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm font-medium text-foreground/90">
           <Icon className="h-4 w-4 text-primary/70" />
-          {label}
+          <span>
+            {label}
+            {required && <span className="ml-1 text-destructive">*</span>}
+          </span>
         </label>
         {multiline ? (
           <Textarea
