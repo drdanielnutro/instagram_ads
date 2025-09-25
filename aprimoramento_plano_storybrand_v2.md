@@ -80,8 +80,8 @@
 
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** A classe `UserInputExtractor` e seu prompt serão atualizados para reconhecer e extrair os três novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) do input do usuário. O schema de saída será expandido para incluí-los.
-- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). A configuração `WIZARD_STEPS` será atualizada para incluir os campos quando a flag estiver ativa, preferencialmente usando um componente de seleção (radio/dropdown) para `sexo_cliente_alvo`. A lógica de submissão do formulário será ajustada para enviar esses dados ao backend quando disponíveis.
-- **Opcionalidade:** Os novos campos no frontend serão marcados como opcionais para não criar atrito no "caminho feliz". A validação de sua presença será responsabilidade do `fallback_input_collector` apenas quando o caminho de recuperação for ativado.
+- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). A configuração `WIZARD_STEPS` será atualizada para incluir os campos quando a flag estiver ativa, preferencialmente usando um componente de seleção (radio/dropdown) para `sexo_cliente_alvo` que ofereça somente as opções `masculino` e `feminino`. A lógica de submissão do formulário será ajustada para enviar esses dados ao backend quando disponíveis.
+- **Opcionalidade controlada:** Os novos campos no frontend continuarão opcionais para preservar a fluidez do caminho feliz, mas o fallback exige que `sexo_cliente_alvo` esteja normalizado em `masculino` ou `feminino`. Caso o usuário não forneça essa informação, o `fallback_input_collector` tentará normalizar a partir do contexto; se falhar, o pipeline será interrompido com erro explícito, impedindo a geração de um StoryBrand de baixa qualidade.
 
 #### **9. Contrato de Estado Pós-Fallback**
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
@@ -97,9 +97,9 @@
   - `storybrand_gate_debug: bool = False` (para forçar o fallback durante testes, com override via `STORYBRAND_GATE_DEBUG`).
 
 #### **11. Logs, Métricas e Observabilidade**
-- **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`.
+- **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`, obedecendo ao contrato da Seção 16.1.
 - **Fallback:** O início e o fim da execução de cada seção, o número de iterações de revisão e os feedbacks completos do revisor serão logados.
-- **Trilha de Auditoria:** Uma chave `state['storybrand_audit_trail']` será mantida como uma lista ordenada de eventos, registrando cada etapa principal do fallback para facilitar a depuração e a análise de performance.
+- **Trilha de Auditoria:** Uma chave `state['storybrand_audit_trail']` será mantida como uma lista ordenada de eventos (Seção 16.2), registrando cada etapa principal do fallback para facilitar a depuração e a análise de performance.
 
 #### **12. Testes e Validação**
 - **Testes Unitários:**
@@ -127,3 +127,68 @@
 - Implementar um sistema para monitorar as métricas do `StoryBrandQualityGate` ao longo do tempo, permitindo a recalibração periódica do `min_storybrand_completeness` com base em dados reais.
 - Avaliar a possibilidade de implementar um cache para os StoryBrands reconstruídos. Se a mesma landing page falhar repetidamente, o sistema poderia reutilizar um resultado de fallback já gerado e aprovado.
 - Desenvolver uma interface de auditoria simples que leia o `state['storybrand_audit_trail']` para facilitar a análise de execuções de fallback com falha.
+
+#### **16. Especificações de Contratos e Convenções**
+
+Esta seção consolida os contratos de dados e as convenções operacionais que garantem uma implementação determinística do fallback.
+
+**16.1 Contrato de Dados – `storybrand_gate_metrics`**
+- A chave `state['storybrand_gate_metrics']` armazenará um único objeto JSON por execução do gate (sem histórico acumulado) e os logs estruturados devem refletir o mesmo formato.
+- Formato:
+  ```json
+  {
+    "score_obtained": "float | null",
+    "score_threshold": "float",
+    "decision_path": "Literal['happy_path', 'fallback']",
+    "timestamp_utc": "str (ISO 8601 format)",
+    "is_forced_fallback": "bool",
+    "debug_flag_active": "bool"
+  }
+  ```
+- Significado dos campos:
+  - `score_obtained`: valor lido do estado; `null` quando inexistente/ inválido.
+  - `score_threshold`: valor de `config.min_storybrand_completeness` utilizado na avaliação.
+  - `decision_path`: caminho escolhido (`happy_path` ou `fallback`).
+  - `timestamp_utc`: timestamp no formato ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`).
+  - `is_forced_fallback`: `true` quando o score estiver ausente ou inválido e o fallback for acionado por segurança.
+  - `debug_flag_active`: `true` quando `config.storybrand_gate_debug` estiver habilitado, sinalizando uma execução forçada.
+
+**16.2 Contrato de Dados – `storybrand_audit_trail`**
+- A chave `state['storybrand_audit_trail']` conterá uma lista de eventos em ordem cronológica. O `section_pipeline_runner` adicionará entradas antes e depois de cada subagente, sem limites de crescimento dentro de uma execução.
+- Cada evento seguirá o formato:
+  ```json
+  {
+    "stage": "Literal['collector', 'preparer', 'writer', 'reviewer', 'checker', 'corrector', 'compiler']",
+    "section_key": "str | null",
+    "iteration": "int | null",
+    "status": "Literal['started', 'completed', 'pass', 'fail', 'corrected', 'error']",
+    "details": "str | dict",
+    "timestamp_utc": "str (ISO 8601 format)",
+    "duration_ms": "int | null"
+  }
+  ```
+- Orientações adicionais:
+  - `section_key` recebe a chave da seção atual (ex.: `storybrand_character`) ou `null` para estágios globais.
+  - `iteration` representa a iteração do loop de revisão; use `null` fora do contexto do loop.
+  - `details` armazena feedbacks completos do revisor ou mensagens de erro estruturadas.
+  - `duration_ms` registra o tempo de execução do estágio; pode ser `null` para eventos de início (`status='started'`).
+
+**16.3 Vocabulário e Lógica – `sexo_cliente_alvo`**
+- Valor final obrigatório: `masculino` ou `feminino`. O sistema não aceitará variantes “neutras”.
+- Normalização:
+  - O `UserInputExtractor` e o `fallback_input_collector` devem mapear entradas comuns (`homem`, `homens`, `masc`, `mulher`, `mulheres`, `fem`) para os dois valores canônicos.
+  - Entradas inválidas ou vazias ativam o `fallback_input_collector`, que tentará inferir o sexo a partir de `state['landing_page_context']` (busca de pistas linguísticas, CTAs, pronomes, etc.).
+- Política de falha:
+  - Se, após a tentativa de normalização e inferência, o valor permanecer indefinido, o pipeline de fallback será interrompido com erro explícito (`RuntimeError` ou equivalente) e um registro será incluído em `storybrand_audit_trail`. A execução aborta para garantir a qualidade do resultado.
+- Efeito prático:
+  - O valor final controla apenas a seleção do prompt do `section_reviewer` (`review_masculino.txt` ou `review_feminino.txt`). Os demais agentes escreverão com base no contexto completo do negócio.
+
+**16.4 Convenção de Carregamento de Prompts**
+- Um utilitário dedicado (`PromptLoader` em `app/utils/prompt_loader.py`) ficará responsável por carregar, cachear e renderizar prompts; agentes não lerão arquivos diretamente.
+- Convenções:
+  - Diretório base: `prompts/storybrand_fallback/`.
+  - Nomenclatura: `[tipo]_[chave].txt` (ex.: `writer_character.txt`, `reviewer_masculino.txt`, `corrector.txt`).
+  - Encoding obrigatório: UTF-8.
+- Comportamento do loader:
+  - Carregamento “lazy” com cache em memória; ausência de arquivo dispara `FileNotFoundError` durante a inicialização para forçar correção imediata.
+  - Renderização via placeholders `{variavel}`; agentes fornecem o contexto (dict) e recebem a string final. Erros de interpolação devem gerar exceção com mensagem descritiva.
