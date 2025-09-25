@@ -4,7 +4,7 @@
 > Referência principal: `aprimoramento_plano_storybrand_v2.md`
 
 ## 1. Objetivos e Contratos
-- [ ] Revisar métricas e logs existentes para garantir que decisões do `StoryBrandQualityGate` sigam o contrato da Seção 16.1.
+- [x] Revisar métricas e logs existentes para garantir que decisões do `StoryBrandQualityGate` sigam o contrato da Seção 16.1.
 - [ ] Definir/confirmar limiar `config.min_storybrand_completeness` e variáveis de ambiente associadas.
 
 ## 2. Integração no `app/agent.py`

@@ -19,10 +19,11 @@
 - **Método `_run_async_impl`:** Este método conterá a lógica central de roteamento.
   - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. Ler `score = state.get('storybrand_analysis', {}).get('completeness_score')` com fallback em `state.get('landing_page_context', {}).get('storybrand_completeness')`. Verificar também a presença de `state['storybrand_analysis']` quando aplicável.
   - **Lógica de Decisão e Logging:** Com base no score, o agente determinará o caminho a seguir (`"happy_path"` ou `"fallback"`). Esta decisão, juntamente com metadados relevantes (score obtido, limiar utilizado, timestamp), será registrada em `state['storybrand_gate_metrics']` para fins de observabilidade. Logs estruturados (`logger.info`) serão emitidos para auditoria em tempo real.
+  - **Sincronização de Flags:** O gate só considerará a execução do fallback quando **ambas** as flags `config.ENABLE_STORYBRAND_FALLBACK` e `config.ENABLE_NEW_INPUT_FIELDS` estiverem `True`. Se `ENABLE_NEW_INPUT_FIELDS` estiver `False`, o agente registrará o fato em `storybrand_gate_metrics` e seguirá automaticamente pelo `"happy_path"`, independentemente do score calculado, preservando a compatibilidade com fluxos legados.
   - **Invocação Condicional:**
     - Se `score >= config.min_storybrand_completeness`, o agente invocará o `PlanningOrRunSynth` passando o `InvocationContext` atual (`async for event in self.planning_or_synth.run_async(ctx): yield event`).
-    - Caso contrário, ele invocará o `fallback_storybrand_pipeline`.
-  - **Fallback Forçado por Segurança:** Uma verificação de segurança será implementada. Se o score estiver ausente/inválido, o agente acionará o pipeline de fallback por padrão para garantir que o sistema nunca prossiga com dados de qualidade incerta.
+    - Caso contrário, ele invocará o `fallback_storybrand_pipeline`, desde que as flags estejam habilitadas; se `ENABLE_STORYBRAND_FALLBACK` ou `ENABLE_NEW_INPUT_FIELDS` estiverem `False`, ele permanecerá no `"happy_path"` e registrará o bloqueio.
+  - **Fallback Forçado por Segurança:** Uma verificação de segurança será implementada. Se o score estiver ausente/inválido **e** as flags permitirem a execução do fallback, o agente acionará o pipeline de recuperação por padrão para garantir que o sistema nunca prossiga com dados de qualidade incerta. Caso as flags bloqueiem o fallback, ele seguirá pelo `"happy_path"` e registrará no `storybrand_gate_metrics` que a recuperação foi impedida por configuração.
 
 #### **3.1 Regras de Mapeamento 16→7 (Compilador)**
 - O compilador consolidará as 16 seções narrativas no schema `StoryBrandAnalysis` seguindo estas regras:
@@ -40,7 +41,8 @@
 - **Estrutura:** Será um `SequentialAgent` robusto, contendo a sequência de sub-agentes que executam a reconstrução completa.
 - **Sub-agentes principais:**
   1. `fallback_input_initializer` (BaseAgent): Um agente lógico que garante que as chaves de estado necessárias para o fallback (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) existam no `state`, inicializando-as com valores padrão (ex: strings vazias) se estiverem ausentes.
-  2. `fallback_input_collector` (LlmAgent): Sua missão é popular os três inputs essenciais. Ele tentará preenchê-los a partir de `state['landing_page_context']`. Ele não deve inferir "persona" ou "tom", pois estes são derivados da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
+  2. `fallback_input_collector` (LlmAgent): Sua missão é popular os três inputs essenciais. Ele deve priorizar os valores já presentes na **raiz** do estado (`state['nome_empresa']`, `state['o_que_a_empresa_faz']`, `state['sexo_cliente_alvo']`). Somente se algum campo estiver ausente ou vazio é que ele recorrerá a `state['landing_page_context']` (ou sinais adicionais do estado) como fonte suplementar para inferência. Ele não deve inferir "persona" ou "tom", pois estes são derivados da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
+     - Caso, mesmo após a etapa anterior, `sexo_cliente_alvo` permaneça `"neutro"`, vazio ou `None`, o agente realizará uma **última tentativa de inferência contextual** com base em `state['landing_page_context']` (ex.: pronomes usados na headline, personas mencionadas nos benefícios). Se a inferência falhar, ele registrará um evento com `status: 'error'` e `details: 'Pré-requisito crítico sexo_cliente_alvo não pôde ser determinado.'` em `state['storybrand_audit_trail']` e abortará o pipeline imediatamente, evitando seguir com dados inconsistentes.
   3. `section_pipeline_runner` (BaseAgent): O orquestrador interno do fallback. Ele carregará a configuração de todas as 16 seções do StoryBrand e executará, em um loop, o bloco de agentes reutilizáveis (preparador de contexto + escritor de seção + loop de revisão) para cada seção, garantindo a construção incremental e coerente.
   4. `fallback_storybrand_compiler` (BaseAgent): Após a conclusão bem-sucedida de todos os loops de revisão, este agente lógico compilará as 16 seções individuais aprovadas em uma única e rica estrutura de dados, garantindo que o "Contrato de Estado" com os 8 campos principais seja cumprido. Implementação de referência: `app/agents/fallback_compiler.py` (segue as regras da seção 3.1).
   5. `fallback_quality_reporter` (BaseAgent, opcional): Um agente final que resume os metadados da execução do fallback (número de iterações por seção, feedbacks do revisor, etc.) e os salva em `state['storybrand_recovery_report']` para análise de qualidade.
@@ -81,7 +83,7 @@
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** A classe `UserInputExtractor` e seu prompt serão atualizados para reconhecer e extrair os três novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) do input do usuário. O schema de saída será expandido para incluí-los.
 - **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). Quando a flag estiver ativa, os passos serão tratados como obrigatórios: o wizard bloqueará o avanço/enviar enquanto os três campos não forem preenchidos e validados (plano específico do frontend detalhará as regras de UX).
-- **Pré-condição para o fallback:** O pipeline parte do pressuposto de que `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` já chegaram válidos ao backend. O `fallback_input_collector` apenas verifica e normaliza sinônimos; se qualquer campo permanecer ausente ou inválido, o fallback interromperá a execução com erro explícito, evitando a produção de um StoryBrand inconsistente.
+- **Pré-condição para o fallback:** O pipeline parte do pressuposto de que `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` foram coletados pelo preflight e armazenados na raiz do estado. O `fallback_input_collector` confirma e normaliza esses valores, complementando-os com `state['landing_page_context']` apenas quando necessário. Se, após a normalização e a tentativa de inferência contextual final, qualquer campo permanecer ausente ou inválido (especialmente `sexo_cliente_alvo`), o fallback registrará o erro em `storybrand_audit_trail` e interromperá a execução com mensagem explícita.
 
 #### **9. Contrato de Estado Pós-Fallback**
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
@@ -109,6 +111,7 @@
 - **Testes de Integração:**
   - Simular uma execução completa do `fallback_storybrand_pipeline`, mockando as respostas dos `LlmAgents` para verificar se o fluxo de estado, os loops e o contrato de estado final funcionam como esperado.
   - Garantir que o "caminho feliz" permanece funcional e não é afetado pelas novas mudanças.
+  - Verificar que o fallback é abortado corretamente quando `sexo_cliente_alvo` não pode ser determinado como `masculino` ou `feminino`, garantindo o registro do evento de erro em `state['storybrand_audit_trail']`.
 - **Testes Manuais (QA):**
   - Executar o sistema, forçando um score baixo (ex.: `storybrand_analysis.completeness_score`), e observar os logs e o resultado final para validar a qualidade e o comportamento do fallback.
   - Testar casos de borda, como a ausência dos inputs essenciais (`sexo_cliente_alvo`, etc.).
@@ -150,7 +153,7 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
   - `score_threshold`: valor de `config.min_storybrand_completeness` utilizado na avaliação.
   - `decision_path`: caminho escolhido (`happy_path` ou `fallback`).
   - `timestamp_utc`: timestamp no formato ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`).
-  - `is_forced_fallback`: `true` quando o score estiver ausente ou inválido e o fallback for acionado por segurança.
+  - `is_forced_fallback`: `true` quando o score estiver ausente ou inválido e o fallback for acionado por segurança com as flags habilitadas; se o fallback for bloqueado por configuração, mantenha `false` e registre `decision_path = 'happy_path'`.
   - `debug_flag_active`: `true` quando `config.storybrand_gate_debug` estiver habilitado, sinalizando uma execução forçada.
 
 **16.2 Contrato de Dados – `storybrand_audit_trail`**
@@ -174,14 +177,18 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
   - `duration_ms` registra o tempo de execução do estágio; pode ser `null` para eventos de início (`status='started'`).
 
 **16.3 Vocabulário e Lógica – `sexo_cliente_alvo`**
-- Valor final obrigatório: `masculino` ou `feminino`. O sistema não aceitará variantes “neutras”.
+- Valor final obrigatório: `masculino` ou `feminino`. Valores como `"neutro"` ou variações livres só podem existir durante a etapa de coleta; o estado final entregue aos consumidores deve estar normalizado.
+- Fontes primárias e suplementares:
+  - O `run_preflight` e o `UserInputExtractor` populam `state['sexo_cliente_alvo']` diretamente na raiz do estado. O `fallback_input_collector` valida e normaliza esse valor como primeira etapa.
+  - `state['landing_page_context']` é utilizado apenas como fonte suplementar quando o campo estiver ausente, vazio ou igual a `"neutro"`, fornecendo sinais narrativos (pronomes, personas, depoimentos) para uma inferência guiada.
 - Normalização:
-  - O `UserInputExtractor` e o `fallback_input_collector` devem mapear entradas comuns (`homem`, `homens`, `masc`, `mulher`, `mulheres`, `fem`) para os dois valores canônicos.
-  - Caso o backend receba um valor vazio ou não normalizável (violação da UI), o `fallback_input_collector` registrará a inconsistência e abortará imediatamente o fluxo; não haverá tentativa de inferência baseada em contexto.
-- Política de falha:
-  - Se, após a normalização, o valor permanecer indefinido, o pipeline de fallback será interrompido com erro explícito (`RuntimeError` ou equivalente) e um registro será incluído em `storybrand_audit_trail`. A execução aborta para garantir a qualidade do resultado.
+  - `homem`, `homens`, `masc`, `mulher`, `mulheres`, `fem` e variações semelhantes devem ser convertidas consistentemente para `masculino` ou `feminino`.
+  - Os prompts do coletor precisam instruir o modelo a trabalhar sempre com a forma canônica (`masculino`/`feminino`) ao atualizar o estado.
+- Salvaguarda final:
+  - Caso, após a normalização e a tentativa suplementar de inferência, o valor permaneça `"neutro"`, `None` ou indeterminado, o `fallback_input_collector` registrará `{"stage": "collector", "status": "error", "details": "Pré-requisito crítico sexo_cliente_alvo não pôde ser determinado."}` em `state['storybrand_audit_trail']` e abortará a execução.
+  - Esse cenário deve resultar em `decision_path = "happy_path"` quando `config.ENABLE_NEW_INPUT_FIELDS` estiver `False`, pois o gate não permitirá a entrada no fallback sem os campos obrigatórios habilitados.
 - Efeito prático:
-  - O valor final controla apenas a seleção do prompt do `section_reviewer` (`review_masculino.txt` ou `review_feminino.txt`). Os demais agentes escreverão com base no contexto completo do negócio.
+  - O valor final controla a seleção de prompts sensíveis a gênero (`review_masculino.txt` ou `review_feminino.txt`) e garante a consistência narrativa das seções revisadas. Os demais agentes utilizam o contexto completo do negócio, independente do gênero escolhido.
 
 **16.4 Convenção de Carregamento de Prompts**
 - Um utilitário dedicado (`PromptLoader` em `app/utils/prompt_loader.py`) ficará responsável por carregar, cachear e renderizar prompts; agentes não lerão arquivos diretamente.
