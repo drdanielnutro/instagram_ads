@@ -1,59 +1,45 @@
 # Revisão do Plano de Fallback — Storybrand
 
 ## 1. Sumário Executivo
-- O plano propõe corretamente posicionar um gate de qualidade após o `landing_page_analyzer`, reutilizando o limiar centralizado em `config.min_storybrand_completeness` e preservando as chaves já consumidas pelos agentes subsequentes. Porém, vários detalhes operacionais se apoiam em chaves de estado inexistentes (`storybrand_completeness_score`, `landing_page_analysis`) ou ignoram componentes consolidados (`PlanningOrRunSynth`).
-- [Resolvido] A estrutura sugerida para o fallback (16 seções com prompts dedicados) carecia de mapeamento 16→7. Implementamos o `FallbackStorybrandCompiler` em `app/agents/fallback_compiler.py`, que compila as 16 seções no schema `StoryBrandAnalysis` com `completeness_score=1.0` e sincroniza `landing_page_context.storybrand_completeness`.
-- Há dependências cruzadas não tratadas: novos campos exigem mudanças coordenadas no frontend e no extractor backend, diretórios indicados não existem e o plano de documentação/checklists diverge do processo atual descrito em `AGENTS.md`.
-
-### Atualizações Implementadas
-- Novo pacote: `app/agents/`.
-- Novo agente: `FallbackStorybrandCompiler` com mapeamento 16→7 (gera `storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context`).
-- Nenhuma alteração de pipeline ainda: o agente não está conectado; fluxo atual permanece inalterado.
+- O posicionamento do `StoryBrandQualityGate` logo após o `landing_page_analyzer`, reutilizando o limiar centralizado em `config.min_storybrand_completeness`, está em linha com o pipeline atual e mantém o contrato de estado usado pelo fluxo "feliz".【F:aprimoramento_plano_storybrand_v2.md†L10-L24】【F:app/config.py†L48-L71】【F:app/agent.py†L1221-L1229】
+- O mapeamento 16→7 planejado para o compilador já está coberto pela implementação existente em `FallbackStorybrandCompiler`, garantindo consistência entre caminhos normal e fallback.【F:aprimoramento_plano_storybrand_v2.md†L27-L36】【F:app/agents/fallback_compiler.py†L89-L237】
+- Risco principal: o plano prevê que o `fallback_input_collector` recupere `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` a partir de `landing_page_context`, mas o estado atual grava esses campos na raiz da sessão; seguir o plano literal deixaria o fallback sem entradas obrigatórias.【F:aprimoramento_plano_storybrand_v2.md†L42-L46】【F:app/agent.py†L626-L687】【F:app/server.py†L284-L305】
+- Outro ponto crítico: exigir abortar quando `sexo_cliente_alvo` não for `masculino|feminino` conflita com o valor padrão `neutro` produzido quando os novos campos não estão habilitados; é preciso acoplar o fallback às mesmas flags que tornam os campos obrigatórios ou tratar esse caso explicitamente.【F:aprimoramento_plano_storybrand_v2.md†L176-L184】【F:app/server.py†L220-L305】【F:helpers/user_extract_data.py†L300-L420】
 
 ## 2. Itens Corretos e Consistentes
-- **Uso do limiar de qualidade já exposto em `config.min_storybrand_completeness`** — A leitura direta da configuração mantém a coerência com `DevelopmentConfiguration` (`app/config.py`, linhas 34-71) e permite override por ambiente. Isso garante que o fallback seja acionado com o mesmo parâmetro usado hoje para validar a análise inicial.
-  - Evidências no código: `DevelopmentConfiguration.min_storybrand_completeness` em `app/config.py`.
-- **Manter o contrato de estado (`storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context`)** — O plano reforça que o fallback deve popular as mesmas chaves já persistidas pelo callback `process_and_extract_sb7` (`app/callbacks/landing_page_callbacks.py`, linhas 108-155) e consumidas por agentes como `context_synthesizer` (`app/agent.py`, linhas 697-744). Isso garante compatibilidade com o pipeline atual.
-  - Evidências no código: escrita das chaves em `process_and_extract_sb7`; uso em `context_synthesizer`.
-- **Inserir o gate logo após o `landing_page_analyzer`** — A proposta preserva o fluxo do `complete_pipeline` (`app/agent.py`, linhas 1208-1235), onde a análise da landing page deve preceder a decisão de planejar ou sintetizar. O posicionamento mantém o encadeamento de agentes já estabelecido.
-  - Evidências no código: definição do `complete_pipeline` com `landing_page_analyzer` seguido de `PlanningOrRunSynth`.
-- **Adoção de LoopAgent para revisão iterativa** — A ideia de reaproveitar um loop de revisão compartilhado está alinhada com o padrão já implementado (`plan_review_loop`, `code_review_loop`, `task_execution_loop` em `app/agent.py`, linhas 1133-1200). Criar prompts específicos sem alterar o mecanismo de loop respeita a infraestrutura existente.
-  - Evidências no código: definição dos loops com `LoopAgent` em `app/agent.py`.
+- **Gate reutiliza `config.min_storybrand_completeness` e a posição após o analisador** — O plano orienta injetar o gate no `complete_pipeline` logo depois do `landing_page_analyzer` e ler o limiar da configuração global. Isso preserva o fluxo existente que hoje aciona `PlanningOrRunSynth` e já usa o mesmo parâmetro de qualidade.【F:aprimoramento_plano_storybrand_v2.md†L10-L24】【F:app/config.py†L48-L71】【F:app/agent.py†L1221-L1229】
+  - Evidências no código: `DevelopmentConfiguration.min_storybrand_completeness`; `complete_pipeline` instancia `PlanningOrRunSynth` após o analisador.
+- **Contrato de estado compartilhado entre caminhos feliz e fallback** — A exigência de manter `storybrand_analysis`, `storybrand_summary` e `storybrand_ad_context` em ambos os caminhos já está atendida: o callback da análise grava essas chaves e o compilador fallback as repõe com dados válidos.【F:aprimoramento_plano_storybrand_v2.md†L4-L9】【F:aprimoramento_plano_storybrand_v2.md†L88-L97】【F:app/callbacks/landing_page_callbacks.py†L111-L129】【F:app/agents/fallback_compiler.py†L222-L237】
+  - Evidências no código: persistência das três chaves e sincronização do score com `landing_page_context`.
+- **Mapeamento 16→7 já compatível** — As regras descritas (agregar exposições no problema, priorizar `value_proposition` no guia, dividir CTAs, etc.) espelham exatamente o que `FallbackStorybrandCompiler` já faz, evitando retrabalho e garantindo aderência ao schema Pydantic atual.【F:aprimoramento_plano_storybrand_v2.md†L27-L36】【F:app/agents/fallback_compiler.py†L89-L237】
+  - Evidências no código: composição dos elementos, cálculo de `metadata.text_length`, atualização de `completeness_score` para 1.0.
+- **Pré-condições para inputs essenciais alinhadas ao frontend/backend** — O plano condiciona o fallback a receber `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` validados. Tanto o extractor quanto o wizard já tratam esses campos e o checklist marca as ações como concluídas, tornando a etapa viável quando as flags estiverem ativas.【F:aprimoramento_plano_storybrand_v2.md†L80-L87】【F:helpers/user_extract_data.py†L60-L420】【F:frontend/src/constants/wizard.constants.ts†L15-L273】【F:checklist.md†L40-L43】
+  - Evidências no código: prompts e validações no extractor; passos obrigatórios no wizard quando `VITE_ENABLE_NEW_FIELDS=true`.
+- **Adoção do checklist central da raiz** — O plano remete ao checklist principal e ele já enumera as etapas esperadas do fallback, garantindo governança do progresso sem exigir um artefato paralelo.【F:aprimoramento_plano_storybrand_v2.md†L116-L120】【F:checklist.md†L1-L81】
+  - Evidências: checklist aponta diretamente para tarefas do plano v2.
 
 ## 3. Inconsistências Encontradas
-- [Resolvido] **Leitura de `state['storybrand_completeness_score']`** — O plano foi ajustado para usar `state['storybrand_analysis']['completeness_score']` com fallback para `state['landing_page_context']['storybrand_completeness']`, exatamente como o callback `process_and_extract_sb7` já produz (`app/callbacks/landing_page_callbacks.py:111-134`).
-- [Resolvido] **Ignorar o agente `PlanningOrRunSynth`** — O documento agora orienta o gate a receber o próprio `PlanningOrRunSynth` como dependência e a reutilizar `run_async`, preservando a lógica existente (`aprimoramento_plano_storybrand_v2.md:13-24`; `app/agent.py:260-278`).
-- [Resolvido] **Estrutura inexistente `app/agents/...`** — O pacote `app/agents/` foi criado e contém o `FallbackStorybrandCompiler`, viabilizando a organização proposta e mantendo os imports válidos (`app/agents/__init__.py:1-5`; `app/agents/fallback_compiler.py:1-214`).
-- [Resolvido] **Uso da chave `state['landing_page_analysis']`** — As referências do plano passaram a apontar para `landing_page_context`, alinhadas ao que o `landing_page_analyzer` já persiste (`app/agent.py:626-687`; `aprimoramento_plano_storybrand_v2.md:6-24`).
-- [Resolvido] **Mapeamento das 16 seções para `StoryBrandAnalysis`** — Implementado via `FallbackStorybrandCompiler` (`app/agents/fallback_compiler.py`). O compilador:
-  - Sintetiza `problem.description` a partir de `exposition_*`, `inciting_*`, `unmet_needs_summary` e usa `problem_external/internal/philosophical` em `problem.types` e `evidence`.
-  - Define `guide.description` priorizando `value_proposition` e agrega autoridade do `guide`; preenche `plan.steps` e CTAs a partir de `plan` e `action`.
-  - Preenche `evidence`/`confidence` básicos, `success.benefits/transformation` e `metadata.text_length`.
-  - Persiste `storybrand_analysis`, `storybrand_summary`, `storybrand_ad_context` e sincroniza `landing_page_context.storybrand_completeness = 1.0`.
-- [Resolvido] **Definir `state['storybrand_completeness'] = 1.0` como garantia** — O compilador atualiza `storybrand_analysis['completeness_score'] = 1.0` e sincroniza `landing_page_context['storybrand_completeness'] = 1.0`, evitando loops desnecessários (`app/agents/fallback_compiler.py:200-214`).
-- [Resolvido] **Novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) alinhados com frontend/back-end** — Wizard, extractor e preflight já persistem essas chaves com normalização e defaults.
-- **Checklist e documentação em caminhos divergentes** — O plano prevê `checklists/storybrand_fallback.md`, mas o processo atual documentado em `AGENTS.md` exige atualizar `checklist.md` na raiz.
-  - Impacto: risco de equipes seguirem checklists diferentes ou ignorarem o fluxo “Checklist Primeiro, Código Depois”.
-  - **Correção Sugerida**: alinhar com o fluxo vigente (atualizar `checklist.md` ou documentar claramente como o novo arquivo se integra ao processo oficial).
+- **Coleta dos três inputs essenciais a partir de `landing_page_context`** — O plano define que `fallback_input_collector` preencherá `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` lendo `state['landing_page_context']`. Contudo, o `landing_page_analyzer` só produz dados narrativos da página (headline, benefícios, CTAs etc.) e nunca inclui esses campos de negócio; eles chegam via `initial_state` da preflight e ficam na raiz do estado quando `ENABLE_NEW_INPUT_FIELDS` está ativo.【F:aprimoramento_plano_storybrand_v2.md†L42-L46】【F:app/agent.py†L626-L687】【F:app/server.py†L284-L305】
+  - Impacto: o coletor ficaria sem valores válidos e, por consequência, o fallback abortaria mesmo com dados fornecidos pelo usuário.
+  - Evidências no código: estrutura de `landing_page_context`; inicialização dos campos na raiz do estado.
+  - Relação com ADK: o `SequentialAgent` do fallback operará sobre `ctx.session.state`; ler a chave errada impede cumprir o contrato de dados.
+  - **Correção Sugerida**: alterar o requisito do plano para que o coletor leia primeiro as chaves de topo (`state['nome_empresa']`, `state['o_que_a_empresa_faz']`, `state['sexo_cliente_alvo']`), usando `landing_page_context` apenas como fonte suplementar se forem adicionados lá no futuro.
+
+- **Abortar quando `sexo_cliente_alvo` ≠ {masculino,feminino} sem sincronizar flags** — A Seção 16.3 determina falha imediata para valores fora do domínio binário. Entretanto, quando `ENABLE_NEW_INPUT_FIELDS` está desativado (configuração padrão) o backend mantém `sexo_cliente_alvo='neutro'`, e o extractor só aplica validações rígidas quando a flag está habilitada; em shadow mode ele deixa o campo vazio sem erro.【F:aprimoramento_plano_storybrand_v2.md†L176-L184】【F:app/server.py†L220-L305】【F:helpers/user_extract_data.py†L300-L420】
+  - Impacto: ativar o fallback sem alinhar as flags quebraria o fluxo por erro forçado, mesmo em ambientes onde a UI ainda não obriga o preenchimento.
+  - Evidências no código: default `neutro` no preflight; validações condicionais no extractor.
+  - Relação com ADK: o gate poderia disparar fallback (por score baixo) e a própria recuperação abortaria por inconsistência artificial.
+  - **Correção Sugerida**: atualizar o plano para vincular `ENABLE_STORYBRAND_FALLBACK` à ativação das flags de coleta (`ENABLE_NEW_INPUT_FIELDS`/`VITE_ENABLE_NEW_FIELDS`) ou, alternativamente, instruir o coletor a converter `neutro` em um fluxo guiado de seleção antes de abortar.
 
 ## 4. Pontos de Incerteza
-- Mapeamento detalhado das 16 seções narrativas para os campos do `StoryBrandAnalysis` (quais atributos alimentam `guide.authority`, `plan.steps`, `metadata`).
-- Vocabulário esperado para `sexo_cliente_alvo` (masculino/feminino/apresentação neutra?) e implicações de prompt nos revisores.
-- Necessidade de versionar ou auditar StoryBrands antigos antes que o fallback sobrescreva `storybrand_analysis` (não há requisito explícito).
+- Como o pipeline deve se comportar quando `ENABLE_NEW_INPUT_FIELDS` e `VITE_ENABLE_NEW_FIELDS` estiverem dessincronizadas (por exemplo, frontend habilitado e backend não)?【F:aprimoramento_plano_storybrand_v2.md†L80-L87】【F:app/server.py†L220-L305】
+- Qual será a fonte de verdade para os prompts (estrutura, placeholders e owners) no diretório `prompts/storybrand_fallback/`, ainda inexistente no repositório?【F:aprimoramento_plano_storybrand_v2.md†L186-L194】
+- A responsabilidade do `fallback_quality_reporter` (opcional) inclui persistência em storage externo ou apenas logs no estado? O plano não esclarece consumidores desse relatório.【F:aprimoramento_plano_storybrand_v2.md†L42-L46】
 
 ## 5. Viabilidade de Implementação (por tema)
-- **Seção 1 — Objetivos e Princípios**: Viável após corrigir a leitura do score; limiar e chaves já existem.
-- **Seção 2 — Pontos de Integração em `agent.py`**: Viável; o plano já prevê o gate reutilizando `PlanningOrRunSynth`, restando apenas implementar a classe no módulo escolhido (`app/agent.py` ou `app/agents/storybrand_gate.py`).
-- **Seção 3 — StoryBrandQualityGate**: Viável após corrigir as chaves do estado e definir a estrutura de logging (`storybrand_gate_metrics`).
-- **Seção 4 — Fallback StoryBrand Pipeline**: Viável após corrigir a origem de dados para `landing_page_context` e com o compilador 16→7 já implementado. Continua dependendo da coleta dos novos campos no frontend/extractor quando o fallback for ativado.
-- **Seção 5 — Configuração das Seções**: Parcialmente desbloqueada pelo mapeamento 16→7. Ainda requer catalogar nomes de chaves no estado e a lista final das 16 seções com seus prompts.
-- **Seção 6 — Loop de Revisão Compartilhado**: Viável; já existem `LoopAgent`s no projeto, mas falta especificar onde armazenar resultados intermediários.
-- **Seção 7 — Prompts Necessários**: Viável se o diretório for criado e houver estratégia de carregamento dos arquivos.
-- **Seção 8 — Coleta de Inputs Essenciais**: Requer coordenação entre frontend e extractor; viável após definir dados opcionais e validações.
-- **Seção 9 — Contrato de Estado Pós-Fallback**: Dependente do compilador produzir um `StoryBrandAnalysis` válido; ajustar apenas `storybrand_completeness` não basta.
-- **Seção 10 — Ajustes em `app/config.py`**: Simples; basta acrescentar campos na configuração e documentar variáveis de ambiente.
-- **Seção 11 — Logs e Observabilidade**: Viável, mas precisa definir formato de `storybrand_gate_metrics` e `storybrand_audit_trail` para facilitar análise posterior.
-- **Seção 12 — Testes e Validação**: Viável com mocks dos novos agentes; falta plano para simular as respostas dos `LlmAgent` no fallback.
-- **Seção 13 — Documentação**: Viável desde que alinhada ao processo atual (atualizar `AGENTS.md` e/ou `checklist.md` conforme o fluxo oficial).
-- **Seção 14 — Feature Flag**: Viável; segue padrão de outras flags em `config` e pode condicionar a inclusão do gate.
-- **Seção 15 — Etapas Futuras**: Conceitualmente válidas, mas dependem das métricas e do audit trail definidos nas seções anteriores.
+- **Seções 1–3 (Gate e thresholds)** — Viável: o pipeline já expõe `PlanningOrRunSynth` e o limiar centralizado, restando implementar o agente customizado e a métrica conforme o contrato descrito.【F:aprimoramento_plano_storybrand_v2.md†L10-L36】【F:app/config.py†L48-L71】【F:app/agent.py†L1221-L1229】
+- **Seção 4 (Pipeline fallback)** — Estruturalmente viável, pois `SequentialAgent` e `LoopAgent` já são usados em outros pontos; contudo, é necessário corrigir a origem dos três inputs obrigatórios antes de implementar o coletor para evitar falhas imediatas.【F:aprimoramento_plano_storybrand_v2.md†L38-L46】【F:app/agent.py†L626-L687】【F:app/server.py†L284-L305】
+- **Seções 5–6 (Config das seções e loop compartilhado)** — Exequível: o compilador já espera as 16 chaves e os loops existentes podem servir de referência. Depende da criação dos prompts e do `PromptLoader` proposto.【F:aprimoramento_plano_storybrand_v2.md†L48-L69】【F:app/agents/fallback_compiler.py†L89-L237】
+- **Seção 8 (Inputs essenciais)** — Viável apenas quando as flags de novos campos estiverem ativas em frontend e backend; caso contrário, ajustes adicionais são necessários para conciliar com o requisito de abortar em valores inválidos.【F:aprimoramento_plano_storybrand_v2.md†L80-L87】【F:frontend/src/constants/wizard.constants.ts†L15-L273】【F:helpers/user_extract_data.py†L300-L420】【F:app/server.py†L220-L305】
+- **Seções 9–13 (Contrato pós-fallback, configuração, observabilidade, testes e documentação)** — Executável com o que já existe: o compilador atual cumpre a maior parte do contrato, `checklist.md` cobre as tarefas e restam adicionar novas flags/configurações e rotinas de logging/testes.【F:aprimoramento_plano_storybrand_v2.md†L88-L121】【F:app/agents/fallback_compiler.py†L222-L237】【F:checklist.md†L1-L81】
+- **Seções 14–16 (Feature flag, métricas e contratos)** — Implementável, mas dependente das correções acima: criar as flags em `config`, garantir que `storybrand_gate_metrics` e `storybrand_audit_trail` sejam preenchidos e alinhar a política de `sexo_cliente_alvo` com as condições de produção.【F:aprimoramento_plano_storybrand_v2.md†L122-L194】【F:app/server.py†L220-L305】
