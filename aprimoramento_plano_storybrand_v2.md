@@ -80,7 +80,7 @@
 
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** A classe `UserInputExtractor` e seu prompt serão atualizados para reconhecer e extrair os três novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) do input do usuário. O schema de saída será expandido para incluí-los.
-- **Frontend (`VITE_ENABLE_WIZARD=true`):** A configuração `WIZARD_STEPS` será atualizada para adicionar novos campos de formulário no `WizardForm`, preferencialmente com um componente de seleção (radio/dropdown) para `sexo_cliente_alvo`. A lógica de submissão do formulário será ajustada para enviar esses novos dados ao backend.
+- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). A configuração `WIZARD_STEPS` será atualizada para incluir os campos quando a flag estiver ativa, preferencialmente usando um componente de seleção (radio/dropdown) para `sexo_cliente_alvo`. A lógica de submissão do formulário será ajustada para enviar esses dados ao backend quando disponíveis.
 - **Opcionalidade:** Os novos campos no frontend serão marcados como opcionais para não criar atrito no "caminho feliz". A validação de sua presença será responsabilidade do `fallback_input_collector` apenas quando o caminho de recuperação for ativado.
 
 #### **9. Contrato de Estado Pós-Fallback**
@@ -116,7 +116,7 @@
 #### **13. Documentação**
 - O arquivo `AGENTS.md` será atualizado para incluir a documentação do `StoryBrandQualityGate`, do `fallback_storybrand_pipeline` e de todos os seus sub-agentes.
 - Um novo documento, `docs/storybrand_fallback.md`, será criado para detalhar a arquitetura, o fluxo de controle e a lógica de prompts do caminho de recuperação.
-- Um novo checklist de implementação, `checklists/storybrand_fallback.md`, será criado no repositório para guiar e controlar o desenvolvimento desta feature.
+- O processo seguirá o checklist oficial (`checklist.md` na raiz), em conformidade com o fluxo “Checklist Primeiro, Código Depois”.
 - Os novos campos de entrada (`nome_empresa`, etc.) serão documentados no `README.md` principal e em exemplos de uso da API.
 
 #### **14. Feature Flag (Opcional, mas Recomendado)**

@@ -17,6 +17,7 @@ import {
 } from '@/utils/wizard.utils';
 
 import { ProgressHeader } from './ProgressHeader';
+import { StepsList } from './StepsList';
 import { StepCard } from './StepCard';
 import { NavigationFooter } from './NavigationFooter';
 import { LandingPageStep } from './steps/LandingPageStep';
@@ -270,46 +271,49 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
   }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, markFieldTouched, touched]);
 
   return (
-    <div className="w-full h-screen flex flex-col bg-background overflow-hidden">
+    <div className="fixed inset-0 flex flex-col bg-background">
       {/* Layout responsivo: coluna única no mobile; sidebar + conteúdo no desktop */}
-      <div className="w-full h-full flex lg:flex-row">
+      <div className="w-full flex-1 flex lg:flex-row overflow-hidden min-h-0">
         {/* Sidebar / Header de progresso */}
-        <aside className="hidden lg:block w-80 flex-shrink-0 border-r border-border/60 p-6">
-          <ProgressHeader
+        <aside className="hidden lg:flex w-80 flex-shrink-0 border-r border-border/60 p-6 flex-col">
+          <StepsList
             steps={WIZARD_STEPS}
             currentStep={currentStep}
             completedSteps={completedSteps}
-            orientation="vertical"
-            onStepClick={(idx) => {
+            onStepClick={(idx: number) => {
               setCurrentStep(idx);
             }}
           />
         </aside>
 
         {/* Coluna da direita: conteúdo principal */}
-        <div className="flex-1 flex flex-col min-h-0 min-w-0 p-6">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
           {/* Toggle e header no mobile */}
-          <MobileToggle
-            open={isMobileSidebarOpen}
-            onToggle={() => setIsMobileSidebarOpen((v) => !v)}
-          />
-          {isMobileSidebarOpen && (
-            <div className="lg:hidden mb-4 rounded-xl border border-border/60 bg-card/70 p-4">
-              <ProgressHeader
-                steps={WIZARD_STEPS}
-                currentStep={currentStep}
-                completedSteps={completedSteps}
-                orientation="vertical"
-                onStepClick={(idx) => {
-                  setCurrentStep(idx);
-                  setIsMobileSidebarOpen(false);
-                }}
-              />
-            </div>
-          )}
+          <div className="px-6 pt-6">
+            <MobileToggle
+              open={isMobileSidebarOpen}
+              onToggle={() => setIsMobileSidebarOpen((v) => !v)}
+            />
+            {isMobileSidebarOpen && (
+              <div className="lg:hidden mb-4 rounded-xl border border-border/60 bg-card/70 p-4">
+                <ProgressHeader
+                  steps={WIZARD_STEPS}
+                  currentStep={currentStep}
+                  completedSteps={completedSteps}
+                  orientation="vertical"
+                  onStepClick={(idx) => {
+                    setCurrentStep(idx);
+                    setIsMobileSidebarOpen(false);
+                  }}
+                />
+              </div>
+            )}
+          </div>
 
-          <div className="flex-1 min-h-0 min-w-0 overflow-y-auto flex items-center">
-            <StepCard step={currentWizardStep}>{renderStepContent()}</StepCard>
+          <div className="flex-1 min-h-0 overflow-y-auto flex items-center px-6 pb-6">
+            <StepCard step={currentWizardStep} currentStep={currentStep} totalSteps={WIZARD_STEPS.length}>
+              {renderStepContent()}
+            </StepCard>
           </div>
 
           <NavigationFooter

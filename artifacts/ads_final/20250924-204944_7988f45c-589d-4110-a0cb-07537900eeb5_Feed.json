@@ -1,0 +1,149 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Emagrecimento Feminino: Saúde, Autoestima e Vigor Renovados.",
+      "corpo": "Cansada de dietas que não funcionam e de se sentir traída pela própria roupa? Você merece uma solução que entenda suas lutas. Com o Dr. Daniel Araújo (CRM 48645), Médico Nutrólogo, você encontra um tratamento personalizado que considera seus desafios emocionais e metabólicos. Recupere sua energia, autoestima e bem-estar com um plano médico que pode incluir opções como Wegovy e Mounjaro, sempre com acompanhamento seguro. Sua jornada para uma saúde concreta e duradoura começa agora. Chega de frustração!",
+      "cta_texto": "Agende sua Consulta Personalizada"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher (40-55) frustrada por não conseguir vestir uma roupa. Em seguida, ela aparece decidida, agendando uma consulta online. Por fim, ela está confiante e feliz, desfrutando de momentos com amigas ou família, sentindo-se bem consigo mesma, simbolizando a recuperação da autoestima, energia e saúde plena.",
+      "prompt_estado_atual": "A middle-aged woman, 40-55 years old, Caucasian, slightly overweight, standing in her bedroom, looking with frustration at a dress that no longer fits. Her expression is one of disappointment and low self-esteem. The room feels a bit cluttered, conveying emotional weight. Shot in 4:5 aspect ratio, photorealistic, natural light.",
+      "prompt_estado_intermediario": "The same middle-aged woman, now sitting at a clean desk, looking with hopeful determination at her smartphone screen, as if making an important decision like booking a medical consultation. Her posture is upright, signaling a readiness for change. The lighting is brighter, signifying clarity and purpose. Shot in 4:5 aspect ratio, photorealistic.",
+      "prompt_estado_aspiracional": "The same woman, now looking vibrant, confident, and with a radiant smile. She is outdoors, elegantly dressed, enjoying a social gathering with friends or family, perhaps at a brunch or garden party. She is interacting happily, her posture is upright and graceful, reflecting improved self-esteem and renewed energy. The scene is brightly lit and joyful, emphasizing a life lived fully. Shot in 4:5 aspect ratio, photorealistic.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234723Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=87e805851c6174ab645359c29f73adb5fb8d66ded5231ff5f72511488d8a917bb28ea39dcfc163344c1ce53dd461385ccdaca3ef8c80b17772acf12080a5ba07dde459b9f29b9606396149cb21698e6d2d157625dc56a2a730b12e62a69b1f28efc6e4a15d56274ab87e8bf1624a72e2cbf1d111def0d56f667e386ae1b10063759c35dc4c62363dc3ded9075065284891ac5641a30ef339a014ed1cd2c4a7535fb81b36b52a910842b0f941b09060684b87bfce1e93c4d215856f4d0a132c8f60229fcc5d75b7f91e0dc3c179c71e42caf0c96fe32df270e16a5405e39fcc8fcc383b865af27e0f12c38ce805f6b4184e7b40bd833939bbebdd54d49f553b3c",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234742Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5b50353db969f3160c40e6c0046f9c1970c152ca9652ac72cd4bdeae65ed25df3661e300f03be32b517a2a546d88bdb653864a85f0b7dcabc05a147fe9922cde38f74681de509719fefaae19dbb47f3b32130d4f9315a3207eafdf96c895491455513c8753dbd2ff77d022856318837095e8873bce09151ef8eb53145a0c7b2e566144a7123bd299c267ea421866ec7c2dfc3cdd15a44c2a102f3ca0c7d81ba7616f63a8084aa4c4a539a8c6d1af4f8f426d1c04ce7e86ec42043e41c7f148984e7850d204be23fe447cb7dd957eb94655485f93975b9dbcdd404e828fee4ebf6d79f146db86073ae798f46d6fccc98ded84e906854ade7c1043ae163ccb9b11",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234800Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0e1aa98bbbf62a2036e93059b382961f6eaa9c098488bb8ec18ebb70244bc713188ac9e7b11837ac6d64038161bcf9cff14d03690f020463fd4515ee69cd4185003d86b4b629e4442ae67a8e7fd107c391fecb34d5429b929308a088590ec73679df4bb8a4c655a1ba2d52351b6cf6001e973aff01cb749317baa78c8e02be5de94f8cbd5a522bd5714816757ca007818b70b5b2c93f98a0d769d55bdbbee69d0b891eda7974f5ce3eb199293a8660817ff753cfeda8c52928d6b1ded84a07188f0116dc8862240ca259f7a9f8216362092a57b17a81fe55cf66615ce893b87734a03c5457eefa1f5ac66e74821a1959357fa70346be48c3cf6dce1864324442",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 52.167508320002526
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato Feed (preferencialmente 4:5) focam em imagens autênticas que mostram a transformação (autoestima, saúde, lazer) e não apenas a perda de peso. A copy é empática, aborda as dores da persona (mulheres 40-55, dificuldade com dietas, autoestima baixa, desejo de recuperar o bem-estar e sentir-se confiante), posiciona a solução médica especializada com credibilidade (Dr. Daniel, Wegovy/Mounjaro como parte do tratamento) e possui um CTA claro para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Sua Jornada de Emagrecimento Feminino Começa Aqui.",
+      "corpo": "Com o passar dos anos, emagrecer parece uma batalha cada vez mais difícil, e as dietas só trazem frustração. Você merece um caminho que entenda seu corpo e suas emoções. O Dr. Daniel Araújo, Médico Nutrólogo, oferece um plano de emagrecimento médico personalizado para mulheres, que pode incluir suporte farmacológico seguro como Wegovy e Mounjaro, sempre com acompanhamento. Recupere sua energia, melhore sua saúde e reencontre a alegria de se sentir bem consigo mesma. Sua transformação duradoura está ao seu alcance!",
+      "cta_texto": "Transforme Sua Saúde"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher (40-55) frustrada com a dificuldade em emagrecer, olhando-se no espelho com desânimo. A cena intermediária a mostra pesquisando sobre nutrologia ou o Dr. Daniel Araújo em seu notebook, com um olhar focado e esperançoso. A cena final a mostra com uma aparência radiante, praticando uma atividade leve ao ar livre ou desfrutando de um momento tranquilo, simbolizando bem-estar e leveza.",
+      "prompt_estado_atual": "A slightly overweight woman, around 45, in her bedroom, looking in a full-length mirror with a discouraged expression. She is trying to zip up a pair of pants that don't fit, conveying clear frustration and a struggle with body image. Morning light from a window. Photorealistic style, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "The same woman, now at a desk, looking thoughtfully at a laptop screen displaying a medical website about women's health and nutrology by Dr. Daniel Araújo. Her expression is serious but hopeful, indicating she's taking a decisive step towards a solution. Soft indoor lighting. Photorealistic style, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, now looking vibrant, fit, and energetic, walking happily on a scenic park path during a relaxed morning. She's smiling confidently, wearing comfortable, stylish activewear, enjoying her renewed vitality. Bright, natural outdoor light. Photorealistic style, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_1.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234812Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=548b42f986245471ac56dd03b42eb422d1c29e377fe215ce9cc4b6946dc5295d7a93469660185b944de160c6fa22d41a9d1646483f82ba61dba83ef38b086e5fb22c9cce5efae41442a4c0ff4a97276767b43352d6f2e64ca14178ecd91d580b73566d528a4d428f75808b38fd37344b8078a62e3230fcddb067295df7eb65c8701b3c427974bc83565bfb3e1bf131c1cf4b22d0cb84118dd1464862c92a8bce6df3140d0caf8933bffb594cda89433e6a649d5b29dfe49c795f7f31c541e9f20ebc1cd3c400ecebb78a1316405a1442d27062b118c2f90449868e315ea78618adf95f611ba7d446e61a8d0d60c22dab9b66b548d5d72a9f81837dd3093b129c",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_1.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234830Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=01132df06fc9341f9d6e74cba100f9e83efbe862dfcd40d43407cc0e45d6b8c4497d3097d0ef2a93e87ad0feb6d42fddfda514e029623c4e4647dd851c1919c3ea4f7b62f73fd754143c1f14ab8725a9aa91abb59f45b1e0d2ae7aa36f64b893e8baf20b01baadbe9a54bb571f8542a07bfcc7d5fa59b104e6c9c78ed7b2d3ec48d5747aeae7476e237afc2b36780499eca5d91839980dd09426626eb9dbcafb4543f69ad6d4d7c31e2ad51cb5fa1b7011a1440e9d6851cc149cf5dc07195d80d7cd90b20ea290c862a3a0681f03a918e774d799f978e6ee97c34c5851e422bde77c3873dfe66011eeb6e2e0363420004bb17d927509b88f254a03866413a442",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_1.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234849Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=11dd001287977fd44dd239cab77e7f6b26c0b5bc0ef391b8b313e070309c20964d2da9898ad229f7863fcacb494348ddf67b9175e38baa2f2a3e1def1a78252363d89313082cca590fedeced43e89c8fe66f92491df466e4faac5a7cbd404d490a5f2734253ec2881b32e94e61d4585aaa73e1e030ab7ff5b588f3080a9b096a1c6484a7e606ee78e5a78742005380249f313f1ade26b08d34b8634ae10ce7cb343974c593670dc498e75cd0a1e0b46b76b6a2ab42bc449360b2dc0e07ed859161c7276699e03e1c20e2b7652b5908fb315e2924686d0489355100334c994a24604e42c721a1e1753d99e6b1e083262ec9bc6db02eddf8b64b880d3745024295",
+      "image_generation_meta": {
+        "variation_idx": 1,
+        "duration_seconds": 49.329509832998156
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato Feed (preferencialmente 4:5) focam em imagens autênticas que mostram a transformação (autoestima, saúde, lazer) e não apenas a perda de peso. A copy é empática, aborda as dores da persona (mulheres 40-55, dificuldade com dietas, metabolismo lento, autoestima baixa), posiciona a solução médica com credibilidade (Dr. Daniel, Wegovy/Mounjaro) e possui um CTA claro.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Recupere Sua Saúde Feminina: Emagrecimento com Suporte Médico.",
+      "corpo": "Você já tentou de tudo para emagrecer e se sente frustrada? A medicina nutrológica oferece soluções inovadoras. O Dr. Daniel Araújo, Médico Nutrólogo, entende que a perda de peso feminina envolve mais do que dietas. Tratamentos como Wegovy e Mounjaro, quando clinicamente indicados e acompanhados, podem ser o que você precisa para destravar seus resultados. Recupere sua saúde, bem-estar e autoestima com um plano seguro e totalmente personalizado para você.",
+      "cta_texto": "Descubra Seu Plano"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher (40-55) olha para uma balança ou um antigo diário de dieta com expressão pensativa e frustrada. A cena intermediária a mostra em consulta com o Dr. Daniel Araújo, que a ouve com empatia. A cena final a retrata participando de uma atividade social ou familiar com um sorriso confiante, irradiando saúde e bem-estar, simbolizando a liberdade de viver sem culpa e com energia renovada.",
+      "prompt_estado_atual": "A close-up shot of a woman's hands, aged 40s, holding a diet plan or a food journal on a kitchen counter. Her face is slightly blurred in the background, with a thoughtful and disheartened expression, reflecting past struggles with weight. Soft kitchen lighting, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "Over-the-shoulder shot of the same woman sitting in a bright, modern medical office, listening intently to a male doctor (Dr. Daniel) who is explaining her personalized treatment plan with an empathetic gesture. The focus is on the patient's engaged and hopeful reaction to the medical solution. 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, looking much healthier, happier, and radiant. She is enjoying a leisurely afternoon with friends at a cafe or garden, laughing and engaged in conversation. Her posture is relaxed and confident, her skin glowing, reflecting her renewed vitality and inner peace. Dynamic and joyful scene, photorealistic, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234902Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a8b58d01d3ffafc23502258ee80d7094acfd00c03004723212f5d4f1c4f70c7e06f4e2eb9043ac69d0934f593067b191cedeaaefe933f1b93d7b5803b356435c08139ff8a800b28c51c9056d72596bcf09d7ccf3ab87988ac87b8593cd761fee47193b661e8ae409f1b53e7adcdc26979d5d9e940cad38e75007dc157fb9c54547bfb911524506be3e0b4272319a1ab1f829b4edf1883eadf0b1dfffdb0f4fdc55590b7b040f83f05a16e82ef8544c9ebff1e58c087e8f18bdf412322633e963a5ed633bbc70240fd99f95f6d51327843367d034a532e86176a7a8a25a2760cdb07a11783bd4412e6589d678b92f82cb07636a9f951b1b773bd1f221d8e03c73",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234921Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=1709c4171b5332717cdd728a5fe12d9f833de9c0322272745ec555e3ee8b87bdbb8ee13425a171ebd92d9647f0cf8b68b8b043c206ec89e470024c36931add6195e54445277a3f975e6403c1b0f3117ff3563ee54efbbc737fb4763e69e152362c9428f9d26379bd588fd1fa5267132e4ee8682c1934c18f88e6a7ec14d336e44cadab9295fab3032de07e7392616a4e6d21545f0f79b707f2bfdcb23b7b9a81999fdd328993b876f744a7ac770ae5af893086c3c12917bf6be5a4a4d61a97d245e7167f5363908a3aee541854b02e30a604148937da789247d396c56581de143a52aff0b09f2a05919bb882ace53c9c5fdbbd6b043be637fcdfe6474e50e88d",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/7988f45c-589d-4110-a0cb-07537900eeb5/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250924%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250924T234944Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9d2ca1345ca2d5decfed9312f5833575fc39a362516919a864c4e6547253394f6af19a32178f7a266bbd9347476f6d7642bc8325e6c91ae47e1c1727ef3ae80d80cb92d703f8bfc1c35e23ea61e02d2c83c8db19ee9f5dd1b6ac2fe7384b3ef567363738069e40656f63c9f654adbbcec2ae267c2e3f21bdd2ed340e1102cf3850b480e9f1992db8c65ba0aa4f0d02d19cefe5827f635fd2eb62d56b063bf7bde3e160285481d856d4eb7d48c6a9f7355698676fc65c13afd9d28a250e592ecdd535e3bdc0f981776069c2a5c8ecb17f3853e4d5310e4e78fac6ac2d752e96f6694e4ba37d1952529dfcbcd597e1547fb49113b71748c3d4474e8741c841b983",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 54.86210266999842
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato Feed (preferencialmente 4:5) focam em imagens autênticas que mostram a transformação (autoestima, saúde, lazer) e não apenas a perda de peso. A copy é empática, aborda as dores da persona (mulheres 40-55, dificuldade com dietas, metabolismo lento, desejo de recuperar o bem-estar e a autoestima), posiciona a solução médica com credibilidade (Dr. Daniel, Wegovy/Mounjaro) e possui um CTA claro.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  }
+]
