@@ -19,11 +19,11 @@
 - **Método `_run_async_impl`:** Este método conterá a lógica central de roteamento.
   - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. Ler `score = state.get('storybrand_analysis', {}).get('completeness_score')` com fallback em `state.get('landing_page_context', {}).get('storybrand_completeness')`. Verificar também a presença de `state['storybrand_analysis']` quando aplicável.
   - **Lógica de Decisão e Logging:** Com base no score, o agente determinará o caminho a seguir (`"happy_path"` ou `"fallback"`). Esta decisão, juntamente com metadados relevantes (score obtido, limiar utilizado, timestamp), será registrada em `state['storybrand_gate_metrics']` para fins de observabilidade. Logs estruturados (`logger.info`) serão emitidos para auditoria em tempo real.
-  - **Sincronização de Flags:** O gate só considerará a execução do fallback quando **ambas** as flags `config.ENABLE_STORYBRAND_FALLBACK` e `config.ENABLE_NEW_INPUT_FIELDS` estiverem `True`. Antes de consultar o score, ele também verificará `state.get('force_storybrand_fallback')`: quando essa flag estiver presente/positiva (e o fallback habilitado), o gate deverá pular o caminho feliz e delegar imediatamente ao pipeline de recuperação, marcando `is_forced_fallback = True` em `storybrand_gate_metrics`. Se `ENABLE_NEW_INPUT_FIELDS` estiver `False`, o agente registrará o fato em `storybrand_gate_metrics` e seguirá automaticamente pelo `"happy_path"`, preservando a compatibilidade com fluxos legados.
+  - **Sincronização de Flags:** O gate só considerará a execução do fallback quando **ambas** as flags `config.enable_storybrand_fallback` e `config.enable_new_input_fields` estiverem `True`. Antes de consultar o score, ele também verificará `state.get('force_storybrand_fallback')`: quando essa flag estiver presente/positiva (e as flags anteriores habilitadas), o gate deverá pular o caminho feliz e delegar imediatamente ao pipeline de recuperação, marcando `is_forced_fallback = True` em `storybrand_gate_metrics`. Se `config.enable_new_input_fields` estiver `False`, o agente registrará o bloqueio e seguirá automaticamente pelo `"happy_path"`, preservando a compatibilidade com fluxos legados.
   - **Invocação Condicional:**
-    - Se `state.get('force_storybrand_fallback')` estiver ativo (ou `config.storybrand_gate_debug` for `True`), o agente invocará imediatamente o `fallback_storybrand_pipeline` e registrará o motivo no log estruturado.
+    - Se `state.get('force_storybrand_fallback')` estiver ativo (ou `config.storybrand_gate_debug` for `True`) **e** `config.enable_storybrand_fallback`/`config.enable_new_input_fields` estiverem habilitados, o agente invocará imediatamente o `fallback_storybrand_pipeline` e registrará o motivo no log estruturado.
     - Caso contrário, se `score >= config.min_storybrand_completeness`, o agente invocará o `PlanningOrRunSynth` passando o `InvocationContext` atual (`async for event in self.planning_or_synth.run_async(ctx): yield event`).
-    - Se o score estiver abaixo do limiar (e as flags estiverem habilitadas), ele invocará o `fallback_storybrand_pipeline`; se `ENABLE_STORYBRAND_FALLBACK` ou `ENABLE_NEW_INPUT_FIELDS` estiverem `False`, permanecerá no `"happy_path"` e registrará o bloqueio.
+    - Se o score estiver abaixo do limiar (e as flags estiverem habilitadas), ele invocará o `fallback_storybrand_pipeline`; se `config.enable_storybrand_fallback` ou `config.enable_new_input_fields` estiverem `False`, permanecerá no `"happy_path"` e registrará o bloqueio.
   - **Fallback Forçado por Segurança:** Uma verificação de segurança será implementada. Se o score estiver ausente/inválido **e** as flags permitirem a execução do fallback, o agente acionará o pipeline de recuperação por padrão para garantir que o sistema nunca prossiga com dados de qualidade incerta. Caso as flags bloqueiem o fallback, ele seguirá pelo `"happy_path"` e registrará no `storybrand_gate_metrics` que a recuperação foi impedida por configuração.
 
 #### **3.1 Regras de Mapeamento 16→7 (Compilador)**
@@ -52,7 +52,7 @@
 - **Critérios mínimos:** A frase resultante precisa ter pelo menos 30 caracteres, conter verbo de ação e comunicar claramente quem é ajudado, qual resultado é prometido e por meio de qual abordagem. A validação no preflight deve rejeitar apenas quando esses critérios não puderem ser atingidos pelo modelo.
 - **Integração com `sexo_cliente_alvo`:** Quando o gênero estiver disponível, o LangExtract deve personalizar a narrativa (ex.: "Ajudamos homens...", "Ajudamos mães...") garantindo consistência com os prompts sensíveis a gênero usados no fallback.
 - **Falhas e auditoria:** Se o enriquecimento falhar, o helper devolve erro estruturado e o `/run_preflight` responde 422, impedindo a criação da sessão ADK. Nenhuma execução de fallback deve iniciar sem que o preflight tenha retornado `success=True`.
-- **Flag de força opcional:** O preflight pode, opcionalmente, definir `state['force_storybrand_fallback'] = True` (por configuração ou ação explícita do usuário) quando for desejável pular o caminho feliz mesmo com score desconhecido. O gate usa essa flag para tomar a decisão conforme descrito na Seção 3.
+- **Flag de força opcional:** Quando `config.enable_new_input_fields` e `config.enable_storybrand_fallback` estiverem ativos (e o frontend sinalizar a mesma intenção via `VITE_ENABLE_NEW_FIELDS`), o preflight poderá definir `state['force_storybrand_fallback'] = True` (por configuração ou ação explícita do usuário) para pular o caminho feliz. Enquanto o `/run_preflight` não propagar essa chave, trate-a como tarefa futura antes de habilitar o controle manual.
 - **Referências cruzadas:** Documentar quaisquer ajustes adicionais no `plano_langextract_enriquecimento.md` e manter ambos os planos sincronizados para evitar divergências de implementação.
 
 #### **5. Configuração das Seções**
@@ -93,7 +93,7 @@
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** O preflight passa a combinar extração + enriquecimento. LangExtract, alimentado por prompts e few-shots específicos, transforma descrições genéricas em frases transformacionais e devolve `o_que_a_empresa_faz` já alinhado ao formato "Ajudamos [quem] a [resultado] através de [como]". O helper registra o status do enriquecimento (sucesso/falha) e fornece mensagens pedagógicas quando o modelo não consegue cumprir o contrato.
 - **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continua habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controla o fluxo com os novos campos obrigatórios. A interface deve refletir as mensagens de validação atualizadas, guiando o usuário a fornecer insumos suficientes para que o LangExtract gere a frase transformacional.
-- **Pré-condição para o fallback:** O pipeline pressupõe que `nome_empresa`, `o_que_a_empresa_faz` (enriquecido) e `sexo_cliente_alvo` foram produzidos com sucesso pelo preflight e armazenados na raiz do estado. O helper só retorna 200 quando esses campos atendem aos critérios; `fallback_input_collector` apenas confirma/normaliza e registra métricas. Quando necessário, o preflight pode adicionar `state['force_storybrand_fallback'] = True` para sinalizar que o caminho feliz deve ser pulado.
+- **Pré-condição para o fallback:** O pipeline pressupõe que `nome_empresa`, `o_que_a_empresa_faz` (enriquecido) e `sexo_cliente_alvo` foram produzidos com sucesso pelo preflight e armazenados na raiz do estado. O helper só retorna 200 quando esses campos atendem aos critérios; `fallback_input_collector` apenas confirma/normaliza e registra métricas. Mesmo em execuções forçadas, o fallback só pode ser habilitado quando `config.enable_new_input_fields` (backend) e `VITE_ENABLE_NEW_FIELDS` (frontend) estiverem `True`.
 
 #### **9. Contrato de Estado Pós-Fallback**
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
@@ -109,7 +109,7 @@
   - `storybrand_gate_debug: bool = False` (para forçar o fallback durante testes, com override via `STORYBRAND_GATE_DEBUG`).
 
 #### **11. Logs, Métricas e Observabilidade**
-- **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`, obedecendo ao contrato da Seção 16.1. Quando `state['force_storybrand_fallback']` ou `config.storybrand_gate_debug` forem utilizados, o log deve evidenciar o motivo (`force_flag_active`, `debug_flag_active`).
+- **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`, obedecendo ao contrato da Seção 16.1. Quando `state['force_storybrand_fallback']` ou `config.storybrand_gate_debug` forem utilizados (e/ou bloqueados por ausência de `config.enable_new_input_fields`), o log deve evidenciar o motivo (`force_flag_active`, `debug_flag_active`, `blocked_by_flags`).
 - **Preflight:** Registrar no log estruturado o resultado do enriquecimento (valor final, status e mensagens de erro quando aplicável) para facilitar auditoria e depuração antes mesmo do gate.
 - **Fallback:** O início e o fim da execução de cada seção, o número de iterações de revisão e os feedbacks completos do revisor serão logados.
 - **Trilha de Auditoria:** Uma chave `state['storybrand_audit_trail']` será mantida como uma lista ordenada de eventos (Seção 16.2), registrando cada etapa principal do fallback para facilitar a depuração e a análise de performance.
@@ -118,6 +118,7 @@
 - **Testes Unitários:**
   - Testar o `StoryBrandQualityGate` com scores acima, abaixo e iguais ao limiar, mockando os pipelines que ele invoca.
   - Cobrir o cenário "force fallback" garantindo que, com score alto mas `state['force_storybrand_fallback'] = True`, o gate roteie para o pipeline de recuperação e registre `is_forced_fallback` corretamente.
+  - Validar o comportamento "force fallback" quando `config.enable_new_input_fields=False`, assegurando que o gate permaneça no caminho feliz e registre `blocked_by_flags`.
   - Testar a `StoryBrandSectionConfig` e a lógica de carregamento das 16 seções.
   - Testar as funções de compilação do `fallback_storybrand_compiler`.
   - Cobrir `UserInputExtractor` garantindo que entradas genéricas sejam enriquecidas corretamente, que mensagens pedagógicas apareçam em casos extremos e que o atributo `enriched` seja priorizado.
@@ -125,7 +126,7 @@
   - Simular uma execução completa do `fallback_storybrand_pipeline`, mockando as respostas dos `LlmAgents` para verificar se o fluxo de estado, os loops e o contrato de estado final funcionam como esperado.
   - Garantir que o "caminho feliz" permanece funcional e não é afetado pelas novas mudanças.
   - Verificar que o fallback é abortado corretamente quando `sexo_cliente_alvo` não pode ser determinado como `masculino` ou `feminino`, garantindo o registro do evento de erro em `state['storybrand_audit_trail']`.
-  - Exercitar o caminho "force fallback" (score alto + flag ativa) para validar logs, métricas e consistência do estado final.
+  - Exercitar o caminho "force fallback" (score alto + flag ativa) para validar logs, métricas e consistência do estado final, incluindo o cenário bloqueado quando `config.enable_new_input_fields=False`.
   - Executar cenário comparativo produzindo StoryBrands distintos para empresas de mesmo segmento porém com propostas de valor diferentes, validando que o enriquecimento impulsiona narrativas únicas.
 - **Testes Manuais (QA):**
   - Executar o sistema, forçando um score baixo (ex.: `storybrand_analysis.completeness_score`), e observar os logs e o resultado final para validar a qualidade e o comportamento do fallback.
@@ -201,7 +202,7 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
   - Os prompts do coletor precisam instruir o modelo a trabalhar sempre com a forma canônica (`masculino`/`feminino`) ao atualizar o estado.
 - Salvaguarda final:
   - Caso, após a normalização e a tentativa suplementar de inferência, o valor permaneça `"neutro"`, `None` ou indeterminado, o `fallback_input_collector` registrará `{"stage": "collector", "status": "error", "details": "Pré-requisito crítico sexo_cliente_alvo não pôde ser determinado."}` em `state['storybrand_audit_trail']` e abortará a execução.
-  - Esse cenário deve resultar em `decision_path = "happy_path"` quando `config.ENABLE_NEW_INPUT_FIELDS` estiver `False`, pois o gate não permitirá a entrada no fallback sem os campos obrigatórios habilitados.
+  - Esse cenário deve resultar em `decision_path = "happy_path"` quando `config.enable_new_input_fields` estiver `False`, pois o gate não permitirá a entrada no fallback sem os campos obrigatórios habilitados.
 - Efeito prático:
   - O valor final controla a seleção de prompts sensíveis a gênero (`review_masculino.txt` ou `review_feminino.txt`) e garante a consistência narrativa das seções revisadas. Os demais agentes utilizam o contexto completo do negócio, independente do gênero escolhido.
 
