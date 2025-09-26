@@ -61,18 +61,27 @@ class UserInputExtractor:
         )
         if include_new_fields:
             base_prompt += (
-                ", nome_empresa (obrigatório), o_que_a_empresa_faz (obrigatório), "
+                ", nome_empresa (obrigatório), "
+                "o_que_a_empresa_faz (CRÍTICO: capture a frase completa que descreve como "
+                "a empresa transforma a vida dos clientes - ex.: 'Ajudamos X a conseguir Y "
+                "através de Z'), "
                 "sexo_cliente_alvo (obrigatório; somente masculino ou feminino)"
             )
         base_prompt += (
-            ". Use exact user wording for values when present. Do not invent. "
-            "If a field is not present, leave empty. "
-            "Normalize common synonyms only in attributes (not extraction_text)."
+            ". Para campos simples (nome, URL, formato, objetivo, foco), preserve o texto "
+            "original do usuário. "
+            "Para o_que_a_empresa_faz: quando o texto estiver genérico ou incompleto, "
+            "ENRIQUEÇA criando uma frase completa de transformação usando todos os "
+            "campos disponíveis (perfil_cliente, sexo_cliente_alvo, objetivo_final, foco). "
+            "Formato ideal: 'Ajudamos [QUEM] a [CONSEGUIR O QUÊ] através de [COMO]'. "
+            "Se um campo não estiver presente, deixe vazio. Normalize sinônimos apenas "
+            "em attributes, mantendo extraction_text coerente com a instrução."
         )
         if include_new_fields:
             base_prompt += (
                 " Para sexo_cliente_alvo, mapeie qualquer sinônimo para masculino ou feminino. "
-                "Nunca retorne neutro ou valores vazios para campos obrigatórios."
+                "Nunca retorne neutro ou valores vazios para campos obrigatórios. "
+                "Para o_que_a_empresa_faz, rejeite descrições genéricas como 'Consultoria'."
             )
 
         # Prompt para extração dos campos mínimos
@@ -89,7 +98,8 @@ class UserInputExtractor:
             "formato_anuncio: Reels\n"
             "foco: não engordar no inverno\n"
             "nome_empresa: Clínica Bem Viver\n"
-            "o_que_a_empresa_faz: Clínica de nutrição e emagrecimento saudável\n"
+            "o_que_a_empresa_faz: Ajudamos executivos com sobrepeso a recuperar saúde e energia "
+            "com programas personalizados de nutrição\n"
             "sexo_cliente_alvo: homens maduros\n"
         )
         examples.append(
@@ -124,7 +134,10 @@ class UserInputExtractor:
                     ),
                     lx.data.Extraction(
                         extraction_class="o_que_a_empresa_faz",
-                        extraction_text="Clínica de nutrição e emagrecimento saudável",
+                        extraction_text=(
+                            "Ajudamos executivos com sobrepeso a recuperar saúde e energia "
+                            "com programas personalizados de nutrição"
+                        ),
                     ),
                     lx.data.Extraction(
                         extraction_class="sexo_cliente_alvo",
@@ -141,7 +154,8 @@ class UserInputExtractor:
             "objetivo: mensagens no WhatsApp\n"
             "perfil: executivos 30-45 com pouco tempo\n"
             "nome da empresa: Agência Exemplo\n"
-            "Descrição: Agência de marketing digital para profissionais autônomos\n"
+            "Descrição: Ajudamos profissionais autônomos a conquistar clientes consistentes "
+            "com campanhas digitais personalizadas\n"
             "público: homens autônomos e consultores\n"
         )
         examples.append(
@@ -168,13 +182,33 @@ class UserInputExtractor:
                     ),
                     lx.data.Extraction(
                         extraction_class="o_que_a_empresa_faz",
-                        extraction_text="Agência de marketing digital para profissionais autônomos",
+                        extraction_text=(
+                            "Ajudamos profissionais autônomos a conquistar clientes consistentes "
+                            "com campanhas digitais personalizadas"
+                        ),
                     ),
                     lx.data.Extraction(
                         extraction_class="sexo_cliente_alvo",
                         extraction_text="homens autônomos",
                         attributes={"normalized": "masculino"},
                     ),
+                ],
+            )
+        )
+
+        # Exemplo 2b – descrição vaga permanece para ser barrada na validação
+        txt2b = (
+            "Descrição: Consultoria empresarial\n"
+            "público: empresários e gestores\n"
+        )
+        examples.append(
+            lx.data.ExampleData(
+                text=txt2b,
+                extractions=[
+                    lx.data.Extraction(
+                        extraction_class="o_que_a_empresa_faz",
+                        extraction_text="Consultoria empresarial",
+                    )
                 ],
             )
         )
@@ -238,6 +272,94 @@ class UserInputExtractor:
                         extraction_class="sexo_cliente_alvo",
                         extraction_text="feminino",
                         attributes={"normalized": "feminino"},
+                    ),
+                ],
+            )
+        )
+
+        # Exemplo 5 – enriquecimento masculino a partir de descrição genérica
+        txt5 = (
+            "empresa: Clínica Vitalidade\n"
+            "descrição: tratamento médico para emagrecer\n"
+            "perfil: homens executivos 40-50 anos\n"
+            "sexo: masculino\n"
+            "objetivo: agendamentos\n"
+        )
+        examples.append(
+            lx.data.ExampleData(
+                text=txt5,
+                extractions=[
+                    lx.data.Extraction(
+                        extraction_class="nome_empresa",
+                        extraction_text="Clínica Vitalidade",
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="o_que_a_empresa_faz",
+                        extraction_text="tratamento médico para emagrecer",
+                        attributes={
+                            "enriched": (
+                                "Ajudamos executivos acima dos 40 a recuperar energia e forma física "
+                                "através de tratamento médico personalizado para emagrecimento sustentável"
+                            )
+                        },
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="perfil_cliente",
+                        extraction_text="homens executivos 40-50 anos",
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="sexo_cliente_alvo",
+                        extraction_text="masculino",
+                        attributes={"normalized": "masculino"},
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="objetivo_final",
+                        extraction_text="agendamentos",
+                        attributes={"normalized": "agendamentos"},
+                    ),
+                ],
+            )
+        )
+
+        # Exemplo 6 – enriquecimento feminino com contexto familiar
+        txt6 = (
+            "nome: Espaço Bem-Estar\n"
+            "serviço: consultoria nutricional\n"
+            "público: mulheres mães 30-40\n"
+            "sexo alvo: feminino\n"
+            "meta: leads\n"
+        )
+        examples.append(
+            lx.data.ExampleData(
+                text=txt6,
+                extractions=[
+                    lx.data.Extraction(
+                        extraction_class="nome_empresa",
+                        extraction_text="Espaço Bem-Estar",
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="o_que_a_empresa_faz",
+                        extraction_text="consultoria nutricional",
+                        attributes={
+                            "enriched": (
+                                "Ajudamos mães ocupadas a cuidar da alimentação de toda a família "
+                                "através de consultoria nutricional prática e personalizada"
+                            )
+                        },
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="perfil_cliente",
+                        extraction_text="mulheres mães 30-40",
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="sexo_cliente_alvo",
+                        extraction_text="feminino",
+                        attributes={"normalized": "feminino"},
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="objetivo_final",
+                        extraction_text="leads",
+                        attributes={"normalized": "leads"},
                     ),
                 ],
             )
@@ -321,6 +443,10 @@ class UserInputExtractor:
                 attrs = getattr(ext, "attributes", {}) or {}
                 if cls in data and txt:
                     data[cls] = txt.strip()
+                if cls == "o_que_a_empresa_faz":
+                    enriched = (attrs.get("enriched") or "").strip()
+                    if enriched:
+                        data[cls] = enriched
                 if cls == "formato_anuncio":
                     normalized["formato_anuncio_norm"] = self._normalize_formato(
                         attrs.get("normalized") or txt
@@ -392,11 +518,11 @@ class UserInputExtractor:
             else:
                 data["nome_empresa"] = nome_empresa
 
-            if not descricao or len(descricao) < 10:
+            if not descricao:
                 errors.append(
                     {
                         "field": "o_que_a_empresa_faz",
-                        "message": "Descrição da empresa é obrigatória (mínimo 10 caracteres).",
+                        "message": "Descrição da empresa é obrigatória (mínimo 30 caracteres).",
                     }
                 )
             elif len(descricao) > 200:
@@ -406,8 +532,23 @@ class UserInputExtractor:
                         "message": "Descrição da empresa deve ter no máximo 200 caracteres.",
                     }
                 )
+            elif not self._is_transformational_description(descricao):
+                errors.append(
+                    {
+                        "field": "o_que_a_empresa_faz",
+                        "message": (
+                            "Descreva a TRANSFORMAÇÃO que você oferece aos clientes. "
+                            "Exemplo bom: 'Ajudamos mães a organizar rotina familiar em 30 dias'. "
+                            "Exemplo ruim: 'Consultoria familiar'. "
+                            "Inclua: QUEM você ajuda + COMO + QUAL RESULTADO."
+                        ),
+                    }
+                )
             else:
-                data["o_que_a_empresa_faz"] = descricao
+                descricao_compact = " ".join(descricao.split())
+                # TODO: extrair palavras-chave da transformação para enriquecer o fallback
+                # quando os prompts suportarem contexto adicional.
+                data["o_que_a_empresa_faz"] = descricao_compact
 
             if sexo_norm not in {"masculino", "feminino"}:
                 errors.append(
@@ -426,6 +567,63 @@ class UserInputExtractor:
             "normalized": normalized,
             "errors": errors,
         }
+
+    @staticmethod
+    def _is_transformational_description(descricao: str) -> bool:
+        """Valida se a descrição comunica transformação acionável."""
+
+        if not descricao:
+            return False
+
+        clean = descricao.strip()
+        if len(clean) < 30:
+            return False
+
+        desc_lower = clean.lower()
+
+        if desc_lower.startswith("ajudamos") and " a " in desc_lower:
+            return True
+
+        action_verbs = [
+            "ajud",
+            "transform",
+            "capacit",
+            "auxili",
+            "gui",
+            "facilit",
+            "oferec",
+            "fornec",
+            "entreg",
+            "possibilit",
+            "cria",
+            "criar",
+            "desenvolv",
+        ]
+        has_action = any(verb in desc_lower for verb in action_verbs)
+
+        result_connectors = [" para ", " através ", " com ", " até ", " em "]
+        has_result = any(conn in desc_lower for conn in result_connectors)
+
+        if has_action and (has_result or len(clean) > 50):
+            return True
+
+        generic_single_terms = {
+            "consulta",
+            "consultoria",
+            "consultoria empresarial",
+            "servicos",
+            "serviços",
+            "servico",
+            "serviço",
+            "empresa",
+            "negocio",
+            "negócio",
+        }
+        if desc_lower in generic_single_terms and len(clean.split()) <= 2:
+            return False
+
+        return has_action
+
     @staticmethod
     def _normalize_formato(value: str | None) -> Optional[str]:
         if not value:

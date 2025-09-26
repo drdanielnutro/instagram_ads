@@ -41,11 +41,18 @@
 - **Estrutura:** Será um `SequentialAgent` robusto, contendo a sequência de sub-agentes que executam a reconstrução completa.
 - **Sub-agentes principais:**
   1. `fallback_input_initializer` (BaseAgent): Um agente lógico que garante que as chaves de estado necessárias para o fallback (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) existam no `state`, inicializando-as com valores padrão (ex: strings vazias) se estiverem ausentes.
-  2. `fallback_input_collector` (LlmAgent): Sua missão é popular os três inputs essenciais. Ele deve priorizar os valores já presentes na **raiz** do estado (`state['nome_empresa']`, `state['o_que_a_empresa_faz']`, `state['sexo_cliente_alvo']`). Somente se algum campo estiver ausente ou vazio é que ele recorrerá a `state['landing_page_context']` (ou sinais adicionais do estado) como fonte suplementar para inferência. Ele não deve inferir "persona" ou "tom", pois estes são derivados da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
+  2. `fallback_input_collector` (LlmAgent): Sua missão é confirmar os três inputs essenciais já enriquecidos pelo preflight. Ele deve confiar, por padrão, nos valores presentes na **raiz** do estado (`state['nome_empresa']`, `state['o_que_a_empresa_faz']`, `state['sexo_cliente_alvo']`), assumindo que `o_que_a_empresa_faz` chegou como frase transformacional produzida pelo LangExtract. Somente se algum campo estiver ausente ou sinalizado como inválido o coletor recorrerá a `state['landing_page_context']` (ou sinais adicionais do estado) como fonte suplementar para recomputar o valor e registrar o ocorrido em `state['storybrand_audit_trail']`. Ele não deve inferir "persona" ou "tom" arbitrariamente; essas nuances derivam da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
      - Caso, mesmo após a etapa anterior, `sexo_cliente_alvo` permaneça `"neutro"`, vazio ou `None`, o agente realizará uma **última tentativa de inferência contextual** com base em `state['landing_page_context']` (ex.: pronomes usados na headline, personas mencionadas nos benefícios). Se a inferência falhar, ele registrará um evento com `status: 'error'` e `details: 'Pré-requisito crítico sexo_cliente_alvo não pôde ser determinado.'` em `state['storybrand_audit_trail']` e abortará o pipeline imediatamente, evitando seguir com dados inconsistentes.
   3. `section_pipeline_runner` (BaseAgent): O orquestrador interno do fallback. Ele carregará a configuração de todas as 16 seções do StoryBrand e executará, em um loop, o bloco de agentes reutilizáveis (preparador de contexto + escritor de seção + loop de revisão) para cada seção, garantindo a construção incremental e coerente.
   4. `fallback_storybrand_compiler` (BaseAgent): Após a conclusão bem-sucedida de todos os loops de revisão, este agente lógico compilará as 16 seções individuais aprovadas em uma única e rica estrutura de dados, garantindo que o "Contrato de Estado" com os 8 campos principais seja cumprido. Implementação de referência: `app/agents/fallback_compiler.py` (segue as regras da seção 3.1).
   5. `fallback_quality_reporter` (BaseAgent, opcional): Um agente final que resume os metadados da execução do fallback (número de iterações por seção, feedbacks do revisor, etc.) e os salva em `state['storybrand_recovery_report']` para análise de qualidade.
+
+#### **4.1 Enriquecimento Pré-Fallback via LangExtract**
+- **Motor principal:** O preflight (`helpers/user_extract_data.py`) passa a ser responsável por transformar descrições genéricas em frases completas de proposta de valor utilizando LangExtract. O resultado enriquecido deve ser persistido em `state['o_que_a_empresa_faz']` e marcado com um status explícito (ex.: `state['preflight_meta']['o_que_a_empresa_faz'] = 'enriched'`).
+- **Critérios mínimos:** A frase resultante precisa ter pelo menos 30 caracteres, conter verbo de ação e comunicar claramente quem é ajudado, qual resultado é prometido e por meio de qual abordagem. A validação no preflight deve rejeitar apenas quando esses critérios não puderem ser atingidos pelo modelo.
+- **Integração com `sexo_cliente_alvo`:** Quando o gênero estiver disponível, o LangExtract deve personalizar a narrativa (ex.: "Ajudamos homens...", "Ajudamos mães...") garantindo consistência com os prompts sensíveis a gênero usados no fallback.
+- **Falhas e auditoria:** Se o enriquecimento falhar, o preflight registra erro descritivo, sinaliza o status como `failed` e impede a entrada no fallback. `fallback_input_collector` deve checar esse status antes de prosseguir e, em caso de bloqueio, registrar evento em `state['storybrand_audit_trail']` com `stage='collector'`.
+- **Referências cruzadas:** Documentar quaisquer ajustes adicionais no `plano_langextract_enriquecimento.md` e manter ambos os planos sincronizados para evitar divergências de implementação.
 
 #### **5. Configuração das Seções**
 - **Arquivo sugerido:** `app/agents/storybrand_sections.py`.
@@ -56,11 +63,13 @@
   - `review_prompt_paths`: Um dicionário mapeando o gênero aos caminhos dos prompts de revisão (ex: `{'masculino': '...', 'feminino': '...'}`).
   - `corrector_prompt_path`: O caminho para o arquivo de prompt do agente corretor.
   - `narrative_goal`: Uma descrição do objetivo estratégico da seção (ex: "Definir o herói da história e conectar-se com seus desejos").
+- **Uso obrigatório do contexto enriquecido:** Cada configuração deve receber `o_que_a_empresa_faz` (enriquecido) via `extra_context`, garantindo que escritores, revisores e corretores tenham acesso ao mesmo statement transformacional durante todo o loop.
 - **Lista de Seções:** Uma lista ordenada de instâncias de `StoryBrandSectionConfig` será definida, mapeando todas as **16 seções** do sistema original para garantir a mesma profundidade narrativa: `character`, `exposition_1`, `inciting_incident_1`, `exposition_2`, `inciting_incident_2`, `unmet_needs_summary`, `problem_external`, `problem_internal`, `problem_philosophical`, `guide`, `value_proposition`, `plan`, `action`, `failure`, `success`, `identity`.
 - **Lógica do `section_pipeline_runner`:** Este agente irá iterar sobre a lista de configurações. Para cada seção, ele executará a seguinte sequência:
   1. Executar um `context_preparer` (BaseAgent) para popular as chaves genéricas no `state` (`state['chave_secao_atual']`, `state['nome_secao_atual']`, `state['contexto_anterior']`).
-  2. Invocar o `section_writer` (LlmAgent), carregando o prompt definido em `writer_prompt_path`.
-  3. Invocar o `section_review_loop` (LoopAgent compartilhado) e aguardar sua conclusão bem-sucedida antes de passar para a próxima seção da lista.
+  2. Injetar no contexto da seção o valor de `state['o_que_a_empresa_faz']` (e demais campos enriquecidos) antes de acionar qualquer LlmAgent.
+  3. Invocar o `section_writer` (LlmAgent), carregando o prompt definido em `writer_prompt_path`.
+  4. Invocar o `section_review_loop` (LoopAgent compartilhado) e aguardar sua conclusão bem-sucedida antes de passar para a próxima seção da lista.
 
 #### **6. Loop de Revisão Compartilhado**
 - **Componentes do Loop (`section_review_loop`):**
@@ -75,15 +84,15 @@
 - **Diretório sugerido:** `prompts/storybrand_fallback/`.
 - **Conteúdo e Filosofia dos Prompts:**
   - `collector.txt`: Instruções para o `fallback_input_collector` focar na extração dos 3 inputs essenciais, com exemplos.
-  - **Prompts de Escrita (16 arquivos, ex: `section_character.txt`, `section_exposition_1.txt`):** Cada prompt conterá a "receita" estrutural para sua respectiva seção, extraída dos modelos `storybrand_*.txt` originais. Por exemplo, `section_problem_internal.txt` instruirá o agente a descrever a frustração causada pelo problema externo.
-  - **Prompts de Revisão (`review_masculino.txt`, `review_feminino.txt`):** Estes prompts serão detalhados. Eles conterão a personalidade destilada dos `perfil_cliente_*.txt`, as instruções para atuar como o "empresário consciente" e os critérios de avaliação da dupla consciência (empatia + estratégia).
+  - **Prompts de Escrita (16 arquivos, ex: `section_character.txt`, `section_exposition_1.txt`):** Além da "receita" estrutural da seção (derivada dos modelos `storybrand_*.txt`), cada prompt deve instruir explicitamente o LLM a usar `{o_que_a_empresa_faz}` como fio condutor da narrativa, adaptando problemas, soluções e promessas ao statement transformacional enriquecido.
+  - **Prompts de Revisão (`review_masculino.txt`, `review_feminino.txt`):** Devem manter a personalidade do "empresário consciente" e, adicionalmente, incluir critérios objetivos perguntando se a saída é claramente específica ao `{o_que_a_empresa_faz}` enriquecido e se um concorrente genérico poderia reutilizar o texto. Respostas que não refletirem a transformação devem ser rejeitadas com feedback acionável.
   - `corrector.txt`: Um prompt genérico e robusto para reescrita guiada por feedback.
   - `compiler.txt`: Instruções para o `fallback_storybrand_compiler` (se for um `BaseAgent`, esta lógica estará em código) para consolidar as 16 seções nos 8 campos principais do schema `StoryBrandAnalysis`, criando descrições ricas e coerentes.
 
 #### **8. Coleta de Inputs Essenciais para o Fallback**
-- **Backend (`helpers/user_extract_data.py`):** A classe `UserInputExtractor` e seu prompt serão atualizados para reconhecer e extrair os três novos campos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) do input do usuário. O schema de saída será expandido para incluí-los.
-- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continuará habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controlará a exibição dos novos passos (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`). Quando a flag estiver ativa, os passos serão tratados como obrigatórios: o wizard bloqueará o avanço/enviar enquanto os três campos não forem preenchidos e validados (plano específico do frontend detalhará as regras de UX).
-- **Pré-condição para o fallback:** O pipeline parte do pressuposto de que `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` foram coletados pelo preflight e armazenados na raiz do estado. O `fallback_input_collector` confirma e normaliza esses valores, complementando-os com `state['landing_page_context']` apenas quando necessário. Se, após a normalização e a tentativa de inferência contextual final, qualquer campo permanecer ausente ou inválido (especialmente `sexo_cliente_alvo`), o fallback registrará o erro em `storybrand_audit_trail` e interromperá a execução com mensagem explícita.
+- **Backend (`helpers/user_extract_data.py`):** O preflight passa a combinar extração + enriquecimento. LangExtract, alimentado por prompts e few-shots específicos, transforma descrições genéricas em frases transformacionais e devolve `o_que_a_empresa_faz` já alinhado ao formato "Ajudamos [quem] a [resultado] através de [como]". O helper registra o status do enriquecimento (sucesso/falha) e fornece mensagens pedagógicas quando o modelo não consegue cumprir o contrato.
+- **Frontend (flags `VITE_ENABLE_WIZARD` e `VITE_ENABLE_NEW_FIELDS`):** `VITE_ENABLE_WIZARD` continua habilitando a experiência baseada em wizard, enquanto `VITE_ENABLE_NEW_FIELDS` controla o fluxo com os novos campos obrigatórios. A interface deve refletir as mensagens de validação atualizadas, guiando o usuário a fornecer insumos suficientes para que o LangExtract gere a frase transformacional.
+- **Pré-condição para o fallback:** O pipeline pressupõe que `nome_empresa`, `o_que_a_empresa_faz` (enriquecido) e `sexo_cliente_alvo` foram produzidos com sucesso pelo preflight e armazenados na raiz do estado. `fallback_input_collector` apenas confirma/normaliza esses valores e registra métricas; se qualquer campo chegar com status `failed`, a execução deve ser abortada com log em `storybrand_audit_trail` e mensagem clara para a camada superior.
 
 #### **9. Contrato de Estado Pós-Fallback**
 - O `fallback_storybrand_compiler` tem a missão crítica de garantir que, ao final de sua execução, o `session.state` seja indistinguível do estado gerado pelo "caminho feliz". Ele deve:
@@ -100,6 +109,7 @@
 
 #### **11. Logs, Métricas e Observabilidade**
 - **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`, obedecendo ao contrato da Seção 16.1.
+- **Preflight:** Registrar no log estruturado o resultado do enriquecimento (valor final, status e mensagens de erro quando aplicável) para facilitar auditoria e depuração antes mesmo do gate.
 - **Fallback:** O início e o fim da execução de cada seção, o número de iterações de revisão e os feedbacks completos do revisor serão logados.
 - **Trilha de Auditoria:** Uma chave `state['storybrand_audit_trail']` será mantida como uma lista ordenada de eventos (Seção 16.2), registrando cada etapa principal do fallback para facilitar a depuração e a análise de performance.
 
@@ -108,10 +118,12 @@
   - Testar o `StoryBrandQualityGate` com scores acima, abaixo e iguais ao limiar, mockando os pipelines que ele invoca.
   - Testar a `StoryBrandSectionConfig` e a lógica de carregamento das 16 seções.
   - Testar as funções de compilação do `fallback_storybrand_compiler`.
+  - Cobrir `UserInputExtractor` garantindo que entradas genéricas sejam enriquecidas corretamente, que mensagens pedagógicas apareçam em casos extremos e que o atributo `enriched` seja priorizado.
 - **Testes de Integração:**
   - Simular uma execução completa do `fallback_storybrand_pipeline`, mockando as respostas dos `LlmAgents` para verificar se o fluxo de estado, os loops e o contrato de estado final funcionam como esperado.
   - Garantir que o "caminho feliz" permanece funcional e não é afetado pelas novas mudanças.
   - Verificar que o fallback é abortado corretamente quando `sexo_cliente_alvo` não pode ser determinado como `masculino` ou `feminino`, garantindo o registro do evento de erro em `state['storybrand_audit_trail']`.
+  - Executar cenário comparativo produzindo StoryBrands distintos para empresas de mesmo segmento porém com propostas de valor diferentes, validando que o enriquecimento impulsiona narrativas únicas.
 - **Testes Manuais (QA):**
   - Executar o sistema, forçando um score baixo (ex.: `storybrand_analysis.completeness_score`), e observar os logs e o resultado final para validar a qualidade e o comportamento do fallback.
   - Testar casos de borda, como a ausência dos inputs essenciais (`sexo_cliente_alvo`, etc.).
