@@ -141,8 +141,9 @@
 - A seção "Como fazer" (tanto neste plano quanto nos playbooks derivados) deve ser auditada para corrigir referências obsoletas a `config.ENABLE_*` e destacar as variáveis de ambiente `ENABLE_STORYBRAND_FALLBACK`/`ENABLE_NEW_INPUT_FIELDS` e `VITE_ENABLE_NEW_FIELDS` que habilitam o fluxo completo.
 
 #### **14. Feature Flag (Opcional, mas Recomendado)**
-- Uma nova flag de configuração, `enable_storybrand_fallback: bool = False`, será adicionada em `app/config.py`, com override via `ENABLE_STORYBRAND_FALLBACK` para habilitar o comportamento quando estiver pronto para produção.
-- A inserção do `StoryBrandQualityGate` no `complete_pipeline` em `agent.py` será condicionada a esta flag. Isso permite desativar rapidamente todo o mecanismo de fallback em caso de problemas em produção, sem a necessidade de um novo deploy.
+- Reutilizar a flag de configuração **já existente** `enable_storybrand_fallback: bool = False` em `app/config.py`, mantendo o override atual via variável de ambiente `ENABLE_STORYBRAND_FALLBACK`.
+- Revisar a documentação do rollout para reforçar o uso dessa flag e garantir que ambientes legados estejam cientes do comportamento padrão (`False`).
+- Condicionar a inserção do `StoryBrandQualityGate` no `complete_pipeline` em `agent.py` ao valor dessa flag, preservando a capacidade de desativar rapidamente o mecanismo de fallback sem exigir novo deploy.
 
 #### **15. Etapas Futuras (Opcional)**
 - Implementar um sistema para monitorar as métricas do `StoryBrandQualityGate` ao longo do tempo, permitindo a recalibração periódica do `min_storybrand_completeness` com base em dados reais.
@@ -215,5 +216,5 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
   - Nomenclatura: `[tipo]_[chave].txt` (ex.: `writer_character.txt`, `reviewer_masculino.txt`, `corrector.txt`).
   - Encoding obrigatório: UTF-8.
 - Comportamento do loader:
-  - Carregamento “lazy” com cache em memória; ausência de arquivo dispara `FileNotFoundError` durante a inicialização para forçar correção imediata.
+  - Carregamento **eager** com cache em memória. Durante a inicialização, o utilitário varre o diretório configurado, carrega todos os arquivos e armazena os conteúdos em um dicionário interno. Caso algum arquivo obrigatório não seja encontrado, um `FileNotFoundError` é disparado imediatamente, evitando execuções com prompts incompletos.
   - Renderização via placeholders `{variavel}`; agentes fornecem o contexto (dict) e recebem a string final. Erros de interpolação devem gerar exceção com mensagem descritiva.
