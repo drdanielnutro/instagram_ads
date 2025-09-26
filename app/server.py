@@ -27,6 +27,7 @@ from app.utils.tracing import CloudTraceLoggingSpanExporter
 from app.utils.typing import Feedback
 from app.plan_models.fixed_plans import get_plan_by_format
 from app.format_specifications import get_specs_by_format, get_specs_json_by_format
+from app.config import config
 
 try:
     from helpers.user_extract_data import extract_user_input
@@ -217,12 +218,8 @@ def run_preflight(payload: dict = Body(...)) -> dict:
     except Exception:
         pass
 
-    enable_new_input_fields = (
-        os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
-    )
-    preflight_shadow_mode = (
-        os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
-    )
+    enable_new_input_fields = config.enable_new_input_fields
+    preflight_shadow_mode = config.preflight_shadow_mode
 
     nome_empresa = (data.get("nome_empresa") or "").strip()
     descricao_empresa = (data.get("o_que_a_empresa_faz") or "").strip()

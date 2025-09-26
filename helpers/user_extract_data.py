@@ -26,6 +26,8 @@ import os
 import re
 import logging
 
+from app.config import config
+
 try:
     import langextract as lx
 except Exception as exc:  # pragma: no cover
@@ -46,12 +48,8 @@ class UserInputExtractor:
         self.project = os.getenv("GOOGLE_CLOUD_PROJECT")
         self.location = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 
-        self.enable_new_input_fields = (
-            os.getenv("ENABLE_NEW_INPUT_FIELDS", "false").lower() == "true"
-        )
-        self.preflight_shadow_mode = (
-            os.getenv("PREFLIGHT_SHADOW_MODE", "true").lower() == "true"
-        )
+        self.enable_new_input_fields = config.enable_new_input_fields
+        self.preflight_shadow_mode = config.preflight_shadow_mode
 
         include_new_fields = self.enable_new_input_fields or self.preflight_shadow_mode
 

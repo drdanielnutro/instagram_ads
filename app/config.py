@@ -35,6 +35,8 @@ class DevelopmentConfiguration:
     enable_detailed_logging: bool = True
     enable_readme_generation: bool = False  # não aplicável a Ads
     enable_image_generation: bool = True
+    enable_new_input_fields: bool = False
+    preflight_shadow_mode: bool = True
 
     # Preferences
     code_style: str = "standard"
@@ -85,6 +87,16 @@ if os.getenv("FLUTTER_AGENT_ENABLE_README"):
 
 if os.getenv("ENABLE_IMAGE_GENERATION"):
     config.enable_image_generation = os.getenv("ENABLE_IMAGE_GENERATION").lower() == "true"
+
+if os.getenv("ENABLE_NEW_INPUT_FIELDS"):
+    config.enable_new_input_fields = (
+        os.getenv("ENABLE_NEW_INPUT_FIELDS").lower() == "true"
+    )
+
+if os.getenv("PREFLIGHT_SHADOW_MODE"):
+    config.preflight_shadow_mode = (
+        os.getenv("PREFLIGHT_SHADOW_MODE").lower() == "true"
+    )
 
 if os.getenv("IMAGE_GENERATION_TIMEOUT"):
     config.image_generation_timeout = int(os.getenv("IMAGE_GENERATION_TIMEOUT"))
