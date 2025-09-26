@@ -9,7 +9,8 @@ Saída padrão: {
     "objetivo_final": str|None,
     "perfil_cliente": str|None,
     "formato_anuncio": str|None,
-    "foco": str|None
+    "foco": str|None,
+    "force_storybrand_fallback": bool
   },
   "normalized": {
     "formato_anuncio_norm": str|None,
@@ -63,7 +64,8 @@ class UserInputExtractor:
                 "o_que_a_empresa_faz (CRÍTICO: capture a frase completa que descreve como "
                 "a empresa transforma a vida dos clientes - ex.: 'Ajudamos X a conseguir Y "
                 "através de Z'), "
-                "sexo_cliente_alvo (obrigatório; somente masculino ou feminino)"
+                "sexo_cliente_alvo (obrigatório; somente masculino ou feminino), "
+                "force_storybrand_fallback (opcional; true/false para acionar o fallback de StoryBrand)"
             )
         base_prompt += (
             ". Para campos simples (nome, URL, formato, objetivo, foco), preserve o texto "
@@ -79,8 +81,9 @@ class UserInputExtractor:
             base_prompt += (
                 " Para sexo_cliente_alvo, mapeie qualquer sinônimo para masculino ou feminino. "
                 "Nunca retorne neutro ou valores vazios para campos obrigatórios. "
-                "Para o_que_a_empresa_faz, rejeite descrições genéricas como 'Consultoria'."
-            )
+                "Para o_que_a_empresa_faz, rejeite descrições genéricas como 'Consultoria'. "
+                "Para force_storybrand_fallback aceite apenas true/false explícitos."
+        )
 
         # Prompt para extração dos campos mínimos
         self.prompt = base_prompt
@@ -142,6 +145,11 @@ class UserInputExtractor:
                         extraction_text="homens maduros",
                         attributes={"normalized": "masculino"},
                     ),
+                    lx.data.Extraction(
+                        extraction_class="force_storybrand_fallback",
+                        extraction_text="false",
+                        attributes={"normalized": "false"},
+                    ),
                 ],
             )
         )
@@ -189,6 +197,11 @@ class UserInputExtractor:
                         extraction_class="sexo_cliente_alvo",
                         extraction_text="homens autônomos",
                         attributes={"normalized": "masculino"},
+                    ),
+                    lx.data.Extraction(
+                        extraction_class="force_storybrand_fallback",
+                        extraction_text="true",
+                        attributes={"normalized": "true"},
                     ),
                 ],
             )
@@ -423,6 +436,7 @@ class UserInputExtractor:
                     "nome_empresa": None,
                     "o_que_a_empresa_faz": None,
                     "sexo_cliente_alvo": None,
+                    "force_storybrand_fallback": None,
                 }
             )
 
@@ -457,6 +471,11 @@ class UserInputExtractor:
                     normalized["sexo_cliente_alvo_norm"] = self._normalize_sexo(
                         attrs.get("normalized") or txt
                     )
+                if include_new_fields and cls == "force_storybrand_fallback":
+                    normalized_flag = self._normalize_force_flag(
+                        attrs.get("normalized") or txt
+                    )
+                    data["force_storybrand_fallback"] = normalized_flag
 
         try:
             logger.debug(
@@ -494,10 +513,15 @@ class UserInputExtractor:
         if not data["perfil_cliente"]:
             errors.append({"field": "perfil_cliente", "message": "Perfil/Persona ausente."})
 
+        if include_new_fields and not self.enable_new_input_fields:
+            if data.get("force_storybrand_fallback") is None:
+                data["force_storybrand_fallback"] = False
+
         if self.enable_new_input_fields:
             nome_empresa = (data.get("nome_empresa") or "").strip()
             descricao = (data.get("o_que_a_empresa_faz") or "").strip()
             sexo_norm = (normalized.get("sexo_cliente_alvo_norm") or "").strip()
+            force_fallback_flag = data.get("force_storybrand_fallback")
 
             if not nome_empresa or len(nome_empresa) < 2:
                 errors.append(
@@ -557,6 +581,16 @@ class UserInputExtractor:
                 )
             else:
                 normalized["sexo_cliente_alvo_norm"] = sexo_norm
+
+            if force_fallback_flag is None:
+                data["force_storybrand_fallback"] = False
+            elif not isinstance(force_fallback_flag, bool):
+                errors.append(
+                    {
+                        "field": "force_storybrand_fallback",
+                        "message": "force_storybrand_fallback deve ser true ou false.",
+                    }
+                )
 
         success = len(errors) == 0
         return {
@@ -685,6 +719,25 @@ class UserInputExtractor:
             return "masculino"
         if v in feminino_aliases or "fem" in v or "mulher" in v:
             return "feminino"
+
+        return None
+
+    @staticmethod
+    def _normalize_force_flag(value: str | None) -> Optional[bool]:
+        if value is None:
+            return None
+
+        if isinstance(value, bool):
+            return value
+
+        text = str(value).strip().lower()
+        if not text:
+            return None
+
+        if text in {"true", "1", "yes", "sim", "on"}:
+            return True
+        if text in {"false", "0", "no", "nao", "não", "off"}:
+            return False
 
         return None
 

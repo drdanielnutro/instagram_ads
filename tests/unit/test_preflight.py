@@ -39,9 +39,18 @@ class DummyStorageClient:
 
 @pytest.fixture
 def preflight_client_factory(monkeypatch):
-    def _create(*, enable_new_fields: bool, shadow_mode: bool):
+    def _create(
+        *,
+        enable_new_fields: bool,
+        shadow_mode: bool,
+        enable_storybrand_fallback: bool = False,
+    ):
         monkeypatch.setenv('ENABLE_NEW_INPUT_FIELDS', 'true' if enable_new_fields else 'false')
         monkeypatch.setenv('PREFLIGHT_SHADOW_MODE', 'true' if shadow_mode else 'false')
+        monkeypatch.setenv(
+            'ENABLE_STORYBRAND_FALLBACK',
+            'true' if enable_storybrand_fallback else 'false',
+        )
         monkeypatch.setattr('google.auth.default', lambda *args, **kwargs: (None, 'test-project'))
         monkeypatch.setattr('google.cloud.logging.Client', DummyLoggingClient)
         monkeypatch.setattr('google.cloud.storage.Client', DummyStorageClient)
@@ -90,6 +99,7 @@ def test_preflight_includes_new_fields(preflight_client_factory, monkeypatch):
     assert initial_state['nome_empresa'] == 'Agência Exemplo'
     assert initial_state['o_que_a_empresa_faz'] == 'Marketing para profissionais liberais'
     assert initial_state['sexo_cliente_alvo'] == 'masculino'
+    assert initial_state['force_storybrand_fallback'] is False
 
 
 def test_preflight_returns_422_when_required_fields_missing(preflight_client_factory, monkeypatch):
@@ -161,3 +171,118 @@ def test_preflight_excludes_new_fields_when_disabled(preflight_client_factory, m
     assert 'nome_empresa' not in initial_state
     assert 'o_que_a_empresa_faz' not in initial_state
     assert 'sexo_cliente_alvo' not in initial_state
+
+
+def test_preflight_blocks_force_flag_without_new_fields(preflight_client_factory, monkeypatch):
+    client, server = preflight_client_factory(
+        enable_new_fields=False,
+        shadow_mode=False,
+        enable_storybrand_fallback=True,
+    )
+
+    def fake_extract_user_input(_text):
+        return {
+            'success': True,
+            'data': {
+                'landing_page_url': 'https://example.com',
+                'objetivo_final': 'agendamentos',
+                'perfil_cliente': 'clientes',
+                'formato_anuncio': 'Reels',
+                'foco': '',
+            },
+            'normalized': {
+                'formato_anuncio_norm': 'Reels',
+                'objetivo_final_norm': 'agendamentos',
+            },
+            'errors': [],
+        }
+
+    monkeypatch.setattr(server, 'extract_user_input', fake_extract_user_input)
+
+    response = client.post(
+        '/run_preflight',
+        json={'text': 'dummy', 'force_storybrand_fallback': True},
+    )
+    assert response.status_code == 400
+    detail = response.json()['detail']
+    assert 'ENABLE_NEW_INPUT_FIELDS' in detail['message']
+
+
+def test_preflight_blocks_force_flag_when_fallback_disabled(preflight_client_factory, monkeypatch):
+    client, server = preflight_client_factory(
+        enable_new_fields=True,
+        shadow_mode=False,
+        enable_storybrand_fallback=False,
+    )
+
+    def fake_extract_user_input(_text):
+        return {
+            'success': True,
+            'data': {
+                'landing_page_url': 'https://example.com',
+                'objetivo_final': 'agendamentos',
+                'perfil_cliente': 'clientes',
+                'formato_anuncio': 'Reels',
+                'foco': '',
+                'nome_empresa': 'Empresa',
+                'o_que_a_empresa_faz': 'Descrição longa',
+                'sexo_cliente_alvo': 'masculino',
+                'force_storybrand_fallback': False,
+            },
+            'normalized': {
+                'formato_anuncio_norm': 'Reels',
+                'objetivo_final_norm': 'agendamentos',
+                'sexo_cliente_alvo_norm': 'masculino',
+            },
+            'errors': [],
+        }
+
+    monkeypatch.setattr(server, 'extract_user_input', fake_extract_user_input)
+
+    response = client.post(
+        '/run_preflight',
+        json={'text': 'dummy', 'force_storybrand_fallback': True},
+    )
+    assert response.status_code == 409
+    detail = response.json()['detail']
+    assert 'ENABLE_STORYBRAND_FALLBACK' in detail['action']
+
+
+def test_preflight_sets_force_flag_when_enabled(preflight_client_factory, monkeypatch):
+    client, server = preflight_client_factory(
+        enable_new_fields=True,
+        shadow_mode=False,
+        enable_storybrand_fallback=True,
+    )
+
+    def fake_extract_user_input(_text):
+        return {
+            'success': True,
+            'data': {
+                'landing_page_url': 'https://example.com',
+                'objetivo_final': 'agendamentos',
+                'perfil_cliente': 'clientes',
+                'formato_anuncio': 'Reels',
+                'foco': '',
+                'nome_empresa': 'Empresa',
+                'o_que_a_empresa_faz': 'Descrição longa com transformação',
+                'sexo_cliente_alvo': 'masculino',
+                'force_storybrand_fallback': False,
+            },
+            'normalized': {
+                'formato_anuncio_norm': 'Reels',
+                'objetivo_final_norm': 'agendamentos',
+                'sexo_cliente_alvo_norm': 'masculino',
+            },
+            'errors': [],
+        }
+
+    monkeypatch.setattr(server, 'extract_user_input', fake_extract_user_input)
+
+    response = client.post(
+        '/run_preflight',
+        json={'text': 'dummy', 'force_storybrand_fallback': True},
+    )
+    assert response.status_code == 200
+    initial_state = response.json()['initial_state']
+    assert initial_state['force_storybrand_fallback'] is True

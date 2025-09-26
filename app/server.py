@@ -14,6 +14,7 @@
 
 import os
 import logging
+from typing import Any, Optional
 
 import google.auth
 from fastapi import FastAPI, HTTPException
@@ -105,6 +106,25 @@ def collect_feedback(feedback: Feedback) -> dict[str, str]:
     """
     logger.log_struct(feedback.model_dump(), severity="INFO")
     return {"status": "success"}
+
+
+def _coerce_bool(value: Any) -> Optional[bool]:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if not normalized:
+            return None
+        if normalized in {"true", "1", "yes", "sim", "on"}:
+            return True
+        if normalized in {"false", "0", "no", "nao", "não", "off"}:
+            return False
+    if isinstance(value, (int, float)):
+        if value == 1:
+            return True
+        if value == 0:
+            return False
+    return None
 
 
 @app.post("/run_preflight")
@@ -220,6 +240,7 @@ def run_preflight(payload: dict = Body(...)) -> dict:
 
     enable_new_input_fields = config.enable_new_input_fields
     preflight_shadow_mode = config.preflight_shadow_mode
+    enable_storybrand_fallback = getattr(config, "enable_storybrand_fallback", False)
 
     nome_empresa = (data.get("nome_empresa") or "").strip()
     descricao_empresa = (data.get("o_que_a_empresa_faz") or "").strip()
@@ -293,6 +314,36 @@ def run_preflight(payload: dict = Body(...)) -> dict:
         "planning_mode": "fixed",
     }
 
+    force_flag_payload = None
+    if isinstance(payload, dict):
+        force_flag_payload = _coerce_bool(payload.get("force_storybrand_fallback"))
+
+    force_flag_data = data.get("force_storybrand_fallback") if isinstance(data, dict) else None
+    if not isinstance(force_flag_data, bool):
+        force_flag_data = False
+
+    force_storybrand_fallback = force_flag_data
+    if force_flag_payload is not None:
+        force_storybrand_fallback = force_flag_payload
+
+    if force_storybrand_fallback:
+        if not enable_new_input_fields:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "force_storybrand_fallback exige ENABLE_NEW_INPUT_FIELDS ativo.",
+                    "action": "Ative ENABLE_NEW_INPUT_FIELDS e VITE_ENABLE_NEW_FIELDS antes de forçar o fallback.",
+                },
+            )
+        if not enable_storybrand_fallback:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "message": "Fallback StoryBrand está desativado na configuração atual.",
+                    "action": "Defina ENABLE_STORYBRAND_FALLBACK=true para permitir o acionamento manual.",
+                },
+            )
+
     if enable_new_input_fields:
         initial_state.update(
             {
@@ -301,6 +352,8 @@ def run_preflight(payload: dict = Body(...)) -> dict:
                 "sexo_cliente_alvo": sexo_alvo_effective,
             }
         )
+
+        initial_state["force_storybrand_fallback"] = bool(force_storybrand_fallback)
 
     response = {
         "success": True,
