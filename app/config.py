@@ -36,6 +36,7 @@ class DevelopmentConfiguration:
     enable_readme_generation: bool = False  # não aplicável a Ads
     enable_image_generation: bool = True
     enable_new_input_fields: bool = False
+    enable_storybrand_fallback: bool = False
     preflight_shadow_mode: bool = True
 
     # Preferences
@@ -91,6 +92,11 @@ if os.getenv("ENABLE_IMAGE_GENERATION"):
 if os.getenv("ENABLE_NEW_INPUT_FIELDS"):
     config.enable_new_input_fields = (
         os.getenv("ENABLE_NEW_INPUT_FIELDS").lower() == "true"
+    )
+
+if os.getenv("ENABLE_STORYBRAND_FALLBACK"):
+    config.enable_storybrand_fallback = (
+        os.getenv("ENABLE_STORYBRAND_FALLBACK").lower() == "true"
     )
 
 if os.getenv("PREFLIGHT_SHADOW_MODE"):
