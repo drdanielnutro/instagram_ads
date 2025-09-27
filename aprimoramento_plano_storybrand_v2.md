@@ -14,7 +14,7 @@
 - A lógica interna do `StoryBrandQualityGate` deve ser implementada para ler o valor do limiar diretamente do objeto de configuração, `config.min_storybrand_completeness`, garantindo que qualquer override via variável de ambiente – incluindo o novo `STORYBRAND_MIN_COMPLETENESS` – seja respeitado automaticamente.
 
 #### **3. StoryBrandQualityGate (BaseAgent Customizado)**
-- **Arquivo sugerido:** `app/agents/storybrand_gate.py`.
+ - **Criar arquivo:** `app/agents/storybrand_gate.py`.
 - **Implementação:** A classe `StoryBrandQualityGate` herdará de `google.adk.agents.BaseAgent`.
 - **Método `_run_async_impl`:** Este método conterá a lógica central de roteamento.
   - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. Ler `score = state.get('storybrand_analysis', {}).get('completeness_score')` com fallback em `state.get('landing_page_context', {}).get('storybrand_completeness')`. Verificar também a presença de `state['storybrand_analysis']` quando aplicável.
@@ -39,9 +39,9 @@
   - `metadata.text_length` computado a partir da soma dos textos-fonte; `completeness_score = 1.0` (pós‑fallback), e sincronização com `landing_page_context.storybrand_completeness = 1.0`.
 
 #### **4. Fallback StoryBrand Pipeline (SequentialAgent)**
-- **Arquivo sugerido:** `app/agents/storybrand_fallback.py`.
+- **Criar arquivo:** `app/agents/storybrand_fallback.py`.
 - **Estrutura:** Será um `SequentialAgent` robusto, contendo a sequência de sub-agentes que executam a reconstrução completa.
-- **Sub-agentes principais:**
+- **Criar os seguintes sub-agentes principais:**
   1. `fallback_input_initializer` (BaseAgent): Um agente lógico que garante que as chaves de estado necessárias para o fallback (`nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`) existam no `state`, inicializando-as com valores padrão (ex: strings vazias) se estiverem ausentes.
   2. `fallback_input_collector` (LlmAgent): Sua missão é confirmar os três inputs essenciais já enriquecidos pelo preflight. Ele deve confiar, por padrão, nos valores presentes na **raiz** do estado (`state['nome_empresa']`, `state['o_que_a_empresa_faz']`, `state['sexo_cliente_alvo']`), assumindo que `o_que_a_empresa_faz` chegou como frase transformacional produzida pelo LangExtract. Somente se algum campo estiver ausente ou sinalizado como inválido o coletor recorrerá a `state['landing_page_context']` (ou sinais adicionais do estado) como fonte suplementar para recomputar o valor e registrar o ocorrido em `state['storybrand_audit_trail']`. Ele não deve inferir "persona" ou "tom" arbitrariamente; essas nuances derivam da seleção do `sexo_cliente_alvo` e da aplicação dos modelos de sucesso.
      - Caso, mesmo após a etapa anterior, `sexo_cliente_alvo` permaneça `"neutro"`, vazio ou `None`, o agente realizará uma **última tentativa de inferência contextual** com base em `state['landing_page_context']` (ex.: pronomes usados na headline, personas mencionadas nos benefícios). Se a inferência falhar, ele registrará um evento com `status: 'error'` e `details: 'Pré-requisito crítico sexo_cliente_alvo não pôde ser determinado.'` em `state['storybrand_audit_trail']` e abortará o pipeline imediatamente, emitindo um `Event` com `EventActions(escalate=True)` (ou lançando uma exceção) para interromper o `SequentialAgent` conforme o padrão do ADK.
@@ -59,7 +59,7 @@
 - **Referências cruzadas:** Documentar quaisquer ajustes adicionais no `plano_langextract_enriquecimento.md` e manter ambos os planos sincronizados para evitar divergências de implementação.
 
 #### **5. Configuração das Seções**
-- **Arquivo sugerido:** `app/agents/storybrand_sections.py`.
+- **Criar arquivo:** `app/agents/storybrand_sections.py`.
 - **Estrutura de Dados:** Será criada uma `dataclass` ou `Pydantic Model` chamada `StoryBrandSectionConfig` com os seguintes campos:
   - `key`: O nome da chave no `state` (ex: `"storybrand_character"`).
   - `display_name`: O nome legível (ex: `"Personagem"`).
@@ -68,7 +68,7 @@
   - `corrector_prompt_path`: O caminho para o arquivo de prompt do agente corretor.
   - `narrative_goal`: Uma descrição do objetivo estratégico da seção (ex: "Definir o herói da história e conectar-se com seus desejos").
 - **Uso obrigatório do contexto enriquecido:** Cada configuração deve receber `o_que_a_empresa_faz` (enriquecido) via `extra_context`, garantindo que escritores, revisores e corretores tenham acesso ao mesmo statement transformacional durante todo o loop.
-- **Lista de Seções:** Uma lista ordenada de instâncias de `StoryBrandSectionConfig` será definida, mapeando todas as **16 seções** do sistema original para garantir a mesma profundidade narrativa: `storybrand_character`, `exposition_1`, `inciting_incident_1`, `exposition_2`, `inciting_incident_2`, `unmet_needs_summary`, `storybrand_problem_external`, `storybrand_problem_internal`, `storybrand_problem_philosophical`, `storybrand_guide`, `storybrand_value_proposition`, `storybrand_plan`, `storybrand_action`, `storybrand_failure`, `storybrand_success`, `storybrand_identity`. **Atenção:** as seções de exposição/inciting/unmet não possuem o prefixo `storybrand_` e devem seguir exatamente os nomes consumidos por `FallbackStorybrandCompiler`.
+- **Lista de Seções:** Definir uma lista ordenada de instâncias de `StoryBrandSectionConfig`, mapeando todas as **16 seções** do sistema original para garantir a mesma profundidade narrativa: `storybrand_character`, `exposition_1`, `inciting_incident_1`, `exposition_2`, `inciting_incident_2`, `unmet_needs_summary`, `storybrand_problem_external`, `storybrand_problem_internal`, `storybrand_problem_philosophical`, `storybrand_guide`, `storybrand_value_proposition`, `storybrand_plan`, `storybrand_action`, `storybrand_failure`, `storybrand_success`, `storybrand_identity`. **Atenção:** as seções de exposição/inciting/unmet não possuem o prefixo `storybrand_` e devem seguir exatamente os nomes consumidos por `FallbackStorybrandCompiler`.
 - **Lógica do `section_pipeline_runner`:** Este agente irá iterar sobre a lista de configurações. Para cada seção, ele executará a seguinte sequência:
   1. Executar um `context_preparer` (BaseAgent) para popular as chaves genéricas no `state` (`state['chave_secao_atual']`, `state['nome_secao_atual']`, `state['contexto_anterior']`).
   2. Injetar no contexto da seção o valor de `state['o_que_a_empresa_faz']` (e demais campos enriquecidos) antes de acionar qualquer LlmAgent.
@@ -76,7 +76,7 @@
   4. Invocar o `section_review_loop` (LoopAgent compartilhado) e aguardar sua conclusão bem-sucedida antes de passar para a próxima seção da lista.
 
 #### **6. Loop de Revisão Compartilhado**
-- **Componentes do Loop (`section_review_loop`):**
+- **Criar os componentes do Loop (`section_review_loop`):**
   - `section_reviewer` (LlmAgent): Este agente atuará como o **"empresário consciente"**. Seu prompt será carregado dinamicamente (masculino ou feminino) e instruído a aplicar uma **dupla consciência**: avaliar a ressonância emocional do texto (empatia pelo cliente) e sua eficácia estratégica (aderência ao framework StoryBrand). A opção de um revisor "neutro" será descartada para manter a força dos arquétipos. A saída será um JSON estruturado: `{ "grade": "pass|fail", "comment": "..." }`.
   - `approval_checker` (BaseAgent): Um agente lógico que inspeciona o `grade` no resultado do revisor. Se for `"pass"`, ele dispara `actions.escalate=True` para encerrar o loop.
   - `section_corrector` (LlmAgent): Ativado apenas em caso de `"fail"`, este agente recebe o texto original e o `comment` do revisor, e sua única tarefa é aplicar as correções sugeridas, sobrescrevendo a chave de estado da seção atual.
@@ -85,8 +85,8 @@
   - Cada iteração do loop (revisão, checagem, correção) será registrada com logs detalhados, incluindo o nome da seção, o status da revisão (`pass`/`fail`) e o comentário completo do revisor para facilitar a depuração.
 
 #### **7. Prompts Necessários**
-- **Diretório sugerido:** `prompts/storybrand_fallback/`.
-- **Conteúdo e Filosofia dos Prompts:**
+- **Criar diretório:** `prompts/storybrand_fallback/`.
+- **Criar os arquivos de prompt conforme diretrizes abaixo:**
   - `collector.txt`: Instruções para o `fallback_input_collector` focar na extração dos 3 inputs essenciais, com exemplos.
   - **Prompts de Escrita (16 arquivos, ex: `section_character.txt`, `section_exposition_1.txt`):** Além da "receita" estrutural da seção (derivada dos modelos `storybrand_*.txt`), cada prompt deve instruir explicitamente o LLM a usar `{o_que_a_empresa_faz}` como fio condutor da narrativa, adaptando problemas, soluções e promessas ao statement transformacional enriquecido.
   - **Prompts de Revisão (`review_masculino.txt`, `review_feminino.txt`):** Devem manter a personalidade do "empresário consciente" e, adicionalmente, incluir critérios objetivos perguntando se a saída é claramente específica ao `{o_que_a_empresa_faz}` enriquecido e se um concorrente genérico poderia reutilizar o texto. Respostas que não refletirem a transformação devem ser rejeitadas com feedback acionável.
@@ -215,11 +215,11 @@ Esta seção consolida os contratos de dados e as convenções operacionais que 
   - O valor final controla a seleção de prompts sensíveis a gênero (`review_masculino.txt` ou `review_feminino.txt`) e garante a consistência narrativa das seções revisadas. Os demais agentes utilizam o contexto completo do negócio, independente do gênero escolhido.
 
 **16.4 Convenção de Carregamento de Prompts**
-- Um utilitário dedicado (`PromptLoader` em `app/utils/prompt_loader.py`) ficará responsável por carregar, cachear e renderizar prompts; agentes não lerão arquivos diretamente.
+- Criar utilitário dedicado (`PromptLoader` em `app/utils/prompt_loader.py`) que ficará responsável por carregar, cachear e renderizar prompts; agentes não lerão arquivos diretamente.
 - Convenções:
   - Diretório base: `prompts/storybrand_fallback/`.
   - Nomenclatura: `[tipo]_[chave].txt` (ex.: `writer_character.txt`, `reviewer_masculino.txt`, `corrector.txt`).
   - Encoding obrigatório: UTF-8.
 - Comportamento do loader:
- - Carregamento **eager** com cache em memória. Durante a inicialização, o utilitário varre o diretório configurado, carrega todos os arquivos e armazena os conteúdos em um dicionário interno. Caso algum arquivo obrigatório não seja encontrado, um `FileNotFoundError` é disparado imediatamente, evitando execuções com prompts incompletos. Esse comportamento é sempre ativo; quem estiver provisionando ambiente pode simplesmente manter o flag `ENABLE_STORYBRAND_FALLBACK` desligado para impedir que o loader seja instanciado antes da hora.
+- Carregamento **eager** com cache em memória. Durante a inicialização, o utilitário criado varrerá o diretório configurado, carregará todos os arquivos e armazenará os conteúdos em um dicionário interno. Caso algum arquivo obrigatório não seja encontrado, um `FileNotFoundError` será disparado imediatamente, evitando execuções com prompts incompletos. Esse comportamento é sempre ativo; quem estiver provisionando ambiente pode simplesmente manter o flag `ENABLE_STORYBRAND_FALLBACK` desligado para impedir que o loader seja instanciado antes da hora.
   - Renderização via placeholders `{variavel}`; agentes fornecem o contexto (dict) e recebem a string final. Erros de interpolação devem gerar exceção com mensagem descritiva.
