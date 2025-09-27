@@ -8,6 +8,8 @@ persistindo também o summary e o ad_context no estado.
 from __future__ import annotations
 
 import logging
+import time
+from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from google.adk.agents import BaseAgent
@@ -27,6 +29,7 @@ from app.schemas.storybrand import (
     SuccessElement,
     StoryBrandMetadata,
 )
+from .storybrand_sections import build_storybrand_section_configs
 
 
 logger = logging.getLogger(__name__)
@@ -85,6 +88,39 @@ class FallbackStorybrandCompiler(BaseAgent):
 
     async def _run_async_impl(self, ctx: InvocationContext):  # type: ignore[override]
         state = ctx.session.state
+        compiler_start = time.perf_counter()
+        sections = build_storybrand_section_configs()
+
+        def append_compiler_event(status: str, details: Any | None = None, duration_ms: int | None = None) -> None:
+            audit = state.get("storybrand_audit_trail")
+            if not isinstance(audit, list):
+                audit = []
+                state["storybrand_audit_trail"] = audit
+            timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+            audit.append(
+                {
+                    "stage": "compiler",
+                    "status": status,
+                    "section_key": "compiler",
+                    "iteration": None,
+                    "details": details,
+                    "timestamp_utc": timestamp,
+                    "duration_ms": duration_ms,
+                }
+            )
+
+        def log_compiler(status: str, **extra: Any) -> None:
+            payload: Dict[str, Any] = {
+                "section_key": "compiler",
+                "stage": "compiler",
+                "status": status,
+                "iteration": None,
+            }
+            payload.update(extra)
+            logger.info("storybrand_fallback_section", extra=payload)
+
+        append_compiler_event("started", {"sections": [cfg.state_key for cfg in sections]})
+        log_compiler("started", total_sections=len(sections))
 
         # Coletar fontes das 16 seções (nomes padronizados)
         character_text = _get_str(state, "storybrand_character")
@@ -229,6 +265,10 @@ class FallbackStorybrandCompiler(BaseAgent):
         if isinstance(lp_ctx, dict):
             lp_ctx["storybrand_completeness"] = 1.0
             state["landing_page_context"] = lp_ctx
+
+        duration_ms = int((time.perf_counter() - compiler_start) * 1000)
+        append_compiler_event("completed", {"text_length": metadata.text_length}, duration_ms=duration_ms)
+        log_compiler("completed", text_length=metadata.text_length, duration_ms=duration_ms)
 
         # Relato breve
         yield Event(

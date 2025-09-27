@@ -100,6 +100,11 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## Refatorações Recentes
 
+### 2025-09-17 - StoryBrand fallback enforcement
+- ✅ `nome_empresa` e `o_que_a_empresa_faz` passam a ser tratados como obrigatórios quando `ENABLE_NEW_INPUT_FIELDS=true`.
+- ✅ `sexo_cliente_alvo` deve ser `masculino` ou `feminino`; o fallback tenta inferir via `landing_page_context` antes de abortar.
+- ✅ Auditoria/logs ampliados (`preparer`, `checker`, `compiler` e `storybrand_fallback_section`).
+
 ### 2025-09-16 - Campos opcionais no preflight/wizard
 - ✅ Novos campos opcionais `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` no extractor, preflight e wizard
 - ✅ Normalização de gênero com default `neutro`
@@ -158,16 +163,16 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
 ### 1. Input Processor
 Extrai campos estruturados da entrada do usuário:
 
-**Campos obrigatórios**:
+**Campos obrigatórios** (quando `ENABLE_NEW_INPUT_FIELDS=true` e fallback habilitado):
 - `landing_page_url`: URL da página de destino
 - `objetivo_final`: Ex: agendamentos, leads, vendas
 - `perfil_cliente`: Persona/storybrand do público-alvo
 - `formato_anuncio`: **"Reels", "Stories" ou "Feed"** (controlado pelo usuário)
+- `nome_empresa`: Como a marca deve ser citada nos criativos (obrigatório, sem default)
+- `o_que_a_empresa_faz`: Resumo da proposta de valor/serviços da empresa (obrigatório)
+- `sexo_cliente_alvo`: **apenas** `masculino` ou `feminino` (valores vazios/"neutro" bloqueiam o fallback)
 
 **Campos opcionais**:
-- `nome_empresa`: Como a marca deve ser citada nos criativos (default: "Empresa")
-- `o_que_a_empresa_faz`: Resumo da proposta de valor/serviços da empresa
-- `sexo_cliente_alvo`: masculino | feminino | neutro (default quando vazio)
 - `foco`: Tema ou gancho da campanha (ex: "liquidação de inverno")
 
 Observação: No modo “preflight”, a extração/normalização ocorre no servidor antes do ADK. Se inválido, o servidor responde 422 com os erros e o ADK não é acionado.
@@ -318,7 +323,7 @@ PREFLIGHT_SHADOW_MODE=true
 ### Backend (runtime, .env)
 - **ENABLE_NEW_INPUT_FIELDS** (default: false)
   - false: /run_preflight não inclui novos campos no initial_state (retrocompatível).
-  - true: inclui `nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo` (com defaults) no initial_state.
+  - true: inclui `nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo` no initial_state **e exige valores válidos** (`sexo_cliente_alvo` limitado a `masculino`/`feminino`).
 - **ENABLE_STORYBRAND_FALLBACK** (default: false)
   - false: o gate monitora métricas, mas nunca executa o fallback.
   - true: o gate pode acionar o `fallback_storybrand_pipeline` (requer ENABLE_NEW_INPUT_FIELDS=true).
@@ -355,8 +360,9 @@ Fases sugeridas:
 O fallback é ativado pelo agente `StoryBrandQualityGate` quando o score de completude StoryBrand fica abaixo de `config.min_storybrand_completeness`, quando `state['force_storybrand_fallback']` está habilitado ou quando `config.storybrand_gate_debug` está `True`.
 
 - **Pipeline**: `fallback_storybrand_pipeline` (`app/agents/storybrand_fallback.py`) executa inicialização, coleta/validação de inputs, geração das 16 seções, compilação (`FallbackStorybrandCompiler`) e relatório de qualidade.
+- **Coleta**: o coletor reforça `nome_empresa`/`o_que_a_empresa_faz`, tenta inferir `sexo_cliente_alvo` a partir de `landing_page_context` e aborta o pipeline com `EventActions(escalate=True)` quando os campos não podem ser recuperados.
 - **Prompts**: ficam em `prompts/storybrand_fallback/` e são carregados pelo utilitário `PromptLoader` (`app/utils/prompt_loader.py`). Faltas disparam `FileNotFoundError`.
-- **Métricas**: o gate popula `state['storybrand_gate_metrics']`; o fallback adiciona eventos em `state['storybrand_audit_trail']` e um sumário em `state['storybrand_recovery_report']`.
+- **Métricas/Logs**: o gate popula `state['storybrand_gate_metrics']`; o fallback adiciona eventos (incluindo `preparer`, `checker`, `compiler` com `duration_ms`) em `state['storybrand_audit_trail']`, registra logs estruturados `storybrand_fallback_section` e gera `state['storybrand_recovery_report']`.
 - **Configuração**: use `ENABLE_STORYBRAND_FALLBACK=true`, `ENABLE_NEW_INPUT_FIELDS=true` e ajuste `FALLBACK_STORYBRAND_MAX_ITERATIONS`/`FALLBACK_STORYBRAND_MODEL` conforme necessidade.
 - **Rollout sugerido**: habilite primeiro o backend (`ENABLE_STORYBRAND_FALLBACK=true`), valide métricas com `STORYBRAND_GATE_DEBUG` em ambiente de QA e só então ligue `VITE_ENABLE_NEW_FIELDS` no frontend.
 - **QA**: `tests/unit/agents/test_storybrand_gate.py` e `tests/unit/utils/test_prompt_loader.py` cobrem a lógica crítica do gate e do carregamento de prompts.

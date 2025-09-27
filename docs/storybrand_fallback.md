@@ -8,7 +8,7 @@ O fallback de StoryBrand garante que a narrativa esteja completa mesmo quando a 
 
 Quando o fallback é acionado, ele executa os cinco blocos abaixo em `app/agents/storybrand_fallback.py`:
 1. **FallbackInputInitializer** – garante chaves obrigatórias e inicializa `storybrand_audit_trail`.
-2. **fallback_input_collector** – agente LLM que confirma/normaliza `nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo`.
+2. **fallback_input_collector** – agente LLM que confirma `nome_empresa`/`o_que_a_empresa_faz`, tenta inferir `sexo_cliente_alvo` via `state['landing_page_context']` e aborta com `EventActions(escalate=True)` quando os campos permanecem inválidos.
 3. **StoryBrandSectionRunner** – gera e revisa as 16 seções (writer → reviewer → corrector) respeitando `config.fallback_storybrand_max_iterations`.
 4. **FallbackStorybrandCompiler** – converte as seções aprovadas para o schema `StoryBrandAnalysis`, atualizando `storybrand_summary`, `storybrand_ad_context` e score.
 5. **FallbackQualityReporter** – agrega métricas e salva `storybrand_recovery_report`.
@@ -25,8 +25,10 @@ Principais arquivos:
 
 ## Métricas e Auditoria
 - `state['storybrand_gate_metrics']`: score avaliado, threshold, caminho escolhido, timestamp, flags de força/debug.
-- `state['storybrand_audit_trail']`: eventos cronometrados por estágio/seção.
+- `state['storybrand_gate_debug']`: payload com `fallback_enabled`, `force_flag_active` e `block_reason` (quando aplicável).
+- `state['storybrand_audit_trail']`: eventos cronometrados por estágio/seção, incluindo `preparer`, `checker`, `compiler` e `duration_ms`.
 - `state['storybrand_recovery_report']`: resumo agregando seções aprovadas e iterações.
+- Logs `logger.info('storybrand_fallback_section', extra={...})` sinalizam início/fim de cada estágio (writer/reviewer/corrector/checker/compiler) para observabilidade externa.
 
 ## Configuração
 - `ENABLE_STORYBRAND_FALLBACK` precisa estar `true` junto de `ENABLE_NEW_INPUT_FIELDS` para permitir fallback.

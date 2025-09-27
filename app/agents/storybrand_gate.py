@@ -81,13 +81,18 @@ class StoryBrandQualityGate(BaseAgent):
             "timestamp_utc": timestamp,
             "is_forced_fallback": forced_reason,
             "debug_flag_active": debug_flag,
+        }
+
+        state["storybrand_gate_metrics"] = metrics
+
+        debug_payload = {
             "force_flag_active": force_flag,
             "fallback_enabled": fallback_enabled,
         }
         if block_reason:
-            metrics["block_reason"] = block_reason
+            debug_payload["block_reason"] = block_reason
 
-        state["storybrand_gate_metrics"] = metrics
+        state["storybrand_gate_debug"] = debug_payload
 
         logger.info(
             "storybrand_gate_decision",
