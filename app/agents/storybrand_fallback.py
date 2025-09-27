@@ -4,14 +4,15 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import AsyncGenerator, Dict, Iterable, List, Optional
 
-from google.adk.agents import BaseAgent, LlmAgent, SequentialAgent
+from google.adk.agents import BaseAgent, LlmAgent, LoopAgent, SequentialAgent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.agents.invocation_context import InvocationContext
-from google.adk.events import Event
+from google.adk.events import Event, EventActions
 from pydantic import BaseModel, Field
 
 from app.config import config
@@ -25,8 +26,14 @@ from .storybrand_sections import StoryBrandSectionConfig, build_storybrand_secti
 logger = logging.getLogger(__name__)
 
 PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts" / "storybrand_fallback"
-SECTION_PROMPT_NAMES = {section.prompt_name for section in build_storybrand_section_configs()}
-REQUIRED_PROMPTS = {"collector", "corrector", "review_masculino", "review_feminino", "compiler"} | SECTION_PROMPT_NAMES
+SECTION_CONFIGS = build_storybrand_section_configs()
+REQUIRED_PROMPTS = {
+    "collector",
+    "corrector",
+    "review_masculino",
+    "review_feminino",
+    "compiler",
+} | {section.writer_prompt_path.stem for section in SECTION_CONFIGS}
 PROMPT_LOADER = PromptLoader(PROMPT_DIR, required_prompts=REQUIRED_PROMPTS)
 FALLBACK_MODEL = getattr(config, "fallback_storybrand_model", None) or getattr(config, "worker_model", "gemini-2.5-flash")
 MAX_ITERATIONS = getattr(config, "fallback_storybrand_max_iterations", 3)
@@ -70,6 +77,7 @@ def _append_audit_event(
     section_key: Optional[str] = None,
     iteration: Optional[int] = None,
     details: Optional[object] = None,
+    duration_ms: Optional[int] = None,
 ) -> None:
     audit_trail = state.get("storybrand_audit_trail")
     if not isinstance(audit_trail, list):
@@ -84,7 +92,7 @@ def _append_audit_event(
             "iteration": iteration,
             "details": details,
             "timestamp_utc": timestamp,
-            "duration_ms": None,
+            "duration_ms": duration_ms,
         }
     )
 
@@ -99,6 +107,96 @@ def _normalize_gender(value: object) -> str:
     return ""
 
 
+def _collect_text_fragments(value: object) -> List[str]:
+    fragments: List[str] = []
+    if isinstance(value, str):
+        fragments.append(value)
+    elif isinstance(value, list):
+        for item in value:
+            fragments.extend(_collect_text_fragments(item))
+    elif isinstance(value, dict):
+        for val in value.values():
+            fragments.extend(_collect_text_fragments(val))
+    return fragments
+
+
+FEMININE_MARKERS = {
+    "ela",
+    "dela",
+    "delas",
+    "mulher",
+    "mulheres",
+    "feminino",
+    "feminina",
+    "cliente feminina",
+    "para ela",
+}
+MASCULINE_MARKERS = {
+    "ele",
+    "dele",
+    "deles",
+    "homem",
+    "homens",
+    "masculino",
+    "masculina",
+    "cliente masculino",
+    "para ele",
+}
+
+
+def _infer_gender_from_context(context: object) -> str:
+    if not isinstance(context, dict):
+        return ""
+
+    feminine_hits = 0
+    masculine_hits = 0
+    for fragment in _collect_text_fragments(context):
+        lowered = fragment.lower()
+        if any(token in lowered for token in FEMININE_MARKERS):
+            feminine_hits += 1
+        if any(token in lowered for token in MASCULINE_MARKERS):
+            masculine_hits += 1
+
+    if feminine_hits > masculine_hits and feminine_hits > 0:
+        return "feminino"
+    if masculine_hits > feminine_hits and masculine_hits > 0:
+        return "masculino"
+    return ""
+
+
+def _log_section_event(
+    *,
+    section_key: Optional[str],
+    stage: str,
+    status: str,
+    iteration: Optional[int],
+    **extra: object,
+) -> None:
+    payload: Dict[str, object] = {
+        "section_key": section_key,
+        "stage": stage,
+        "status": status,
+        "iteration": iteration,
+    }
+    payload.update(extra)
+    logger.info("storybrand_fallback_section", extra=payload)
+
+
+def _coerce_review_result(value: object) -> FallbackReviewResult:
+    if isinstance(value, FallbackReviewResult):
+        return value
+    if isinstance(value, dict):
+        return FallbackReviewResult(**value)
+    if isinstance(value, str):
+        try:
+            parsed = json.loads(value)
+            if isinstance(parsed, dict):
+                return FallbackReviewResult(**parsed)
+        except json.JSONDecodeError:
+            pass
+    return FallbackReviewResult(grade="fail", comment="Formato inesperado retornado pelo revisor.")
+
+
 def fallback_input_collector_callback(callback_context: CallbackContext) -> None:
     state = callback_context.state
     raw_result = state.get("fallback_input_review")
@@ -111,6 +209,18 @@ def fallback_input_collector_callback(callback_context: CallbackContext) -> None
             parsed_result = value
 
     errors: List[str] = []
+    enriched_fields: Dict[str, object] = {}
+    enriched_registry = state.get("storybrand_enriched_inputs")
+    if not isinstance(enriched_registry, dict):
+        enriched_registry = {}
+        state["storybrand_enriched_inputs"] = enriched_registry
+
+    def record_enrichment(key: str, value: str, source: str) -> None:
+        timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        info = {"value": value, "source": source, "timestamp_utc": timestamp}
+        enriched_fields[key] = info
+        enriched_registry[key] = info
+
     for key in REQUIRED_INPUT_KEYS:
         current_value = state.get(key)
         extracted_value: Optional[str] = None
@@ -120,19 +230,28 @@ def fallback_input_collector_callback(callback_context: CallbackContext) -> None
                 maybe_value = entry.get("value")
                 if isinstance(maybe_value, str):
                     extracted_value = maybe_value.strip()
-        if isinstance(current_value, str) and current_value.strip():
-            value = current_value.strip()
-        elif extracted_value:
+
+        sanitized_current = current_value.strip() if isinstance(current_value, str) else ""
+        value = sanitized_current
+        if not value and extracted_value:
             value = extracted_value
-        else:
-            value = ""
+            state[key] = value
+            record_enrichment(key, value, "llm")
 
         if key == "sexo_cliente_alvo":
             normalized = _normalize_gender(value)
-            if not normalized:
-                errors.append("sexo_cliente_alvo inválido")
-            else:
+            if normalized:
                 state[key] = normalized
+                if not sanitized_current and normalized != value:
+                    record_enrichment(key, normalized, "llm")
+                continue
+
+            inferred = _infer_gender_from_context(state.get("landing_page_context"))
+            if inferred:
+                state[key] = inferred
+                record_enrichment(key, inferred, "landing_page_context")
+            else:
+                errors.append("sexo_cliente_alvo inválido")
         else:
             if not value:
                 errors.append(f"{key} ausente")
@@ -140,9 +259,12 @@ def fallback_input_collector_callback(callback_context: CallbackContext) -> None
                 state[key] = value
 
     if errors:
-        detail = {"errors": errors}
+        detail = {"errors": errors, "enriched_fields": enriched_fields}
         _append_audit_event(state, stage="collector", status="error", section_key=None, iteration=None, details=detail)
-        raise ValueError(
+        callback_context.events.append(
+            Event(author="fallback_input_collector", actions=EventActions(escalate=True))
+        )
+        raise RuntimeError(
             "Fallback StoryBrand não pode continuar sem inputs essenciais: " + ", ".join(errors)
         )
 
@@ -152,7 +274,10 @@ def fallback_input_collector_callback(callback_context: CallbackContext) -> None
         status="completed",
         section_key=None,
         iteration=None,
-        details={key: state.get(key) for key in REQUIRED_INPUT_KEYS},
+        details={
+            "inputs": {key: state.get(key) for key in REQUIRED_INPUT_KEYS},
+            "enriched_fields": enriched_fields,
+        },
     )
 
 
@@ -164,6 +289,220 @@ fallback_input_collector = LlmAgent(
     output_key="fallback_input_review",
     after_agent_callback=fallback_input_collector_callback,
 )
+
+
+class SectionReviewerAgent(BaseAgent):
+    def __init__(
+        self,
+        *,
+        section: StoryBrandSectionConfig,
+        gender: str,
+        iteration_key: str,
+        review_key: str,
+    ) -> None:
+        super().__init__(name=f"{section.state_key}_reviewer")
+        self._section = section
+        self._gender = gender
+        self._iteration_key = iteration_key
+        self._review_key = review_key
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
+        state = ctx.session.state
+        iteration = int(state.get(self._iteration_key, 1))
+        start = time.perf_counter()
+        _append_audit_event(
+            state,
+            stage="reviewer",
+            status="started",
+            section_key=self._section.state_key,
+            iteration=iteration,
+            details=None,
+        )
+        _log_section_event(
+            section_key=self._section.state_key,
+            stage="reviewer",
+            status="started",
+            iteration=iteration,
+            display_name=self._section.display_name,
+        )
+
+        prompt_path = self._section.review_prompt_paths[self._gender]
+        instruction = PROMPT_LOADER.render_from_path(
+            prompt_path,
+            {
+                "section_key": self._section.state_key,
+                "current_text": state.get(self._section.state_key, ""),
+                "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
+            },
+        )
+        reviewer = LlmAgent(
+            model=FALLBACK_MODEL,
+            name=self.name,
+            description=f"Revisa a seção {self._section.state_key} do StoryBrand.",
+            instruction=instruction,
+            output_schema=FallbackReviewResult,
+            output_key=self._review_key,
+        )
+        async for event in reviewer.run_async(ctx):
+            yield event
+
+        duration = int((time.perf_counter() - start) * 1000)
+        review = _coerce_review_result(state.get(self._review_key))
+        state[self._review_key] = review.model_dump()
+        status = "pass" if review.is_pass else "fail"
+        _append_audit_event(
+            state,
+            stage="reviewer",
+            status=status,
+            section_key=self._section.state_key,
+            iteration=iteration,
+            details=review.comment,
+            duration_ms=duration,
+        )
+        _log_section_event(
+            section_key=self._section.state_key,
+            stage="reviewer",
+            status=status,
+            iteration=iteration,
+            comment=review.comment,
+        )
+
+
+class SectionApprovalChecker(BaseAgent):
+    def __init__(
+        self,
+        *,
+        section: StoryBrandSectionConfig,
+        iteration_key: str,
+        review_key: str,
+        approved_flag_key: str,
+    ) -> None:
+        super().__init__(name=f"{section.state_key}_approval_checker")
+        self._section = section
+        self._iteration_key = iteration_key
+        self._review_key = review_key
+        self._approved_flag_key = approved_flag_key
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
+        state = ctx.session.state
+        iteration = int(state.get(self._iteration_key, 1))
+        review = _coerce_review_result(state.get(self._review_key))
+        state[self._approved_flag_key] = review.is_pass
+        status = "approved" if review.is_pass else "retry"
+        _append_audit_event(
+            state,
+            stage="checker",
+            status=status,
+            section_key=self._section.state_key,
+            iteration=iteration,
+            details=review.comment,
+            duration_ms=0,
+        )
+        _log_section_event(
+            section_key=self._section.state_key,
+            stage="checker",
+            status=status,
+            iteration=iteration,
+            comment=review.comment,
+        )
+        if review.is_pass:
+            yield Event(author=self.name, actions=EventActions(escalate=True))
+        else:
+            yield Event(author=self.name)
+
+
+class SectionCorrectorAgent(BaseAgent):
+    def __init__(
+        self,
+        *,
+        section: StoryBrandSectionConfig,
+        iteration_key: str,
+        review_key: str,
+        approved_flag_key: str,
+    ) -> None:
+        super().__init__(name=f"{section.state_key}_corrector")
+        self._section = section
+        self._iteration_key = iteration_key
+        self._review_key = review_key
+        self._approved_flag_key = approved_flag_key
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
+        state = ctx.session.state
+        iteration = int(state.get(self._iteration_key, 1))
+        if state.get(self._approved_flag_key):
+            _append_audit_event(
+                state,
+                stage="corrector",
+                status="skipped",
+                section_key=self._section.state_key,
+                iteration=iteration,
+                details="Seção aprovada; correção não necessária.",
+                duration_ms=0,
+            )
+            _log_section_event(
+                section_key=self._section.state_key,
+                stage="corrector",
+                status="skipped",
+                iteration=iteration,
+            )
+            yield Event(author=self.name)
+            return
+
+        review = _coerce_review_result(state.get(self._review_key))
+        start = time.perf_counter()
+        _append_audit_event(
+            state,
+            stage="corrector",
+            status="started",
+            section_key=self._section.state_key,
+            iteration=iteration,
+            details=review.comment,
+        )
+        _log_section_event(
+            section_key=self._section.state_key,
+            stage="corrector",
+            status="started",
+            iteration=iteration,
+            comment=review.comment,
+        )
+        instruction = PROMPT_LOADER.render_from_path(
+            self._section.corrector_prompt_path,
+            {
+                "nome_empresa": state.get("nome_empresa", ""),
+                "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
+                "section_key": self._section.state_key,
+                "current_text": state.get(self._section.state_key, ""),
+                "review_comment": review.comment,
+            },
+        )
+        corrector = LlmAgent(
+            model=FALLBACK_MODEL,
+            name=self.name,
+            description=f"Corrige a seção {self._section.state_key} com base no feedback.",
+            instruction=instruction,
+            output_key=self._section.state_key,
+        )
+        async for event in corrector.run_async(ctx):
+            yield event
+
+        duration = int((time.perf_counter() - start) * 1000)
+        _append_audit_event(
+            state,
+            stage="corrector",
+            status="completed",
+            section_key=self._section.state_key,
+            iteration=iteration,
+            details={"length": len(str(state.get(self._section.state_key, "")))},
+            duration_ms=duration,
+        )
+        _log_section_event(
+            section_key=self._section.state_key,
+            stage="corrector",
+            status="completed",
+            iteration=iteration,
+        )
+        state[self._iteration_key] = iteration + 1
+        yield Event(author=self.name)
 
 
 class StoryBrandSectionRunner(BaseAgent):
@@ -188,154 +527,164 @@ class StoryBrandSectionRunner(BaseAgent):
         gender = _normalize_gender(state.get("sexo_cliente_alvo"))
         if gender not in {"masculino", "feminino"}:
             raise ValueError("sexo_cliente_alvo inválido para execução do fallback")
+        iteration_key = f"{section.state_key}_iteration"
+        review_key = f"{section.state_key}_review"
+        approved_flag_key = f"{section.state_key}_approved"
 
-        for iteration in range(1, MAX_ITERATIONS + 1):
-            approved_sections = {
-                cfg.state_key: state.get(cfg.state_key)
-                for cfg in self._sections
-                if isinstance(state.get(cfg.state_key), str) and state.get(cfg.state_key)
-            }
-            approved_dump = json.dumps(approved_sections, ensure_ascii=False)
+        state[iteration_key] = 1
+        state[approved_flag_key] = False
+        state.pop(review_key, None)
 
-            writer_instruction = PROMPT_LOADER.render(
-                section.prompt_name,
-                {
-                    "nome_empresa": state.get("nome_empresa", ""),
-                    "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
-                    "sexo_cliente_alvo": gender,
-                    "landing_page_context": state.get("landing_page_context", {}),
-                    "approved_sections": approved_dump,
-                },
-            )
-            writer_agent = LlmAgent(
-                model=FALLBACK_MODEL,
-                name=f"{section.state_key}_writer",
-                description=f"Gera a seção {section.state_key} do StoryBrand.",
-                instruction=writer_instruction,
-                output_key=section.state_key,
-            )
-            _append_audit_event(
-                state,
-                stage="writer",
-                status="started",
-                section_key=section.state_key,
-                iteration=iteration,
-                details=section.narrative_goal,
-            )
-            async for event in writer_agent.run_async(ctx):
-                yield event
-            _append_audit_event(
-                state,
-                stage="writer",
-                status="completed",
-                section_key=section.state_key,
-                iteration=iteration,
-                details={"length": len(str(state.get(section.state_key, "")))},
-            )
+        _log_section_event(
+            section_key=section.state_key,
+            stage="section",
+            status="start",
+            iteration=1,
+            display_name=section.display_name,
+        )
 
-            review_prompt_name = "review_masculino" if gender == "masculino" else "review_feminino"
-            review_instruction = PROMPT_LOADER.render(
-                review_prompt_name,
-                {
-                    "section_key": section.state_key,
-                    "current_text": state.get(section.state_key, ""),
-                    "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
-                },
-            )
-            review_agent = LlmAgent(
-                model=FALLBACK_MODEL,
-                name=f"{section.state_key}_reviewer",
-                description=f"Revisa a seção {section.state_key} do StoryBrand.",
-                instruction=review_instruction,
-                output_schema=FallbackReviewResult,
-                output_key=f"{section.state_key}_review",
-            )
-            _append_audit_event(
-                state,
-                stage="reviewer",
-                status="started",
-                section_key=section.state_key,
-                iteration=iteration,
-                details=None,
-            )
-            async for event in review_agent.run_async(ctx):
-                yield event
+        approved_sections = {
+            cfg.state_key: state.get(cfg.state_key)
+            for cfg in self._sections
+            if isinstance(state.get(cfg.state_key), str) and state.get(cfg.state_key)
+        }
+        approved_dump = json.dumps(approved_sections, ensure_ascii=False)
+        preparer_details = {
+            "display_name": section.display_name,
+            "approved_sections": list(approved_sections.keys()),
+        }
+        _append_audit_event(
+            state,
+            stage="preparer",
+            status="completed",
+            section_key=section.state_key,
+            iteration=1,
+            details=preparer_details,
+            duration_ms=0,
+        )
+        _log_section_event(
+            section_key=section.state_key,
+            stage="preparer",
+            status="completed",
+            iteration=1,
+            approved_sections=list(approved_sections.keys()),
+        )
 
-            review_data = state.get(f"{section.state_key}_review")
-            if isinstance(review_data, FallbackReviewResult):
-                review = review_data
-            elif isinstance(review_data, dict):
-                review = FallbackReviewResult(**review_data)
-            else:
-                review = FallbackReviewResult(grade="fail", comment="Revisor retornou formato inesperado.")
+        writer_instruction = PROMPT_LOADER.render_from_path(
+            section.writer_prompt_path,
+            {
+                "nome_empresa": state.get("nome_empresa", ""),
+                "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
+                "sexo_cliente_alvo": gender,
+                "landing_page_context": state.get("landing_page_context", {}),
+                "approved_sections": approved_dump,
+            },
+        )
+        writer_agent = LlmAgent(
+            model=FALLBACK_MODEL,
+            name=f"{section.state_key}_writer",
+            description=f"Gera a seção {section.state_key} do StoryBrand.",
+            instruction=writer_instruction,
+            output_key=section.state_key,
+        )
+        writer_start = time.perf_counter()
+        _append_audit_event(
+            state,
+            stage="writer",
+            status="started",
+            section_key=section.state_key,
+            iteration=1,
+            details=section.narrative_goal,
+        )
+        _log_section_event(
+            section_key=section.state_key,
+            stage="writer",
+            status="started",
+            iteration=1,
+            narrative_goal=section.narrative_goal,
+        )
+        async for event in writer_agent.run_async(ctx):
+            yield event
+        writer_duration = int((time.perf_counter() - writer_start) * 1000)
+        section_text = str(state.get(section.state_key, ""))
+        _append_audit_event(
+            state,
+            stage="writer",
+            status="completed",
+            section_key=section.state_key,
+            iteration=1,
+            details={"length": len(section_text)},
+            duration_ms=writer_duration,
+        )
+        _log_section_event(
+            section_key=section.state_key,
+            stage="writer",
+            status="completed",
+            iteration=1,
+            length=len(section_text),
+        )
 
-            if review.is_pass:
+        reviewer_agent = SectionReviewerAgent(
+            section=section,
+            gender=gender,
+            iteration_key=iteration_key,
+            review_key=review_key,
+        )
+        approval_checker = SectionApprovalChecker(
+            section=section,
+            iteration_key=iteration_key,
+            review_key=review_key,
+            approved_flag_key=approved_flag_key,
+        )
+        corrector_agent = SectionCorrectorAgent(
+            section=section,
+            iteration_key=iteration_key,
+            review_key=review_key,
+            approved_flag_key=approved_flag_key,
+        )
+
+        def _review_loop_failure_handler(callback_context: CallbackContext) -> None:
+            if not bool(callback_context.state.get(approved_flag_key)):
+                failure_iteration = int(callback_context.state.get(iteration_key, MAX_ITERATIONS))
+                detail = {
+                    "reason": "Limite de iterações atingido",
+                    "max_iterations": MAX_ITERATIONS,
+                    "last_review": callback_context.state.get(review_key),
+                }
                 _append_audit_event(
-                    state,
-                    stage="reviewer",
-                    status="pass",
+                    callback_context.state,
+                    stage="checker",
+                    status="error",
                     section_key=section.state_key,
-                    iteration=iteration,
-                    details=review.comment,
+                    iteration=failure_iteration,
+                    details=detail,
                 )
-                break
+                _log_section_event(
+                    section_key=section.state_key,
+                    stage="checker",
+                    status="error",
+                    iteration=failure_iteration,
+                    reason="max_iterations",
+                )
+                callback_context.events.append(
+                    Event(author=f"{section.state_key}_review_loop", actions=EventActions(escalate=True))
+                )
+                raise RuntimeError(
+                    f"Seção {section.state_key} não atingiu aprovação após {MAX_ITERATIONS} iterações."
+                )
 
-            _append_audit_event(
-                state,
-                stage="reviewer",
-                status="fail",
-                section_key=section.state_key,
-                iteration=iteration,
-                details=review.comment,
-            )
+        review_loop = LoopAgent(
+            name=f"{section.state_key}_review_loop",
+            max_iterations=MAX_ITERATIONS,
+            sub_agents=[reviewer_agent, approval_checker, corrector_agent],
+            after_agent_callback=_review_loop_failure_handler,
+        )
 
-            corrector_instruction = PROMPT_LOADER.render(
-                "corrector",
-                {
-                    "nome_empresa": state.get("nome_empresa", ""),
-                    "o_que_a_empresa_faz": state.get("o_que_a_empresa_faz", ""),
-                    "section_key": section.state_key,
-                    "current_text": state.get(section.state_key, ""),
-                    "review_comment": review.comment,
-                },
-            )
-            corrector_agent = LlmAgent(
-                model=FALLBACK_MODEL,
-                name=f"{section.state_key}_corrector",
-                description=f"Corrige a seção {section.state_key} com base no feedback.",
-                instruction=corrector_instruction,
-                output_key=section.state_key,
-            )
-            _append_audit_event(
-                state,
-                stage="corrector",
-                status="started",
-                section_key=section.state_key,
-                iteration=iteration,
-                details=None,
-            )
-            async for event in corrector_agent.run_async(ctx):
-                yield event
-            _append_audit_event(
-                state,
-                stage="corrector",
-                status="completed",
-                section_key=section.state_key,
-                iteration=iteration,
-                details=None,
-            )
-        else:
-            _append_audit_event(
-                state,
-                stage="reviewer",
-                status="error",
-                section_key=section.state_key,
-                iteration=MAX_ITERATIONS,
-                details="Limite de iterações atingido sem aprovação.",
-            )
-            raise RuntimeError(
-                f"Seção {section.state_key} não atingiu aprovação após {MAX_ITERATIONS} iterações."
-            )
+        async for event in review_loop.run_async(ctx):
+            yield event
+
+        state.pop(approved_flag_key, None)
+        state.pop(iteration_key, None)
 
 
 class FallbackQualityReporter(BaseAgent):
@@ -349,7 +698,7 @@ class FallbackQualityReporter(BaseAgent):
         audit = state.get("storybrand_audit_trail")
         if not isinstance(audit, list):
             audit = []
-        sections = build_storybrand_section_configs()
+        sections = SECTION_CONFIGS
         iterations: Dict[str, int] = {}
         for entry in audit:
             if not isinstance(entry, dict):
@@ -376,7 +725,7 @@ fallback_storybrand_pipeline = SequentialAgent(
     sub_agents=[
         FallbackInputInitializer(),
         fallback_input_collector,
-        StoryBrandSectionRunner(build_storybrand_section_configs()),
+        StoryBrandSectionRunner(SECTION_CONFIGS),
         FallbackStorybrandCompiler(),
         FallbackQualityReporter(),
     ],

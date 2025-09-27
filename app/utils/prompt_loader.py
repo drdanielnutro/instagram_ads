@@ -63,5 +63,25 @@ class PromptLoader:
     def available_prompts(self) -> Dict[str, str]:
         return dict(self._cache)
 
+    def _normalize_path(self, path: Path | str) -> Path:
+        candidate = Path(path)
+        if not candidate.is_absolute():
+            candidate = (self._base_path / candidate).resolve()
+        try:
+            candidate.relative_to(self._base_path)
+        except ValueError as exc:
+            raise PromptNotFoundError(
+                f"Prompt path '{candidate}' is outside of base directory '{self._base_path}'."
+            ) from exc
+        return candidate
+
+    def get_prompt_by_path(self, path: Path | str) -> str:
+        normalized = self._normalize_path(path)
+        return self.get_prompt(normalized.stem)
+
+    def render_from_path(self, path: Path | str, context: Mapping[str, object]) -> str:
+        normalized = self._normalize_path(path)
+        return self.render(normalized.stem, context)
+
 
 __all__ = ["PromptLoader", "PromptNotFoundError", "PromptRenderError"]
