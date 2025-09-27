@@ -9,9 +9,9 @@
 
 #### **2. Pontos de Integração no `agent.py`**
 - A integração será feita no pipeline principal, `complete_pipeline`, definido no arquivo `app/agent.py`.
-- Um novo agente customizado, `StoryBrandQualityGate`, será inserido na lista de `sub_agents` do `complete_pipeline`, posicionado imediatamente após o agente `landing_page_analyzer`.
+- O `StoryBrandQualityGate` **substituirá** a entrada atual do `PlanningOrRunSynth` na lista de `sub_agents`, permanecendo posicionado logo após o `landing_page_analyzer`. O planner existente não ficará mais na lista bruta; em vez disso, será passado para o gate via construtor.
 - O `StoryBrandQualityGate` receberá como dependências (argumentos em seu construtor) os dois caminhos que ele orquestrará: o `PlanningOrRunSynth` (para o "caminho feliz") e o novo `fallback_storybrand_pipeline` (para o "caminho de recuperação").
-- A lógica interna do `StoryBrandQualityGate` deve ser implementada para ler o valor do limiar diretamente do objeto de configuração, `config.min_storybrand_completeness`, garantindo que qualquer override via variável de ambiente seja respeitado automaticamente.
+- A lógica interna do `StoryBrandQualityGate` deve ser implementada para ler o valor do limiar diretamente do objeto de configuração, `config.min_storybrand_completeness`, garantindo que qualquer override via variável de ambiente – incluindo o novo `STORYBRAND_MIN_COMPLETENESS` – seja respeitado automaticamente.
 
 #### **3. StoryBrandQualityGate (BaseAgent Customizado)**
 - **Arquivo sugerido:** `app/agents/storybrand_gate.py`.
@@ -19,7 +19,7 @@
 - **Método `_run_async_impl`:** Este método conterá a lógica central de roteamento.
   - **Leitura e Validação do Estado:** O método acessará o estado via `ctx.session.state`. Ler `score = state.get('storybrand_analysis', {}).get('completeness_score')` com fallback em `state.get('landing_page_context', {}).get('storybrand_completeness')`. Verificar também a presença de `state['storybrand_analysis']` quando aplicável.
   - **Lógica de Decisão e Logging:** Com base no score, o agente determinará o caminho a seguir (`"happy_path"` ou `"fallback"`). Esta decisão, juntamente com metadados relevantes (score obtido, limiar utilizado, timestamp), será registrada em `state['storybrand_gate_metrics']` para fins de observabilidade. Logs estruturados (`logger.info`) serão emitidos para auditoria em tempo real.
-  - **Sincronização de Flags:** O gate só considerará a execução do fallback quando **ambas** as flags `config.enable_storybrand_fallback` e `config.enable_new_input_fields` estiverem `True`. Antes de consultar o score, ele também verificará `state.get('force_storybrand_fallback')` e `config.storybrand_gate_debug`: quando qualquer uma dessas condições estiver ativa **e** o fallback estiver habilitado pelas flags principais, o gate deverá pular o caminho feliz e delegar imediatamente ao pipeline de recuperação, marcando `is_forced_fallback = True` em `storybrand_gate_metrics`. Se `config.enable_storybrand_fallback` ou `config.enable_new_input_fields` estiverem `False`, o agente registrará o bloqueio em `storybrand_gate_metrics` (incluindo o motivo da impossibilidade) e seguirá automaticamente pelo `"happy_path"`, preservando a compatibilidade com fluxos legados. O `/run_preflight` já reforça essa condição ao rejeitar `force_storybrand_fallback` quando as flags estão desativadas.
+  - **Sincronização de Flags:** O gate sempre fará parte do `complete_pipeline`; quando **ambas** as flags `config.enable_storybrand_fallback` e `config.enable_new_input_fields` estiverem `True`, ele poderá optar pelo fallback. Antes de consultar o score, ele também verificará `state.get('force_storybrand_fallback')` e `config.storybrand_gate_debug`: quando qualquer uma dessas condições estiver ativa **e** o fallback estiver habilitado pelas flags principais, o gate delegará imediatamente ao pipeline de recuperação, marcando `is_forced_fallback = True` em `storybrand_gate_metrics`. Se `config.enable_storybrand_fallback` ou `config.enable_new_input_fields` estiverem `False`, o agente registrará o bloqueio em `storybrand_gate_metrics` (incluindo o motivo da impossibilidade) e seguirá automaticamente pelo `"happy_path"`, preservando a compatibilidade com fluxos legados. O `/run_preflight` já reforça essa condição ao rejeitar `force_storybrand_fallback` quando as flags estão desativadas.
   - **Invocação Condicional:**
     - Se `state.get('force_storybrand_fallback')` estiver ativo ou `config.storybrand_gate_debug` for `True` e as duas flags principais permitirem o fallback, o agente executará o `fallback_storybrand_pipeline`, registrará o motivo no log estruturado **e**, ao término bem-sucedido, continuará encadeando o `PlanningOrRunSynth` para gerar `feature_briefing` e demais artefatos exigidos pelo pipeline de execução.
     - Se qualquer mecanismo de força/debug estiver ativo **mas** alguma das flags principais estiver `False`, o gate registrará `decision_path = 'happy_path'` com o motivo do bloqueio e continuará com o fluxo padrão.
@@ -92,6 +92,7 @@
   - **Prompts de Revisão (`review_masculino.txt`, `review_feminino.txt`):** Devem manter a personalidade do "empresário consciente" e, adicionalmente, incluir critérios objetivos perguntando se a saída é claramente específica ao `{o_que_a_empresa_faz}` enriquecido e se um concorrente genérico poderia reutilizar o texto. Respostas que não refletirem a transformação devem ser rejeitadas com feedback acionável.
   - `corrector.txt`: Um prompt genérico e robusto para reescrita guiada por feedback.
   - `compiler.txt`: Instruções para o `fallback_storybrand_compiler` (se for um `BaseAgent`, esta lógica estará em código) para consolidar as 16 seções nos 8 campos principais do schema `StoryBrandAnalysis`, criando descrições ricas e coerentes.
+- **Disponibilidade dos Arquivos:** A criação desses prompts é parte integrante da implementação do fallback. O `PromptLoader` descrito na Seção 16.4 deve validar a existência de cada arquivo antes de disponibilizar a função de carregamento, retornando erro claro quando algum prompt estiver ausente. Enquanto os arquivos não forem entregues ao repositório, o loader deve executar em modo "lazy" (carregamento sob demanda) ou ser habilitado apenas em conjunto com os prompts para evitar falhas no import.
 
 #### **8. Coleta de Inputs Essenciais para o Fallback**
 - **Backend (`helpers/user_extract_data.py`):** O preflight passa a combinar extração + enriquecimento. LangExtract, alimentado por prompts e few-shots específicos, transforma descrições genéricas em frases transformacionais e devolve `o_que_a_empresa_faz` já alinhado ao formato "Ajudamos [quem] a [resultado] através de [como]". O helper registra o status do enriquecimento (sucesso/falha) e fornece mensagens pedagógicas quando o modelo não consegue cumprir o contrato.
@@ -106,10 +107,11 @@
   - Opcionalmente, salvar os metadados da recuperação em `state['storybrand_recovery_report']`.
 
 #### **10. Ajustes em `app/config.py`**
-- Os seguintes parâmetros de configuração serão adicionados à classe `DevelopmentConfiguration`:
+- Os seguintes parâmetros de configuração serão adicionados/ajustados na classe `DevelopmentConfiguration`:
   - `fallback_storybrand_max_iterations: int = 3`.
   - `fallback_storybrand_model: str | None = None` (para permitir o uso de um modelo mais potente, como o `gemini-2.5-pro`, especificamente para o fallback, com override via `FALLBACK_STORYBRAND_MODEL`).
-  - O campo `storybrand_gate_debug` **já existe** em `app/config.py`; o plano deve apenas garantir que ele esteja documentado e coberto por testes/validações adequadas.
+  - `storybrand_gate_debug: bool` já existe; o plano deve apenas garantir documentação e testes.
+  - **Novo override:** ler `STORYBRAND_MIN_COMPLETENESS` (float) para permitir ajuste operacional do limiar `min_storybrand_completeness` sem alterar código.
 
 #### **11. Logs, Métricas e Observabilidade**
 - **Gate:** A decisão do `StoryBrandQualityGate` (`score`, `threshold`, `path`) será logada e salva em `state['storybrand_gate_metrics']`, obedecendo ao contrato da Seção 16.1. Quando `state['force_storybrand_fallback']` ou `config.storybrand_gate_debug` forem utilizados, o log deve evidenciar o motivo (`force_flag_active`, `debug_flag_active`). As instruções de "Como fazer" do plano e dos artefatos complementares devem ser revisadas para citar explicitamente `config.enable_storybrand_fallback`/`config.enable_new_input_fields` (em vez de variantes em maiúsculas) ao apresentar exemplos de código.
@@ -146,7 +148,7 @@
 #### **14. Feature Flag (Opcional, mas Recomendado)**
 - Reutilizar a flag de configuração **já existente** `enable_storybrand_fallback: bool = False` em `app/config.py`, mantendo o override atual via variável de ambiente `ENABLE_STORYBRAND_FALLBACK`.
 - Revisar a documentação do rollout para reforçar o uso dessa flag e garantir que ambientes legados estejam cientes do comportamento padrão (`False`).
-- Condicionar a inserção do `StoryBrandQualityGate` no `complete_pipeline` em `agent.py` ao valor dessa flag, preservando a capacidade de desativar rapidamente o mecanismo de fallback sem exigir novo deploy.
+- Mesmo com a flag desligada, o `StoryBrandQualityGate` permanece no pipeline em modo observador: ele registra o bloqueio, mantém o caminho feliz e evita duplicação de lógica. Dessa forma, reativar o fallback em produção exige apenas ligar a flag, sem nova publicação.
 
 #### **15. Etapas Futuras (Opcional)**
 - Implementar um sistema para monitorar as métricas do `StoryBrandQualityGate` ao longo do tempo, permitindo a recalibração periódica do `min_storybrand_completeness` com base em dados reais.

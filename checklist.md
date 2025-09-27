@@ -8,8 +8,8 @@
 - [ ] Definir/confirmar limiar `config.min_storybrand_completeness` e variáveis de ambiente associadas.
 
 ## 2. Integração no `app/agent.py`
-- [ ] Criar/posicionar `StoryBrandQualityGate` após `landing_page_analyzer` reaproveitando `PlanningOrRunSynth`.
-- [ ] Condicionar o gate à flag `config.enable_storybrand_fallback` (override via `ENABLE_STORYBRAND_FALLBACK`).
+- [ ] Substituir o `PlanningOrRunSynth` da lista do `complete_pipeline` por `StoryBrandQualityGate`, repassando o planner existente via construtor.
+- [ ] Garantir que o gate permaneça no pipeline mesmo com `config.enable_storybrand_fallback=False`, realizando short-circuit e registrando métricas quando as flags estiverem desligadas.
 
 ## 3. StoryBrandQualityGate
 - [ ] Implementar agente (`app/agents/storybrand_gate.py` ou módulo equivalente) herdando de `BaseAgent`.

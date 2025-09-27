@@ -105,6 +105,14 @@ if os.getenv("STORYBRAND_GATE_DEBUG"):
         os.getenv("STORYBRAND_GATE_DEBUG").lower() == "true"
     )
 
+if os.getenv("STORYBRAND_MIN_COMPLETENESS"):
+    try:
+        config.min_storybrand_completeness = float(
+            os.getenv("STORYBRAND_MIN_COMPLETENESS")
+        )
+    except ValueError:
+        pass
+
 if os.getenv("PREFLIGHT_SHADOW_MODE"):
     config.preflight_shadow_mode = (
         os.getenv("PREFLIGHT_SHADOW_MODE").lower() == "true"
