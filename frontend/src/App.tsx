@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { ChatMessagesView } from "@/components/ChatMessagesView";
 import { isPreviewEnabled } from "@/utils/featureFlags";
 
-// Update DisplayData to be a string type
 type DisplayData = string | null;
+
 interface MessageWithAgent {
   type: "human" | "ai";
   content: string;
@@ -16,30 +16,101 @@ interface MessageWithAgent {
   finalReportWithCitations?: boolean;
 }
 
-interface AgentMessage {
-  parts: { text: string }[];
-  role: string;
-}
+type FunctionCallPayload = {
+  name: string;
+  args?: Record<string, unknown>;
+  id?: string;
+};
 
-interface AgentResponse {
-  content: AgentMessage;
-  usageMetadata: {
-    candidatesTokenCount: number;
-    promptTokenCount: number;
-    totalTokenCount: number;
-  };
-  author: string;
-  actions: {
-    stateDelta: {
-      research_plan?: string;
-      final_report_with_citations?: boolean;
-    };
-  };
-}
+type FunctionResponsePayload = {
+  name: string;
+  response?: unknown;
+  id?: string;
+};
+
+type TimelineData =
+  | { type: "text"; content: string }
+  | { type: "functionCall"; name: string; args?: Record<string, unknown>; id?: string }
+  | { type: "functionResponse"; name: string; response?: unknown; id?: string }
+  | { type: "sources"; content: unknown };
 
 interface ProcessedEvent {
   title: string;
-  data: any;
+  data: TimelineData;
+}
+
+type DeliveryMeta = {
+  ok: boolean;
+  signed_url?: string;
+  [key: string]: unknown;
+};
+
+type SessionResponse = {
+  userId: string;
+  id: string;
+  appName: string;
+};
+
+type PreflightResult = {
+  initial_state?: Record<string, unknown>;
+  plan_summary?: Record<string, unknown>;
+  blocked?: boolean;
+};
+
+type ParsedPart = {
+  text?: string;
+  functionCall?: FunctionCallPayload;
+  functionResponse?: FunctionResponsePayload;
+};
+
+type SseParseResult = {
+  textParts: string[];
+  agent: string;
+  finalReportWithCitations?: string;
+  functionCall: FunctionCallPayload | null;
+  functionResponse: FunctionResponsePayload | null;
+  sourceCount: number;
+  sources: unknown;
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const isParsedPart = (value: unknown): value is ParsedPart => {
+  if (!isRecord(value)) {
+    return false;
+  }
+  if (value.text && typeof value.text !== "string") {
+    return false;
+  }
+  return true;
+};
+
+async function retryWithBackoff<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 10,
+  maxDuration: number = 120000 // 2 minutes
+): Promise<T> {
+  const startTime = Date.now();
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (Date.now() - startTime > maxDuration) {
+      throw new Error(`Retry timeout after ${maxDuration}ms`);
+    }
+
+    try {
+      return await fn();
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error(String(error));
+      lastError = err;
+      const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
+      console.log(`Attempt ${attempt + 1} failed, retrying in ${delay}ms...`, err);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError ?? new Error("Retry attempts exhausted");
 }
 
 export default function App() {
@@ -54,7 +125,7 @@ export default function App() {
   const [isBackendReady, setIsBackendReady] = useState(false);
   const [isCheckingBackend, setIsCheckingBackend] = useState(true);
   const [preflightEnabled, setPreflightEnabled] = useState<boolean>(true);
-  const [deliveryMeta, setDeliveryMeta] = useState<any | null>(null);
+  const [deliveryMeta, setDeliveryMeta] = useState<DeliveryMeta | null>(null);
   const [deliveryChecking, setDeliveryChecking] = useState<boolean>(false);
   const [showPreview, setShowPreview] = useState(false);
   const currentAgentRef = useRef('');
@@ -72,7 +143,7 @@ export default function App() {
 
   // Initialize preflight from env (default ON)
   useEffect(() => {
-    const env = (import.meta as any).env?.VITE_ENABLE_PREFLIGHT;
+    const env = import.meta.env?.VITE_ENABLE_PREFLIGHT;
     if (env === 'false') {
       setPreflightEnabled(false);
     }
@@ -84,33 +155,7 @@ export default function App() {
     }
   }, [deliveryMeta]);
 
-  const retryWithBackoff = async (
-    fn: () => Promise<any>,
-    maxRetries: number = 10,
-    maxDuration: number = 120000 // 2 minutes
-  ): Promise<any> => {
-    const startTime = Date.now();
-    let lastError: Error;
-    
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-      if (Date.now() - startTime > maxDuration) {
-        throw new Error(`Retry timeout after ${maxDuration}ms`);
-      }
-      
-      try {
-        return await fn();
-      } catch (error) {
-        lastError = error as Error;
-        const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // Exponential backoff, max 5s
-        console.log(`Attempt ${attempt + 1} failed, retrying in ${delay}ms...`, error);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-    
-    throw lastError!;
-  };
-
-  const createSession = async (initialState?: any): Promise<{userId: string, sessionId: string, appName: string}> => {
+  const createSession = useCallback(async (initialState?: Record<string, unknown>): Promise<{ userId: string; sessionId: string; appName: string }> => {
     const generatedSessionId = uuidv4();
     const response = await fetch(`/api/apps/app/users/u_999/sessions/${generatedSessionId}`, {
       method: "POST",
@@ -119,20 +164,20 @@ export default function App() {
       },
       body: JSON.stringify(initialState || {})
     });
-    
+
     if (!response.ok) {
       throw new Error(`Failed to create session: ${response.status} ${response.statusText}`);
     }
-    
-    const data = await response.json();
+
+    const data: SessionResponse = await response.json();
     return {
       userId: data.userId,
       sessionId: data.id,
       appName: data.appName
     };
-  };
+  }, []);
 
-  const runPreflight = async (text: string): Promise<{ initial_state?: any, plan_summary?: any, blocked?: boolean } | null> => {
+  const runPreflight = useCallback(async (text: string): Promise<PreflightResult | null> => {
     try {
       const resp = await fetch(`/api/run_preflight`, {
         method: "POST",
@@ -140,9 +185,9 @@ export default function App() {
         body: JSON.stringify({ text })
       });
       if (resp.status === 422) {
-        const detail = await resp.json();
-        const msg = (detail && detail.detail && detail.detail.message) ? detail.detail.message : "Preflight inválido.";
-        const errs = (detail && detail.detail && detail.detail.errors) ? JSON.stringify(detail.detail.errors) : "";
+        const detail = (await resp.json()) as { detail?: { message?: string; errors?: unknown } };
+        const msg = detail?.detail?.message ?? "Preflight inválido.";
+        const errs = detail?.detail?.errors ? JSON.stringify(detail.detail.errors) : "";
         setMessages(prev => [...prev, { type: "ai", content: `${msg}\n${errs}`, id: Date.now().toString(), agent: "preflight" }]);
         return { blocked: true };
       }
@@ -150,13 +195,13 @@ export default function App() {
         console.warn("/run_preflight falhou, seguindo sem preflight.");
         return null;
       }
-      const data = await resp.json();
+      const data = (await resp.json()) as { initial_state?: Record<string, unknown>; plan_summary?: Record<string, unknown> };
       return { initial_state: data.initial_state, plan_summary: data.plan_summary };
-    } catch (e) {
-      console.warn("Erro no preflight, seguindo sem preflight.", e);
+    } catch (error) {
+      console.warn("Erro no preflight, seguindo sem preflight.", error);
       return null;
     }
-  };
+  }, []);
 
   const checkDeliveryMeta = useCallback(async () => {
     if (!userId || !sessionId) return;
@@ -164,12 +209,12 @@ export default function App() {
       setDeliveryChecking(true);
       const resp = await fetch(`/api/delivery/final/meta?user_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`);
       if (resp.ok) {
-        const data = await resp.json();
+        const data = (await resp.json()) as DeliveryMeta;
         if (data && data.ok) {
           setDeliveryMeta(data);
         }
       }
-    } catch (e) {
+    } catch {
       // ignore
     } finally {
       setDeliveryChecking(false);
@@ -184,16 +229,16 @@ export default function App() {
       const resp = await fetch(url);
       const ct = resp.headers.get('content-type') || '';
       if (ct.includes('application/json')) {
-        const data = await resp.json();
-        if (data && data.signed_url) {
-          window.open(data.signed_url, '_blank');
+        const data = (await resp.json()) as DeliveryMeta;
+        if (data?.signed_url) {
+          window.open(String(data.signed_url), '_blank');
           return;
         }
       }
       // Fallback: open endpoint directly (local stream case)
       window.open(url, '_blank');
-    } catch (e) {
-      console.warn('Download failed', e);
+    } catch (error) {
+      console.warn('Download failed', error);
     }
   }, [userId, sessionId]);
 
@@ -214,74 +259,57 @@ export default function App() {
   };
 
   // Function to extract text and metadata from SSE data
-  const extractDataFromSSE = (data: string) => {
+  const extractDataFromSSE = (data: string): SseParseResult => {
     try {
-      const parsed = JSON.parse(data);
-      console.log('[SSE PARSED EVENT]:', JSON.stringify(parsed, null, 2)); // DEBUG: Log parsed event
+      const parsedRaw = JSON.parse(data) as unknown;
+      console.log('[SSE PARSED EVENT]:', JSON.stringify(parsedRaw, null, 2)); // DEBUG: Log parsed event
 
-      let textParts: string[] = [];
-      let agent = '';
-      let finalReportWithCitations = undefined;
-      let functionCall = null;
-      let functionResponse = null;
-      let sources = null;
-
-      // Check if content.parts exists and has text
-      if (parsed.content && parsed.content.parts) {
-        textParts = parsed.content.parts
-          .filter((part: any) => part.text)
-          .map((part: any) => part.text);
-        
-        // Check for function calls
-        const functionCallPart = parsed.content.parts.find((part: any) => part.functionCall);
-        if (functionCallPart) {
-          functionCall = functionCallPart.functionCall;
-        }
-        
-        // Check for function responses
-        const functionResponsePart = parsed.content.parts.find((part: any) => part.functionResponse);
-        if (functionResponsePart) {
-          functionResponse = functionResponsePart.functionResponse;
-        }
+      if (!isRecord(parsedRaw)) {
+        return { textParts: [], agent: '', finalReportWithCitations: undefined, functionCall: null, functionResponse: null, sourceCount: 0, sources: null };
       }
 
-      // Extract agent information
-      if (parsed.author) {
-        agent = parsed.author;
+      const content = isRecord(parsedRaw.content) ? parsedRaw.content : undefined;
+      const partsRaw = content && Array.isArray(content.parts) ? content.parts : [];
+
+      const filteredParts = partsRaw.filter(isParsedPart);
+      const textParts = filteredParts
+        .map(part => part.text)
+        .filter((text): text is string => typeof text === "string" && text.length > 0);
+
+      const functionCallPart = filteredParts.find(part => part.functionCall?.name);
+      const functionResponsePart = filteredParts.find(part => part.functionResponse?.name);
+
+      const agent = typeof parsedRaw.author === "string" ? parsedRaw.author : "";
+      if (agent) {
         console.log('[SSE EXTRACT] Agent:', agent); // DEBUG: Log agent
       }
 
-      if (
-        parsed.actions &&
-        parsed.actions.stateDelta &&
-        parsed.actions.stateDelta.final_report_with_citations
-      ) {
-        finalReportWithCitations = parsed.actions.stateDelta.final_report_with_citations;
-      }
+      const actions = isRecord(parsedRaw.actions) ? parsedRaw.actions : undefined;
+      const stateDelta = actions && isRecord(actions.stateDelta) ? actions.stateDelta : undefined;
+      const finalReportWithCitations = typeof stateDelta?.final_report_with_citations === "string"
+        ? stateDelta.final_report_with_citations
+        : undefined;
 
-      // Extract website count from research agents
       let sourceCount = 0;
-      if ((parsed.author === 'section_researcher' || parsed.author === 'enhanced_search_executor')) {
-        console.log('[SSE EXTRACT] Relevant agent for source count:', parsed.author); // DEBUG
-        if (parsed.actions?.stateDelta?.url_to_short_id) {
-          console.log('[SSE EXTRACT] url_to_short_id found:', parsed.actions.stateDelta.url_to_short_id); // DEBUG
-          sourceCount = Object.keys(parsed.actions.stateDelta.url_to_short_id).length;
-          console.log('[SSE EXTRACT] Calculated sourceCount:', sourceCount); // DEBUG
-        } else {
-          console.log('[SSE EXTRACT] url_to_short_id NOT found for agent:', parsed.author); // DEBUG
+      if (agent === 'section_researcher' || agent === 'enhanced_search_executor') {
+        const urlMap = stateDelta && isRecord(stateDelta.url_to_short_id) ? stateDelta.url_to_short_id : undefined;
+        if (urlMap) {
+          sourceCount = Object.keys(urlMap).length;
         }
       }
 
-      // Extract sources if available
-      if (parsed.actions?.stateDelta?.sources) {
-        sources = parsed.actions.stateDelta.sources;
-        console.log('[SSE EXTRACT] Sources found:', sources); // DEBUG
-      }
+      const sources = stateDelta?.sources ?? null;
 
-
-      return { textParts, agent, finalReportWithCitations, functionCall, functionResponse, sourceCount, sources };
+      return {
+        textParts,
+        agent,
+        finalReportWithCitations,
+        functionCall: functionCallPart?.functionCall ?? null,
+        functionResponse: functionResponsePart?.functionResponse ?? null,
+        sourceCount,
+        sources
+      };
     } catch (error) {
-      // Log the error and a truncated version of the problematic data for easier debugging.
       const truncatedData = data.length > 200 ? data.substring(0, 200) + "..." : data;
       console.error('Error parsing SSE data. Raw data (truncated): "', truncatedData, '". Error details:', error);
       return { textParts: [], agent: '', finalReportWithCitations: undefined, functionCall: null, functionResponse: null, sourceCount: 0, sources: null };
@@ -315,7 +343,7 @@ export default function App() {
     }
   };
 
-  const processSseEventData = (jsonData: string, aiMessageId: string) => {
+  const processSseEventData = useCallback((jsonData: string, aiMessageId: string) => {
     const { textParts, agent, finalReportWithCitations, functionCall, functionResponse, sourceCount, sources } = extractDataFromSSE(jsonData);
 
     if (sourceCount > 0) {
@@ -373,12 +401,12 @@ export default function App() {
 
     if (agent === "report_composer_with_citations" && finalReportWithCitations) {
       const finalReportMessageId = Date.now().toString() + "_final";
-      setMessages(prev => [...prev, { type: "ai", content: finalReportWithCitations as string, id: finalReportMessageId, agent: currentAgentRef.current, finalReportWithCitations: true }]);
-      setDisplayData(finalReportWithCitations as string);
+      setMessages(prev => [...prev, { type: "ai", content: finalReportWithCitations, id: finalReportMessageId, agent: currentAgentRef.current, finalReportWithCitations: true }]);
+      setDisplayData(finalReportWithCitations);
     }
-  };
+  }, []);
 
-  const handleSubmit = useCallback(async (query: string, model: string, effort: string) => {
+  const handleSubmit = useCallback(async (query: string) => {
     if (!query.trim()) return;
 
     setIsLoading(true);
@@ -387,11 +415,11 @@ export default function App() {
       let currentUserId = userId;
       let currentSessionId = sessionId;
       let currentAppName = appName;
-      
+
       if (!currentSessionId || !currentUserId || !currentAppName) {
         console.log('Creating new session...');
         // Tentar preflight para preparar estado inicial (plano fixo + specs por formato)
-        let initialState: any = {};
+        let initialState: Record<string, unknown> = {};
         if (preflightEnabled) {
           const preflight = await runPreflight(query);
           if (preflight?.blocked) {
@@ -404,7 +432,7 @@ export default function App() {
         currentUserId = sessionData.userId;
         currentSessionId = sessionData.sessionId;
         currentAppName = sessionData.appName;
-        
+
         setUserId(currentUserId);
         setSessionId(currentSessionId);
         setAppName(currentAppName);
@@ -449,7 +477,7 @@ export default function App() {
         if (!response.ok) {
           throw new Error(`Failed to send message: ${response.status} ${response.statusText}`);
         }
-        
+
         return response;
       };
 
@@ -458,18 +486,17 @@ export default function App() {
       // Handle SSE streaming
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-      let lineBuffer = ""; 
+      let lineBuffer = "";
       let eventDataBuffer = "";
 
       if (reader) {
-        // eslint-disable-next-line no-constant-condition
-        while (true) {
+        for (; ;) {
           const { done, value } = await reader.read();
 
           if (value) {
             lineBuffer += decoder.decode(value, { stream: true });
           }
-          
+
           let eolIndex;
           // Process all complete lines in the buffer, or the remaining buffer if 'done'
           while ((eolIndex = lineBuffer.indexOf('\n')) >= 0 || (done && lineBuffer.length > 0)) {
@@ -502,7 +529,7 @@ export default function App() {
             // (e.g., stream ended after data lines but before an empty line delimiter)
             if (eventDataBuffer.length > 0) {
               const jsonDataToParse = eventDataBuffer.endsWith('\n') ? eventDataBuffer.slice(0, -1) : eventDataBuffer;
-              console.log('[SSE DISPATCH FINAL EVENT]:', jsonDataToParse.substring(0,200) + "..."); // DEBUG
+              console.log('[SSE DISPATCH FINAL EVENT]:', jsonDataToParse.substring(0, 200) + "..."); // DEBUG
               processSseEventData(jsonDataToParse, aiMessageId);
               eventDataBuffer = ""; // Clear buffer
             }
@@ -517,14 +544,14 @@ export default function App() {
       console.error("Error:", error);
       // Update the AI message placeholder with an error message
       const aiMessageId = Date.now().toString() + "_ai_error";
-      setMessages(prev => [...prev, { 
-        type: "ai", 
-        content: `Sorry, there was an error processing your request: ${error instanceof Error ? error.message : 'Unknown error'}`, 
-        id: aiMessageId 
+      setMessages(prev => [...prev, {
+        type: "ai",
+        content: `Sorry, there was an error processing your request: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        id: aiMessageId
       }]);
       setIsLoading(false);
     }
-  }, [processSseEventData]);
+  }, [appName, preflightEnabled, processSseEventData, runPreflight, sessionId, userId, createSession]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -540,11 +567,11 @@ export default function App() {
   useEffect(() => {
     const checkBackend = async () => {
       setIsCheckingBackend(true);
-      
+
       // Check if backend is ready with retry logic
       const maxAttempts = 60; // 2 minutes with 2-second intervals
       let attempts = 0;
-      
+
       while (attempts < maxAttempts) {
         const isReady = await checkBackendHealth();
         if (isReady) {
@@ -552,16 +579,16 @@ export default function App() {
           setIsCheckingBackend(false);
           return;
         }
-        
+
         attempts++;
         await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds between checks
       }
-      
+
       // If we get here, backend didn't come up in time
       setIsCheckingBackend(false);
       console.error("Backend failed to start within 2 minutes");
     };
-    
+
     checkBackend();
   }, []);
 
@@ -573,37 +600,25 @@ export default function App() {
     window.location.reload();
   }, []);
 
-  // Scroll to bottom when messages update
-  const scrollToBottom = useCallback(() => {
-    if (scrollAreaRef.current) {
-      const scrollViewport = scrollAreaRef.current.querySelector(
-        "[data-radix-scroll-area-viewport]"
-      );
-      if (scrollViewport) {
-        scrollViewport.scrollTop = scrollViewport.scrollHeight;
-      }
-    }
-  }, []);
-
   const BackendLoadingScreen = () => (
     <div className="flex-1 flex flex-col items-center justify-center p-4 overflow-hidden relative">
       <div className="w-full max-w-2xl z-10
                       bg-neutral-900/50 backdrop-blur-md 
                       p-8 rounded-2xl border border-neutral-700 
                       shadow-2xl shadow-black/60">
-        
+
         <div className="text-center space-y-6">
           <h1 className="text-4xl font-bold text-white flex items-center justify-center gap-3">
             ✨ Gemini FullStack - ADK 🚀
           </h1>
-          
+
           <div className="flex flex-col items-center space-y-4">
             {/* Spinning animation */}
             <div className="relative">
               <div className="w-16 h-16 border-4 border-neutral-600 border-t-blue-500 rounded-full animate-spin"></div>
-              <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-purple-500 rounded-full animate-spin" style={{animationDirection: 'reverse', animationDuration: '1.5s'}}></div>
+              <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-purple-500 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
             </div>
-            
+
             <div className="space-y-2">
               <p className="text-xl text-neutral-300">
                 Waiting for backend to be ready...
@@ -612,12 +627,12 @@ export default function App() {
                 This may take a moment on first startup
               </p>
             </div>
-            
+
             {/* Animated dots */}
             <div className="flex space-x-1">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-              <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
             </div>
           </div>
         </div>
@@ -665,7 +680,7 @@ export default function App() {
               disabled={!userId || !sessionId || deliveryChecking}
               className="text-xs border-neutral-600 text-neutral-200 hover:bg-neutral-700"
             >
-              {deliveryChecking ? 'Verificando…' : 'Atualizar' }
+              {deliveryChecking ? 'Verificando…' : 'Atualizar'}
             </Button>
             {previewEnabled && deliveryMeta?.ok && (
               <Button
@@ -695,8 +710,8 @@ export default function App() {
                 <p className="text-neutral-300">
                   Unable to connect to backend services at localhost:8000
                 </p>
-                <button 
-                  onClick={() => window.location.reload()} 
+                <button
+                  onClick={() => window.location.reload()}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
                 >
                   Retry
