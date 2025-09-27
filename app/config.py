@@ -37,6 +37,7 @@ class DevelopmentConfiguration:
     enable_image_generation: bool = True
     enable_new_input_fields: bool = False
     enable_storybrand_fallback: bool = False
+    storybrand_gate_debug: bool = False  # Force fallback path for testing purposes
     preflight_shadow_mode: bool = True
 
     # Preferences
@@ -97,6 +98,11 @@ if os.getenv("ENABLE_NEW_INPUT_FIELDS"):
 if os.getenv("ENABLE_STORYBRAND_FALLBACK"):
     config.enable_storybrand_fallback = (
         os.getenv("ENABLE_STORYBRAND_FALLBACK").lower() == "true"
+    )
+
+if os.getenv("STORYBRAND_GATE_DEBUG"):
+    config.storybrand_gate_debug = (
+        os.getenv("STORYBRAND_GATE_DEBUG").lower() == "true"
     )
 
 if os.getenv("PREFLIGHT_SHADOW_MODE"):

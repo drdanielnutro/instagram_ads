@@ -9,7 +9,7 @@
 
 ## 2. Integração no `app/agent.py`
 - [ ] Criar/posicionar `StoryBrandQualityGate` após `landing_page_analyzer` reaproveitando `PlanningOrRunSynth`.
-- [ ] Condicionar o gate à flag `ENABLE_STORYBRAND_FALLBACK` em `config`.
+- [ ] Condicionar o gate à flag `config.enable_storybrand_fallback` (override via `ENABLE_STORYBRAND_FALLBACK`).
 
 ## 3. StoryBrandQualityGate
 - [ ] Implementar agente (`app/agents/storybrand_gate.py` ou módulo equivalente) herdando de `BaseAgent`.
@@ -47,7 +47,7 @@
 - [ ] Atualizar `landing_page_context['storybrand_completeness'] = 1.0` ao final do fallback.
 
 ## 10. Configuração (`app/config.py`)
-- [ ] Adicionar campos (`fallback_storybrand_max_iterations`, `fallback_storybrand_model`, `storybrand_gate_debug`, `ENABLE_STORYBRAND_FALLBACK`).
+- [ ] Adicionar campos (`fallback_storybrand_max_iterations`, `fallback_storybrand_model`, `storybrand_gate_debug`, `config.enable_storybrand_fallback`).
 - [ ] Documentar variáveis de ambiente correspondentes.
 
 ## 11. Logs e Observabilidade
@@ -67,7 +67,7 @@
 - [ ] Atualizar README com novos campos obrigatórios e exemplos de payload/API.
 
 ## 14. Feature Flag & Rollout
-- [ ] Garantir toggles (`ENABLE_STORYBRAND_FALLBACK`, `VITE_ENABLE_NEW_FIELDS`) documentados e controlados.
+- [ ] Garantir toggles (`config.enable_storybrand_fallback` / `ENABLE_STORYBRAND_FALLBACK`, `VITE_ENABLE_NEW_FIELDS`) documentados e controlados.
 - [ ] Planejar rollout backend → frontend e estratégia de rollback.
 
 ## 15. Auditoria & Métricas Futuras
