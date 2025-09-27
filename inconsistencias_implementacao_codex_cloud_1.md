@@ -28,6 +28,7 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 3.2 Popular `state['storybrand_gate_metrics']` conforme contrato
 - **Status:** Incorreto
 - **Justificativa:** Embora os campos obrigatórios estejam presentes, o dicionário gravado inclui chaves extras (`force_flag_active`, `fallback_enabled`, `block_reason`) que não fazem parte do formato definido na Seção 16.1, violando o contrato estrito descrito no plano.【F:app/agents/storybrand_gate.py†L77-L88】【F:aprimoramento_plano_storybrand_v2.md†L162-L181】
+- **Correção sugerida:** Limitar `storybrand_gate_metrics` às chaves previstas (score, threshold, decision_path, timestamp, forced/debug) ou mover os campos extras para outro registro, mantendo o contrato da Seção 16.1.
 
 ### 3.3 Registrar fallback forçado quando score ausente/inválido
 - **Status:** Correto
@@ -45,6 +46,7 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 4.3 Implementar `fallback_input_collector` conforme plano
 - **Status:** Incorreto
 - **Justificativa:** O coletor apenas valida valores existentes ou retornados pelo LLM; ele não consulta `landing_page_context` quando faltam dados nem realiza a “última tentativa” de inferência para `sexo_cliente_alvo`, tampouco registra um evento de erro com `EventActions` antes de abortar, contrariando as orientações da Seção 4 e 16.3.【F:app/agents/storybrand_fallback.py†L102-L156】【F:aprimoramento_plano_storybrand_v2.md†L45-L48】【F:aprimoramento_plano_storybrand_v2.md†L205-L213】
+- **Correção sugerida:** Consultar `landing_page_context` quando os inputs permanecerem vazios, normalizar `sexo_cliente_alvo`, registrar o evento de erro padrão no audit trail e abortar o pipeline via `EventActions(escalate=True)` quando a inferência falhar.
 
 ### 4.4 Implementar `section_pipeline_runner` iterando pelas 16 seções
 - **Status:** Correto
@@ -58,19 +60,23 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 5.1 Criar `StoryBrandSectionConfig` com todos os campos previstos
 - **Status:** Incorreto
 - **Justificativa:** A dataclass inclui apenas `state_key`, `prompt_name` e `narrative_goal`; os campos exigidos (`display_name`, `writer_prompt_path`, `review_prompt_paths`, `corrector_prompt_path`) não foram implementados.【F:app/agents/storybrand_sections.py†L9-L103】【F:aprimoramento_plano_storybrand_v2.md†L62-L70】
+- **Correção sugerida:** Adicionar `display_name`, `writer_prompt_path`, `review_prompt_paths` (por gênero) e `corrector_prompt_path` à dataclass, preenchendo os caminhos explícitos conforme a Seção 5.
 
 ### 5.2 Mapear prompts (`writer`, `reviewer`, `corrector`) e `narrative_goal`
 - **Status:** Incorreto
 - **Justificativa:** Apesar de listar as 16 seções e seus prompts de escrita, não há mapeamento por seção dos prompts de revisão e correção, contrariando o plano.【F:app/agents/storybrand_sections.py†L18-L103】【F:aprimoramento_plano_storybrand_v2.md†L62-L76】
+- **Correção sugerida:** Popular o mapeamento completo de prompts por seção e reutilizá-lo no runner/loop em vez de reconstruir instruções manualmente.
 
 ## 6. Loop de Revisão Compartilhado
 ### 6.1 Implementar `section_review_loop` reutilizando `LoopAgent`
 - **Status:** Incorreto
 - **Justificativa:** O loop de revisão foi codificado manualmente dentro de `_run_section`; não existe um `LoopAgent` compartilhado que encapsule reviewer/checker/corrector como previsto.【F:app/agents/storybrand_fallback.py†L192-L338】【F:aprimoramento_plano_storybrand_v2.md†L78-L85】
+- **Correção sugerida:** Extrair o bloco de revisão para um `LoopAgent` dedicado (`section_review_loop`) reutilizado em cada seção, conforme arquitetura prevista.
 
 ### 6.2 Configurar `section_reviewer`, `approval_checker`, `section_corrector`
 - **Status:** Incorreto
 - **Justificativa:** Os agentes são instanciados inline a cada iteração e não há um `approval_checker` dedicado que sinalize escalonamento, descumprindo a arquitetura especificada.【F:app/agents/storybrand_fallback.py†L236-L326】【F:aprimoramento_plano_storybrand_v2.md†L78-L85】
+- **Correção sugerida:** Declarar agentes específicos para revisão/aprovação/correção e usar `EscalationChecker` no loop, registrando os estágios adicionais na trilha de auditoria.
 
 ### 6.3 Respeitar `config.fallback_storybrand_max_iterations`
 - **Status:** Correto
@@ -122,21 +128,25 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 
 ## 11. Logs e Observabilidade
 ### 11.1 Logging estruturado do gate/fallback
-- **Status:** Correto
-- **Justificativa:** O gate faz `logger.info` com os campos relevantes e o fallback adiciona eventos detalhados à trilha de auditoria, atendendo à seção 11.【F:app/agents/storybrand_gate.py†L92-L104】【F:app/agents/storybrand_fallback.py†L217-L326】
+- **Status:** Incorreto
+- **Justificativa:** O gate registra logs estruturados, mas o pipeline de fallback apenas preenche `storybrand_audit_trail` no estado sem emitir logs externos (`logger.info`) para início/fim de seções e iterações, contrariando a Seção 11 do plano.【F:app/agents/storybrand_gate.py†L92-L104】【F:app/agents/storybrand_fallback.py†L172-L338】【F:aprimoramento_plano_storybrand_v2.md†L116-L121】
+- **Correção sugerida:** Adicionar chamadas de logging estruturado (ex.: `logger.info`) nos pontos principais do fallback (entrada/saída de seções, resultado da revisão, compilação) mantendo o mesmo formato utilizado pelo gate.
 
 ### 11.2 Preencher `state['storybrand_audit_trail']` conforme contrato
 - **Status:** Incorreto
 - **Justificativa:** Os eventos gravados usam apenas os estágios `collector`, `writer`, `reviewer` e `corrector`, sempre com `duration_ms=None`. As etapas `preparer`, `checker` e `compiler` previstas na Seção 16.2 não são registradas, e não há medição de duração para estágios concluídos.【F:app/agents/storybrand_fallback.py†L65-L338】【F:aprimoramento_plano_storybrand_v2.md†L183-L201】
+- **Correção sugerida:** Acrescentar eventos `preparer`, `checker` e `compiler`, preenchendo `duration_ms` quando aplicável e registrando esses pontos em `StoryBrandSectionRunner` e `FallbackStorybrandCompiler`.
 
 ## 12. Testes
 ### 12.1 Testes unitários do gate (score acima/abaixo/ausente)
 - **Status:** Incorreto
 - **Justificativa:** Há casos para score alto, baixo, force flag e flags desativadas, mas falta um teste cobrindo o cenário de score ausente/inválido exigido pelo plano.【F:tests/unit/agents/test_storybrand_gate.py†L28-L119】【F:aprimoramento_plano_storybrand_v2.md†L124-L126】
+- **Correção sugerida:** Implementar teste cobrindo score ausente/inválido garantindo que o gate force o fallback e marque `is_forced_fallback=True`.
 
 ### 12.2 Testes para `StoryBrandSectionConfig` e runner
 - **Status:** Incorreto
 - **Justificativa:** Existe apenas um teste verificando a contagem e unicidade das seções; não há cobertura para o runner nem validação dos campos adicionais solicitados (display name, prompts), deixando a lógica central sem testes.【F:tests/unit/agents/test_storybrand_sections.py†L1-L8】【09c1ae†L1-L1】【F:aprimoramento_plano_storybrand_v2.md†L62-L76】
+- **Correção sugerida:** Criar testes que validem a configuração completa das seções e exercitem `StoryBrandSectionRunner` com agentes mockados, cobrindo auditoria e limites de iteração.
 
 ### 12.3 Testar `fallback_storybrand_compiler`
 - **Status:** Correto
@@ -145,6 +155,7 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 12.4 Testes de integração do fallback pipeline
 - **Status:** Incorreto
 - **Justificativa:** Não há testes de integração simulando o `fallback_storybrand_pipeline`; a busca por "fallback" em `tests/integration` não retorna referências, descumprindo o item do plano.【832440†L1-L1】【F:aprimoramento_plano_storybrand_v2.md†L131-L136】
+- **Correção sugerida:** Adicionar testes de integração que mockem os `LlmAgent`s e executem o `fallback_storybrand_pipeline`, incluindo o cenário `force_storybrand_fallback`.
 
 ### 12.5 Revalidar caminho feliz
 - **Status:** Correto
@@ -162,6 +173,7 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 13.3 Atualizar README com novos campos obrigatórios
 - **Status:** Incorreto
 - **Justificativa:** O README continua classificando `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` como opcionais e indica `neutro` como default, divergindo do comportamento obrigatório definido no plano e implementado no backend.【F:README.md†L167-L170】【F:aprimoramento_plano_storybrand_v2.md†L45-L48】【F:aprimoramento_plano_storybrand_v2.md†L203-L213】
+- **Correção sugerida:** Atualizar README e demais docs para marcar `nome_empresa`, `o_que_a_empresa_faz` e `sexo_cliente_alvo` como obrigatórios (sem default neutro) quando as flags estiverem ativas.
 
 ## 14. Feature Flag & Rollout
 ### 14.1 Garantir toggles documentados e controlados
@@ -189,11 +201,14 @@ A tabela abaixo registra o status de cada atividade marcada como concluída em `
 ### 16.1 Executar `make lint`, `make test` e testes manuais completos
 - **Status:** Sem evidência
 - **Justificativa:** O repositório não contém registros (logs, relatórios ou scripts) comprovando a execução dos comandos de QA exigidos; apenas o checklist marca o item como concluído.【F:checklist.md†L57-L60】
+- **Correção sugerida:** Executar `make lint`/`make test` após as alterações e anexar logs ou artefatos no PR como evidência de QA automatizado.
 
 ### 16.2 Capturar evidências (logs, screenshots) para PR
 - **Status:** Sem evidência
 - **Justificativa:** Não há artefatos versionados (imagens ou logs) demonstrando as evidências mencionadas, apesar de o checklist indicar conclusão.【F:checklist.md†L60-L61】
+- **Correção sugerida:** Capturar as evidências prometidas (logs, screenshots) e versioná-las ou anexá-las ao PR para respaldar a revisão.
 
 ### 16.3 Revisar checklist antes do merge
 - **Status:** Sem evidência
 - **Justificativa:** O checklist está marcado como concluído, mas não há documentação complementar comprovando a revisão final exigida neste item.【F:checklist.md†L61-L62】
+- **Correção sugerida:** Registrar explicitamente a revisão final (ex.: comentário no PR ou atualização datada no checklist) antes de concluir o merge.
