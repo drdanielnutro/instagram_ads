@@ -39,6 +39,8 @@ logger = logging.getLogger(__name__)
 from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
 from .callbacks.persist_outputs import persist_final_delivery
 from .schemas.storybrand import StoryBrandAnalysis
+from .agents.storybrand_fallback import fallback_storybrand_pipeline
+from .agents.storybrand_gate import StoryBrandQualityGate
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -1153,6 +1155,16 @@ planning_pipeline = SequentialAgent(
     ],
 )
 
+planning_or_run_synth = PlanningOrRunSynth(
+    synth_agent=context_synthesizer,
+    planning_agent=planning_pipeline
+)
+
+storybrand_quality_gate = StoryBrandQualityGate(
+    planning_agent=planning_or_run_synth,
+    fallback_agent=fallback_storybrand_pipeline
+)
+
 code_review_loop = LoopAgent(
     name="code_review_loop",
     max_iterations=config.max_code_review_iterations if hasattr(config, "max_code_review_iterations") else 5,
@@ -1224,7 +1236,7 @@ complete_pipeline = SequentialAgent(
     sub_agents=[
         input_processor,
         landing_page_analyzer,  # NOVO: adicionar aqui
-        PlanningOrRunSynth(synth_agent=context_synthesizer, planning_agent=planning_pipeline),
+        storybrand_quality_gate,
         execution_pipeline
     ],
 )

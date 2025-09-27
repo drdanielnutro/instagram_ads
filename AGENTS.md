@@ -40,3 +40,11 @@
 - Em seguida, consulte o plano `aprimoramento_plano_storybrand_v2.md` e, se aplicável, o plano complementar específico (ex.: `plano_campos_obrigatorios_storybrand.md`) para entender o contexto da tarefa.
 - Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
 - Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist.md` e registre o resultado na sua resposta/PR.
+
+## StoryBrand Fallback Pipeline
+- O agente `StoryBrandQualityGate` (arquivo `app/agents/storybrand_gate.py`) fica fixo no `complete_pipeline` e decide entre o caminho feliz (`PlanningOrRunSynth`) e o fallback (`fallback_storybrand_pipeline`).
+- O fallback está implementado em `app/agents/storybrand_fallback.py` e carrega prompts via `PromptLoader` (`app/utils/prompt_loader.py`).
+- Prompts ficam em `prompts/storybrand_fallback/` e são carregados de forma fail-fast (raise `FileNotFoundError` se faltar).
+- Logs estruturados ficam em `state['storybrand_gate_metrics']` e `state['storybrand_audit_trail']`. Garanta que testes cubram cenários happy-path, fallback e force fallback.
+- Novos parâmetros de config: `fallback_storybrand_max_iterations`, `fallback_storybrand_model`, `enable_storybrand_fallback`, `storybrand_gate_debug`. Overrides via env (`FALLBACK_STORYBRAND_MAX_ITERATIONS`, `FALLBACK_STORYBRAND_MODEL`, `ENABLE_STORYBRAND_FALLBACK`).
+- Use `tests/unit/agents/test_storybrand_gate.py` e `tests/unit/utils/test_prompt_loader.py` como referência para escrever novos testes.
