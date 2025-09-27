@@ -38,6 +38,8 @@ class DevelopmentConfiguration:
     enable_new_input_fields: bool = False
     enable_storybrand_fallback: bool = False
     storybrand_gate_debug: bool = False  # Force fallback path for testing purposes
+    fallback_storybrand_max_iterations: int = 3
+    fallback_storybrand_model: str | None = None
     preflight_shadow_mode: bool = True
 
     # Preferences
@@ -104,6 +106,16 @@ if os.getenv("STORYBRAND_GATE_DEBUG"):
     config.storybrand_gate_debug = (
         os.getenv("STORYBRAND_GATE_DEBUG").lower() == "true"
     )
+
+if os.getenv("FALLBACK_STORYBRAND_MAX_ITERATIONS"):
+    config.fallback_storybrand_max_iterations = int(
+        os.getenv("FALLBACK_STORYBRAND_MAX_ITERATIONS")
+    )
+
+if os.getenv("FALLBACK_STORYBRAND_MODEL"):
+    value = os.getenv("FALLBACK_STORYBRAND_MODEL")
+    if value:
+        config.fallback_storybrand_model = value
 
 if os.getenv("STORYBRAND_MIN_COMPLETENESS"):
     try:

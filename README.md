@@ -306,6 +306,10 @@ ARTIFACTS_BUCKET=gs://instagram-ads-472021-facilitador-logs-data   # uso interno
 DELIVERIES_BUCKET=gs://instagram-ads-472021-deliveries             # JSON final (frontend via Signed URL)
 # Flags de novos campos (backend)
 ENABLE_NEW_INPUT_FIELDS=false
+ENABLE_STORYBRAND_FALLBACK=false
+FALLBACK_STORYBRAND_MAX_ITERATIONS=3
+FALLBACK_STORYBRAND_MODEL=
+STORYBRAND_GATE_DEBUG=false
 PREFLIGHT_SHADOW_MODE=true
 ```
 
@@ -315,6 +319,15 @@ PREFLIGHT_SHADOW_MODE=true
 - **ENABLE_NEW_INPUT_FIELDS** (default: false)
   - false: /run_preflight não inclui novos campos no initial_state (retrocompatível).
   - true: inclui `nome_empresa`, `o_que_a_empresa_faz`, `sexo_cliente_alvo` (com defaults) no initial_state.
+- **ENABLE_STORYBRAND_FALLBACK** (default: false)
+  - false: o gate monitora métricas, mas nunca executa o fallback.
+  - true: o gate pode acionar o `fallback_storybrand_pipeline` (requer ENABLE_NEW_INPUT_FIELDS=true).
+- **FALLBACK_STORYBRAND_MAX_ITERATIONS** (default: 3)
+  - Controla o número máximo de ciclos writer→reviewer→corrector por seção.
+- **FALLBACK_STORYBRAND_MODEL** (opcional)
+  - Permite usar um modelo mais potente (ex.: `gemini-2.5-pro`) apenas no fallback.
+- **STORYBRAND_GATE_DEBUG** (default: false)
+  - true: força o fallback independentemente do score para depuração/QA.
 - **PREFLIGHT_SHADOW_MODE** (default: true)
   - true: extrai/loga novos campos sem incluí-los no initial_state (observação segura).
   - false: ignora completamente a extração dos novos campos quando ENABLE_NEW_INPUT_FIELDS=false.
@@ -336,6 +349,17 @@ Fases sugeridas:
 1) Backend com SHADOW on e NEW_INPUT_FIELDS off; frontend com VITE_ENABLE_NEW_FIELDS=false.
 2) Habilitar UI: VITE_ENABLE_NEW_FIELDS=true para subset; observar erros/telemetria.
 3) Habilitar fim-a-fim: ENABLE_NEW_INPUT_FIELDS=true; depois avaliar desligar SHADOW.
+
+## StoryBrand Fallback (Alta Fidelidade)
+
+O fallback é ativado pelo agente `StoryBrandQualityGate` quando o score de completude StoryBrand fica abaixo de `config.min_storybrand_completeness`, quando `state['force_storybrand_fallback']` está habilitado ou quando `config.storybrand_gate_debug` está `True`.
+
+- **Pipeline**: `fallback_storybrand_pipeline` (`app/agents/storybrand_fallback.py`) executa inicialização, coleta/validação de inputs, geração das 16 seções, compilação (`FallbackStorybrandCompiler`) e relatório de qualidade.
+- **Prompts**: ficam em `prompts/storybrand_fallback/` e são carregados pelo utilitário `PromptLoader` (`app/utils/prompt_loader.py`). Faltas disparam `FileNotFoundError`.
+- **Métricas**: o gate popula `state['storybrand_gate_metrics']`; o fallback adiciona eventos em `state['storybrand_audit_trail']` e um sumário em `state['storybrand_recovery_report']`.
+- **Configuração**: use `ENABLE_STORYBRAND_FALLBACK=true`, `ENABLE_NEW_INPUT_FIELDS=true` e ajuste `FALLBACK_STORYBRAND_MAX_ITERATIONS`/`FALLBACK_STORYBRAND_MODEL` conforme necessidade.
+- **Rollout sugerido**: habilite primeiro o backend (`ENABLE_STORYBRAND_FALLBACK=true`), valide métricas com `STORYBRAND_GATE_DEBUG` em ambiente de QA e só então ligue `VITE_ENABLE_NEW_FIELDS` no frontend.
+- **QA**: `tests/unit/agents/test_storybrand_gate.py` e `tests/unit/utils/test_prompt_loader.py` cobrem a lógica crítica do gate e do carregamento de prompts.
 
 ## Execução
 
