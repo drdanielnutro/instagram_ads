@@ -36,26 +36,7 @@
     - Registrar um evento `preparer` antes de montar o contexto da seção, `checker` após a decisão do approval checker e `compiler` na entrada/saída do compilador.
     - Sempre que possível, preencher `duration_ms` para estágios concluídos (ex.: usando timestamps antes/depois da execução).
 
-## 12. Testes
-- [ ] 12.1 Cobrir score ausente no gate
-    - Adicionar um novo teste (ex.: `test_gate_forces_fallback_when_score_missing`) que inicializa o estado sem score, executa o gate e verifica se o fallback é chamado e `is_forced_fallback` fica `True`.
-
-- [ ] 12.2 Testar configuração e runner de seções
-    - Atualizar `test_storybrand_sections.py` para validar os novos campos (display name, caminhos de prompt).
-    - Criar testes com mocks para `StoryBrandSectionRunner`, validando que os prompts corretos são utilizados e que o limite de iterações gera erro quando excedido.
-
-- [ ] 12.4 Adicionar teste de integração do fallback
-    - Criar um teste de integração (ex.: `tests/integration/test_storybrand_fallback_pipeline.py`) que configure o estado inicial, habilite as flags e use fixtures/mocks para `LlmAgent`, assegurando a geração das 16 seções e da compilação.
-    - Incluir o cenário `force_storybrand_fallback=True` para verificar métricas e logs.
-
 ## 13. Documentação
 - [ ] 13.3 Atualizar documentação sobre campos obrigatórios
     - Editar a seção de inputs no README para refletir que os campos são obrigatórios com as flags ativas e que `sexo_cliente_alvo` deve ser `masculino` ou `feminino`.
     - Revisar `docs/storybrand_fallback.md` e quaisquer outros documentos para alinhar a terminologia.
-
-## 16. QA Final
-- [ ] 16.1 Registrar execução de QA
-    - Executar `make lint` e `make test` após aplicar as correções e anexar os resultados (logs ou referência) ao PR ou a um diretório `artifacts/`.
-
-- [ ] 16.2 Anexar evidências gráficas/logs ao PR
-    - Gerar logs e/ou screenshots demonstrando o fallback funcionando (por exemplo, saída de logs do gate + pipeline) e anexá-los ao PR ou ao repositório.
