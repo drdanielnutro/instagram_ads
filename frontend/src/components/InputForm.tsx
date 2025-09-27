@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { ArrowRight, FileText, LinkIcon, Target, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,14 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
 
   const chatTextareaRef = useRef<HTMLTextAreaElement>(null);
   const landingPageRef = useRef<HTMLInputElement>(null);
+
+  const landingPageDescriptionId = useId();
+  const objetivoDescriptionId = useId();
+  const objetivoLabelId = useId();
+  const formatoDescriptionId = useId();
+  const formatoLabelId = useId();
+  const perfilDescriptionId = useId();
+  const focoDescriptionId = useId();
 
   useEffect(() => {
     if (context === "chat") {
@@ -127,13 +135,16 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             </span>
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-foreground/95">Passo 1 — Landing page</h3>
-              <p className="text-sm text-muted-foreground">
+              <p id={landingPageDescriptionId} className="text-sm text-muted-foreground">
                 Informe a URL principal que resume a oferta. Usaremos a página para validar copy, tom e CTA.
               </p>
             </div>
           </div>
           <div className="mt-4">
             <div className="relative">
+              <label className="sr-only" htmlFor="landing-page-url">
+                URL da landing page
+              </label>
               <Input
                 id="landing-page-url"
                 ref={landingPageRef}
@@ -143,8 +154,13 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
                 disabled={isLoading}
                 autoComplete="off"
                 className="pl-11"
+                aria-describedby={landingPageDescriptionId}
               />
-              <LinkIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <LinkIcon
+                aria-hidden="true"
+                focusable="false"
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+              />
             </div>
           </div>
         </div>
@@ -156,22 +172,29 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             </span>
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-foreground/95">Passo 2 — Objetivo final</h3>
-              <p className="text-sm text-muted-foreground">
+              <p id={objetivoDescriptionId} className="text-sm text-muted-foreground">
                 Escolha a ação esperada do público para ajustar copy, CTA e fluxo do anúncio.
               </p>
             </div>
           </div>
           <div className="mt-4">
-            <Select
-              value={objetivoFinal || undefined}
-              onValueChange={setObjetivoFinal}
-              disabled={isLoading}
-            >
+            <span className="sr-only" id={objetivoLabelId}>
+              Objetivo final da campanha
+            </span>
+            <Select value={objetivoFinal || undefined} onValueChange={setObjetivoFinal} disabled={isLoading}>
               <div className="relative">
-                <SelectTrigger className="pl-11">
+                <SelectTrigger
+                  className="pl-11"
+                  aria-labelledby={objetivoLabelId}
+                  aria-describedby={objetivoDescriptionId}
+                >
                   <SelectValue placeholder="Selecione o objetivo" />
                 </SelectTrigger>
-                <Target className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Target
+                  aria-hidden="true"
+                  focusable="false"
+                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                />
               </div>
               <SelectContent>
                 {objetivoFinalOptions.map((option) => (
@@ -191,22 +214,29 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             </span>
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-foreground/95">Passo 3 — Formato do anúncio</h3>
-              <p className="text-sm text-muted-foreground">
+              <p id={formatoDescriptionId} className="text-sm text-muted-foreground">
                 Feed, Stories ou Reels determinam limites de texto, aspect ratio e estilo visual.
               </p>
             </div>
           </div>
           <div className="mt-4">
-            <Select
-              value={formatoAnuncio || undefined}
-              onValueChange={setFormatoAnuncio}
-              disabled={isLoading}
-            >
+            <span className="sr-only" id={formatoLabelId}>
+              Formato do anúncio
+            </span>
+            <Select value={formatoAnuncio || undefined} onValueChange={setFormatoAnuncio} disabled={isLoading}>
               <div className="relative">
-                <SelectTrigger className="pl-11">
+                <SelectTrigger
+                  className="pl-11"
+                  aria-labelledby={formatoLabelId}
+                  aria-describedby={formatoDescriptionId}
+                >
                   <SelectValue placeholder="Selecione o formato" />
                 </SelectTrigger>
-                <FileText className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <FileText
+                  aria-hidden="true"
+                  focusable="false"
+                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                />
               </div>
               <SelectContent>
                 {formatoAnuncioOptions.map((option) => (
@@ -226,13 +256,16 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             </span>
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-foreground/95">Passo 4 — Perfil do cliente</h3>
-              <p className="text-sm text-muted-foreground">
+              <p id={perfilDescriptionId} className="text-sm text-muted-foreground">
                 Resuma persona, dores, desejos e estilo de comunicação desejado para manter coerência.
               </p>
             </div>
           </div>
           <div className="mt-4">
             <div className="relative">
+              <label className="sr-only" htmlFor="perfil-cliente">
+                Perfil do cliente
+              </label>
               <Textarea
                 id="perfil-cliente"
                 value={perfilCliente}
@@ -241,8 +274,13 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
                 rows={4}
                 disabled={isLoading}
                 className="pl-11"
+                aria-describedby={perfilDescriptionId}
               />
-              <Users className="pointer-events-none absolute left-3 top-5 h-4 w-4 text-muted-foreground" />
+              <Users
+                aria-hidden="true"
+                focusable="false"
+                className="pointer-events-none absolute left-3 top-5 h-4 w-4 text-muted-foreground"
+              />
             </div>
           </div>
         </div>
@@ -254,12 +292,15 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             </span>
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-foreground/95">Passo 5 — Foco da campanha</h3>
-              <p className="text-sm text-muted-foreground">
+              <p id={focoDescriptionId} className="text-sm text-muted-foreground">
                 Liste diferenciais, mensagens obrigatórias ou restrições (compliance, claims proibidos, etc.).
               </p>
             </div>
           </div>
           <div className="mt-4">
+            <label className="sr-only" htmlFor="foco-campanha">
+              Foco da campanha
+            </label>
             <Textarea
               id="foco-campanha"
               value={foco}
@@ -267,6 +308,7 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
               placeholder="Ex.: destacar acompanhamento médico, evitar promessas de emagrecimento rápido."
               rows={4}
               disabled={isLoading}
+              aria-describedby={focoDescriptionId}
             />
           </div>
         </div>
@@ -283,13 +325,17 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
         >
           {isLoading ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 aria-hidden="true" focusable="false" className="h-4 w-4 animate-spin" />
               Gerando anúncios...
             </>
           ) : (
             <>
               Iniciar geração
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight
+                aria-hidden="true"
+                focusable="false"
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+              />
             </>
           )}
         </Button>
