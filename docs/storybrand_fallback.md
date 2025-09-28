@@ -35,6 +35,9 @@ Principais arquivos:
 - `FALLBACK_STORYBRAND_MAX_ITERATIONS` controla o número máximo de tentativas por seção (default: 3).
 - `FALLBACK_STORYBRAND_MODEL` permite definir um modelo dedicado (default usa `config.worker_model`).
 - `STORYBRAND_GATE_DEBUG` força o fallback para QA.
+- Quando o fallback é forçado (via `storybrand_gate_debug` ou `force_storybrand_fallback` com flags habilitadas), a etapa de
+  análise da landing page é ignorada e o pipeline começa diretamente pelo fallback, mantendo `landing_page_context` como um
+  dicionário vazio para auditoria.
 
 ## Testes
 - `tests/unit/agents/test_storybrand_gate.py` cobre decisões do gate (score alto/baixo, force flag, flags desabilitadas).
