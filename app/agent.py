@@ -689,6 +689,41 @@ Observação: se houver um "foco" (ex.: campanha sazonal, liquidação), prioriz
 )
 
 
+class LandingPageStage(BaseAgent):
+    """Wrapper that skips landing page analysis when fallback is forced."""
+
+    def __init__(self, landing_page_agent: BaseAgent) -> None:
+        super().__init__(name="landing_page_stage")
+        self._landing_page_agent = landing_page_agent
+
+    async def _run_async_impl(
+        self, ctx: InvocationContext
+    ) -> AsyncGenerator[Event, None]:  # type: ignore[override]
+        state = ctx.session.state
+        fallback_enabled = bool(
+            getattr(config, "enable_storybrand_fallback", False)
+            and getattr(config, "enable_new_input_fields", False)
+        )
+        force_flag = bool(state.get("force_storybrand_fallback"))
+        debug_flag = bool(getattr(config, "storybrand_gate_debug", False))
+
+        if fallback_enabled and (force_flag or debug_flag):
+            if not isinstance(state.get("landing_page_context"), dict):
+                state["landing_page_context"] = {}
+            logger.info(
+                "storybrand_landing_page_skipped",
+                extra={
+                    "reason": "forced_fallback",
+                    "force_flag": force_flag,
+                    "debug_flag": debug_flag,
+                },
+            )
+            return
+
+        async for event in self._landing_page_agent.run_async(ctx):
+            yield event
+
+
 image_assets_agent = ImageAssetsAgent()
 
 
@@ -1160,6 +1195,8 @@ planning_or_run_synth = PlanningOrRunSynth(
     planning_agent=planning_pipeline
 )
 
+landing_page_stage = LandingPageStage(landing_page_agent=landing_page_analyzer)
+
 storybrand_quality_gate = StoryBrandQualityGate(
     planning_agent=planning_or_run_synth,
     fallback_agent=fallback_storybrand_pipeline
@@ -1235,7 +1272,7 @@ complete_pipeline = SequentialAgent(
     description="Pipeline completo (Ads): input → análise LP → planejamento → execução → montagem → validação.",
     sub_agents=[
         input_processor,
-        landing_page_analyzer,  # NOVO: adicionar aqui
+        landing_page_stage,
         storybrand_quality_gate,
         execution_pipeline
     ],
