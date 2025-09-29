@@ -129,6 +129,10 @@ class CloudTraceLoggingSpanExporter(CloudTraceSpanExporter):
             self._gcs_permission_denied = True
             self._gcs_disabled = True
             return "GCS permission denied"
+        except gcs_exceptions.NotFound as exc:
+            logging.warning("Tracing bucket %s not found: %s", self.bucket_name, exc)
+            self._gcs_disabled = True
+            return "GCS bucket not found"
         except gcs_exceptions.GoogleAPICallError as exc:  # pragma: no cover - defensive
             logging.warning("Failed to validate tracing bucket %s: %s", self.bucket_name, exc)
             return "GCS bucket validation failed"
@@ -146,6 +150,10 @@ class CloudTraceLoggingSpanExporter(CloudTraceSpanExporter):
             self._gcs_permission_denied = True
             self._gcs_disabled = True
             return "GCS permission denied"
+        except gcs_exceptions.NotFound as exc:
+            logging.warning("Tracing bucket %s not found during upload: %s", self.bucket_name, exc)
+            self._gcs_disabled = True
+            return "GCS bucket not found"
         except gcs_exceptions.GoogleAPICallError as exc:  # pragma: no cover - defensive
             logging.warning(
                 "Failed to upload span %s to bucket %s: %s", span_id, self.bucket_name, exc
