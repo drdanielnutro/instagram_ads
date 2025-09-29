@@ -3,27 +3,27 @@
 ## 1. Saturação do Vertex AI (erro 429 RESOURCE_EXHAUSTED)
 - **Erro detectado:** `google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED` ao executar o pipeline StoryBrand (logs apontam para chamadas Vertex AI em `app/tools/langextract_sb7.py`).
 - **Correção proposta:**
-  1. **Limitar concorrência**: adicionar controle de concorrência (semáforo/asyncio.Lock) nas chamadas de geração dentro de `app/tools/langextract_sb7.py` e/ou `app/agents/storybrand_gate.py` para garantir um número máximo de requisições ativas ao Vertex AI (ex.: configurable via `VERTEX_CONCURRENCY_LIMIT`).
-  2. **Retry com backoff**: encapsular as chamadas em um utilitário (ex.: `app/utils/vertex_retry.py`) que aplique `retry` exponencial com jitter, respeite `Retry-After` do cabeçalho e desista após N tentativas, disparando fallback StoryBrand.
+  1. **Retry com backoff**: encapsular as chamadas em um utilitário (ex.: `app/utils/vertex_retry.py`) que aplique `retry` exponencial com jitter, respeite `Retry-After` do cabeçalho e desista após N tentativas, disparando fallback StoryBrand quando necessário.
+  2. **Limitar concorrência**: adicionar controle de concorrência (semáforo/asyncio.Lock) nas chamadas de geração dentro de `app/tools/langextract_sb7.py` e/ou `app/agents/storybrand_gate.py` para garantir um número máximo de requisições ativas ao Vertex AI (ex.: configurável via `VERTEX_CONCURRENCY_LIMIT`).
   3. **Truncagem adaptativa**: revisar `StoryBrand` HTML/prompt em `app/tools/langextract_sb7.py` para aplicar truncagem dinâmica baseada no tamanho do HTML recebido, evitando exceder limites de tokens.
   4. **Cache local opcional**: usar `functools.lru_cache` ou persistência leve em `app/utils/cache.py` para reutilizar respostas do Vertex AI quando `landing_page_url` + parâmetros forem iguais.
 - **Justificativa técnica:**
-  - O 429 decorre de excesso de requisições ou insumos grandes; controlar concorrência resolve a causa imediata reduzindo pressão na API.
   - Retries com backoff são recomendados pelo Vertex AI para lidar temporariamente com limits, evitando falhas definitivas.
+  - O 429 decorre de excesso de requisições ou insumos grandes; controlar concorrência resolve a causa imediata reduzindo pressão na API.
   - Truncagem e cache reduzem payloads enviados e reutilizam resultados, diminuindo consumo de quota.
-- **Estratégia escolhida:** A combinação ataque-causa (controle + truncagem) + mitigação temporária (retry/backoff) garante estabilização do sistema e melhora resiliência sem depender de expansão de quota. Também respeita restrições de custo/latência.
+- **Estratégia escolhida:** Priorizar retry/backoff endereça falhas transitórias enquanto o limite de concorrência previne novos picos; truncagem e cache completam a otimização de uso, estabilizando o sistema sem depender de aumento de quota e preservando custo/latência.
 
 ## 2. Falha de permissão no bucket GCS (erro 403 storage.buckets.get)
 - **Erro detectado:** `google.api_core.exceptions.Forbidden: ... does not have storage.buckets.get access` durante exportação de spans (`app/utils/tracing.py` linha ~108).
 - **Correção proposta:**
-  1. **Ajustar IAM**: conceder à service account `instagram-ads-sa@instagram-ads-472021.iam.gserviceaccount.com` as roles mínimas `roles/storage.objectCreator` e `roles/storage.objectViewer` (ou role custom equivalente) no bucket `instagram-ads-472021-facilitador-logs-data`. Terraform/CLI: `gcloud storage buckets add-iam-policy-binding gs://instagram-ads-472021-facilitador-logs-data --member=serviceAccount:instagram-ads-sa@instagram-ads-472021.iam.gserviceaccount.com --role=roles/storage.objectCreator`.
+  1. **Ajustar IAM**: conceder à service account `instagram-ads-sa@instagram-ads-472021.iam.gserviceaccount.com` as roles mínimas `roles/storage.objectCreator` e `roles/storage.legacyBucketReader` (ou role custom equivalente) no bucket `instagram-ads-472021-facilitador-logs-data`. Terraform/CLI: `gcloud storage buckets add-iam-policy-binding gs://instagram-ads-472021-facilitador-logs-data --member=serviceAccount:instagram-ads-sa@instagram-ads-472021.iam.gserviceaccount.com --role=roles/storage.objectCreator` e `--role=roles/storage.legacyBucketReader`.
   2. **Tratamento resiliente**: atualizar `CloudTraceLoggingSpanExporter.store_in_gcs` (`app/utils/tracing.py`) para capturar exceções `Forbidden`/`NotFound` e registrar aviso sem tentar revalidar continuamente, incluindo flag `TRACING_DISABLE_GCS=true` caso o bucket não esteja configurado.
   3. **Documentar credenciais**: registrar no README e/ou `deployment/README.md` os passos de IAM para ambientes locais, evitando configuração incompleta.
 - **Justificativa técnica:**
-  - Sem permissão adequada, o exporter nunca conseguirá criar/ver blobs, gerando exceções e poluindo logs. Ajustar IAM é a correção definitiva.
+  - Sem permissão adequada (incluindo `storage.buckets.get`), o exporter nunca conseguirá verificar o bucket nem criar/ver blobs, gerando exceções e poluindo logs. Ajustar IAM é a correção definitiva.
   - Tratamento resiliente evita quedas/tentativas repetidas enquanto a permissão não é liberada, melhorando DX.
   - Documentação formal previne regressões em novos ambientes.
-- **Estratégia escolhida:** Conceder permissões mínimas resolve a raiz (impossibilidade de acessar o bucket). O fallback no código protege ambientes onde o bucket não será habilitado (desenvolvimento isolado) sem comprometer monitoramento em produção.
+- **Estratégia escolhida:** Conceder permissões mínimas (objectCreator + legacyBucketReader) resolve a raiz — garante checagem e escrita no bucket. O fallback no código protege ambientes onde o bucket não será habilitado (desenvolvimento isolado) sem comprometer monitoramento em produção.
 
 ## 3. Melhor resposta ao frontend durante falhas Vertex
 - **Erro detectado:** Polling contínuo do frontend para `/delivery/final/meta` retornando 404, mesmo após falha do pipeline devido ao 429.
