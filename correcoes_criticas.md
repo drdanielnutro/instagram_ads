@@ -4,7 +4,7 @@
 - **Erro detectado:** `google.genai.errors.ClientError: 429 RESOURCE_EXHAUSTED` ao executar o pipeline StoryBrand (logs apontam para chamadas Vertex AI em `app/tools/langextract_sb7.py`).
 - **Correção proposta:**
   1. **Retry com backoff**: encapsular as chamadas em um utilitário (ex.: `app/utils/vertex_retry.py`) que aplique `retry` exponencial com jitter, respeite `Retry-After` do cabeçalho e desista após N tentativas, disparando fallback StoryBrand quando necessário.
-  2. **Limitar concorrência**: adicionar controle de concorrência (semáforo/asyncio.Lock) nas chamadas de geração dentro de `app/tools/langextract_sb7.py` e/ou `app/agents/storybrand_gate.py` para garantir um número máximo de requisições ativas ao Vertex AI (ex.: configurável via `VERTEX_CONCURRENCY_LIMIT`).
+  2. **Limitar concorrência**: adicionar controle de concorrência (semáforo/asyncio.Lock) nas chamadas de geração dentro de `app/tools/langextract_sb7.py` e/ou `app/agents/storybrand_gate.py` para garantir um número máximo de requisições ativas ao Vertex AI (ex.: configurável via `VERTEX_CONCURRENCY_LIMIT`). O limite deve bloquear novas requisições e colocá-las em espera até que haja vaga, de forma semelhante a uma fila interna, eliminando o envio agressivo de chamadas durante períodos de saturação.
   3. **Truncagem adaptativa**: revisar `StoryBrand` HTML/prompt em `app/tools/langextract_sb7.py` para aplicar truncagem dinâmica baseada no tamanho do HTML recebido, evitando exceder limites de tokens.
   4. **Cache local opcional**: usar `functools.lru_cache` ou persistência leve em `app/utils/cache.py` para reutilizar respostas do Vertex AI quando `landing_page_url` + parâmetros forem iguais.
 - **Justificativa técnica:**
