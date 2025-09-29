@@ -1,4 +1,5 @@
-from collections.abc import MutableMapping
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -8,96 +9,16 @@ from typing import Any
 
 from google.cloud import storage
 
+from app.utils.delivery_status import clear_failure_meta
+from app.utils.json_tools import try_parse_json_string
+from app.utils.session_state import resolve_state, safe_session_id, safe_user_id
+
 
 logger = logging.getLogger(__name__)
-
-from app.utils.json_tools import try_parse_json_string
 
 
 def _ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
-
-
-def _resolve_state(callback_context: Any) -> dict[str, Any]:
-    """Return the shared state dict from different callback context types."""
-
-    # CallbackContext exposes ``state`` directly.
-    state = getattr(callback_context, "state", None)
-    if isinstance(state, MutableMapping):
-        return state
-
-    # InvocationContext exposes ``session.state``.
-    session = getattr(callback_context, "session", None)
-    if session is not None:
-        session_state = getattr(session, "state", None)
-        if isinstance(session_state, MutableMapping):
-            return session_state
-
-    # CallbackContext stores InvocationContext in ``_invocation_context``.
-    invocation_ctx = getattr(callback_context, "_invocation_context", None)
-    if invocation_ctx is not None:
-        session = getattr(invocation_ctx, "session", None)
-        if session is not None:
-            session_state = getattr(session, "state", None)
-            if isinstance(session_state, MutableMapping):
-                return session_state
-
-    return {}
-
-
-def _safe_session_id(callback_context: Any) -> str:
-    try:
-        session = getattr(callback_context, "session", None)
-        if session is not None:
-            return (
-                getattr(session, "id", None)
-                or getattr(session, "session_id", None)
-                or "nosession"
-            )
-    except Exception:
-        pass
-
-    try:
-        sess = getattr(callback_context, "_invocation_context", None)
-        if sess and getattr(sess, "session", None):
-            s = sess.session
-            return getattr(s, "id", None) or getattr(s, "session_id", None) or "nosession"
-    except Exception:
-        pass
-
-    state = _resolve_state(callback_context)
-    return str(state.get("session_id", "nosession"))
-
-
-def _safe_user_id(callback_context: Any) -> str:
-    """Best-effort extraction of user_id from callback context.
-
-    Falls back to `state.get('user_id')` and finally 'anonymous'.
-    """
-    try:
-        sess = getattr(callback_context, "session", None)
-        if sess is not None:
-            uid = getattr(sess, "user_id", None)
-            if uid:
-                return str(uid)
-    except Exception:
-        pass
-
-    try:
-        sess = getattr(callback_context, "_invocation_context", None)
-        if sess and getattr(sess, "session", None):
-            s = sess.session
-            uid = getattr(s, "user_id", None)
-            if uid:
-                return str(uid)
-    except Exception:
-        pass
-
-    state = _resolve_state(callback_context)
-    uid = state.get("user_id")
-    if uid:
-        return str(uid)
-    return "anonymous"
 
 
 def _upload_to_gcs(bucket_uri: str, dest_path: str, data: bytes) -> str:
@@ -120,7 +41,7 @@ def persist_final_delivery(callback_context: Any) -> None:
     """
 
     try:
-        state = _resolve_state(callback_context)
+        state = resolve_state(callback_context)
         payload = state.get("final_code_delivery")
         if not payload:
             logger.warning("persist_final_delivery: no final_code_delivery in state; skipping")
@@ -146,8 +67,8 @@ def persist_final_delivery(callback_context: Any) -> None:
             except Exception:
                 pass
 
-        session_id = _safe_session_id(callback_context)
-        user_id = _safe_user_id(callback_context)
+        session_id = safe_session_id(callback_context)
+        user_id = safe_user_id(callback_context)
         ts = time.strftime("%Y%m%d-%H%M%S")
         fname = f"{ts}_{session_id}_{fmt}.json"
 
@@ -180,6 +101,12 @@ def persist_final_delivery(callback_context: Any) -> None:
         state["final_delivery_local_path"] = str(local_path)
         if gcs_uri:
             state["final_delivery_gcs_uri"] = gcs_uri
+        state["final_delivery_status"] = {
+            "status": "completed",
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "session_id": session_id,
+            "user_id": user_id,
+        }
 
         # Write sidecar meta locally and to GCS for fast lookup by endpoints
         try:
@@ -210,5 +137,7 @@ def persist_final_delivery(callback_context: Any) -> None:
                     logger.error("Failed to upload final delivery meta to GCS: %s", me)
         except Exception as e:
             logger.error("Failed to persist final delivery meta: %s", e)
+
+        clear_failure_meta(session_id)
     except Exception as e:
         logger.error("persist_final_delivery error: %s", e)

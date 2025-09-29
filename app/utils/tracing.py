@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
 import json
 import logging
+import os
 from collections.abc import Sequence
 from typing import Any
 
 import google.cloud.storage as storage
+from google.api_core import exceptions as gcs_exceptions
 from google.cloud import logging as google_cloud_logging
 from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
 from opentelemetry.sdk.trace import ReadableSpan
@@ -61,6 +65,8 @@ class CloudTraceLoggingSpanExporter(CloudTraceSpanExporter):
             bucket_name or f"{self.project_id}-facilitador-logs-data"
         )
         self.bucket = self.storage_client.bucket(self.bucket_name)
+        self._gcs_disabled = os.getenv("TRACING_DISABLE_GCS", "false").lower() == "true"
+        self._gcs_permission_denied = False
 
     def export(self, spans: Sequence[ReadableSpan]) -> SpanExportResult:
         """
@@ -105,17 +111,47 @@ class CloudTraceLoggingSpanExporter(CloudTraceSpanExporter):
         :param span_id: The ID of the span
         :return: The  GCS URI of the stored content
         """
-        if not self.storage_client.bucket(self.bucket_name).exists():
-            logging.warning(
-                f"Bucket {self.bucket_name} not found. "
-                "Unable to store span attributes in GCS."
-            )
-            return "GCS bucket not found"
+        if self._gcs_disabled:
+            return "GCS tracing disabled"
+
+        try:
+            if not self.storage_client.bucket(self.bucket_name).exists():
+                logging.warning(
+                    "Bucket %s not found. Unable to store span attributes in GCS.",
+                    self.bucket_name,
+                )
+                return "GCS bucket not found"
+        except gcs_exceptions.Forbidden as exc:
+            if not self._gcs_permission_denied:
+                logging.warning(
+                    "No permission to check bucket %s for tracing spans: %s", self.bucket_name, exc
+                )
+            self._gcs_permission_denied = True
+            self._gcs_disabled = True
+            return "GCS permission denied"
+        except gcs_exceptions.GoogleAPICallError as exc:  # pragma: no cover - defensive
+            logging.warning("Failed to validate tracing bucket %s: %s", self.bucket_name, exc)
+            return "GCS bucket validation failed"
 
         blob_name = f"spans/{span_id}.json"
         blob = self.bucket.blob(blob_name)
 
-        blob.upload_from_string(content, "application/json")
+        try:
+            blob.upload_from_string(content, "application/json")
+        except gcs_exceptions.Forbidden as exc:
+            if not self._gcs_permission_denied:
+                logging.warning(
+                    "No permission to upload span %s to bucket %s: %s", span_id, self.bucket_name, exc
+                )
+            self._gcs_permission_denied = True
+            self._gcs_disabled = True
+            return "GCS permission denied"
+        except gcs_exceptions.GoogleAPICallError as exc:  # pragma: no cover - defensive
+            logging.warning(
+                "Failed to upload span %s to bucket %s: %s", span_id, self.bucket_name, exc
+            )
+            return "GCS upload failed"
+
         return f"gs://{self.bucket_name}/{blob_name}"
 
     def _process_large_attributes(self, span_dict: dict, span_id: str) -> dict:

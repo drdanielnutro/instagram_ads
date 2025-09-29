@@ -100,6 +100,13 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## Refatorações Recentes
 
+### 2025-09-18 - Estabilização Vertex AI e observabilidade
+- ✅ Retry exponencial com respeito ao cabeçalho `Retry-After` (`VERTEX_RETRY_*`) e limite de concorrência configurável (`VERTEX_CONCURRENCY_LIMIT`).
+- ✅ Truncagem adaptativa (head+tail) para inputs grandes (`STORYBRAND_SOFT_CHAR_LIMIT`, `STORYBRAND_HARD_CHAR_LIMIT`, `STORYBRAND_TAIL_RATIO`).
+- ✅ Cache local opcional para resultados repetidos (`STORYBRAND_CACHE_ENABLED`, `STORYBRAND_CACHE_MAXSIZE`, `STORYBRAND_CACHE_TTL`).
+- ✅ Persistência de falhas StoryBrand com retorno 503 para o frontend e métrica `storybrand.vertex429.count`/`storybrand.delivery_failure.count`.
+- ✅ Exportador de spans resiliente: use `TRACING_DISABLE_GCS=true` em ambientes sem permissão de GCS.
+
 ### 2025-09-17 - StoryBrand fallback enforcement
 - ✅ `nome_empresa` e `o_que_a_empresa_faz` passam a ser tratados como obrigatórios quando `ENABLE_NEW_INPUT_FIELDS=true`.
 - ✅ `sexo_cliente_alvo` deve ser `masculino` ou `feminino`; o fallback tenta inferir via `landing_page_context` antes de abortar.

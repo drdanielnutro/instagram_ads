@@ -11,6 +11,7 @@ from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event
 
 from app.config import config
+from app.utils.metrics import record_storybrand_fallback
 
 
 logger = logging.getLogger(__name__)
@@ -109,6 +110,15 @@ class StoryBrandQualityGate(BaseAgent):
         )
 
         if should_run_fallback:
+            if forced_reason:
+                fallback_reason = "forced"
+            elif score_missing:
+                fallback_reason = "missing_score"
+            elif score_below_threshold:
+                fallback_reason = "score_below_threshold"
+            else:
+                fallback_reason = "unknown"
+            record_storybrand_fallback(fallback_reason)
             async for event in self._fallback_agent.run_async(ctx):
                 yield event
 

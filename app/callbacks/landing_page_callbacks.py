@@ -5,13 +5,61 @@ Integrates StoryBrand analysis after web fetching.
 
 import logging
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 import os
 import time
 from app.tools.langextract_sb7 import StoryBrandExtractor
 from app.schemas.storybrand import StoryBrandAnalysis
+from app.utils.delivery_status import write_failure_meta
+from app.utils.metrics import record_delivery_failure
+from app.utils.session_state import resolve_state, safe_session_id, safe_user_id
+from app.utils.vertex_retry import VertexRetryExceededError
 
 logger = logging.getLogger(__name__)
+
+
+def _mark_storybrand_failure(
+    tool_context: Any,
+    reason: str,
+    message: str,
+    *,
+    retry_after: float | None = None,
+    attempts: int | None = None,
+) -> None:
+    state = resolve_state(tool_context)
+    failure_payload = {
+        "status": "failed",
+        "reason": reason,
+        "message": message,
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+    if retry_after is not None:
+        failure_payload["retry_after_seconds"] = retry_after
+    if attempts is not None:
+        failure_payload["attempts"] = attempts
+
+    state["final_delivery_status"] = failure_payload
+    metrics = state.get("storybrand_gate_metrics") or {}
+    metrics["vertex_error"] = {
+        "reason": reason,
+        "message": message,
+        "retry_after": retry_after,
+        "attempts": attempts,
+    }
+    state["storybrand_gate_metrics"] = metrics
+    state["force_storybrand_fallback"] = True
+    state["storybrand_last_error"] = failure_payload
+
+    session_id = safe_session_id(tool_context)
+    user_id = safe_user_id(tool_context)
+    write_failure_meta(
+        session_id=session_id,
+        user_id=user_id,
+        reason=reason,
+        message=message,
+        extra={"retry_after": retry_after, "attempts": attempts},
+    )
+    record_delivery_failure(reason)
 
 
 def process_and_extract_sb7(
@@ -88,7 +136,15 @@ def process_and_extract_sb7(
             )
 
         t0 = time.time()
-        storybrand_data = extractor.extract(input_text)
+        state = resolve_state(tool_context)
+        landing_page_url = ""
+        if state:
+            landing_page_url = state.get("landing_page_url", "")
+
+        storybrand_data = extractor.extract(
+            input_text,
+            landing_page_url=landing_page_url or None,
+        )
         t1 = time.time()
         duration = round(t1 - t0, 2)
         # Logar métrica de latência
@@ -153,6 +209,16 @@ def process_and_extract_sb7(
             if hasattr(tool_context, 'state'):
                 tool_context.state['storybrand_raw'] = storybrand_data
 
+    except VertexRetryExceededError as e:
+        message = "Vertex AI saturado ao extrair StoryBrand"
+        logger.error("%s: %s", message, e)
+        _mark_storybrand_failure(
+            tool_context,
+            reason="vertex_resource_exhausted",
+            message=message,
+            retry_after=getattr(e, "retry_after", None),
+            attempts=getattr(e, "attempts", None),
+        )
     except Exception as e:
         logger.error(f"Erro ao processar análise StoryBrand: {str(e)}")
 

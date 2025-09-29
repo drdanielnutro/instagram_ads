@@ -10,6 +10,8 @@ from fastapi.responses import FileResponse, Response
 from google.cloud import storage
 from typing import Any
 
+from app.utils.delivery_status import load_failure_meta
+
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/delivery", tags=["delivery"])
@@ -102,6 +104,9 @@ def get_final_meta(user_id: str = Query(...), session_id: str = Query(...)):
     """
     meta = _load_local_meta(session_id)
     if not meta:
+        failure_meta = load_failure_meta(session_id)
+        if failure_meta and str(failure_meta.get("user_id", "")) == str(user_id):
+            raise HTTPException(status_code=503, detail=failure_meta)
         raise HTTPException(status_code=404, detail="Final delivery not available yet")
 
     # Optional sanity check: if user_id mismatches, still return 404

@@ -3,10 +3,11 @@ StoryBrand Framework Extractor using LangExtract
 Uses Google's LangExtract library with LLMs to extract the 7 StoryBrand elements.
 """
 
+import hashlib
 import logging
-import textwrap
-from typing import Dict, List, Any, Optional
 import os
+import textwrap
+from typing import Any, Dict, List, Optional
 
 try:
     import langextract as lx
@@ -16,6 +17,9 @@ except ImportError:
     )
 
 logger = logging.getLogger(__name__)
+
+from app.utils.cache import get_storybrand_cache, make_storybrand_cache_key
+from app.utils.vertex_retry import VertexRetryExceededError, call_with_vertex_retry
 
 
 class StoryBrandExtractor:
@@ -41,6 +45,8 @@ class StoryBrandExtractor:
             api_key: Chave API (se None, usa LANGEXTRACT_API_KEY do ambiente)
         """
         self.model_id = model_id
+        self.cache_enabled = os.getenv("STORYBRAND_CACHE_ENABLED", "true").lower() != "false"
+        self._cache = get_storybrand_cache()
 
         # Forçar uso de Vertex AI (sem API key)
         self.project = os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -437,7 +443,58 @@ class StoryBrandExtractor:
 
         return examples
 
-    def extract(self, html_content: str) -> Dict[str, Any]:
+    def _prepare_input(self, content: str) -> tuple[str, bool, dict[str, Any]]:
+        """Normalize and adaptively truncate the HTML/text payload for Vertex AI."""
+
+        if not isinstance(content, str):
+            return "", False, {"input_length": 0, "strategy": "empty"}
+
+        hard_limit = max(0, int(os.getenv("STORYBRAND_HARD_CHAR_LIMIT", "20000")))
+        soft_limit = max(1000, int(os.getenv("STORYBRAND_SOFT_CHAR_LIMIT", "12000")))
+        tail_ratio = float(os.getenv("STORYBRAND_TAIL_RATIO", "0.2"))
+        tail_ratio = min(max(tail_ratio, 0.05), 0.4)
+
+        length = len(content)
+        overflow = max(0, length - soft_limit)
+        adaptive_bonus = min(soft_limit, int(overflow * 0.3))
+        allowed = soft_limit + adaptive_bonus
+        if hard_limit:
+            allowed = min(allowed, hard_limit)
+
+        metadata: dict[str, Any] = {
+            "input_length": length,
+            "soft_limit": soft_limit,
+            "hard_limit": hard_limit,
+            "allowed_chars": allowed,
+            "tail_ratio": tail_ratio,
+        }
+
+        if length <= allowed or allowed <= 0:
+            metadata.update({"strategy": "passthrough", "truncated": False})
+            digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
+            metadata["input_hash"] = digest
+            return content, False, metadata
+
+        head_chars = max(soft_limit, int(allowed * (1 - tail_ratio)))
+        head_chars = min(head_chars, allowed)
+        tail_chars = max(0, allowed - head_chars)
+        truncated_content = content[:head_chars]
+        if tail_chars:
+            truncated_content += "\n<!-- storybrand:tail -->\n" + content[-tail_chars:]
+
+        digest = hashlib.sha256(truncated_content.encode("utf-8")).hexdigest()
+        metadata.update(
+            {
+                "strategy": "head_tail",
+                "truncated": True,
+                "head_chars": head_chars,
+                "tail_chars": tail_chars,
+                "input_hash": digest,
+            }
+        )
+        return truncated_content, True, metadata
+
+    def extract(self, html_content: str, *, landing_page_url: Optional[str] = None) -> Dict[str, Any]:
         """
         Extrai os elementos StoryBrand do conteúdo HTML usando LangExtract.
 
@@ -459,9 +516,15 @@ class StoryBrandExtractor:
             max_workers = int(os.getenv("STORYBRAND_MAX_WORKERS", "4"))
             max_char_buffer = int(os.getenv("STORYBRAND_MAX_CHAR_BUFFER", "1500"))
 
+            prepared_input, truncated, truncation_info = self._prepare_input(html_content)
+            if truncated:
+                logger.info("StoryBrand input truncated", extra=truncation_info)
+            else:
+                logger.debug("StoryBrand input passthrough", extra=truncation_info)
+
             # Configurar parâmetros baseado no modo (Vertex AI ou Gemini API)
             extract_kwargs = {
-                "text_or_documents": html_content,
+                "text_or_documents": prepared_input,
                 "prompt_description": self.prompt,
                 "examples": self.examples,
                 "model_id": self.model_id,  # String com nome do modelo
@@ -486,12 +549,41 @@ class StoryBrandExtractor:
                 "location": self.location,
             }
 
-            # Executar extração com LangExtract
-            result = lx.extract(**extract_kwargs)
+            cache_key = None
+            if self.cache_enabled and truncation_info.get("input_hash"):
+                cache_key = make_storybrand_cache_key(
+                    truncation_info["input_hash"],
+                    self.model_id,
+                    passes,
+                    max_workers,
+                    max_char_buffer,
+                    os.getenv("GOOGLE_CLOUD_PROJECT"),
+                    landing_page_url or "",
+                )
+                cached = self._cache.get(cache_key) if cache_key else None
+                if cached is not None:
+                    logger.info(
+                        "Retornando StoryBrand do cache local", extra={"landing_page_url": landing_page_url}
+                    )
+                    return cached
+
+            # Executar extração com LangExtract usando retry/backoff
+            result = call_with_vertex_retry(
+                lambda: lx.extract(**extract_kwargs),
+                logger_obj=logger,
+            )
 
             # Converter resultado para formato StoryBrand
-            return self._convert_to_storybrand_format(result)
+            converted = self._convert_to_storybrand_format(result)
 
+            if cache_key:
+                self._cache.set(cache_key, converted)
+
+            return converted
+
+        except VertexRetryExceededError as e:
+            logger.error("Vertex AI saturado após múltiplas tentativas: %s", e)
+            raise
         except Exception as e:
             logger.error(f"Erro ao extrair StoryBrand com LangExtract: {str(e)}")
             return self._empty_result()

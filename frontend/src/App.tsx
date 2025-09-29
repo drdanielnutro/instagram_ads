@@ -127,6 +127,7 @@ export default function App() {
   const [preflightEnabled, setPreflightEnabled] = useState<boolean>(true);
   const [deliveryMeta, setDeliveryMeta] = useState<DeliveryMeta | null>(null);
   const [deliveryChecking, setDeliveryChecking] = useState<boolean>(false);
+  const [deliveryError, setDeliveryError] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const currentAgentRef = useRef('');
   const accumulatedTextRef = useRef("");
@@ -208,11 +209,24 @@ export default function App() {
     try {
       setDeliveryChecking(true);
       const resp = await fetch(`/api/delivery/final/meta?user_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`);
+      if (resp.status === 503) {
+        const failure = (await resp.json()) as { message?: string; reason?: string; status?: string };
+        const reason = failure?.reason ? ` (${failure.reason})` : "";
+        const msg = failure?.message ?? "Falha ao gerar o StoryBrand devido à saturação do Vertex AI.";
+        setDeliveryError(`${msg}${reason}`);
+        setDeliveryMeta(null);
+        return;
+      }
       if (resp.ok) {
         const data = (await resp.json()) as DeliveryMeta;
         if (data && data.ok) {
           setDeliveryMeta(data);
+          setDeliveryError(null);
         }
+        return;
+      }
+      if (resp.status === 404) {
+        setDeliveryError(null);
       }
     } catch {
       // ignore
@@ -700,6 +714,11 @@ export default function App() {
             </Button>
           </div>
         </div>
+        {deliveryError && (
+          <div className="px-4 py-2 bg-red-900/40 border border-red-700 text-red-200 text-sm">
+            {deliveryError} — tente novamente quando o limite de uso do Vertex AI for restabelecido.
+          </div>
+        )}
         <div className={`flex-1 overflow-y-auto ${(messages.length === 0 || isCheckingBackend) ? "flex" : ""}`}>
           {isCheckingBackend ? (
             <BackendLoadingScreen />
