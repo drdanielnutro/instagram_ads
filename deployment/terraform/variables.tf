@@ -116,3 +116,44 @@ variable "create_repository" {
   default     = false
 }
 
+variable "default_project_id" {
+  description = "Project ID padrão (fallback quando project_id não for informado)"
+  type        = string
+  default     = ""
+}
+
+variable "project_id" {
+  description = "Project ID onde as políticas serão criadas"
+  type        = string
+  default     = ""
+}
+
+variable "vertex429_metric_type" {
+  description = "Metric type completo do contador de erros 429"
+  type        = string
+  default     = "custom.googleapis.com/storybrand/vertex429/count"
+}
+
+variable "vertex429_rate_threshold" {
+  description = "Limite (taxa por minuto) para disparo do alerta de erros 429"
+  type        = number
+  default     = 5
+}
+
+variable "delivery_failure_metric_type" {
+  description = "Metric type completo do contador de falhas de entrega"
+  type        = string
+  default     = "custom.googleapis.com/storybrand/delivery_failure/count"
+}
+
+variable "delivery_failure_threshold" {
+  description = "Número de falhas em 5 minutos que dispara o alerta"
+  type        = number
+  default     = 1
+}
+
+variable "alert_notification_channels" {
+  description = "Lista de IDs de canais de notificação (e-mail, Slack, Pub/Sub etc.)"
+  type        = list(string)
+  default     = []
+}

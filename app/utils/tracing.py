@@ -164,32 +164,56 @@ class CloudTraceLoggingSpanExporter(CloudTraceSpanExporter):
 
     def _process_large_attributes(self, span_dict: dict, span_id: str) -> dict:
         """
-        Process large attribute values by storing them in GCS if they exceed the size
-        limit of Google Cloud Logging.
+        Process large attribute values by storing them in GCS if the entire
+        span dictionary exceeds the size limit of Google Cloud Logging.
 
         :param span_dict: The span data dictionary
-        :param trace_id: The trace ID
         :param span_id: The span ID
         :return: The updated span dictionary
         """
-        attributes = span_dict["attributes"]
-        if len(json.dumps(attributes).encode()) > 255 * 1024:  # 250 KB
-            # Separate large payload from other attributes
-            attributes_payload = dict(attributes.items())
-            attributes_retain = dict(attributes.items())
+        # Google Cloud Logging has a 256KB limit per entry. We check against a slightly
+        # smaller limit to leave a buffer.
+        LOG_ENTRY_SIZE_LIMIT = 250 * 1024  # 250 KB
 
-            # Store large payload in GCS
-            gcs_uri = self.store_in_gcs(json.dumps(attributes_payload), span_id)
-            attributes_retain["uri_payload"] = gcs_uri
-            attributes_retain["url_payload"] = (
-                f"https://storage.mtls.cloud.google.com/"
-                f"{self.bucket_name}/spans/{span_id}.json"
-            )
+        try:
+            serialized_span = json.dumps(span_dict).encode("utf-8")
+            current_size = len(serialized_span)
+        except TypeError:
+            # If serialization fails, we can't determine the size, so we proceed cautiously.
+            current_size = LOG_ENTRY_SIZE_LIMIT + 1
 
-            span_dict["attributes"] = attributes_retain
+        if current_size > LOG_ENTRY_SIZE_LIMIT:
+            original_attributes = span_dict.get("attributes")
+            if not original_attributes:
+                # Nothing to offload, but the span is still too large.
+                # We can't do much here, but we'll log a warning.
+                logging.warning(
+                    "Span %s exceeds size limit but has no attributes to offload.",
+                    span_id,
+                )
+                return span_dict
+
             logging.info(
-                "Length of payload span above 250 KB, storing attributes in GCS "
-                "to avoid large log entry errors"
+                "Span %s with size %s KB exceeds limit, offloading attributes to GCS.",
+                span_id,
+                round(current_size / 1024),
             )
+
+            # Store the complete original attributes payload in GCS
+            gcs_uri = self.store_in_gcs(json.dumps(original_attributes), span_id)
+
+            # Create a new, minimal set of attributes that replaces the large one
+            new_attributes = {
+                "payload_offloaded": "true",
+                "original_attribute_count": len(original_attributes),
+                "gcs_payload_uri": gcs_uri,
+                "gcs_payload_url": (
+                    f"https://storage.mtls.cloud.google.com/"
+                    f"{self.bucket_name}/spans/{span_id}.json"
+                ),
+            }
+
+            # Replace the original attributes with our new pointer attributes
+            span_dict["attributes"] = new_attributes
 
         return span_dict
