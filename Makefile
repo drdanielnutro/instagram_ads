@@ -24,11 +24,14 @@ check-and-kill-ports:
 
 # Main development command: runs all agents and the frontend
 dev: check-and-kill-ports
-	@export GOOGLE_APPLICATION_CREDENTIALS=$${GOOGLE_APPLICATION_CREDENTIALS:-./sa-key.json}; \
+	@set -a; \
+	 if [ -f app/.env ]; then source app/.env; fi; \
+	 export GOOGLE_APPLICATION_CREDENTIALS=$${GOOGLE_APPLICATION_CREDENTIALS:-./sa-key.json}; \
 	 echo "Using GOOGLE_APPLICATION_CREDENTIALS=$${GOOGLE_APPLICATION_CREDENTIALS}"; \
 	 if [ ! -f "$${GOOGLE_APPLICATION_CREDENTIALS}" ]; then \
 	   echo "⚠️  Service account key not found at $${GOOGLE_APPLICATION_CREDENTIALS}. Continuing with ADC credentials (Signed URLs may fail)."; \
 	 fi; \
+	 set +a; \
 	 make dev-all
 
 # --- Development workflows ---

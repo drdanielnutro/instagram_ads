@@ -1,0 +1,146 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Travado ou Comer por Estresse? Tratamento Médico!",
+      "corpo": "Cansada de tentar de tudo e sentir que seu metabolismo não responde? A alimentação emocional te prende num ciclo de culpa? O Dr. Daniel Araújo, Médico Nutrólogo, oferece um tratamento para perda de peso pensado para você. Com uma abordagem que entende suas lutas, criamos um plano personalizado que pode incluir o uso responsável de Mounjaro, quando indicado, para combater o metabolismo 'travado' e a compulsão. Recupere sua saúde, autoestima e energia de forma duradoura, com suporte médico contínuo e sem julgamentos.",
+      "cta_texto": "Agendar Consulta via WhatsApp"
+    },
+    "visual": {
+      "descricao_imagem": "Jornada de uma mulher: 1. Estado atual: mulher com expressão de frustração sentada à mesa, olhando para um prato de comida com culpa, refletindo o metabolismo 'travado' e a alimentação emocional. 2. Estado intermediário: a mesma mulher, com expressão determinada, segurando um smartphone, pesquisando sobre o tratamento médico. 3. Estado aspiracional: a mulher surge confiante e sorridente, em um ambiente externo vibrante, demonstrando bem-estar e saúde recuperados.",
+      "prompt_estado_atual": "Close-up of a tired and frustrated woman, 40s, sitting alone at a kitchen table, looking at a plate of comfort food with a conflicted expression (sadness, guilt). Her posture is slightly slumped. The lighting is subdued, emphasizing a sense of being 'stuck'. Realistic photo, natural skin texture, medium shot. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman, now with a determined yet hopeful expression. She is holding a smartphone, actively looking at a screen with medical information. The setting is still a home environment, but with brighter light, indicating a moment of decision to seek help. Her posture is more upright. Realistic photo, medium shot. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now appearing healthier and radiant, smiling genuinely while walking energetically in a sunlit park. Her clothes fit well, reflecting freedom and vitality. The colors are fresh and vibrant. Realistic photo, natural lighting. Aspect ratio 4:5.",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_0.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164653Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=39116c2c273e43679a24fb0ac5c8d27183405b7ae077bd22a6328b1cfce16a8fe33f500c2d05339bd21d7be62a500fd331241eabd5d359556d2196f0eeb71e62b6e7d5a82703f0acc69ef24e873049478ec6a4f3e1c328630bf41bdda9169cbb81c9465426706cc1efaf2a76d1cc0745916905adc2120f9afc1b54d04a8d546047c024a9a4509e1dd33ccd0d255bd183391a07af76f87aab54aef45d42b9f3b6373ac545b397751614d4ac76911060ca1592a806472912c9640743d1972b4ca003fc41e9bcab5e1b45d68c3a356c1660a78e04ad2ef66fc661521d76c639354cf64ae6c3235ccc4886d95c7271b2d11036f890d2fb0b45fc2c8b4a6296583e94",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_0.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164707Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=48cbe927059150fb1f3d87c19b87dfb5362fe8f43f9727bcd440289e3faf69877768bf7a41f71f269c27336f7314311afd491f14c9254399d017b1d3190b2a565bdd329fdf4180a6186b1c86ed29049c3b4081bb559829a6a6cd0ee00bbf98f063995f3f6ce2778893a133ab6103353e84a3371f9b7d7e11bb43a1c2dc357b3b6428a1d74459987fa5ad337dfe853123538270b9ee068f08bce6ea6a310354d30d79c878ca10779fbfb39eaccae221b962456fd082a86417a52d0367d46444f7000f8c173642d9bc3a8dca138425fcb545e5a61706a495d07e7aa55ed83fc2eb6db90d8c14bef417631200d1f9a7e740d1aad5eeacdf7748b7008072773a53e0",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_0.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164721Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=51d6c405937f70f0a9883ca6c12de3d631ed875c3aa79c004da52018099ced12cf06d06ff1eb9485b20eee79ce72730ca4064872b36b7c98d83bcc1dfd706b7b45828ad14b29302053cc9b7ca28c156a0b6a4a42b62a662e7fa20eb4abb876780fde22e6bc0a24b811b801b66c981dcce3732634d5001620f994d429ac32029948914658d1197b1b9d1878c9d99226f13398c5ae3289f50b4c7cedb43a429d5dbdd63146765c6f7f082341125d5dbde1499455b22b58f24110f4f56d8de17f2cf0835fcb53d569182ca4df44de6fb007ddddaadb120030c86f512232f3688bec84706659045c3c878a8424a28df5176cdee33a0046ce11198a9147ab8c9d19df",
+      "image_generation_meta": {
+        "variation_idx": 0,
+        "duration_seconds": 43.445909498997935
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance para Feed (4:5) no nicho de saúde feminina focam em imagens que evocam emoções (frustração, alívio, confiança) ou cenários aspiracionais de bem-estar. O copy valida a dor da persona ('metabolismo travado'), posiciona a solução médica especializada (Dr. Nutrólogo) de forma empática e autoritária, mencionando tratamentos avançados (como Mounjaro, de forma responsável), e direciona com um CTA claro para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Sua Autoestima Refém da Balança? Existe um Plano Médico.",
+      "corpo": "Se o seu esforço parece em vão e a balança afeta sua confiança, saiba que o problema pode não ser você, mas a abordagem. Para um metabolismo que parece 'travado', um tratamento médico pode ser a chave. Com o Dr. Daniel Araújo, você tem um plano que considera sua saúde integral, podendo incluir auxílios como Mounjaro, com segurança e supervisão. Dê o primeiro passo para resgatar sua autoestima e bem-estar. Agende sua consulta.",
+      "cta_texto": "Saiba Mais e Agende"
+    },
+    "visual": {
+      "descricao_imagem": "Narrativa visual focada na autoestima: 1. Estado atual: mulher de costas para um espelho, com uma postura curvada e expressão triste, simbolizando a desconexão com o próprio corpo. 2. Estado intermediário: a mesma mulher em uma consulta médica, em um ambiente acolhedor, conversando com um profissional (mãos em foco, tom de escuta). 3. Estado aspiracional: a mulher se olhando no espelho com um sorriso confiante, vestindo uma roupa que a faz se sentir bem, celebrando sua nova fase.",
+      "prompt_estado_atual": "A woman in her late 30s standing with her back partially to a mirror, shoulders slumped, looking down with a sad expression. The reflection is slightly out of focus. The room's lighting is dim and cool-toned, creating a melancholic atmosphere. Realistic photo. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A close-up shot focusing on the hands of a doctor and a patient during a consultation. The doctor's hands are gesturing calmly while explaining something, and the patient's hands are relaxed, indicating a sense of trust and relief. The setting is a bright, professional, and welcoming medical office. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now looking directly at her reflection in a full-length mirror with a confident, genuine smile. She is wearing an outfit that fits perfectly and makes her look vibrant. The room is filled with warm, natural light. Her posture is straight and proud. Realistic photo. Aspect ratio 4:5.",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_1.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164731Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=3bbd4b90eb5990f3b699decb6d4e5ae8a6b921981f18796f402ccdf210d5c30f8e8b0692c469696e516f85fac148347526cb0ce56e2165cb7cf672ec438beeb9766c5dd019a303018eaaf2ad550db409c3c7cb0bea419e7828a137787f9a2406dd38387e46f390cfed66b2b96c98b303b1f66dee3d384ecf8b12bf669cc1c2dfbee7207634ece127797d86355b5f5f72bf66655a060fc450a50f6e78b426e6ce9909850dbac76b1ae5cfd2314471d1be0ea75a002d7cbbdb5faa3848c7875f6b40dac117f3b04d6e71411394e5df56216265c8b2411634646f9e3e7bec9f2ac62922522c9d858397b9d862f4bf7bea649b9e88285b3f4ee93eda5ccdc72b39c6",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_1.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164744Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a8a45e626f08d477989ca2b79c899e9f633bee6f852081d3a474952e049f91616b07f8508929e53faab12572df10ef821b4e6def09fb1eed38ad1d0179a9aef8d7e2dc546bba6bf52bb3a377736a6c6f700b1254dbd6768ab6c2d2d3a759eb0d6e81ae59c4b6f97ba275dcf14e83f879b1776e77d5ff47ebe34a66518e64d1c445400411910e32386ebeee6aff5b21b976d87b4ee66d7268540d59d979dc60a248412adb0c75d816cd2636c9158fe01681403108e3ab43b00f6bed635e3e8d0fa4d573418cc2fb32869165a94da5832cea0235e90e167c52b73ab4a0df65ce6945a0707fb7c4dda391919ca8b9a0dc3e2cb49da8ff6692de10d7c2f27c05be21",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_1.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164757Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0bad717eab0aeaa3bf9a644c95366b81fce57a3fd76f4eb8e77fd24c7d0cf75bc87c82d44e1853b0104770d09a53098db51eb6113743de77bb7ca6983f2b2de6b90b4e2b20f66b62ebfca0c7cf09662dbb5de94ee61146d11a49c1a1833bf12f2fbdd3ceffe613bf5d1b237c62eb7bafdebebe8b221ccc37408840e1e357bfc80dccfc7439d6e1ee55ea59500c83ea916fb09a64ced63b525c5b88f0f7dbe114ce5b538b1d8e3d3d17062d676fdc5d93a6f07b6d5038bb52424223878241a3aca8c4cf1348ad569da1d050897a8658b506ab8b38dadf0565feb7710552a0fc39f111552e0e9eda72e0f88715b5a7c88b5fd75b4aa4bc8a0fb12e2a7bab94fee0",
+      "image_generation_meta": {
+        "variation_idx": 1,
+        "duration_seconds": 36.13399823900181
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance para Feed (4:5) no nicho de saúde feminina focam em imagens que evocam emoções (frustração, alívio, confiança) ou cenários aspiracionais de bem-estar. O copy valida a dor da persona ('metabolismo travado'), posiciona a solução médica especializada (Dr. Nutrólogo) de forma empática e autoritária, mencionando tratamentos avançados (como Mounjaro, de forma responsável), e direciona com um CTA claro para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Emagrecimento com Suporte Médico. Chega de Tentar Sozinha.",
+      "corpo": "Dietas restritivas e treinos exaustivos falham porque não tratam a causa raiz. A obesidade é uma condição de saúde complexa. O Dr. Daniel Araújo, Médico Nutrólogo, oferece um tratamento completo, investigando seus fatores metabólicos e emocionais. Se indicado, utilizamos tratamentos modernos como o Mounjaro para regular seu metabolismo e restaurar sua saúde. É hora de um plano que realmente funciona, com segurança e acompanhamento. Fale conosco.",
+      "cta_texto": "Agendar Avaliação Médica"
+    },
+    "visual": {
+      "descricao_imagem": "Jornada do tratamento médico: 1. Estado atual: close-up da mão de uma mulher sobre uma balança, com expressão de cansaço no rosto ao fundo, desfocado. 2. Estado intermediário: imagem do Dr. Daniel Araújo em seu consultório, com uma postura acolhedora e profissional, olhando para a câmera, transmitindo autoridade e confiança. 3. Estado aspiracional: uma mulher vibrante e cheia de energia, amarrando o tênis para uma corrida ou pedalando ao ar livre, simbolizando a liberdade e a vitalidade recuperadas.",
+      "prompt_estado_atual": "A low-angle shot focusing on a woman's hand resting on a bathroom scale, with her tired and discouraged face visible but out of focus in the background. The scene has a sterile, cold feel, conveying the frustration of repeated weigh-ins. Realistic photo. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "A professional portrait of a male doctor (Dr. Daniel Araújo) in his 40s, with a kind and trustworthy expression. He is in a clean, modern medical office. The image conveys empathy and medical authority. Shot from the chest up, with a slightly blurred background. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "A dynamic shot of a healthy, happy woman in her 40s, tying her running shoes with a smile, sitting on a park bench in the early morning sun. She is wearing workout clothes and looks full of energy, ready for an active day. The atmosphere is optimistic and inspiring. Realistic photo. Aspect ratio 4:5.",
+      "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_2.png",
+      "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164810Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2659f824763256d15bf85e1e9ed82903c1c4451d3d669cbf43b669e6388e750ff1d20c3dcf1c9da9e54b839eeb093b83daf325641cf6323ae0e6c34c5b2ed12556586b63ec535d054b343778abd12e953bc4d066a12602bb3c06fa7522903f36d0e82b4687db30540dd59966941eaaeded53504b33ab3972f9fae4a5c3af3d1f9b2ca4626db3f70004b97d1075d830db4438eea787a6e45d48a120eea644bc23d8905d6a034f20fb71461a52903c2a738bba6eab5ce0176bdebad5a1628083995f737e81020f4fa4deb7c7e81c3de299dd68373068b6fa45993e09e65037d5e79ae14c5359527095ec647af67e9e85345f2b4f4bb3f815b2d8255b700aed2054",
+      "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_2.png",
+      "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164824Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b1ac1ec544d94a4ade2bd2c8e70370a07a33f883a93eeb7e650a35b41b46c459845d31b763fbcd254002b2e3f08f7d8e9a66ce038f3e3835ccd97c1c1f0e6f39c1cbb2ced0c16a7ba6abf528c95ca96d594575abc5f26f9f01cf3d576723d067ab326f7502955a374fbbe9b0a224c3bce9b72a423fc64951e4c3bb9087b0117cadff2ccded517b9f994c2dc83617fb702fb5cf2e9fc83b565cfef938e93520813c50604929a629c21f624e42622eb53141de20bf999375de370f71f2f05ad52f4a70aac6d0b1c11f3a0698f28b48c6674466d6620f040d57f7c8e6a2ed05bf26f34438bcead85fa7f2b5ce8bbc4d7a4fd56584cebeb26ded912a5c3525e38a63",
+      "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_2.png",
+      "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/945d21b9-23f7-4ad8-b472-3447f03eb6bf/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20250929%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20250929T164838Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=44a6d3ea8e694d8e160f1ab90f616eecf07df6c2132dd7f69dfee5b37629c137d75e9a54449069f7abad2a7c9b9eb28e2d942c709aa7549c6e476ec52b5255ff15d7615c79b251165c006fd0fcf4f1ba33457a8cd58e583a9af174740cf69dbf6a3734180a9120d11391d21d54c6ed17fd7860a8f726ceb51850a3fffc68cea6093c77aa306bd97197567b745f997765ba9b08c148941bac19caaad07ce3ffdb8772649d0ebd4bbbfa0e4e98d9f9ae35db6133e5399a25b7c7af79b2427bab3518b0ff2dc40257153671219e58a0de7b560891e572bad01edda86b650b491ae0c9bd0dfd0eaca7c47fdb25885ecae868e0a33478e61f2b4164f3bfe37c1a9dd2",
+      "image_generation_meta": {
+        "variation_idx": 2,
+        "duration_seconds": 40.13958200699926
+      }
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance para Feed (4:5) no nicho de saúde feminina focam em imagens que evocam emoções (frustração, alívio, confiança) ou cenários aspiracionais de bem-estar. O copy valida a dor da persona ('metabolismo travado'), posiciona a solução médica especializada (Dr. Nutrólogo) de forma empática e autoritária, mencionando tratamentos avançados (como Mounjaro, de forma responsável), e direciona com um CTA claro para agendamento.",
+    "contexto_landing": {
+      "storybrand_persona": "mulheres que buscam saúde e bem-estar",
+      "storybrand_dores": [
+        "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+        "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas."
+      ],
+      "storybrand_proposta": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+      "storybrand_autoridade": "Com o acompanhamento médico do Dr. Daniel Araújo",
+      "storybrand_beneficios": [
+        "solução que funcione de verdade, feita para a sua saúde e rotina",
+        "assumir o controle do seu bem-estar",
+        "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+      ],
+      "storybrand_transformacao": "saúde concreta e duradoura",
+      "storybrand_cta_principal": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+      "storybrand_urgencia": [
+        "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+        "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+      ]
+    }
+  }
+]

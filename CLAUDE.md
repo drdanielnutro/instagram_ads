@@ -121,7 +121,7 @@ Optional field:
 
 ## Environment Variables
 
-Key configurations in `.env`:
+Key configurations in `app/.env`:
 ```bash
 GOOGLE_CLOUD_PROJECT=instagram-ads-472021
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
@@ -129,11 +129,49 @@ ARTIFACTS_BUCKET=gs://project-facilitador-logs-data  # Optional
 LANGEXTRACT_API_KEY=your-gemini-key  # Optional
 
 # Performance tuning for StoryBrand analysis
-STORYBRAND_TRUNCATE_LIMIT_CHARS=12000  # 0 disables, 8-12k recommended
-STORYBRAND_EXTRACTION_PASSES=1
-STORYBRAND_MAX_WORKERS=4
-STORYBRAND_MAX_CHAR_BUFFER=1500
+STORYBRAND_HARD_CHAR_LIMIT=20000
+STORYBRAND_SOFT_CHAR_LIMIT=12000
+STORYBRAND_TAIL_RATIO=0.2
+
+# Vertex AI retry settings
+VERTEX_CONCURRENCY_LIMIT=3
+VERTEX_RETRY_MAX_ATTEMPTS=5
+VERTEX_RETRY_INITIAL_BACKOFF=1.0
+VERTEX_RETRY_MAX_BACKOFF=30.0
 ```
+
+## Feature Flags
+
+### Available Flags
+- `ENABLE_STORYBRAND_FALLBACK`: Enable fallback pipeline when StoryBrand analysis is weak or fails (default: `false`)
+- `ENABLE_NEW_INPUT_FIELDS`: Enable experimental input fields (default: `false`)
+- `STORYBRAND_GATE_DEBUG`: Force fallback path for testing (default: `false`)
+- `ENABLE_IMAGE_GENERATION`: Enable Gemini image generation (default: `true`)
+- `PREFLIGHT_SHADOW_MODE`: Extract new fields without including in initial_state (default: `true`)
+
+### Important Notes
+**Fallback Activation Logic**: The StoryBrand fallback pipeline only runs when:
+1. `ENABLE_STORYBRAND_FALLBACK=true` **AND** `ENABLE_NEW_INPUT_FIELDS=true` (both required)
+2. AND one of:
+   - `STORYBRAND_GATE_DEBUG=true` (forces fallback)
+   - `force_storybrand_fallback=true` in state (set by error handlers)
+   - StoryBrand score < `min_storybrand_completeness` (default 0.6)
+
+See [app/agents/storybrand_gate.py:47-75](app/agents/storybrand_gate.py#L47-L75) for gate logic.
+
+### Setting Flags Locally
+Flags are loaded from `app/.env` via Makefile export. To modify:
+1. Edit `app/.env`
+2. Restart with `make dev` (automatically sources and exports vars)
+3. Check startup logs for "Feature flags loaded on startup" to confirm values
+4. Look for `storybrand_gate_decision` log entry with `fallback_enabled=True`
+
+### Troubleshooting
+If flags aren't being loaded:
+- Verify `app/.env` exists and contains the flags
+- Restart backend completely (kill ports with `make check-and-kill-ports`)
+- Check startup logs immediately after `make dev`
+- Test with: `uv run python -c "import os; from app.config import config; print(config.enable_storybrand_fallback)"`
 
 ## Current Issues & Solutions
 

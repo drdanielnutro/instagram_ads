@@ -94,6 +94,26 @@ except Exception as e:  # pragma: no cover
     logging.getLogger(__name__).warning("Delivery router not loaded: %s", e)
 
 
+@app.on_event("startup")
+async def log_feature_flags():
+    """Log feature flags on startup for visibility and debugging."""
+    from app.config import config
+
+    py_logger.info(
+        "Feature flags loaded on startup",
+        extra={
+            "enable_storybrand_fallback": config.enable_storybrand_fallback,
+            "enable_new_input_fields": config.enable_new_input_fields,
+            "storybrand_gate_debug": config.storybrand_gate_debug,
+            "enable_image_generation": config.enable_image_generation,
+            "preflight_shadow_mode": config.preflight_shadow_mode,
+            "vertex_concurrency_limit": os.getenv("VERTEX_CONCURRENCY_LIMIT"),
+            "storybrand_soft_char_limit": os.getenv("STORYBRAND_SOFT_CHAR_LIMIT"),
+            "storybrand_hard_char_limit": os.getenv("STORYBRAND_HARD_CHAR_LIMIT"),
+        }
+    )
+
+
 @app.post("/feedback")
 def collect_feedback(feedback: Feedback) -> dict[str, str]:
     """Collect and log feedback.

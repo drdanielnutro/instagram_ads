@@ -1,10 +1,10 @@
 {
-  "filename": "20250929-134546_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
+  "filename": "20250929-134838_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
   "formato": "Feed",
-  "timestamp": "2025-09-29T16:45:47Z",
-  "size_bytes": 13581,
-  "final_delivery_local_path": "artifacts/ads_final/20250929-134546_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
-  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/945d21b9-23f7-4ad8-b472-3447f03eb6bf/20250929-134546_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
+  "timestamp": "2025-09-29T16:48:38Z",
+  "size_bytes": 24352,
+  "final_delivery_local_path": "artifacts/ads_final/20250929-134838_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/945d21b9-23f7-4ad8-b472-3447f03eb6bf/20250929-134838_945d21b9-23f7-4ad8-b472-3447f03eb6bf_Feed.json",
   "user_id": "u_999",
   "session_id": "945d21b9-23f7-4ad8-b472-3447f03eb6bf"
 }
