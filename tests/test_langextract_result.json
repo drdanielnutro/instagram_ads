@@ -8,35 +8,34 @@
     "confidence": 0.9
   },
   "problem": {
-    "description": "Cada dia sem uma estratégia digital é dinheiro perdido; Seus concorrentes não vão esperar você decidir; É injusto que empresas menores estejam crescendo mais rápido que a sua",
+    "description": "trabalha duro mas não consegue converter visitantes em clientes; Se sente perdido com tantas estratégias de marketing que não funcionam; É injusto que empresas menores estejam crescendo mais rápido que a sua",
     "evidence": [
+      "perder vendas online",
       "luta para conseguir clientes",
+      "trabalha duro mas não consegue converter visitantes em clientes",
       "frustrante ver concorrentes vendendo mais",
       "Se sente perdido com tantas estratégias de marketing que não funcionam",
-      "É injusto que empresas menores estejam crescendo mais rápido que a sua",
-      "Cada dia sem uma estratégia digital é dinheiro perdido",
-      "Seus concorrentes não vão esperar você decidir"
+      "É injusto que empresas menores estejam crescendo mais rápido que a sua"
     ],
     "types": {
-      "external": "Cada dia sem uma estratégia digital é dinheiro perdido",
-      "internal": "Seus concorrentes não vão esperar você decidir",
+      "external": "trabalha duro mas não consegue converter visitantes em clientes",
+      "internal": "Se sente perdido com tantas estratégias de marketing que não funcionam",
       "philosophical": "É injusto que empresas menores estejam crescendo mais rápido que a sua"
     },
     "confidence": 0.8
   },
   "guide": {
-    "description": "Autoridade: Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart; Empatia: Entendemos sua frustração porque já passamos por isso",
-    "authority": "Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart",
-    "empathy": "Entendemos sua frustração porque já passamos por isso",
+    "description": "Autoridade: Com 10 anos de experiência, já ajudamos mais de 500 empresas a triplicar suas vendas; Empatia: Sabemos como é frustrante",
+    "authority": "Com 10 anos de experiência, já ajudamos mais de 500 empresas a triplicar suas vendas",
+    "empathy": "Sabemos como é frustrante",
     "evidence": [
-      "10 anos de experiência, já ajudamos mais de 500 empresas a triplicar suas vendas",
-      "Entendemos sua frustração porque já passamos por isso",
-      "Triplicamos o faturamento em 6 meses! - João Silva, CEO TechStart"
+      "Com 10 anos de experiência, já ajudamos mais de 500 empresas a triplicar suas vendas",
+      "Sabemos como é frustrante"
     ],
     "confidence": 0.8
   },
   "plan": {
-    "description": "3 steps",
+    "description": "3",
     "steps": [
       "3",
       "Análise gratuita do seu negócio digital",
@@ -44,8 +43,7 @@
       "Implementação com acompanhamento semanal"
     ],
     "evidence": [
-      "3 Passos: 1) Análise gratuita do seu negócio digital, 2) Estratégia personalizada de crescimento, 3) Implementação com acompanhamento semanal",
-      "3 Passos: 1) Análise gratuita do seu negócio digital, 2) Estratégia personalizada de crescimento, 3) Implementação com acompanhamento semanal"
+      "Nosso Plano Simples de 3 Passos: 1) Análise gratuita do seu negócio digital, 2) Estratégia personalizada de crescimento, 3) Implementação com acompanhamento semanal"
     ],
     "confidence": 0.85
   },
@@ -53,37 +51,32 @@
     "primary": "Agende Sua Consulta Gratuita Agora",
     "secondary": "Baixe nosso guia gratuito de vendas online",
     "evidence": [
+      "A Agência Growth transformou nosso negócio.",
       "Agende Sua Consulta Gratuita Agora",
       "Baixe nosso guia gratuito de vendas online"
     ],
     "confidence": 0.9
   },
   "failure": {
-    "description": "ficar para trás",
+    "description": "dinheiro perdido",
     "consequences": [
-      "Cada dia sem uma estratégia digital é dinheiro perdido.",
-      "Seus concorrentes não vão esperar você decidir."
+      "Cada dia sem uma estratégia digital é dinheiro perdido. Seus concorrentes não vão esperar você decidir."
     ],
     "evidence": [
-      "Cada dia sem uma estratégia digital é dinheiro perdido.",
-      "Seus concorrentes não vão esperar você decidir."
+      "Cada dia sem uma estratégia digital é dinheiro perdido. Seus concorrentes não vão esperar você decidir."
     ],
     "confidence": 0.75
   },
   "success": {
     "description": "",
     "benefits": [
-      "triplicar suas vendas",
-      "Vendas automáticas acontecendo 24/7",
-      "Clientes chegando sem você precisar prospectar",
-      "Liberdade para focar no que você ama fazer"
+      "Triplicamos o faturamento em 6 meses!",
+      "Vendas automáticas acontecendo 24/7, Clientes chegando sem você precisar prospectar, Liberdade para focar no que você ama fazer"
     ],
-    "transformation": "liberdade e foco",
+    "transformation": "vendas automáticas, clientes sem prospecção, liberdade",
     "evidence": [
-      "triplicar suas vendas",
-      "Vendas automáticas acontecendo 24/7",
-      "Clientes chegando sem você precisar prospectar",
-      "Liberdade para focar no que você ama fazer"
+      "Triplicamos o faturamento em 6 meses!",
+      "Vendas automáticas acontecendo 24/7, Clientes chegando sem você precisar prospectar, Liberdade para focar no que você ama fazer"
     ],
     "confidence": 0.85
   },
@@ -92,14 +85,14 @@
     "extraction_method": "langextract",
     "model_used": "gemini-2.5-flash-lite",
     "elements_found": [
-      "action",
-      "guide",
       "success",
-      "failure",
       "character",
-      "plan",
-      "problem"
+      "failure",
+      "guide",
+      "action",
+      "problem",
+      "plan"
     ],
-    "total_extractions": 21
+    "total_extractions": 17
   }
 }

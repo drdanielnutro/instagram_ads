@@ -494,18 +494,18 @@ class StoryBrandExtractor:
         )
         return truncated_content, True, metadata
 
-    def extract(self, html_content: str, *, landing_page_url: Optional[str] = None) -> Dict[str, Any]:
+    def extract(self, page_content: str, *, landing_page_url: Optional[str] = None) -> Dict[str, Any]:
         """
         Extrai os elementos StoryBrand do conteúdo HTML usando LangExtract.
 
         Args:
-            html_content: HTML ou texto da página a ser analisado
+            page_content: Conteúdo da página (HTML bruto ou texto processado via Trafilatura)
 
         Returns:
             Dict com os 7 elementos StoryBrand extraídos
         """
 
-        if not html_content:
+        if not page_content:
             return self._empty_result()
 
         try:
@@ -516,7 +516,7 @@ class StoryBrandExtractor:
             max_workers = int(os.getenv("STORYBRAND_MAX_WORKERS", "4"))
             max_char_buffer = int(os.getenv("STORYBRAND_MAX_CHAR_BUFFER", "1500"))
 
-            prepared_input, truncated, truncation_info = self._prepare_input(html_content)
+            prepared_input, truncated, truncation_info = self._prepare_input(page_content)
             if truncated:
                 logger.info("StoryBrand input truncated", extra=truncation_info)
             else:

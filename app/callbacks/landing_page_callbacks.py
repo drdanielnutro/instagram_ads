@@ -96,11 +96,10 @@ def process_and_extract_sb7(
         logger.warning("Web fetch não foi bem-sucedido, pulando análise StoryBrand")
         return result
 
-    # Preferir texto limpo do Trafilatura quando disponível (melhor latência/precisão)
-    text_content = result.get('text_content')
-    html_content = result.get('html_content', '')
-    if not (text_content or html_content):
-        logger.warning("Conteúdo vazio, pulando análise StoryBrand")
+    # Usar texto limpo extraído pela Trafilatura
+    text_content = result.get('text_content', '')
+    if not text_content:
+        logger.warning("Conteúdo de texto vazio, pulando análise StoryBrand")
         return result
 
     try:
@@ -108,14 +107,13 @@ def process_and_extract_sb7(
 
         # Criar extrator e processar
         extractor = StoryBrandExtractor()
-        # Se houver texto limpo, usar; senão, cair para HTML bruto
-        input_text = text_content or html_content
-        # Logar tamanhos
+        # Usar texto limpo extraído pela Trafilatura
+        input_text = text_content
+        # Logar tamanho do input
         try:
             logger.info(
-                "StoryBrand input sizes: text_len=%s, html_len=%s",
+                "StoryBrand input size: text_len=%s",
                 len(text_content) if isinstance(text_content, str) else 0,
-                len(html_content) if isinstance(html_content, str) else 0,
             )
         except Exception:
             pass

@@ -30,13 +30,12 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
 
     Returns:
         Dict contendo:
-        - html_content: HTML completo da página
-        - text_content: Texto principal extraído
+        - text_content: Texto principal extraído via Trafilatura
         - title: Título da página
         - meta_description: Meta descrição
         - status: 'success' ou 'error'
         - error_message: Mensagem de erro se houver
-        - metadata: Metadados adicionais extraídos
+        - metadata: Metadados adicionais extraídos do HTML
     """
 
     # Validar URL
@@ -46,7 +45,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
             return {
                 "status": "error",
                 "error_message": f"URL inválida: {url}",
-                "html_content": "",
                 "text_content": "",
                 "metadata": {}
             }
@@ -54,7 +52,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
         return {
             "status": "error",
             "error_message": f"Erro ao parsear URL: {str(e)}",
-            "html_content": "",
             "text_content": "",
             "metadata": {}
         }
@@ -166,7 +163,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
 
         return {
             "status": "success",
-            "html_content": html_content,
             "text_content": text_content,
             "title": title,
             "meta_description": meta_description,
@@ -180,7 +176,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
         return {
             "status": "error",
             "error_message": error_msg,
-            "html_content": "",
             "text_content": "",
             "metadata": {}
         }
@@ -191,7 +186,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
         return {
             "status": "error",
             "error_message": error_msg,
-            "html_content": "",
             "text_content": "",
             "metadata": {}
         }
@@ -202,7 +196,6 @@ def web_fetch_tool(url: str, tool_context: Optional[Any] = None) -> Dict[str, An
         return {
             "status": "error",
             "error_message": error_msg,
-            "html_content": "",
             "text_content": "",
             "metadata": {}
         }
