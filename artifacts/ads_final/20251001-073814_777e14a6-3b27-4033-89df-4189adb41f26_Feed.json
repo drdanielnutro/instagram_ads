@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Elegância que Valoriza. Sem dilemas.",
+      "corpo": "Você merece se sentir reconhecida e poderosa todos os dias. Mas por que a elegância precisa custar uma fortuna ou sacrificar a qualidade? Apresentamos o Conjunto Tricot Bicolor: a peça que une design sofisticado, caimento perfeito e preço justo. Eleve sua autoconfiança com um guarda-roupa inteligente. Vista sua essência.",
+      "cta_texto": "Descubra o Conjunto Tricot Bicolor"
+    },
+    "visual": {
+      "descricao_imagem": "Imagem única e impactante de uma mulher vestindo o Conjunto Tricot Bicolor. Ela está em um ambiente minimalista e chique, como uma galeria de arte ou um café moderno, com uma postura confiante e um sorriso sereno. A foto foca no caimento impecável da peça e na textura do tricot, transmitindo sofisticação e conforto.",
+      "prompt_estado_atual": null,
+      "prompt_estado_intermediario": null,
+      "prompt_estado_aspiracional": "Editorial fashion photo of a confident Brazilian woman (30s) wearing an elegant bicolor tricot knit set (black and white). She is standing in a brightly lit, minimalist art gallery setting. Her pose is natural yet powerful, exuding self-assurance and sophistication. The focus is on the flawless fit and high-quality texture of the outfit. Soft, natural light. Aspect ratio 4:5. Hyper-realistic, high detail.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance em Feed (4:5) focam em imagens/vídeos autênticos e de alta qualidade, que destacam o caimento e a versatilidade do produto (especialmente o Conjunto Tricot Bicolor) em contextos reais. Utilizam texto sobreposto minimalista e impactante para headlines rápidas, e buscam transmitir uma sensação de elegância acessível e autoconfiança no dia a dia da mulher brasileira.",
+    "contexto_landing": "A landing page se comunica com a mulher que busca equilibrar elegância e orçamento, sentindo-se frustrada com a falta de opções que entreguem qualidade e preço justo. Ela anseia por um guarda-roupa que eleve sua autoconfiança e gere reconhecimento, sem causar insegurança financeira. A Loja Flamê se posiciona como a curadora que resolve esse dilema, oferecendo peças sofisticadas como o Conjunto Tricot Bicolor, prometendo uma transformação onde a cliente se torna uma mulher confiante, valorizada e que se veste com inteligência."
+  },
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Reconhecimento e Estilo: Nosso Tricot Bicolor.",
+      "corpo": "Cansada de escolher entre um look sofisticado e um preço justo? Chega de dilemas! O Conjunto Tricot Bicolor da Loja Flamê é a peça que você precisa para alinhar sua imagem à sua essência. Nosso best-seller une design moderno, caimento impecável e o conforto do tricot, garantindo que você se sinta plenamente valorizada e reconhecida. Invista em você, na sua autoconfiança e no seu bolso.",
+      "cta_texto": "Garanta o seu e vista-se de valor!"
+    },
+    "visual": {
+      "descricao_imagem": "Uma sequência narrativa em três imagens. A primeira mostra uma mulher frustrada com seu guarda-roupa. A segunda, ela descobre com otimismo o Conjunto Tricot Bicolor no site da Loja Flamê pelo celular. Na terceira, ela está radiante e confiante, vestindo o conjunto em um ambiente profissional, sendo notada e valorizada.",
+      "prompt_estado_atual": "A woman (30s, professional style) standing before an open, cluttered wardrobe, her expression a mix of frustration and indecision. The lighting is average, highlighting her feeling of being stuck. She holds two hangers, one with a very expensive-looking but severe blouse, the other with a cheap fast-fashion top. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "Close-up on the woman's face, now with a look of hope and curiosity. She is sitting comfortably, and the reflection in her eyes shows she's scrolling on a smartphone. In the foreground, slightly out of focus, we see the phone screen displaying the elegant 'Conjunto Tricot Bicolor' on the Loja Flamê website. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, now transformed, stands tall and confident in a modern, bright office lobby, wearing the chic 'Conjunto Tricot Bicolor'. She has a genuine, self-assured smile, holding a tablet and making eye contact with someone off-camera, clearly being respected and heard. The image radiates success and effortless elegance. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance em Feed (4:5) focam em imagens/vídeos autênticos e de alta qualidade, que destacam o caimento e a versatilidade do produto (especialmente o Conjunto Tricot Bicolor) em contextos reais. Utilizam texto sobreposto minimalista e impactante para headlines rápidas, e buscam transmitir uma sensação de elegância acessível e autoconfiança no dia a dia da mulher brasileira.",
+    "contexto_landing": "A landing page se comunica com a mulher que busca equilibrar elegância e orçamento, sentindo-se frustrada com a falta de opções que entreguem qualidade e preço justo. Ela anseia por um guarda-roupa que eleve sua autoconfiança e gere reconhecimento, sem causar insegurança financeira. A Loja Flamê se posiciona como a curadora que resolve esse dilema, oferecendo peças sofisticadas como o Conjunto Tricot Bicolor, prometendo uma transformação onde a cliente se torna uma mulher confiante, valorizada e que se veste com inteligência."
+  },
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "A elegância que você merece. O preço que você respeita.",
+      "corpo": "Sua imagem não deveria ser um sacrifício. É por isso que fizemos uma curadoria especial de peças que unem qualidade, conforto e um design que te valoriza. O Conjunto Tricot Bicolor é a prova: sinta a confiança de um caimento perfeito e a tranquilidade de um investimento inteligente. Transforme seu guarda-roupa e seja reconhecida pela mulher sofisticada que você é.",
+      "cta_texto": "Ver Coleção e garantir o seu"
+    },
+    "visual": {
+      "descricao_imagem": "Uma imagem em formato de 'antes e depois' lado a lado. À esquerda ('Antes'), uma mulher parece insegura e desconfortável com uma roupa que não veste bem. À direita ('Depois'), a mesma mulher, agora usando o Conjunto Tricot Bicolor, exala confiança e felicidade em um ambiente social elegante, como um coquetel ou um jantar.",
+      "prompt_estado_atual": "Left side of a diptych: A woman in her early 30s looks in a mirror with a disappointed expression. She is wearing an ill-fitting, generic outfit that looks cheap and uncomfortable. Her posture is slumped, and the lighting is flat and unflattering. The background is a messy bedroom. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": null,
+      "prompt_estado_aspiracional": "Right side of a diptych: The same woman, now radiant and confident, wearing the perfectly fitted Loja Flamê 'Conjunto Tricot Bicolor'. She's laughing and interacting with friends at a chic rooftop bar at dusk. The lighting is warm and flattering, and her posture is open and self-assured. She looks effortlessly elegant. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de alta performance em Feed (4:5) focam em imagens/vídeos autênticos e de alta qualidade, que destacam o caimento e a versatilidade do produto (especialmente o Conjunto Tricot Bicolor) em contextos reais. Utilizam texto sobreposto minimalista e impactante para headlines rápidas, e buscam transmitir uma sensação de elegância acessível e autoconfiança no dia a dia da mulher brasileira.",
+    "contexto_landing": "A landing page se comunica com a mulher que busca equilibrar elegância e orçamento, sentindo-se frustrada com a falta de opções que entreguem qualidade e preço justo. Ela anseia por um guarda-roupa que eleve sua autoconfiança e gere reconhecimento, sem causar insegurança financeira. A Loja Flamê se posiciona como a curadora que resolve esse dilema, oferecendo peças sofisticadas como o Conjunto Tricot Bicolor, prometendo uma transformação onde a cliente se torna uma mulher confiante, valorizada e que se veste com inteligência."
+  }
+]
