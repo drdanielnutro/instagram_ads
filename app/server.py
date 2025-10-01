@@ -16,6 +16,9 @@ import os
 import logging
 from typing import Any, Optional
 
+# Note: Environment variables are already loaded in app/__init__.py
+# This ensures .env is loaded before any imports happen
+
 import google.auth
 from fastapi import FastAPI, HTTPException
 from fastapi import Body
@@ -98,6 +101,15 @@ except Exception as e:  # pragma: no cover
 async def log_feature_flags():
     """Log feature flags on startup for visibility and debugging."""
     from app.config import config
+
+    print("=" * 80)
+    print("🚀 SERVER STARTUP COMPLETE - KEY FEATURE FLAGS:")
+    print("=" * 80)
+    print(f"  enable_storybrand_fallback: {config.enable_storybrand_fallback}")
+    print(f"  enable_new_input_fields: {config.enable_new_input_fields}")
+    print(f"  storybrand_gate_debug: {config.storybrand_gate_debug}")
+    print(f"  enable_image_generation: {config.enable_image_generation}")
+    print("=" * 80)
 
     py_logger.info(
         "Feature flags loaded on startup",

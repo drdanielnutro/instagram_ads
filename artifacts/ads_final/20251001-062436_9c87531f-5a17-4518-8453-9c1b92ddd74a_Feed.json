@@ -1,0 +1,116 @@
+[
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Elegância por menos? Últimos dias com preço baixo!",
+      "corpo": "Não adie mais o look dos seus sonhos! O Conjunto Camisa Rendado está com uma promoção que acaba sábado (04/10). É a sua chance de ter sofisticação e qualidade sem pesar no bolso. Parcele em 6x e pague frete a partir de R$10. Corra antes que acabe!",
+      "cta_texto": "Garantir meu conjunto com desconto"
+    },
+    "visual": {
+      "descricao_imagem": "A imagem retrata a jornada da persona: primeiro, uma mulher frustrada com seu guarda-roupa limitado pelo orçamento; depois, ela descobre a oferta do Conjunto Rendado no site da Loja Flame, com uma expressão de esperança; por fim, ela aparece radiante e confiante usando o conjunto, provando que é possível ter estilo e economia.",
+      "prompt_estado_atual": "A young adult woman (25-35 years old) in her bedroom, looking overwhelmed by a pile of generic clothes, her expression is one of frustration and limitation. The lighting is neutral and slightly dim, conveying her current dissatisfaction. Aspect ratio 4:5. --ar 4:5",
+      "prompt_estado_intermediario": "The same woman, now sitting comfortably, looks at a laptop screen showing the Loja Flame website featuring the 'Conjunto Camisa Rendado' with a prominent sale tag. Her expression has shifted to curiosity and hope, realizing a solution is possible. The lighting is brighter. Aspect ratio 4:5. --ar 4:5",
+      "prompt_estado_aspiracional": "The same woman, now looking stunning and confident, wears the elegant 'Conjunto Camisa Rendado' in a chic café. She smiles, exuding self-assurance and happiness with her stylish, affordable look. The lighting is warm and vibrant. Aspect ratio 4:5. --ar 4:5",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed (4:5) de alta performance em e-commerce de moda destacam o produto em uso por modelos que representam a persona, com visuais de alta qualidade e edição dinâmica. Headlines abordam diretamente dores e benefícios (estilo, economia) e o corpo do texto reforça a urgência (promoção limitada) e vantagens financeiras (parcelamento, frete acessível).",
+    "contexto_landing": {
+      "storybrand_persona": "Mulheres que querem se vestir bem gastando pouco, buscando moda feminina elegante e acessível.",
+      "storybrand_dores": [
+        "Dificuldade em encontrar roupas bonitas e de qualidade a preços justos.",
+        "Frustração de querer se sentir bem vestida sem comprometer o orçamento."
+      ],
+      "storybrand_proposta": "A Loja Flame oferece moda feminina elegante e acessível, com condições de pagamento facilitadas e frete vantajoso.",
+      "storybrand_autoridade": "Oferece parcelamento em até 6x no cartão e frete a partir de R$10.",
+      "storybrand_beneficios": [
+        "Vestir-se com estilo e qualidade",
+        "Economizar dinheiro com peças em promoção",
+        "Sentir-se elegante e confiante"
+      ],
+      "storybrand_transformacao": "Passar da frustração de ter um orçamento limitado para a confiança de se vestir com elegância e qualidade de forma acessível.",
+      "storybrand_cta_principal": "Cadastre-se e comece a recebê-las!",
+      "storybrand_urgencia": [
+        "Promoção no Conjunto Camisa Rendado válida até sábado 04/10/2025."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "O look versátil que te deixa pronta para tudo.",
+      "corpo": "Imagine uma peça que te acompanha do trabalho ao happy hour com a mesma elegância. Esse é o nosso Conjunto Camisa Rendado. Sinta a confiança de estar bem vestida em qualquer momento do seu dia. Estilo e sofisticação agora ao seu alcance. Aproveite a oferta especial até 04/10.",
+      "cta_texto": "Descobrir minha nova peça favorita"
+    },
+    "visual": {
+      "descricao_imagem": "Foco na versatilidade. A imagem principal mostra uma mulher elegante usando o Conjunto Camisa Rendado em um ambiente de trabalho moderno. A ideia é comunicar que a peça é sofisticada e se adapta a diferentes momentos da vida da mulher, do profissional ao casual chic.",
+      "prompt_estado_atual": "A confident woman (25-35) wearing a stylish white lace shirt set, smiling during a bright, modern office meeting. She looks poised and professional. The focus is on the elegance of the outfit in a corporate setting. Warm, professional lighting. Aspect ratio 4:5. --ar 4:5",
+      "prompt_estado_intermediario": "The same woman, wearing the same white lace shirt set, enjoying a coffee at a chic, sunlit cafe. The mood is relaxed and sophisticated, showing the outfit's suitability for stylish daytime activities. Natural, airy lighting. Aspect ratio 4:5. --ar 4:5",
+      "prompt_estado_aspiracional": "The same woman, wearing the same white lace shirt set, now at an evening social event, holding a drink and laughing. The lighting is moodier, with city lights in the background, showing the outfit's transition to a perfect night-out look. Elegant, low-key lighting. Aspect ratio 4:5. --ar 4:5",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed (4:5) de alta performance em e-commerce de moda destacam o produto em uso por modelos que representam a persona, com visuais de alta qualidade e edição dinâmica. Headlines abordam diretamente dores e benefícios (estilo, economia) e o corpo do texto reforça a urgência (promoção limitada) e vantagens financeiras (parcelamento, frete acessível).",
+    "contexto_landing": {
+      "storybrand_persona": "Mulheres que querem se vestir bem gastando pouco, buscando moda feminina elegante e acessível.",
+      "storybrand_dores": [
+        "Dificuldade em encontrar roupas bonitas e de qualidade a preços justos.",
+        "Frustração de querer se sentir bem vestida sem comprometer o orçamento."
+      ],
+      "storybrand_proposta": "A Loja Flame oferece moda feminina elegante e acessível, com condições de pagamento facilitadas e frete vantajoso.",
+      "storybrand_autoridade": "Oferece parcelamento em até 6x no cartão e frete a partir de R$10.",
+      "storybrand_beneficios": [
+        "Vestir-se com estilo e qualidade",
+        "Economizar dinheiro com peças em promoção",
+        "Sentir-se elegante e confiante"
+      ],
+      "storybrand_transformacao": "Passar da frustração de ter um orçamento limitado para a confiança de se vestir com elegância e qualidade de forma acessível.",
+      "storybrand_cta_principal": "Cadastre-se e comece a recebê-las!",
+      "storybrand_urgencia": [
+        "Promoção no Conjunto Camisa Rendado válida até sábado 04/10/2025."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://www.lojaflame.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "O Conjunto Rendado que conquistou a internet.",
+      "corpo": "Tem uma razão para o nosso Conjunto Camisa Rendado ser o mais amado: ele une conforto, estilo e um preço justo. Junte-se às mulheres que escolheram se sentir incríveis sem estourar o orçamento. Não fique de fora! Garanta o seu com preço de promoção só até sábado, 04/10.",
+      "cta_texto": "Quero o meu look mais amado"
+    },
+    "visual": {
+      "descricao_imagem": "Estilo prova social (UGC - Conteúdo Gerado pelo Usuário). A imagem é um mosaico ou carrossel com fotos de aparência autêntica de diferentes mulheres (diversidade de corpos e etnias) usando o Conjunto Camisa Rendado em seus dia a dia, felizes e confiantes. O clima é real e identificável.",
+      "prompt_estado_atual": "UGC style photo. A smiling woman (20s) with curly hair takes a mirror selfie in her apartment, wearing a white lace shirt set. The photo looks authentic, spontaneous, and happy. Natural indoor light. She is showcasing her new outfit proudly. Aspect ratio 4:5. --ar 4:5 --style raw",
+      "prompt_estado_intermediario": "UGC style photo. A woman (30s) wearing the same white lace shirt set, posing for a friend in a park. The shot is candid, capturing a moment of laughter. The feel is genuine and relatable, highlighting the outfit's comfort. Bright sunlight. Aspect ratio 4:5. --ar 4:5 --style raw",
+      "prompt_estado_aspiracional": "UGC style photo. A close-up shot focusing on the lace detail of the shirt, worn by a woman with a different skin tone. The image feels like an authentic post from a satisfied customer appreciating the quality of the fabric. Soft, morning light. Aspect ratio 4:5. --ar 4:5 --style raw",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Criativos de Feed (4:5) de alta performance em e-commerce de moda destacam o produto em uso por modelos que representam a persona, com visuais de alta qualidade e edição dinâmica. Headlines abordam diretamente dores e benefícios (estilo, economia) e o corpo do texto reforça a urgência (promoção limitada) e vantagens financeiras (parcelamento, frete acessível).",
+    "contexto_landing": {
+      "storybrand_persona": "Mulheres que querem se vestir bem gastando pouco, buscando moda feminina elegante e acessível.",
+      "storybrand_dores": [
+        "Dificuldade em encontrar roupas bonitas e de qualidade a preços justos.",
+        "Frustração de querer se sentir bem vestida sem comprometer o orçamento."
+      ],
+      "storybrand_proposta": "A Loja Flame oferece moda feminina elegante e acessível, com condições de pagamento facilitadas e frete vantajoso.",
+      "storybrand_autoridade": "Oferece parcelamento em até 6x no cartão e frete a partir de R$10.",
+      "storybrand_beneficios": [
+        "Vestir-se com estilo e qualidade",
+        "Economizar dinheiro com peças em promoção",
+        "Sentir-se elegante e confiante"
+      ],
+      "storybrand_transformacao": "Passar da frustração de ter um orçamento limitado para a confiança de se vestir com elegância e qualidade de forma acessível.",
+      "storybrand_cta_principal": "Cadastre-se e comece a recebê-las!",
+      "storybrand_urgencia": [
+        "Promoção no Conjunto Camisa Rendado válida até sábado 04/10/2025."
+      ]
+    }
+  }
+]

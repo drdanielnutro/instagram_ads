@@ -24,15 +24,8 @@ check-and-kill-ports:
 
 # Main development command: runs all agents and the frontend
 dev: check-and-kill-ports
-	@set -a; \
-	 if [ -f app/.env ]; then source app/.env; fi; \
-	 export GOOGLE_APPLICATION_CREDENTIALS=$${GOOGLE_APPLICATION_CREDENTIALS:-./sa-key.json}; \
-	 echo "Using GOOGLE_APPLICATION_CREDENTIALS=$${GOOGLE_APPLICATION_CREDENTIALS}"; \
-	 if [ ! -f "$${GOOGLE_APPLICATION_CREDENTIALS}" ]; then \
-	   echo "⚠️  Service account key not found at $${GOOGLE_APPLICATION_CREDENTIALS}. Continuing with ADC credentials (Signed URLs may fail)."; \
-	 fi; \
-	 set +a; \
-	 make dev-all
+	@echo "🚀 Starting development environment..."
+	@make dev-all
 
 # --- Development workflows ---
 dev-all:
@@ -50,7 +43,7 @@ dev-coder: check-and-kill-ports
 # --- Helper targets for backends ---
 dev-backend-all:
 	@echo "Starting backend with uvicorn (app.server:app) to include custom endpoints like /run_preflight"
-	@uv run uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload
+	@bash -c 'set -a; [ -f app/.env ] && source app/.env && echo "✅ Environment variables loaded from app/.env"; set +a; uv run uvicorn app.server:app --host 0.0.0.0 --port 8000 --reload'
 
 dev-backend-original:
 	@uv run adk api_server app --allow_origins="*"

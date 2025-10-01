@@ -515,7 +515,8 @@ class StoryBrandSectionRunner(BaseAgent):
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
         state = ctx.session.state
         for section in self._sections:
-            await self._run_section(ctx, state, section)
+            async for event in self._run_section(ctx, state, section):
+                yield event
             yield Event(author=self.name)
 
     async def _run_section(
@@ -523,7 +524,7 @@ class StoryBrandSectionRunner(BaseAgent):
         ctx: InvocationContext,
         state: Dict[str, object],
         section: StoryBrandSectionConfig,
-    ) -> None:
+    ) -> AsyncGenerator[Event, None]:
         gender = _normalize_gender(state.get("sexo_cliente_alvo"))
         if gender not in {"masculino", "feminino"}:
             raise ValueError("sexo_cliente_alvo inválido para execução do fallback")
