@@ -30,11 +30,13 @@
       user_description: str | None = None
       uploaded_at: datetime
   ```
+- **Importante**: antes de colocar esses metadados no estado compartilhado, sempre chamar `metadata.model_dump(mode="json")`
+  (ou expor um método `to_state_dict()` equivalente) para garantir apenas tipos JSON-serializáveis.
 - Estado compartilhado montado em `run_preflight` antes da criação da sessão ADK:
   ```python
   initial_state["reference_images"] = {
-      "character": ReferenceImageMetadata | None,
-      "product": ReferenceImageMetadata | None,
+      "character": dict | None,
+      "product": dict | None,
   }
   initial_state["reference_image_summary"] = {
       "character": "Modelo feminina, cabelos cacheados...",
@@ -48,8 +50,9 @@
   ```python
   from app.utils.reference_cache import resolve_reference_metadata
   ```
-  `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None` deve consultar um cache em memória com TTL configurável, retornar `None` para IDs ausentes e registrar logs estruturados para diagnósticos.
-- No mesmo módulo, implementar `build_reference_summary(reference_images: dict[str, ReferenceImageMetadata | None], payload: dict) -> dict[str, str | None]` agregando labels e descrições (`user_description`) e produzindo frases curtas usadas pelos prompts.
+  `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None` deve consultar um cache em memória com TTL configurável, retornar `None` para IDs ausentes e registrar logs estruturados para diagnósticos. Sempre que o metadado for retornado, convertê-lo para `dict` com `model_dump(mode="json")` antes de inseri-lo no estado.
+- No mesmo módulo, implementar `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]` agregando labels e descrições (`user_description`) e produzindo frases curtas usadas pelos prompts.
+- Implementar helper `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None` que receba o metadado resolvido, faça `model_dump(mode="json")` quando existir e injete `user_description` (se fornecida) no dicionário resultante.
 - Expor também `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None` para ser chamado logo após cada upload, garantindo que `resolve_reference_metadata` encontre os valores durante o `run_preflight` seguinte.
 - JSON final (produzido pelo `final_assembler` em `app/agent.py:1023-1049`):
   ```json
@@ -106,13 +109,19 @@
   6. Adicionar `google-cloud-vision>=3.4.0` (ou a biblioteca Vertex AI equivalente) a `requirements.txt`/`uv.lock` e documentar que `make install` deve ser reexecutado.
 
 ### 6.2 Preflight (`run_preflight`) — `app/server.py:300-393`
-- Atualizar o modelo Pydantic usado pelo endpoint (`RunPreflightRequest` ou equivalente) para aceitar `reference_images` opcional além de `text`/flags existentes.
+- Criar um schema Pydantic (`RunPreflightRequest`) para validar o corpo recebido, aceitando `reference_images` opcionais além de `text`/flags existentes e substituindo o parse manual atual.
 - Resolver IDs para metadados completos antes de montar `initial_state`:
   ```python
   reference_images = payload.get("reference_images", {})
   initial_state["reference_images"] = {
-      "character": resolve_reference_metadata(reference_images.get("character")),
-      "product": resolve_reference_metadata(reference_images.get("product")),
+      "character": merge_user_description(
+          resolve_reference_metadata(reference_images.get("character", {}).get("id")),
+          reference_images.get("character", {}).get("user_description"),
+      ),
+      "product": merge_user_description(
+          resolve_reference_metadata(reference_images.get("product", {}).get("id")),
+          reference_images.get("product", {}).get("user_description"),
+      ),
   }
   initial_state["reference_image_summary"] = build_reference_summary(initial_state["reference_images"], payload)
   initial_state["reference_image_character_summary"] = initial_state["reference_image_summary"].get("character")
@@ -125,16 +134,24 @@
 ### 7.1 Prompts de geração
 - **VISUAL_DRAFT (c. linha 880)**: adicionar placeholders planos `{reference_image_character_summary}` e `{reference_image_product_summary}` e instruir o agente a alinhar narrativa com as referências disponíveis.
 - **COPY_DRAFT (c. linha 830)**: caso haja labels de produto, sugerir que headline/corpo mencionem a peça real usando as mesmas chaves planas.
-- **final_assembler (linhas 1023-1049)**: reforçar no prompt que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real, consumindo os campos planos adicionados ao `initial_state`.
+- **final_assembler (linhas 1023-1049)**: injetar explicitamente no prompt os campos `reference_images.character.gcs_uri`, `reference_images.character.labels`, `reference_images.product.gcs_uri` e `reference_images.product.labels` provenientes do estado (após conversão para `dict`). Reforçar que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real usando esses valores. Se algum campo não existir, remover o placeholder antes de enviar ao modelo. Caso o modelo não retorne esses campos, realizar pós-processamento programático para preencher `visual.reference_assets` com os valores factuais.
 
 ### 7.2 `ImageAssetsAgent._run_async_impl` (`app/agent.py:316-577`)
-- Recuperar `reference_images = state.get("reference_images") or {}` garantindo dicionário vazio quando não houver uploads.
-- Montar argumentos para `generate_transformation_images` apenas quando os metadados existirem:
+- Recuperar `reference_images = state.get("reference_images") or {}` garantindo dicionário vazio quando não houver uploads (importar `ReferenceImageMetadata` no topo do módulo).
+- Montar argumentos para `generate_transformation_images` apenas quando os metadados existirem, reidratando-os para `ReferenceImageMetadata`:
   ```python
   reference_character = reference_images.get("character")
   reference_product = reference_images.get("product")
   assets = await generate_transformation_images(
-      ..., reference_character=reference_character, reference_product=reference_product
+      ...,
+      reference_character=(
+          ReferenceImageMetadata.model_validate(reference_character)
+          if reference_character else None
+      ),
+      reference_product=(
+          ReferenceImageMetadata.model_validate(reference_product)
+          if reference_product else None
+      ),
   )
   ```
 - Registrar em `summary` se as referências foram usadas ou se houve fallback.
@@ -201,6 +218,7 @@
 | Latência adicional | medir tempos; ajustar `config.image_generation_timeout` se necessário |
 | Inconsistência narrativa | reforçar prompts (copy + visual) com labels e descrições; incluir QA manual inicialmente |
 | Crescimento de arquivos em GCS | planejar job de limpeza (Cloud Scheduler + função que remove uploads sem uso em X dias) |
+| Cache local sem compartilhamento entre workers | armazenar metadados em backend compartilhado (Redis/Datastore) ou garantir afinidade de sessão |
 
 ## 13. Roadmap Sugerido
 1. **Infra**: endpoint de upload + Vision integration + schema `ReferenceImageMetadata`.
