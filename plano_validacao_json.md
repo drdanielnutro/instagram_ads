@@ -25,112 +25,116 @@
   - Especificações de formato (`app/format_specifications.py`).
   - Plano fixo por formato (`app/plan_models/fixed_plans.py`) – somente referência de tarefas, não de validação.
 
-## 4. Proposta Técnica Detalhada
+## 4. Proposta Técnica e Sequência de Implementação
 
-### 4.1 Validador Determinístico (novo componente)
-- **Arquivo sugerido:** `app/validators/final_delivery_validator.py` (classe `FinalDeliveryValidatorAgent`).
-- **Responsabilidades:**
-  1. Carregar `final_code_delivery` do estado (aceitar `str`, `list` ou objetos já carregados) e garantir parsing único.
-  2. Validar contra um schema Pydantic dedicado (ex.: `app/schemas/final_delivery.py`) para evitar import circular com `app/agent.py`. Esse schema deve:
-     - Declarar `contexto_landing` como `dict[str, Any] | str` (ou modelar estrutura própria) refletindo o payload real.
-     - Reutilizar campos de `AdVisual`/`AdItem`, agora movidos/copied para o módulo compartilhado, adicionando `Field(min_length=1)` para strings obrigatórias e lidando com trimming.
-     - Respeitar enums configuráveis: `formato` ∈ {"Reels","Stories","Feed"}; `aspect_ratio` baseado em `format_specs`; `cta_instagram` preenchido a partir de fonte única (enum local + overrides do config se existirem).
-     - Normalizar e validar `cta_instagram` usando `state["objetivo_final"]` já normalizado; se o objetivo não mapear para CTA preferencial, emitir aviso e aceitar qualquer CTA permitido.
-  3. Conferir regras por formato com `app/format_specifications.py`:
-     - `visual.aspect_ratio` deve estar em `permitidos` (Feed) ou igual ao valor fixo para Reels/Stories.
-     - `copy.headline` precisa respeitar `headline_max_chars` quando preenchida.
-  4. Checar unicidade entre variações calculando uma tupla normalizada (ex.: `headline`, `corpo`, `visual.prompt_estado_*`) em lower/trim e comparando com um set; duplicatas geram falha com índice específico.
-  5. Atualizar o estado com `final_delivery_validation = {"grade": "pass"|"fail", "issues": [...], "normalized_payload": ...}` para consumo posterior.
-- **Falhas:**
-  - Lançar `FinalDeliveryValidationError` contendo lista de problemas e anexar evento via novo helper `app/utils/audit.py::append_delivery_audit_event` (evita dependência de `_append_audit_event`).
-  - O agente deve usar `make_failure_handler("final_delivery_validation", "JSON final não passou na validação determinística.")` como `after_agent_callback`, garantindo que o orquestrador informe o usuário.
+### Fase 1 – Estruturas de Base (Etapa 5.1)
+Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipeline principal.
 
-### 4.2 Integração no Pipeline
-- Reordenar o `execution_pipeline` para que a validação determinística ocorra imediatamente após o `final_assembler`:
-  ```python
-  deterministic_validation_stage = SequentialAgent(
-      name="deterministic_validation_stage",
-      sub_agents=[final_delivery_validator_agent],
-      after_agent_callback=make_failure_handler(
-          "final_delivery_validation",
-          "JSON final não passou na validação determinística."
-      ),
-  )
+1. **Schema de validação compartilhado**
+   - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
+   - Permitir `contexto_landing` como `dict[str, Any] | str`, aplicar `Field(min_length=1)` e normalizar whitespace nos campos obrigatórios.
+   - Centralizar enums de formato, aspect ratio e CTA em um único lugar para serem reutilizados por agentes e validação.
 
-  semantic_validation_loop = LoopAgent(
-      name="semantic_validation_loop",
-      max_iterations=2,
-      sub_agents=[
-          semantic_visual_reviewer,
-          EscalationChecker(name="semantic_validation_escalator", review_key="semantic_visual_review"),
-          RunIfFailed(name="semantic_fix_if_failed", review_key="semantic_visual_review", agent=semantic_fix_agent),
-      ],
-      after_agent_callback=make_failure_handler(
-          "semantic_visual_review",
-          "Não foi possível garantir coerência narrativa após as iterações."
-      ),
-  )
+2. **Helper de auditoria e metadados**
+   - Criar `app/utils/audit.py` com `append_delivery_audit_event` (seguindo o padrão do fallback StoryBrand) e outras funções necessárias para registrar sucessos/falhas.
+   - Revisar utilitários existentes (`app/utils/delivery_status.py`) apenas se precisarem expor helpers comuns.
 
-  execution_pipeline = SequentialAgent(
-      name="execution_pipeline",
-      sub_agents=[
-          ...
-          final_assembler,
-          deterministic_validation_stage,
-          EscalationBarrier(name="semantic_validation_stage", agent=semantic_validation_loop),
-          image_assets_agent,
-          persist_final_delivery_agent,
-          ...
-      ],
-  )
-  ```
-- `persist_final_delivery_agent` pode ser um wrapper fino em torno de `persist_final_delivery` (ou converter o callback existente em agente) e deve ser executado apenas após todas as validações retornarem `pass`.
-- O `final_validation_loop` atual passa a focar exclusivamente na coerência narrativa (renomeado para `semantic_validation_loop`). O prompt precisa ser ajustado para remover checagens determinísticas já cobertas pelo novo agente.
+### Fase 2 – Validador Determinístico (Etapa 5.2)
+Objetivo: Construir o agente que consome os componentes da Fase 1.
 
-### 4.3 Ajustes no `final_assembler`
-- Revisar `app/agent.py:1023-1049` para reforçar instruções:
-  - Utilizar busca resiliente (`next(..., None)`) para localizar o snippet `VISUAL_DRAFT`; se ausente ou duplicado, registrar falha clara (`final_delivery_validation` com `fail`) e interromper o pipeline antes da montagem.
-  - Incluir na instrução: “Use o `visual` aprovado; ajuste apenas quando o formato exigir variação textual. Nunca deixe prompts vazios.”
-  - Opcional: pós-processar o resultado do assembler substituindo o campo `visual` por cópia literal do snippet aprovado e preservar apenas diferenças de copy.
-- Avaliar se é preciso quebrar `final_assembler` em duas partes: montagem determinística do `visual` + LLM para copy (facilita reuso de prompts entre variações e reduz risco de vazios).
+3. **`FinalDeliveryValidatorAgent`**
+   - Implementar `app/validators/final_delivery_validator.py` importando os schemas da Fase 1.
+   - Responsabilidades principais:
+     - Carregar `final_code_delivery` (string/list/objeto) e efetuar parsing único.
+     - Validar com o schema estrito, incluindo regras por formato (`app/format_specifications.py`) e checagem de `cta_instagram` coerente com `state["objetivo_final"]`.
+     - Detectar duplicidades entre variações usando tuplas normalizadas (`headline`, `corpo`, `prompt_estado_*`).
+     - Persistir `final_delivery_validation = {"grade", "issues", "normalized_payload"}` no estado.
+   - Tratamento de falhas:
+     - Levantar `FinalDeliveryValidationError` contendo os problemas e chamar `append_delivery_audit_event`.
+     - Configurar `after_agent_callback=make_failure_handler("final_delivery_validation", "JSON final não passou na validação determinística.")` e, quando necessário, acionar `write_failure_meta`.
 
-### 4.4 Revisor Semântico Pós-Validação
-- Criar `semantic_visual_reviewer` (LLM) e um loop leve (`semantic_validation_loop`), executado somente quando `final_delivery_validation.grade == "pass"`.
-- **Responsabilidades:**
-  - Verificar coerência narrativa de `descricao_imagem` vs `prompt_estado_*`, avaliando continuidade e persona única.
-  - Checar tonalidade/aderência ao formato (ex.: Feed mais informativo, Reels/Stories curtos) usando `format_specs_json`.
-  - Validar se cada variação respeita o foco e a promessa central sem contradizer o contexto da landing.
-  - Retornar `semantic_visual_review = {"grade": "pass"|"fail", "comment": "..."}`; em caso de `fail`, o loop chama `semantic_fix_agent` e, persistindo a falha, bloqueia o `ImageAssetsAgent`.
-- **Prompt:** Incluir `final_code_delivery` (já normalizado pelo validador), `landing_page_context`, `objetivo_final`, `foco`, `format_specs_json` e instruir a evitar checagens estruturais.
+### Fase 3 – Reorquestração do Pipeline (Etapas 5.3–5.5)
+Objetivo: Integrar o validador, reorganizar agentes e garantir observabilidade consistente.
 
-### 4.5 Observabilidade e Estado
-- Registrar logs estruturados ao estilo `storybrand_fallback_section` quando o validador e o revisor rodarem (ex.: `logger.info("final_delivery_validation", extra={...})`).
-- Salvar no estado:
-  - `final_delivery_validation` (resultado determinístico).
-  - `semantic_visual_review` (resultado LLM).
-- Atualizar mensagens emitidas ao usuário para explicar falhas (ex.: “Validação determinística encontrou prompts vazios na variação 1”).
-- Persistir eventos via `append_delivery_audit_event` tanto para sucesso quanto para falha, e usar `write_failure_meta`/`clear_failure_meta` conforme resultado final.
+#### 4.3.1 Reordenar o `execution_pipeline`
+- Converter o antigo `final_validation_loop` em `semantic_validation_loop`, focado apenas em coerência narrativa.
+- Inserir `deterministic_validation_stage` logo após o `final_assembler` e posicionar `persist_final_delivery_agent` somente após todas as validações passarem.
 
-## 5. Etapas de Implementação
-1. **Preparação de estruturas compartilhadas:**
-   - Criar diretório `app/validators/` (se necessário) e módulo `app/schemas/final_delivery.py` contendo cópia/extração dos modelos `AdCopy`, `AdVisual`, `AdItem`, já com tipos atualizados para `contexto_landing` estruturado.
-   - Introduzir helper `app/utils/audit.py::append_delivery_audit_event` inspirado no fallback StoryBrand, além de centralizar enums de CTA e mapeamentos objetivo→CTA preferencial.
-2. **Validador Determinístico:**
-   - Implementar `FinalDeliveryValidatorAgent(BaseAgent)` em `app/validators/final_delivery_validator.py`, utilizando o schema novo, normalização de strings e verificação de unicidade.
-   - Aplicar `make_failure_handler("final_delivery_validation", ...)` e garantir escrita opcional de `write_failure_meta` para sessões reprovadas.
-3. **Reorganização do pipeline:**
-   - Converter `final_validation_loop` em `semantic_validation_loop` (ajustar prompts e nomes) e inserir `deterministic_validation_stage` antes dele, conforme seção 4.2.
-   - Remover o `after_agent_callback` de `final_assembler` e substituir por `persist_final_delivery_agent` posicionado após as validações.
-4. **Ajustes no `final_assembler`:**
-   - Reforçar instruções, aplicar busca resiliente por `VISUAL_DRAFT` e, se necessário, pós-processar `visual` antes de retornar.
-   - Considerar divisão entre montagem determinística e copy para facilitar reuse.
-5. **Revisor Semântico e correções automáticas:**
-   - Criar `semantic_visual_reviewer` e `semantic_fix_agent`, configurando `semantic_validation_loop` com `EscalationChecker` e `RunIfFailed`.
-   - Bloquear `ImageAssetsAgent` quando `semantic_visual_review` estiver em `fail`.
-6. **Mensagens, estado e documentação:**
-   - Atualizar `EnhancedStatusReporter`, `FeatureOrchestrator` e endpoints de delivery para refletir novos estados/erros.
-   - Propagar `final_delivery_validation` e `semantic_visual_review` para `write_failure_meta`/`clear_failure_meta`, garantindo que sessões reprovadas sejam refletidas nas APIs de entrega.
-   - Documentar o novo fluxo no README/playbooks e revisar imports para evitar ciclos.
+```python
+deterministic_validation_stage = SequentialAgent(
+    name="deterministic_validation_stage",
+    sub_agents=[final_delivery_validator_agent],
+    after_agent_callback=make_failure_handler(
+        "final_delivery_validation",
+        "JSON final não passou na validação determinística."
+    ),
+)
+
+semantic_validation_loop = LoopAgent(
+    name="semantic_validation_loop",
+    max_iterations=2,
+    sub_agents=[
+        semantic_visual_reviewer,
+        EscalationChecker(name="semantic_validation_escalator", review_key="semantic_visual_review"),
+        RunIfFailed(name="semantic_fix_if_failed", review_key="semantic_visual_review", agent=semantic_fix_agent),
+    ],
+    after_agent_callback=make_failure_handler(
+        "semantic_visual_review",
+        "Não foi possível garantir coerência narrativa após as iterações."
+    ),
+)
+
+execution_pipeline = SequentialAgent(
+    name="execution_pipeline",
+    sub_agents=[
+        ...
+        final_assembler,
+        deterministic_validation_stage,
+        EscalationBarrier(name="semantic_validation_stage", agent=semantic_validation_loop),
+        image_assets_agent,
+        persist_final_delivery_agent,
+        ...
+    ],
+)
+```
+
+- Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `final_delivery_validation_failed` e `semantic_visual_review_failed`.
+
+#### 4.3.2 Ajustes no `final_assembler`
+- Reforçar o prompt exigindo reaproveitamento do snippet `VISUAL_DRAFT` aprovado.
+- Usar `next(..., None)` ao buscar o snippet; quando ausente ou duplicado, registrar falha clara (estado + audit) e interromper a montagem.
+- Opcionalmente pós-processar o campo `visual`, copiando o snippet aprovado antes de devolver as variações.
+
+#### 4.3.3 Revisor semântico e agentes auxiliares
+- Criar `semantic_visual_reviewer` (LLM) e `semantic_fix_agent`, ambos reutilizando o schema `Feedback`.
+- Ajustar prompts para remover checagens estruturais e focar em coerência narrativa, foco e aderência às especificações de formato.
+- Garantir que `semantic_validation_loop` bloqueie o `ImageAssetsAgent` sempre que o resultado permanecer em `fail`.
+
+#### 4.3.4 Observabilidade e persistência
+- Registrar eventos estruturados via `append_delivery_audit_event` em cada estágio.
+- Propagar `final_delivery_validation` e `semantic_visual_review` para `write_failure_meta`/`clear_failure_meta`, garantindo que as APIs de entrega reflitam o status real.
+- Atualizar `EnhancedStatusReporter` para sinalizar as novas etapas ao usuário final.
+
+### Fase 4 – Testes, Documentação e Qualidade (Etapas 5.6–6)
+Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
+
+1. **Testes unitários**
+   - Criar `tests/unit/validators/test_final_delivery_validator.py` cobrindo casos de sucesso/falha (campos vazios, aspect ratio inválido, CTA incoerente, duplicidades, strings vazias).
+
+2. **Testes de integração/regressão**
+   - Atualizar ou criar testes que simulem o pipeline completo (`final_assembler` → validador → loop semântico → imagens).
+   - Incluir cenários com `force_storybrand_fallback=True` e diferentes objetivos para assegurar compatibilidade.
+   - Adicionar verificações automáticas para detectar divergências entre enums de CTA, specs e configurações.
+
+3. **Documentação e comunicação**
+   - Atualizar README/playbooks detalhando a nova ordem de validação e impactos nas APIs de entrega.
+   - Registrar notas de migração (ex.: remoção do `after_agent_callback` no `final_assembler`) e sinalizar a necessidade de testes quando novos formatos/CTAs forem adicionados.
+
+## 5. Checklist Operacional
+1. **Fase 1** – Schema compartilhado e helper de auditoria prontos.
+2. **Fase 2** – `FinalDeliveryValidatorAgent` implementado e emitindo estados/audit esperados.
+3. **Fase 3** – Pipeline reorquestrado, `final_assembler` ajustado, revisor semântico e persistência na nova ordem.
+4. **Fase 4** – Testes (unitários, integração, regressão) e documentação atualizados, com CTAs e fallback cobertos.
 
 ## 6. Estratégia de Testes
 - **Unit Tests:**
