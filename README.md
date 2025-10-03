@@ -6,14 +6,16 @@ Este projeto é um sistema multiagente baseado no Google ADK (Agent Development 
 
 **Status**: ✅ Funcional. Análise StoryBrand com mitigação de latência (truncagem + parâmetros). Ver Solução de Problemas para env vars e logs de timing (2025-09-15)
 
-## 🚨 Problema Atual - TRAVAMENTO
+## ✅ Problema Resolvido - TRAVAMENTO
 
-### Diagnóstico (2025-09-14)
-O sistema está travando ao processar requisições com o campo `foco`. O travamento ocorre especificamente em:
-- **Arquivo**: `app/tools/langextract_sb7.py` (linha ~309)
-- **Momento**: Durante análise StoryBrand com LangExtract + Vertex AI
-- **Sintoma**: Requisição trava indefinidamente (timeout após 5+ minutos)
-- **Causa provável**: Timeout na API Vertex AI/Gemini ou HTML muito grande
+### Diagnóstico (2025-09-14) - CORRIGIDO
+~~O sistema estava travando ao processar requisições com o campo `foco`. O travamento ocorria especificamente em:~~
+- ~~**Arquivo**: `app/tools/langextract_sb7.py` (linha ~309)~~
+- ~~**Momento**: Durante análise StoryBrand com LangExtract + Vertex AI~~
+- ~~**Sintoma**: Requisição travava indefinidamente (timeout após 5+ minutos)~~
+- ~~**Causa**: Timeout na API Vertex AI/Gemini ou HTML muito grande~~
+
+**STATUS: PROBLEMA CORRIGIDO** - Implementadas mitigações com truncagem adaptativa, retry exponencial e limite de concorrência
 
 ## 📝 Como Fazer Requisições ao Sistema
 
@@ -132,7 +134,7 @@ curl -X POST http://localhost:8000/run_sse \
 - ✅ **Web fetch real**: Implementado download completo de HTML
 - ✅ **Framework StoryBrand**: Análise dos 7 elementos via LangExtract
 - ✅ **Callbacks ADK**: Processamento via `after_tool_callback`
-- ⚠️ **Bug**: Sistema trava ao processar com LangExtract
+- ✅ ~~**Bug**: Sistema trava ao processar com LangExtract~~ **CORRIGIDO**
 
 ### 2025-09-12 - Melhorias Core
 - ✅ **Campo `formato_anuncio` obrigatório**: Usuário controla o formato (Reels/Stories/Feed)
@@ -459,10 +461,10 @@ Recebe feedback sobre anúncios gerados:
 
 ## Limitações Conhecidas
 
-### 🔴 Crítica - Travamento com LangExtract
-1. **Sistema trava ao processar**: Especificamente em `langextract_sb7.py`
-2. **Timeout indefinido**: Requisições ficam pendentes por 5+ minutos
-3. **Afeta campo "foco"**: Problema aparece ao usar o novo campo opcional
+### ✅ Corrigidas - ~~Travamento com LangExtract~~
+1. ~~**Sistema trava ao processar**: Especificamente em `langextract_sb7.py`~~ **CORRIGIDO**
+2. ~~**Timeout indefinido**: Requisições ficam pendentes por 5+ minutos~~ **CORRIGIDO**
+3. ~~**Afeta campo "foco"**: Problema aparece ao usar o novo campo opcional~~ **CORRIGIDO**
 
 ### 🟢 Resolvidas (eram limitações)
 1. ~~Não extrai conteúdo real da landing page~~ ✅ Resolvido com web_fetch_tool
@@ -487,12 +489,14 @@ export STORYBRAND_MAX_CHAR_BUFFER=1500         # 1000–2000
 ### Preflight retorna 404
 Inicie o backend com `uvicorn app.server:app` (o Makefile já faz isso em `make dev` e `make dev-backend-all`). O endpoint `/run_preflight` é definido em `app/server.py`.
 
-### Problema: Sistema trava ao processar
-**Sintoma**: Requisição fica pendente indefinidamente
-**Causa**: LangExtract travando com Vertex AI
-**Solução temporária**:
-1. Remover campo "foco" da requisição
-2. Ou desabilitar análise StoryBrand em `landing_page_callbacks.py`
+### ~~Problema: Sistema trava ao processar~~ **CORRIGIDO**
+~~**Sintoma**: Requisição fica pendente indefinidamente~~
+~~**Causa**: LangExtract travando com Vertex AI~~
+~~**Solução temporária**:~~
+~~1. Remover campo "foco" da requisição~~
+~~2. Ou desabilitar análise StoryBrand em `landing_page_callbacks.py`~~
+
+**STATUS: PROBLEMA CORRIGIDO** - Implementadas mitigações com truncagem adaptativa e retry exponencial
 
 ### Problema: Porta já em uso
 **Sintoma**: "address already in use"
@@ -508,10 +512,10 @@ export GOOGLE_CLOUD_PROJECT=seu-projeto
 
 ## Próximos Passos Sugeridos
 
-1. **URGENTE: Corrigir travamento do LangExtract**
-   - Adicionar timeout na chamada Vertex AI
-   - Limitar tamanho do HTML processado
-   - Implementar fallback sem StoryBrand
+1. ~~**URGENTE: Corrigir travamento do LangExtract**~~ ✅ **CONCLUÍDO**
+   - ✅ Adicionar timeout na chamada Vertex AI
+   - ✅ Limitar tamanho do HTML processado
+   - ✅ Implementar fallback sem StoryBrand
 
 2. **Melhorias planejadas**:
    - Cache para URLs já processadas
@@ -532,5 +536,5 @@ export GOOGLE_CLOUD_PROJECT=seu-projeto
 
 ---
 
-**Última atualização**: 2025-09-14
-**Versão**: 2.1.0 (com campo "foco" e diagnóstico de travamento)
+**Última atualização**: 2025-10-03
+**Versão**: 2.2.0 (travamento LangExtract corrigido com mitigações)

@@ -1,95 +1,198 @@
-# Plano de Suporte a Upload de Imagem de Referência na Fase Aspiracional
+# Plano Estendido — Referências Visuais de Personagem e Produto/Serviço
 
-## 1. Objetivo e Cenário Atual
-- **Objetivo**: permitir que anunciantes enviem opcionalmente uma imagem (ex.: peça de roupa real) e que o estágio aspiracional utilize essa referência além do prompt textual e da imagem intermediária.
-- **Fluxo atual**:
-  - UI solicita apenas texto; nenhum upload é aceito.
-  - O preflight (`app/server.py:301-393`) popula o estado inicial sem campos de imagem.
-  - `ImageAssetsAgent` (`app/agent.py:310-577`) chama `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-293`) que gera três imagens sequenciais usando somente prompts.
-  - O modelo aspiracional recebe `image_intermediario` como contexto + `prompt_aspiracional` (configurado em `app/config.py:57-102`).
+## 1. Visão Geral
+- Evoluir o fluxo de geração de imagens para aceitar **dois uploads opcionais** (personagem e produto/serviço) e integrá-los nos estágios adequados do pipeline (`app/tools/generate_transformation_images.py`).
+- Garantir segurança, consistência narrativa e alinhamento entre os prompts gerados em `app/agent.py` e as imagens finais.
+- Utilizar **Vertex AI Vision** (SafeSearch + Label/Object Detection) para classificar as imagens logo após o upload, armazenando metadados no estado do agente e em GCS.
 
-## 2. Requisitos Funcionais
-1. **Upload opcional** na UI com validação de formato (PNG/JPEG) e tamanho máximo (ex.: 5 MB).
-2. **Persistência temporária** do arquivo em GCS sob pasta segregada por usuário/sessão.
-3. **Propagação de metadados** até o pipeline (`state['reference_image']` com URI assinado ou `gs://…`).
-4. **Geração aspiracional condicionada**: quando o campo existir, a chamada do modelo deve incluir a imagem de referência e ajustar o prompt.
-5. **Fallback**: se upload falhar ou o arquivo for inválido, a geração deve seguir com o comportamento atual (somente prompts).
-6. **Segurança e limpeza**: garantir que uploads sejam autenticados, sem sobrescrever arquivos alheios; opcionalmente remover artefatos órfãos via job.
+## 2. Motivação
+- Permitir que anunciantes “vistam” um personagem real com o produto fornecido (ex.: vestir uma modelo com a peça da coleção).
+- Reduzir discrepância entre o que o prompt descreve e o que a imagem sintetiza, aumentando confiabilidade para segmentos de moda, beleza, serviços premium etc.
 
-## 3. Alterações por Camada
+## 3. Escopo Funcional
+1. Upload de **Personagem** (imagem base usada no estágio “estado atual”).
+2. Upload de **Produto/Serviço** (incorporado no estágio “estado aspiracional”).
+3. Integração opcional: se nenhum upload for fornecido, o pipeline permanece idêntico ao atual.
+4. Análise automática das imagens (conteúdo impróprio + rótulos principais).
+5. Exposição de metadados (labels, descrições) para os agentes de copy/visual.
+6. Registro das referências usadas no JSON final e nos logs estruturados.
 
-### 3.1 Frontend (React + Vite)
-Arquivos principais: `frontend/src/App.tsx`, componentes em `frontend/src/components/**`.
-- Adicionar campo de upload (componente `<input type="file">` ou Dropzone) limitado a uma imagem.
-- Mostrar preview e permitir remoção antes de enviar.
-- Ao enviar, chamar novo endpoint `/upload/reference-image` (ver seção 3.2) e armazenar o identificador retornado.
-- Incluir o identificador ao disparar `/run_preflight` e `/run` (`payload.initial_state.reference_image_uri`).
-- Atualizar validações e mensagens de erro para lidar com upload opcional.
+## 4. Modelo de Dados & Estado
+- Novo módulo sugerido: `app/schemas/reference_assets.py` contendo:
+  ```python
+  class ReferenceImageMetadata(BaseModel):
+      id: str
+      type: Literal["character", "product"]
+      gcs_uri: str
+      signed_url: str
+      labels: list[str]
+      safe_search_flags: dict[str, str]
+      user_description: str | None = None
+      uploaded_at: datetime
+  ```
+- Estado compartilhado (injetado em `run_preflight`):
+  ```python
+  state["reference_images"] = {
+      "character": ReferenceImageMetadata | None,
+      "product": ReferenceImageMetadata | None,
+  }
+  state["reference_image_summary"] = {
+      "character": "Modelo feminina, cabelos cacheados...",
+      "product": "Bolsa de couro caramelo com alça metálica...",
+  }
+  ```
+- JSON final (produzido pelo `final_assembler` em `app/agent.py:1023-1049`):
+  ```json
+  "visual": {
+    ...,
+    "reference_assets": {
+      "character": {"gcs_uri": "gs://...", "labels": [...]},
+      "product": {"gcs_uri": "gs://...", "labels": [...]}
+    }
+  }
+  ```
+  (apenas quando as referências existirem).
 
-### 3.2 Backend FastAPI (`app/server.py`)
-- Criar rota `POST /upload/reference-image` que receba `UploadFile` (FastAPI) e utilize `app/utils/gcs.py` para enviar ao bucket configurado.
-  - Validar `content_type` (`image/png`, `image/jpeg`), tamanho máximo, e checar quota básica.
-  - Salvar no bucket apontado por `DELIVERIES_BUCKET` ou novo `REFERENCE_IMAGES_BUCKET`; retorno deve conter `gcs_uri` + `signed_url` curta (para preview) + um `reference_image_id`.
-- Atualizar `run_preflight` para aceitar `reference_image_uri` e propagar para `initial_state` quando presente.
-- Ajustar log estruturado para rastrear uploads (`event: reference_image_upload`).
+## 5. UI (React + Vite)
+- Arquivos relevantes: `frontend/src/App.tsx`, `frontend/src/components/*`.
+- Criar componente dedicado `frontend/src/components/ReferenceUpload.tsx` com propriedades `type="character" | "product"`.
+- Validações no cliente: extensões (`.png`, `.jpg`, `.jpeg`), limite de 5 MB, dimensões mínimas.
+- Para cada upload:
+  1. Postar em `POST /upload/reference-image` com `FormData` (`file`, `type`, `userId`, `sessionId`).
+  2. Armazenar resposta (`referenceId`, `signedUrl`, `labels`) em um store (ex.: hook `useReferenceImages`).
+- Ajustar formulário existente “Algo que não pode faltar no anúncio” para coletar uma descrição textual do produto (usada caso não haja upload).
+- Ao chamar `/run_preflight`, enviar payload:
+  ```json
+  {
+    "reference_images": {
+      "character": {"id": "ref-123", "user_description": "Modelo plus size"},
+      "product": {"id": "ref-456", "user_description": "Bolsa caramelo P"}
+    }
+  }
+  ```
 
-### 3.3 Estado e Pipeline dos Agentes (`app/agent.py`)
-- Garantir que o estado carregado em `FeatureOrchestrator` contenha `reference_image_uri` (ou nomenclatura semelhante).
-- No `ImageAssetsAgent._run_async_impl` (`app/agent.py:316-577`):
-  - Recuperar `state.get("reference_image_uri")`.
-  - Ao chamar `generate_transformation_images`, passar novo argumento opcional (`reference_image_uri`).
-  - Registrar em `summary` quais variações usaram imagem de referência.
+## 6. Backend — Endpoints FastAPI (`app/server.py`)
+### 6.1 Upload
+- Adicionar rota perto das demais definições (após `run_preflight` para manter agrupamento):
+  ```python
+  @app.post("/upload/reference-image")
+  async def upload_reference_image(
+      file: UploadFile = File(...),
+      type: Literal["character", "product"] = Form(...),
+      user_id: str = Form(...),
+      session_id: str = Form(...),
+  ) -> dict:
+      ...
+  ```
+- Passos internos:
+  1. Validar `content_type` e tamanho (`file.spool_max_size`).
+  2. Subir para GCS via helper `app/utils/gcs.py` (nova função `upload_reference_image`).
+  3. Chamar Vision AI (`app/utils/vision.py`, nova função `analyze_reference_image`) para SafeSearch + Label/Object detection.
+  4. Bloquear upload se `adult | violence | racy >= LIKELY`.
+  5. Persistir metadados em cache (dicionário em memória ou Datastore opcional) e retornar `{"id": ..., "signed_url": ..., "labels": [...]}`.
 
-### 3.4 Ferramenta de Geração (`app/tools/generate_transformation_images.py`)
-- Alterar assinatura para receber `reference_image_uri: str | None`.
-- Se o campo existir:
-  1. Baixar o arquivo do GCS (utilizando `storage.Client().bucket(..).blob(..).download_as_bytes()`).
-  2. Abrir com `PIL.Image.open(BytesIO(...)).convert("RGB")` (mesma lógica usada para imagens geradas).
-  3. Na etapa aspiracional, chamar `_call_model([image_intermediario, user_reference_image, transform_prompt_asp])` ao invés de apenas `[image_intermediario, transform_prompt_asp]`.
-- Incluir try/except para falhas de download; se ocorrer erro, logar `logger.warning` e continuar com fluxo padrão.
-- Atualizar retorno `meta` indicando `reference_image_used: bool`.
+### 6.2 Preflight (`run_preflight`) — `app/server.py:300-393`
+- Resolver IDs para metadados completos:
+  ```python
+  reference_images = payload.get("reference_images", {})
+  state["reference_images"] = {
+      "character": resolve_reference_metadata(reference_images.get("character")),
+      "product": resolve_reference_metadata(reference_images.get("product")),
+  }
+  ```
+- Gerar `reference_image_summary` combinando labels + descrições do usuário (usado nos prompts de copy/visual).
+- Propagar para o estado inicial com `initial_state.update(...)`.
 
-### 3.5 Ajustes de Prompt (`app/config.py` e estado)
-- Definir `config.image_aspirational_prompt_template_with_reference` com texto que explicite o uso da imagem enviada (ex.: “Use the clothing from the provided reference image …”).
-- Em `ImageAssetsAgent`, decidir qual template usar com base na presença de `reference_image_uri`.
-- Opcional: armazenar o nome/tipo da peça para personalizar prompts (se UI coletar esse metadado).
+## 7. Agentes (`app/agent.py`)
+### 7.1 Prompts de geração
+- **VISUAL_DRAFT (c. linha 880)**: adicionar placeholders `{reference_image_summary.character}` e `{reference_image_summary.product}` e instruir o agente a alinhar narrativa com as referências disponíveis.
+- **COPY_DRAFT (c. linha 830)**: caso haja labels de produto, sugerir que headline/corpo mencionem a peça real.
+- **final_assembler (linhas 1023-1049)**: reforçar no prompt que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real.
 
-### 3.6 Persistência e Auditoria
-- Incluir a URI da imagem de referência nas saídas persistidas (`app/callbacks/persist_outputs.py`) para acompanhamento.
-- Atualizar logs estruturados e audit trail com eventos `reference_image_attached` (similar ao que é feito no fallback).
+### 7.2 `ImageAssetsAgent._run_async_impl` (`app/agent.py:316-577`)
+- Recuperar `reference_images = state.get("reference_images")`.
+- Montar argumentos para `generate_transformation_images`:
+  ```python
+  reference_character = reference_images.get("character")
+  reference_product = reference_images.get("product")
+  assets = await generate_transformation_images(
+      ..., reference_character=reference_character, reference_product=reference_product
+  )
+  ```
+- Registrar em `summary` se as referências foram usadas ou se houve fallback.
 
-## 4. Segurança e Compliance
-- **Autenticação**: reutilizar mecanismo já usado para as demais chamadas; o endpoint de upload deve respeitar CORS e exigir token/API key existente.
-- **Limpeza**: definir política para remover imagens não referenciadas em 24–48 h (job externo ou cron Cloud Functions).
-- **DoS Storage**: limitar tamanho e implementar contagem de uploads por sessão.
-- **Conteúdo inseguro**: opcionalmente integrar serviço de SafeSearch / Vision API para bloquear imagens inadequadas.
+### 7.3 Logs/Auditoria
+- Inserir eventos adicionais usando `logger.info` (ex.: `"reference_image_attached"`) e armazenar no estado (`state['image_generation_audit']`).
 
-## 5. Testes
-- **Unit Tests**:
-  - Novo módulo `tests/unit/tools/test_generate_transformation_images.py` com mocks da `storage.Client` garantindo que, quando `reference_image_uri` existe, `_call_model` recebe três partes.
-  - Testes para fallback em caso de download falho.
-- **Integration Tests**:
-  - Simulação do fluxo com `TestClient` do FastAPI: upload → preflight → execução parcial para validar que `reference_image_uri` chega ao estado do agente.
-  - Teste e2e manual (CLI/Streamlit) verificando se a imagem aspiracional reflete a peça enviada.
+## 8. Ferramenta de Geração (`app/tools/generate_transformation_images.py`)
+### 8.1 Assinatura
+- Alterar função (linhas 209-293) para aceitar:
+  ```python
+  async def generate_transformation_images(...,
+      reference_character: ReferenceImageMetadata | None = None,
+      reference_product: ReferenceImageMetadata | None = None,
+  )
+  ```
+- Criar helper `_load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image` que faça download de `metadata.gcs_uri` via `storage.Client` (com cache simples em dicionário local).
+
+### 8.2 Etapas
+- **Etapa 1 (estado atual)**:
+  - Se `reference_character`, usar `_call_model([character_image, prompt_atual_com_labels])`.
+  - `prompt_atual_com_labels` deriva de `config.image_current_prompt_template` + labels/descrição.
+- **Etapa 2 (intermediária)**: manter fluxo atual.
+- **Etapa 3 (aspiracional)**:
+  - Montar `prompt_aspiracional_enriquecido` com labels do produto e contexto (“incorpore a bolsa marrom da imagem de referência”).
+  - Se `reference_product`, chamar `_call_model([image_intermediario, product_image, prompt_aspiracional_enriquecido])`.
+- Em caso de falha no download ou no modelo, registrar `logger.warning` e prosseguir sem a referência (garantia de fallback).
+- Retorno `meta` deve incluir flags `"character_reference_used"` e `"product_reference_used"`.
+
+## 9. Configuração & Templates (`app/config.py`)
+- Adicionar novas strings:
+  ```python
+  image_current_prompt_template = (
+      "Use the provided character reference ({character_labels}). {prompt_atual}"
+  )
+  image_aspirational_prompt_template_with_product = (
+      "Integrate the product from the reference image ({product_labels}). {prompt_aspiracional}"
+  )
+  ```
+- Em `ImageAssetsAgent`, selecionar o template conforme existência das referências.
+
+## 10. Observabilidade & Persistência
+- Atualizar `app/callbacks/persist_outputs.py:45-56` para incluir `reference_images` no payload persistido.
+- Garantir que `logger.log_struct` (em `app/server.py` e `app/agent.py`) capture uploads, decisões de SafeSearch e uso efetivo na geração.
+- Configurar TTL curto nas `signed_url`; armazenar apenas `gcs_uri` no JSON final.
+
+## 11. Estratégia de Testes
+- **Unitários**:
+  - `tests/unit/utils/test_vision.py`: mocks da Vision API (SafeSearch + labels).
+  - `tests/unit/tools/test_generate_transformation_images.py`: verificar chamadas a `_call_model` com referências.
+  - `tests/unit/agent/test_image_assets_agent.py`: garantir passagem dos metadados corretos.
+- **Integração**:
+  - `tests/integration/api/test_reference_upload.py`: upload → análise → resposta.
+  - `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com fixtures de referência.
 - **Frontend**:
-  - Atualizar testes de componentes (React Testing Library ou Cypress se disponível) cobrindo upload e remoção da imagem.
+  - Atualizar testes de componentes/upload (React Testing Library) e cenários em Cypress se existente.
+- **QA manual**:
+  - Cenários com apenas personagem, apenas produto, ambos, e nenhum.
 
-## 6. Passo a Passo de Implementação
-1. Implementar endpoint de upload e utilitário de GCS (se necessário, criar helper em `app/utils/gcs.py`).
-2. Ajustar preflight e orquestração para aceitar o novo campo.
-3. Atualizar UI com campo de upload, preview e integração com o endpoint.
-4. Evoluir `ImageAssetsAgent` e `generate_transformation_images` com suporte ao parâmetro opcional.
-5. Revisar templates de prompt e logging.
-6. Criar testes unitários/integrados.
-7. Documentar no README (seção de geração de imagens) e no manual interno.
+## 12. Riscos e Mitigações
+| Risco | Mitigação |
+|-------|-----------|
+| Vision AI indisponível | fallback que rejeita upload com mensagem amigável; monitorar via logging |
+| Latência adicional | medir tempos; ajustar `config.image_generation_timeout` se necessário |
+| Inconsistência narrativa | reforçar prompts (copy + visual) com labels e descrições; incluir QA manual inicialmente |
+| Crescimento de arquivos em GCS | planejar job de limpeza (Cloud Scheduler + função que remove uploads sem uso em X dias) |
 
-## 7. Riscos e Mitigações
-- **Erro ao baixar imagem**: tratar via fallback silencioso para não travar a geração.
-- **Referência imprópria**: integrar checagens (Vision API) ou alertas manuais.
-- **Tempo extra de geração**: uso de imagem adicional pode aumentar latência; monitorar e, se necessário, ajustar `config.image_generation_timeout` (`app/config.py:57-104`).
-- **Armazenamento**: growth de arquivos não limpos → planejar limpeza periódica.
+## 13. Roadmap Sugerido
+1. **Infra**: endpoint de upload + Vision integration + schema `ReferenceImageMetadata`.
+2. **UI**: componentes de upload e integração com novo endpoint.
+3. **Estado & Prompts**: ajustes em `run_preflight`, prompts VISUAL/COPY, `final_assembler`.
+4. **Ferramenta de imagem**: suporte aos novos parâmetros e fallback.
+5. **Validação/Logs**: persistência e auditoria.
+6. **Testes**: unitários, integração e QA manual.
+7. **Documentação**: atualizar `README.md` (seção imagem) e materiais internos.
 
-## 8. Próximos Passos
-- Validar com stakeholders se o upload deve ficar restrito a determinados formatos de anúncio (ex.: Feed moda).
-- Estimar esforço de UI/Backend/Agentes e agendar iterações.
-- Após MVP, avaliar extensão para múltiplas referências (ex.: aspiração + moodboard) se houver demanda.
+---
+
+**Conclusão**: esta versão do plano mapeia arquivos e trechos específicos, define estruturas de estado, detalha integrações (Vision AI + GCS) e estabelece passos de implementação/testes. Com a adoção das referências visuais, o pipeline passa a combinar criatividade controlada com fidelidade ao produto real, entregando valor direto para verticais que precisam de consistência visual.
