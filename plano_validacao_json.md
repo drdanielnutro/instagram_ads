@@ -32,12 +32,12 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 
 1. **Schema de validação compartilhado**
    - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
-   - Permitir `contexto_landing` como `dict[str, Any] | str`, aplicar `Field(min_length=1)` e normalizar whitespace nos campos obrigatórios.
-   - Centralizar enums de formato, aspect ratio e CTA em um único lugar para serem reutilizados por agentes e validação.
+   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando `state.get("force_storybrand_fallback")` estiver ativo — nesse caso, o validador aceitará strings vazias documentando o motivo.
+   - Reutilizar enums já existentes em `app/format_specifications.py`/`config.py`; o schema apenas os importa, não define valores próprios (evita múltiplas fontes de verdade).
 
 2. **Helper de auditoria e metadados**
-   - Criar `app/utils/audit.py` com `append_delivery_audit_event` (seguindo o padrão do fallback StoryBrand) e outras funções necessárias para registrar sucessos/falhas.
-   - Revisar utilitários existentes (`app/utils/delivery_status.py`) apenas se precisarem expor helpers comuns.
+   - Criar `app/utils/audit.py` apenas com `append_delivery_audit_event` e funções de logging; mapeamentos de CTA permanecem onde já estão (`format_specifications`/`config`).
+   - Revisar utilitários existentes (`app/utils/delivery_status.py`) apenas se precisarem expor helpers comuns (o helper não deve assumir responsabilidade por enums).
 
 ### Fase 2 – Validador Determinístico (Etapa 5.2)
 Objetivo: Construir o agente que consome os componentes da Fase 1.
@@ -48,17 +48,23 @@ Objetivo: Construir o agente que consome os componentes da Fase 1.
      - Carregar `final_code_delivery` (string/list/objeto) e efetuar parsing único.
      - Validar com o schema estrito, incluindo regras por formato (`app/format_specifications.py`) e checagem de `cta_instagram` coerente com `state["objetivo_final"]`.
      - Detectar duplicidades entre variações usando tuplas normalizadas (`headline`, `corpo`, `prompt_estado_*`).
-     - Persistir `final_delivery_validation = {"grade", "issues", "normalized_payload"}` no estado.
+     - Persistir `final_delivery_validation = {"grade", "issues", "normalized_payload"}` no estado (mantido como referência) e sincronizar `state["final_code_delivery"]` para apontar para o JSON normalizado.
    - Tratamento de falhas:
-     - Levantar `FinalDeliveryValidationError` contendo os problemas e chamar `append_delivery_audit_event`.
+     - Não lançar exceções customizadas; registrar `final_delivery_validation = {"grade": "fail", ...}` e chamar `append_delivery_audit_event`.
      - Configurar `after_agent_callback=make_failure_handler("final_delivery_validation", "JSON final não passou na validação determinística.")` e, quando necessário, acionar `write_failure_meta`.
+     - Atualizar `state["final_code_delivery"]` com a versão normalizada aprovada (string JSON), mantendo o payload alinhado para agentes subsequentes.
 
 ### Fase 3 – Reorquestração do Pipeline (Etapas 5.3–5.5)
 Objetivo: Integrar o validador, reorganizar agentes e garantir observabilidade consistente.
 
 #### 4.3.1 Reordenar o `execution_pipeline`
 - Converter o antigo `final_validation_loop` em `semantic_validation_loop`, focado apenas em coerência narrativa.
-- Inserir `deterministic_validation_stage` logo após o `final_assembler` e posicionar `persist_final_delivery_agent` somente após todas as validações passarem.
+- Substituir o `LlmAgent` `final_assembler` por um estágio composto:
+  - `FinalAssemblyGuard` (novo `BaseAgent`) verifica em Python se há snippets `VISUAL_DRAFT` aprovados (`approved_code_snippets`). Quando faltar, grava `final_delivery_validation = fail` + audit e encerra a fase sem chamar LLM.
+  - `final_assembler_llm` mantém o prompt atual e gera as três variações.
+- Inserir `deterministic_validation_stage` logo após o assembler composto.
+- Introduzir novo utilitário `RunIfPassed` (pequeno `BaseAgent`) que executa o agente encapsulado apenas quando a revisão indicada possui `grade == "pass"`.
+- Usar `RunIfPassed` tanto para o loop semântico quanto para os agentes de imagens e persistência, garantindo que nenhum deles seja chamado após falha determinística ou semântica.
 
 ```python
 deterministic_validation_stage = SequentialAgent(
@@ -70,7 +76,7 @@ deterministic_validation_stage = SequentialAgent(
     ),
 )
 
-semantic_validation_loop = LoopAgent(
+ semantic_validation_loop = LoopAgent(
     name="semantic_validation_loop",
     max_iterations=2,
     sub_agents=[
@@ -88,30 +94,37 @@ execution_pipeline = SequentialAgent(
     name="execution_pipeline",
     sub_agents=[
         ...
-        final_assembler,
+        FinalAssemblyGuard(...),
+        final_assembler_llm,
         deterministic_validation_stage,
-        EscalationBarrier(name="semantic_validation_stage", agent=semantic_validation_loop),
-        image_assets_agent,
-        persist_final_delivery_agent,
+        RunIfPassed(name="semantic_only_if_passed", review_key="final_delivery_validation", agent=semantic_validation_loop),
+        RunIfPassed(name="images_only_if_passed", review_key="semantic_visual_review", agent=image_assets_agent),
+        RunIfPassed(name="persist_only_if_passed", review_key="semantic_visual_review", agent=persist_final_delivery_agent),
         ...
     ],
 )
 ```
 
-- Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `final_delivery_validation_failed` e `semantic_visual_review_failed`.
+- Remover o `after_agent_callback` do `final_assembler` original e a chamada direta a `persist_final_delivery` dentro do `ImageAssetsAgent`; a persistência passa a ser responsabilidade exclusiva do novo agente dedicado.
+- Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `final_delivery_validation_failed` e `semantic_visual_review_failed` e encerrar o pipeline em caso de falha determinística.
 
 #### 4.3.2 Ajustes no `final_assembler`
-- Reforçar o prompt exigindo reaproveitamento do snippet `VISUAL_DRAFT` aprovado.
-- Usar `next(..., None)` ao buscar o snippet; quando ausente ou duplicado, registrar falha clara (estado + audit) e interromper a montagem.
-- Opcionalmente pós-processar o campo `visual`, copiando o snippet aprovado antes de devolver as variações.
+- `FinalAssemblyGuard` realizará a checagem em Python pelos snippets `VISUAL_DRAFT` e registrará falha amigável quando ausência/duplicidade ocorrer.
+- O `final_assembler_llm` terá o prompt reforçado para exigir reutilização do snippet aprovado e retornar JSON pronto para uso.
+- Após a resposta LLM, um pequeno pós-processamento (no guard) substituirá `state["final_code_delivery"]` pela versão validada/padronizada antes de prosseguir.
 
 #### 4.3.3 Revisor semântico e agentes auxiliares
 - Criar `semantic_visual_reviewer` (LLM) e `semantic_fix_agent`, ambos reutilizando o schema `Feedback`.
 - Ajustar prompts para remover checagens estruturais e focar em coerência narrativa, foco e aderência às especificações de formato.
-- Garantir que `semantic_validation_loop` bloqueie o `ImageAssetsAgent` sempre que o resultado permanecer em `fail`.
+- O loop consumirá o JSON já normalizado presente em `state["final_code_delivery"]`; atualizar o plano para que o validador sempre substitua essa chave antes de acionar o revisor.
+- `RunIfPassed` impede a execução do revisor quando o validador falhar.
+
+- Em paralelo, documentar (em planilha/checklist interno) os endpoints afetados: `/delivery/final/meta`, `/delivery/final/download`, streaming SSE e mensagens do `FeatureOrchestrator`.
+- Ajustar consumidores para checar `final_delivery_validation_failed` e `semantic_visual_review_failed` antes de solicitar imagens.
 
 #### 4.3.4 Observabilidade e persistência
-- Registrar eventos estruturados via `append_delivery_audit_event` em cada estágio.
+- Registrar eventos estruturados via `append_delivery_audit_event` em cada estágio (guard, validador, revisor, persistência).
+- `persist_final_delivery_agent` chamará `persist_final_delivery` exatamente uma vez, anexando imagens quando disponíveis. Se `image_assets_agent` for pulado ou falhar, o agente persistirá o JSON sem assets mas incluirá metadados no audit trail.
 - Propagar `final_delivery_validation` e `semantic_visual_review` para `write_failure_meta`/`clear_failure_meta`, garantindo que as APIs de entrega reflitam o status real.
 - Atualizar `EnhancedStatusReporter` para sinalizar as novas etapas ao usuário final.
 
@@ -119,22 +132,22 @@ execution_pipeline = SequentialAgent(
 Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
 
 1. **Testes unitários**
-   - Criar `tests/unit/validators/test_final_delivery_validator.py` cobrindo casos de sucesso/falha (campos vazios, aspect ratio inválido, CTA incoerente, duplicidades, strings vazias).
+   - Criar `tests/unit/validators/test_final_delivery_validator.py` cobrindo casos de sucesso/falha (campos vazios, aspect ratio inválido, CTA incoerente, duplicidades, strings vazias) e incluindo cenários com `force_storybrand_fallback=True` onde campos vazios são aceitáveis.
 
 2. **Testes de integração/regressão**
    - Atualizar ou criar testes que simulem o pipeline completo (`final_assembler` → validador → loop semântico → imagens).
    - Incluir cenários com `force_storybrand_fallback=True` e diferentes objetivos para assegurar compatibilidade.
-   - Adicionar verificações automáticas para detectar divergências entre enums de CTA, specs e configurações.
+   - Adicionar verificações automáticas para detectar divergências entre enums de CTA, specs e configurações (falha caso `config.py` e `format_specifications` entrem em conflito).
 
 3. **Documentação e comunicação**
    - Atualizar README/playbooks detalhando a nova ordem de validação e impactos nas APIs de entrega.
    - Registrar notas de migração (ex.: remoção do `after_agent_callback` no `final_assembler`) e sinalizar a necessidade de testes quando novos formatos/CTAs forem adicionados.
 
 ## 5. Checklist Operacional
-1. **Fase 1** – Schema compartilhado e helper de auditoria prontos.
-2. **Fase 2** – `FinalDeliveryValidatorAgent` implementado e emitindo estados/audit esperados.
-3. **Fase 3** – Pipeline reorquestrado, `final_assembler` ajustado, revisor semântico e persistência na nova ordem.
-4. **Fase 4** – Testes (unitários, integração, regressão) e documentação atualizados, com CTAs e fallback cobertos.
+1. **Fase 1** – Schema compartilhado (com regras para fallback) e helper de auditoria disponíveis, sem duplicar enums.
+2. **Fase 2** – `FinalDeliveryValidatorAgent` atualiza `final_code_delivery`, gera audit/failure meta e respeita exceções de fallback.
+3. **Fase 3** – Guard do assembler, RunIfPassed, pipeline reorquestrado, persistência única e endpoints/orchestrator ajustados.
+4. **Fase 4** – Testes (unitários, integração, regressão) e documentação atualizados, incluindo cenários de fallback e monitoramento de enums.
 
 ## 6. Estratégia de Testes
 - **Unit Tests:**

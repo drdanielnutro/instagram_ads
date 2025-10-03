@@ -30,17 +30,27 @@
       user_description: str | None = None
       uploaded_at: datetime
   ```
-- Estado compartilhado (injetado em `run_preflight`):
+- Estado compartilhado montado em `run_preflight` antes da criação da sessão ADK:
   ```python
-  state["reference_images"] = {
+  initial_state["reference_images"] = {
       "character": ReferenceImageMetadata | None,
       "product": ReferenceImageMetadata | None,
   }
-  state["reference_image_summary"] = {
+  initial_state["reference_image_summary"] = {
       "character": "Modelo feminina, cabelos cacheados...",
       "product": "Bolsa de couro caramelo com alça metálica...",
   }
+  initial_state["reference_image_character_summary"] = initial_state["reference_image_summary"].get("character")
+  initial_state["reference_image_product_summary"] = initial_state["reference_image_summary"].get("product")
   ```
+  (apenas quando as referências existirem). Esses campos precisam estar presentes no dicionário retornado por `/run_preflight` para que o ADK os replique em `state` após `createSession`.
+- Resolver IDs recebidos por `run_preflight` usando utilitário dedicado `app/utils/reference_cache.py`:
+  ```python
+  from app.utils.reference_cache import resolve_reference_metadata
+  ```
+  `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None` deve consultar um cache em memória com TTL configurável, retornar `None` para IDs ausentes e registrar logs estruturados para diagnósticos.
+- No mesmo módulo, implementar `build_reference_summary(reference_images: dict[str, ReferenceImageMetadata | None], payload: dict) -> dict[str, str | None]` agregando labels e descrições (`user_description`) e produzindo frases curtas usadas pelos prompts.
+- Expor também `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None` para ser chamado logo após cada upload, garantindo que `resolve_reference_metadata` encontre os valores durante o `run_preflight` seguinte.
 - JSON final (produzido pelo `final_assembler` em `app/agent.py:1023-1049`):
   ```json
   "visual": {
@@ -57,19 +67,22 @@
 - Arquivos relevantes: `frontend/src/App.tsx`, `frontend/src/components/*`.
 - Criar componente dedicado `frontend/src/components/ReferenceUpload.tsx` com propriedades `type="character" | "product"`.
 - Validações no cliente: extensões (`.png`, `.jpg`, `.jpeg`), limite de 5 MB, dimensões mínimas.
-- Para cada upload:
-  1. Postar em `POST /upload/reference-image` com `FormData` (`file`, `type`, `userId`, `sessionId`).
-  2. Armazenar resposta (`referenceId`, `signedUrl`, `labels`) em um store (ex.: hook `useReferenceImages`).
-- Ajustar formulário existente “Algo que não pode faltar no anúncio” para coletar uma descrição textual do produto (usada caso não haja upload).
-- Ao chamar `/run_preflight`, enviar payload:
+- Fluxo recomendado para upload:
+  1. Permitir que o usuário selecione o arquivo e envie `POST /upload/reference-image` imediatamente com `FormData` (`file`, `type`, `userId?`, `sessionId?`).
+  2. Tratar `userId` e `sessionId` como opcionais; quando ausentes, o backend gera `reference_id` e associa aos metadados do upload.
+  3. Armazenar a resposta (`referenceId`, `signedUrl`, `labels`) em um store (ex.: hook `useReferenceImages`) para reaproveitar no submit principal.
+- Utilizar o campo existente `foco` no formulário para capturar a descrição textual do produto/elemento visual obrigatório quando não houver imagem.
+- Atualizar `handleSubmit` (`frontend/src/App.tsx`) para enviar payload contendo o texto original e as referências:
   ```json
   {
+    "text": "...",
     "reference_images": {
       "character": {"id": "ref-123", "user_description": "Modelo plus size"},
       "product": {"id": "ref-456", "user_description": "Bolsa caramelo P"}
     }
   }
   ```
+  Certifique-se de montar esse objeto a partir do store/hook de referências, enviando apenas os uploads efetivamente realizados.
 
 ## 6. Backend — Endpoints FastAPI (`app/server.py`)
 ### 6.1 Upload
@@ -79,8 +92,8 @@
   async def upload_reference_image(
       file: UploadFile = File(...),
       type: Literal["character", "product"] = Form(...),
-      user_id: str = Form(...),
-      session_id: str = Form(...),
+      user_id: str | None = Form(default=None),
+      session_id: str | None = Form(default=None),
   ) -> dict:
       ...
   ```
@@ -89,29 +102,34 @@
   2. Subir para GCS via helper `app/utils/gcs.py` (nova função `upload_reference_image`).
   3. Chamar Vision AI (`app/utils/vision.py`, nova função `analyze_reference_image`) para SafeSearch + Label/Object detection.
   4. Bloquear upload se `adult | violence | racy >= LIKELY`.
-  5. Persistir metadados em cache (dicionário em memória ou Datastore opcional) e retornar `{"id": ..., "signed_url": ..., "labels": [...]}`.
+  5. Persistir metadados em cache (dicionário em memória com TTL ou Datastore opcional) e retornar `{"id": ..., "signed_url": ..., "labels": [...]}`.
+  6. Adicionar `google-cloud-vision>=3.4.0` (ou a biblioteca Vertex AI equivalente) a `requirements.txt`/`uv.lock` e documentar que `make install` deve ser reexecutado.
 
 ### 6.2 Preflight (`run_preflight`) — `app/server.py:300-393`
-- Resolver IDs para metadados completos:
+- Atualizar o modelo Pydantic usado pelo endpoint (`RunPreflightRequest` ou equivalente) para aceitar `reference_images` opcional além de `text`/flags existentes.
+- Resolver IDs para metadados completos antes de montar `initial_state`:
   ```python
   reference_images = payload.get("reference_images", {})
-  state["reference_images"] = {
+  initial_state["reference_images"] = {
       "character": resolve_reference_metadata(reference_images.get("character")),
       "product": resolve_reference_metadata(reference_images.get("product")),
   }
+  initial_state["reference_image_summary"] = build_reference_summary(initial_state["reference_images"], payload)
+  initial_state["reference_image_character_summary"] = initial_state["reference_image_summary"].get("character")
+  initial_state["reference_image_product_summary"] = initial_state["reference_image_summary"].get("product")
   ```
-- Gerar `reference_image_summary` combinando labels + descrições do usuário (usado nos prompts de copy/visual).
-- Propagar para o estado inicial com `initial_state.update(...)`.
+- `build_reference_summary` deve combinar labels + descrições do usuário, retornando strings curtas para cada tipo. Caso não haja metadados, devolver `None` e manter o campo ausente no initial state.
+- Antes de finalizar o endpoint, executar `initial_state.update(...)` para incluir essas chaves no payload retornado por `/run_preflight`.
 
 ## 7. Agentes (`app/agent.py`)
 ### 7.1 Prompts de geração
-- **VISUAL_DRAFT (c. linha 880)**: adicionar placeholders `{reference_image_summary.character}` e `{reference_image_summary.product}` e instruir o agente a alinhar narrativa com as referências disponíveis.
-- **COPY_DRAFT (c. linha 830)**: caso haja labels de produto, sugerir que headline/corpo mencionem a peça real.
-- **final_assembler (linhas 1023-1049)**: reforçar no prompt que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real.
+- **VISUAL_DRAFT (c. linha 880)**: adicionar placeholders planos `{reference_image_character_summary}` e `{reference_image_product_summary}` e instruir o agente a alinhar narrativa com as referências disponíveis.
+- **COPY_DRAFT (c. linha 830)**: caso haja labels de produto, sugerir que headline/corpo mencionem a peça real usando as mesmas chaves planas.
+- **final_assembler (linhas 1023-1049)**: reforçar no prompt que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real, consumindo os campos planos adicionados ao `initial_state`.
 
 ### 7.2 `ImageAssetsAgent._run_async_impl` (`app/agent.py:316-577`)
-- Recuperar `reference_images = state.get("reference_images")`.
-- Montar argumentos para `generate_transformation_images`:
+- Recuperar `reference_images = state.get("reference_images") or {}` garantindo dicionário vazio quando não houver uploads.
+- Montar argumentos para `generate_transformation_images` apenas quando os metadados existirem:
   ```python
   reference_character = reference_images.get("character")
   reference_product = reference_images.get("product")
@@ -159,9 +177,9 @@
 - Em `ImageAssetsAgent`, selecionar o template conforme existência das referências.
 
 ## 10. Observabilidade & Persistência
-- Atualizar `app/callbacks/persist_outputs.py:45-56` para incluir `reference_images` no payload persistido.
+- Atualizar `app/callbacks/persist_outputs.py:45-56` para receber `state` no `persist_final_delivery`, extrair `state.get("reference_images")`, remover campos sensíveis (`signed_url`, tokens) e salvar o restante em `meta["reference_images"]`. Ajustar os testes correspondentes para validar o novo contrato.
 - Garantir que `logger.log_struct` (em `app/server.py` e `app/agent.py`) capture uploads, decisões de SafeSearch e uso efetivo na geração.
-- Configurar TTL curto nas `signed_url`; armazenar apenas `gcs_uri` no JSON final.
+- Configurar TTL curto nas `signed_url`; armazenar apenas `gcs_uri` no JSON final e documentar como essa política se relaciona com `config.image_signed_url_ttl`.
 
 ## 11. Estratégia de Testes
 - **Unitários**:
