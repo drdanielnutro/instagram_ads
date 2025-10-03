@@ -37,6 +37,7 @@ class DevelopmentConfiguration:
     enable_image_generation: bool = True
     enable_new_input_fields: bool = False
     enable_storybrand_fallback: bool = False
+    enable_deterministic_final_validation: bool = False
     storybrand_gate_debug: bool = False  # Force fallback path for testing purposes
     fallback_storybrand_max_iterations: int = 3
     fallback_storybrand_model: str | None = None
@@ -100,6 +101,11 @@ if os.getenv("ENABLE_NEW_INPUT_FIELDS"):
 if os.getenv("ENABLE_STORYBRAND_FALLBACK"):
     config.enable_storybrand_fallback = (
         os.getenv("ENABLE_STORYBRAND_FALLBACK").lower() == "true"
+    )
+
+if os.getenv("ENABLE_DETERMINISTIC_FINAL_VALIDATION"):
+    config.enable_deterministic_final_validation = (
+        os.getenv("ENABLE_DETERMINISTIC_FINAL_VALIDATION").lower() == "true"
     )
 
 if os.getenv("STORYBRAND_GATE_DEBUG"):

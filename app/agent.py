@@ -18,6 +18,8 @@ import contextlib
 import json
 import logging
 import re
+import hashlib
+from datetime import datetime, timezone
 from collections.abc import AsyncGenerator
 from typing import Any, Dict, Literal
 
@@ -126,12 +128,26 @@ def collect_code_snippets_callback(callback_context: CallbackContext) -> None:
     code_snippets = callback_context.state.get("approved_code_snippets", [])
     if "generated_code" in callback_context.state:
         task_info = callback_context.state.get("current_task_info", {}) or {}
+        snippet_type = task_info.get("category", "UNKNOWN")
+        generated_code = callback_context.state["generated_code"]
+        snippet_source = f"{task_info.get('id', 'unknown')}::{snippet_type}::{generated_code}"
+        snippet_id = hashlib.sha256(snippet_source.encode("utf-8")).hexdigest()
+        approved_ts = (
+            datetime.now(timezone.utc)
+            .replace(microsecond=0)
+            .isoformat()
+            .replace("+00:00", "Z")
+        )
         code_snippets.append({
             "task_id": task_info.get("id", "unknown"),
             "category": task_info.get("category", "UNKNOWN"),
             "task_description": task_info.get("description", ""),
             "file_path": task_info.get("file_path", ""),
-            "code": callback_context.state["generated_code"]
+            "code": generated_code,
+            "snippet_type": snippet_type,
+            "status": "approved",
+            "approved_at": approved_ts,
+            "snippet_id": snippet_id,
         })
     callback_context.state["approved_code_snippets"] = code_snippets
 
@@ -179,9 +195,22 @@ def make_failure_handler(state_key: str, reason: str):
     def _callback(callback_context: CallbackContext) -> None:
         result = callback_context.state.get(state_key)
         grade = result.get("grade") if isinstance(result, dict) else result
-        if grade != "pass":
-            callback_context.state[f"{state_key}_failed"] = True
-            callback_context.state[f"{state_key}_failure_reason"] = reason
+        failure_flag = f"{state_key}_failed"
+        failure_reason_flag = f"{state_key}_failure_reason"
+        if grade == "pass":
+            callback_context.state.pop(failure_flag, None)
+            callback_context.state.pop(failure_reason_flag, None)
+            if state_key == "final_validation_result":
+                callback_context.state["final_delivery_validation"] = result
+                callback_context.state.pop("final_delivery_validation_failed", None)
+                callback_context.state.pop("final_delivery_validation_failure_reason", None)
+        else:
+            callback_context.state[failure_flag] = True
+            callback_context.state[failure_reason_flag] = reason
+            if state_key == "final_validation_result":
+                callback_context.state["final_delivery_validation"] = result
+                callback_context.state["final_delivery_validation_failed"] = True
+                callback_context.state["final_delivery_validation_failure_reason"] = reason
     return _callback
 
 
@@ -255,6 +284,30 @@ class RunIfFailed(BaseAgent):
             # Skip running the wrapped agent
             yield Event(author=self.name, content=Content(parts=[Part(text=f"Skipping {self._agent.name}; review passed.")]))
             return
+        async for ev in self._agent.run_async(ctx):
+            yield ev
+
+
+class RunIfPassed(BaseAgent):
+    """Runs the wrapped agent only when the review result grade is pass."""
+
+    def __init__(self, name: str, review_key: str, agent: BaseAgent):
+        super().__init__(name=name)
+        self._review_key = review_key
+        self._agent = agent
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        result = ctx.session.state.get(self._review_key)
+        grade = result.get("grade") if isinstance(result, dict) else result
+        if grade != "pass":
+            yield Event(
+                author=self.name,
+                content=Content(
+                    parts=[Part(text=f"Skipping {self._agent.name}; review not passed (grade={grade}).")]
+                ),
+            )
+            return
+
         async for ev in self._agent.run_async(ctx):
             yield ev
 
@@ -562,17 +615,22 @@ class ImageAssetsAgent(BaseAgent):
 
         state["image_assets"] = summary
 
-        try:
-            persist_final_delivery(ctx)
-        except Exception as exc:  # pragma: no cover - persistência externa
-            logger.error("Falha ao persistir JSON atualizado com imagens: %s", exc, exc_info=True)
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(
-                    text="⚠️ Imagens geradas, mas houve erro ao persistir a entrega final.""\n" + str(exc)
-                )]),
+        if not getattr(config, "enable_deterministic_final_validation", False):
+            try:
+                persist_final_delivery(ctx)
+            except Exception as exc:  # pragma: no cover - persistência externa
+                logger.error("Falha ao persistir JSON atualizado com imagens: %s", exc, exc_info=True)
+                yield Event(
+                    author=self.name,
+                    content=Content(parts=[Part(
+                        text="⚠️ Imagens geradas, mas houve erro ao persistir a entrega final.""\n" + str(exc)
+                    )]),
+                )
+                return
+        else:
+            logger.info(
+                "ImageAssetsAgent: persistência pulada (modo determinístico ativo)."
             )
-            return
 
         sucesso = sum(1 for item in summary if item.get("status") == "ok")
         yield Event(
@@ -582,17 +640,243 @@ class ImageAssetsAgent(BaseAgent):
             )]),
         )
 
+
+class FinalAssemblyGuardPre(BaseAgent):
+    """Collects approved VISUAL_DRAFT snippets and primes validation state."""
+
+    def __init__(self, name: str = "final_assembly_guard_pre") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        snippets = state.get("approved_code_snippets") or []
+        visual_snippets: list[dict[str, Any]] = []
+        duplicate_ids: set[str] = set()
+        seen_ids: set[str] = set()
+
+        if not isinstance(snippets, list):
+            snippets = []
+
+        for idx, snippet in enumerate(snippets):
+            if not isinstance(snippet, dict):
+                continue
+            snippet_type = snippet.get("snippet_type") or snippet.get("category")
+            if snippet_type != "VISUAL_DRAFT":
+                continue
+
+            code_payload = snippet.get("code")
+            parsed_payload: dict[str, Any] | None = None
+            if isinstance(code_payload, str):
+                parsed, parsed_value = try_parse_json_string(code_payload)
+                if parsed and isinstance(parsed_value, dict):
+                    parsed_payload = parsed_value
+            elif isinstance(code_payload, dict):
+                parsed_payload = code_payload
+
+            snippet_id = snippet.get("snippet_id")
+            if not snippet_id:
+                source = f"{snippet.get('task_id', idx)}::{snippet_type}::{code_payload}".encode("utf-8")
+                snippet_id = hashlib.sha256(source).hexdigest()
+
+            if snippet_id in seen_ids:
+                duplicate_ids.add(snippet_id)
+            seen_ids.add(snippet_id)
+
+            visual_snippets.append(
+                {
+                    "snippet_id": snippet_id,
+                    "task_id": snippet.get("task_id"),
+                    "status": snippet.get("status", "approved"),
+                    "approved_at": snippet.get("approved_at"),
+                    "content": parsed_payload,
+                }
+            )
+
+        state["approved_visual_drafts"] = visual_snippets
+
+        state["final_delivery_validation"] = {
+            "grade": "pending",
+            "source": "deterministic_pre_guard",
+            "total_visual_drafts": len(visual_snippets),
+        }
+        state.pop("final_delivery_validation_failed", None)
+        state.pop("final_delivery_validation_failure_reason", None)
+
+        if not visual_snippets:
+            failure_reason = "Nenhum snippet VISUAL_DRAFT aprovado encontrado para montar o JSON final."
+            state["final_delivery_validation"] = {
+                "grade": "fail",
+                "comment": failure_reason,
+            }
+            state["final_delivery_validation_failed"] = True
+            state["final_delivery_validation_failure_reason"] = failure_reason
+            state["final_validation_result"] = {"grade": "fail", "comment": failure_reason}
+            state["final_validation_result_failed"] = True
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text="⚠️ Nenhum VISUAL_DRAFT aprovado foi localizado; montagem determinística bloqueada."
+                )]),
+            )
+            return
+
+        message = f"Snippets VISUAL_DRAFT aprovados: {len(visual_snippets)}"
+        if duplicate_ids:
+            message += f" (IDs duplicados normalizados: {', '.join(sorted(duplicate_ids))})"
+
+        yield Event(author=self.name, content=Content(parts=[Part(text=message)]))
+
+
+class FinalAssemblyNormalizer(BaseAgent):
+    """Normalizes final delivery JSON ensuring deterministic reuse of approved snippets."""
+
+    def __init__(self, name: str = "final_assembly_normalizer") -> None:
+        super().__init__(name=name)
+
+    @staticmethod
+    def _serialize_context(value: Any) -> str:
+        if isinstance(value, str):
+            return value
+        if isinstance(value, dict):
+            return json.dumps(value, ensure_ascii=False, sort_keys=True)
+        if value is None:
+            return ""
+        return json.dumps(value, ensure_ascii=False)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        raw_delivery = state.get("final_code_delivery")
+        variations: list[dict[str, Any]] = []
+
+        if isinstance(raw_delivery, str):
+            parsed, parsed_value = try_parse_json_string(raw_delivery)
+            if parsed and isinstance(parsed_value, list):
+                variations = [v for v in parsed_value if isinstance(v, dict)]
+            elif parsed and isinstance(parsed_value, dict):
+                variations = [parsed_value]
+        elif isinstance(raw_delivery, list):
+            variations = [v for v in raw_delivery if isinstance(v, dict)]
+        elif isinstance(raw_delivery, dict):
+            variations = [raw_delivery]
+
+        visual_snippets = state.get("approved_visual_drafts")
+        if not isinstance(visual_snippets, list):
+            visual_snippets = []
+
+        if not variations and visual_snippets:
+            for entry in visual_snippets:
+                payload = entry.get("content")
+                if isinstance(payload, dict):
+                    variations.append(payload)
+
+        deduped_variations: list[dict[str, Any]] = []
+        seen_ids: set[str] = set()
+
+        for idx, variation in enumerate(variations):
+            normalized = json.loads(json.dumps(variation, ensure_ascii=False))
+            snippet_entry: dict[str, Any] | None = None
+            if idx < len(visual_snippets):
+                snippet_entry = visual_snippets[idx]
+            elif visual_snippets:
+                snippet_entry = visual_snippets[-1]
+
+            snippet_id = snippet_entry.get("snippet_id") if isinstance(snippet_entry, dict) else None
+            if snippet_id and snippet_id in seen_ids:
+                continue
+            if snippet_id:
+                seen_ids.add(snippet_id)
+
+            snippet_payload = (
+                snippet_entry.get("content")
+                if isinstance(snippet_entry, dict)
+                else None
+            )
+            if isinstance(snippet_payload, dict):
+                visual_block = snippet_payload.get("visual") if "visual" in snippet_payload else snippet_payload
+                if isinstance(visual_block, dict):
+                    normalized["visual"] = visual_block
+
+            contexto_landing = normalized.get("contexto_landing")
+            normalized["contexto_landing"] = self._serialize_context(contexto_landing)
+
+            deduped_variations.append(normalized)
+
+        serialized = json.dumps(deduped_variations, ensure_ascii=False)
+        state["final_code_delivery"] = serialized
+        state["final_code_delivery_parsed"] = deduped_variations
+        state["final_delivery_validation"] = {
+            "grade": "pending",
+            "source": "deterministic_normalizer",
+            "total_variations": len(deduped_variations),
+        }
+
+        yield Event(
+            author=self.name,
+            content=Content(parts=[Part(text=f"Final delivery normalizado ({len(deduped_variations)} variações).")]),
+        )
+
+
+class PersistFinalDeliveryAgent(BaseAgent):
+    """Agent wrapper that persists the final delivery once validation passes."""
+
+    def __init__(self, name: str = "persist_final_delivery_agent") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        try:
+            persist_final_delivery(ctx)
+        except Exception as exc:  # pragma: no cover - persistência externa
+            logger.error("Falha ao persistir JSON final: %s", exc, exc_info=True)
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"⚠️ Falha ao persistir entrega final: {exc}")]),
+            )
+            return
+
+        yield Event(
+            author=self.name,
+            content=Content(parts=[Part(text="💾 Entrega final persistida com sucesso.")]),
+        )
+
+
+class ResetDeterministicValidationState(BaseAgent):
+    """Removes deterministic validation artifacts when the feature flag is disabled."""
+
+    def __init__(self, name: str = "reset_deterministic_validation_state") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        for key in [
+            "approved_visual_drafts",
+            "final_delivery_validation",
+            "final_delivery_validation_failed",
+            "final_delivery_validation_failure_reason",
+            "final_code_delivery_parsed",
+        ]:
+            state.pop(key, None)
+        yield Event(author=self.name)
+
 class TaskInitializer(BaseAgent):
     def __init__(self, name: str):
         super().__init__(name=name)
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-        impl = ctx.session.state.get("implementation_plan", {}) or {}
+        state = ctx.session.state
+        impl = state.get("implementation_plan", {}) or {}
         tasks = impl.get("implementation_tasks", []) or []
-        ctx.session.state["implementation_tasks"] = tasks
-        ctx.session.state["current_task_index"] = 0
-        ctx.session.state["total_tasks"] = len(tasks)
-        ctx.session.state["approved_code_snippets"] = []
+        state["implementation_tasks"] = tasks
+        state["current_task_index"] = 0
+        state["total_tasks"] = len(tasks)
+        state["approved_code_snippets"] = []
+        for key in [
+            "approved_visual_drafts",
+            "final_delivery_validation",
+            "final_delivery_validation_failed",
+            "final_delivery_validation_failure_reason",
+            "final_code_delivery_parsed",
+        ]:
+            state.pop(key, None)
         yield Event(author=self.name)
 
 
@@ -700,6 +984,7 @@ class LandingPageStage(BaseAgent):
         self, ctx: InvocationContext
     ) -> AsyncGenerator[Event, None]:  # type: ignore[override]
         state = ctx.session.state
+        state["landing_page_analysis_failed"] = False
         fallback_enabled = bool(
             getattr(config, "enable_storybrand_fallback", False)
             and getattr(config, "enable_new_input_fields", False)
@@ -710,6 +995,7 @@ class LandingPageStage(BaseAgent):
         if fallback_enabled and (force_flag or debug_flag):
             if not isinstance(state.get("landing_page_context"), dict):
                 state["landing_page_context"] = {}
+            state["landing_page_analysis_failed"] = True
             logger.info(
                 "storybrand_landing_page_skipped",
                 extra={
@@ -722,6 +1008,10 @@ class LandingPageStage(BaseAgent):
 
         async for event in self._landing_page_agent.run_async(ctx):
             yield event
+
+        landing_ctx = state.get("landing_page_context")
+        if not isinstance(landing_ctx, dict) or not landing_ctx:
+            state["landing_page_analysis_failed"] = True
 
 
 image_assets_agent = ImageAssetsAgent()
@@ -1020,11 +1310,12 @@ Responda com confirmação simples.
 )
 
 
-final_assembler = LlmAgent(
-    model=config.critic_model,
-    name="final_assembler",  # mantido
-    description="Monta o JSON final do anúncio a partir dos fragmentos aprovados.",
-    instruction="""
+def build_final_assembler(after_agent_callback=None) -> LlmAgent:
+    return LlmAgent(
+        model=config.critic_model,
+        name="final_assembler",  # mantido
+        description="Monta o JSON final do anúncio a partir dos fragmentos aprovados.",
+        instruction="""
 ## IDENTIDADE: Final Ads Assembler
 
 Monte **3 variações** de anúncio combinando `approved_code_snippets`.
@@ -1045,16 +1336,16 @@ Regras:
 - Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
 - **Saída**: apenas JSON válido (sem markdown).
 """,
-    output_key="final_code_delivery",
-    after_agent_callback=persist_final_delivery,
-)
+        output_key="final_code_delivery",
+        after_agent_callback=after_agent_callback,
+    )
 
-# Validador final (schema estrito + coerência)
-final_validator = LlmAgent(
-    model=config.critic_model,
-    name="final_validator",
-    description="Valida o JSON final contra o schema e regras de coerência.",
-    instruction=r"""
+def build_final_validator() -> LlmAgent:
+    return LlmAgent(
+        model=config.critic_model,
+        name="final_validator",
+        description="Valida o JSON final contra o schema e regras de coerência.",
+        instruction=r"""
 ## IDENTIDADE: Final Schema & Coherence Validator
 
 Valide `final_code_delivery` (string JSON).
@@ -1079,16 +1370,17 @@ Critérios (deve ser **pass** se TODOS forem verdadeiros):
 ## SAÍDA
 {"grade":"pass"|"fail","comment":"Se fail, liste campos/problemas específicos."}
 """,
-    output_schema=Feedback,
-    output_key="final_validation_result",
-)
+        output_schema=Feedback,
+        output_key="final_validation_result",
+    )
 
-# Fixador final (aplica correções apontadas pelo validador)
-final_fix_agent = LlmAgent(
-    model=config.worker_model,
-    name="final_fix_agent",
-    description="Corrige o JSON final com base no feedback do validador.",
-    instruction="""
+
+def build_final_fix_agent() -> LlmAgent:
+    return LlmAgent(
+        model=config.worker_model,
+        name="final_fix_agent",
+        description="Corrige o JSON final com base no feedback do validador.",
+        instruction="""
 ## IDENTIDADE: Final JSON Fixer
 
 Tarefas:
@@ -1103,8 +1395,8 @@ Tarefas:
    - landing_page_context: {landing_page_context}
 4) Retorne **apenas** o JSON final corrigido com 3 variações.
 """,
-    output_key="final_code_delivery",
-)
+        output_key="final_code_delivery",
+    )
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -1237,35 +1529,84 @@ task_execution_loop = LoopAgent(
     after_agent_callback=task_execution_failure_handler,
 )
 
-# Validação final em loop: valida → (pass?) → corrige → revalida
-final_validation_loop = LoopAgent(
-    name="final_validation_loop",
-    max_iterations=3,
-    sub_agents=[
-        final_validator,
-        EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
-        RunIfFailed(name="final_fix_if_failed", review_key="final_validation_result", agent=final_fix_agent),
-    ],
-    after_agent_callback=make_failure_handler(
-        "final_validation_result",
-        "JSON final não passou na validação de schema/coerência."
-    ),
-)
+def build_final_validation_loop(final_validator_agent: BaseAgent, final_fix_agent: BaseAgent) -> LoopAgent:
+    return LoopAgent(
+        name="final_validation_loop",
+        max_iterations=3,
+        sub_agents=[
+            final_validator_agent,
+            EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
+            RunIfFailed(name="final_fix_if_failed", review_key="final_validation_result", agent=final_fix_agent),
+        ],
+        after_agent_callback=make_failure_handler(
+            "final_validation_result",
+            "JSON final não passou na validação de schema/coerência."
+        ),
+    )
 
-execution_pipeline = SequentialAgent(
-    name="execution_pipeline",
-    description="Executa plano, gera fragmentos e monta/valida JSON final.",
-    sub_agents=[
-        TaskInitializer(name="task_initializer"),
-        EnhancedStatusReporter(name="status_reporter_start"),
-        task_execution_loop,
-        EnhancedStatusReporter(name="status_reporter_assembly"),
-        final_assembler,
-        EscalationBarrier(name="final_validation_stage", agent=final_validation_loop),
+
+def build_final_delivery_agents(flag_enabled: bool) -> list[BaseAgent]:
+    final_validator_agent = build_final_validator()
+    final_fix_agent = build_final_fix_agent()
+    validation_loop = build_final_validation_loop(final_validator_agent, final_fix_agent)
+
+    if flag_enabled:
+        deterministic_stage = SequentialAgent(
+            name="deterministic_final_stage",
+            sub_agents=[
+                FinalAssemblyGuardPre(),
+                build_final_assembler(after_agent_callback=None),
+                FinalAssemblyNormalizer(),
+                EscalationBarrier(name="final_validation_stage", agent=validation_loop),
+            ],
+        )
+        return [
+            deterministic_stage,
+            RunIfPassed(
+                name="image_assets_if_passed",
+                review_key="final_validation_result",
+                agent=image_assets_agent,
+            ),
+            RunIfPassed(
+                name="persist_final_if_passed",
+                review_key="final_validation_result",
+                agent=PersistFinalDeliveryAgent(),
+            ),
+        ]
+
+    legacy_stage = [
+        ResetDeterministicValidationState(),
+        build_final_assembler(after_agent_callback=persist_final_delivery),
+        EscalationBarrier(name="final_validation_stage", agent=validation_loop),
         image_assets_agent,
-        EnhancedStatusReporter(name="status_reporter_final"),
-    ],
-)
+    ]
+    return legacy_stage
+
+
+def log_config_flag(flag_name: str, value: Any) -> None:
+    logger.info("config_flag", extra={"flag": flag_name, "value": value})
+
+
+def build_execution_pipeline() -> SequentialAgent:
+    flag_enabled = bool(getattr(config, "enable_deterministic_final_validation", False))
+    log_config_flag("enable_deterministic_final_validation", flag_enabled)
+    final_stage_agents = build_final_delivery_agents(flag_enabled)
+
+    return SequentialAgent(
+        name="execution_pipeline",
+        description="Executa plano, gera fragmentos e monta/valida JSON final.",
+        sub_agents=[
+            TaskInitializer(name="task_initializer"),
+            EnhancedStatusReporter(name="status_reporter_start"),
+            task_execution_loop,
+            EnhancedStatusReporter(name="status_reporter_assembly"),
+            *final_stage_agents,
+            EnhancedStatusReporter(name="status_reporter_final"),
+        ],
+    )
+
+
+execution_pipeline = build_execution_pipeline()
 
 complete_pipeline = SequentialAgent(
     name="complete_pipeline",
@@ -1317,9 +1658,17 @@ class FeatureOrchestrator(BaseAgent):
             yield Event(author=self.name, content=Content(parts=[Part(
                 text=f"⚠️ Falha na Execução: {ctx.session.state.get('task_execution_failure_reason')}"
             )]))
+        elif ctx.session.state.get("final_delivery_validation_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Validação Determinística: {ctx.session.state.get('final_delivery_validation_failure_reason')}"
+            )]))
         elif ctx.session.state.get("final_validation_result_failed"):
             yield Event(author=self.name, content=Content(parts=[Part(
                 text=f"⚠️ Falha na Validação Final: {ctx.session.state.get('final_validation_result_failure_reason')}"
+            )]))
+        elif ctx.session.state.get("semantic_visual_review_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Revisão Semântica: {ctx.session.state.get('semantic_visual_review_failure_reason')}"
             )]))
         elif "final_code_delivery" in ctx.session.state:
             yield Event(author=self.name, content=Content(parts=[Part(text="✅ Anúncio (JSON) gerado e validado!")]))
