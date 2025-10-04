@@ -1,0 +1,922 @@
+{
+  "metadata": {
+    "schema_version": "2.0.0",
+    "execution_timestamp": "2025-10-04T13:30:00-03:00",
+    "plan_file": "/Users/institutorecriare/VSCodeProjects/instagram_ads/imagem_roupa.md",
+    "repository_root": "/Users/institutorecriare/VSCodeProjects/instagram_ads",
+    "total_execution_time_ms": 3847,
+    "creation_registry": [
+      "app/schemas/reference_assets.py",
+      "ReferenceImageMetadata",
+      "app/utils/reference_cache.py",
+      "resolve_reference_metadata",
+      "build_reference_summary",
+      "merge_user_description",
+      "cache_reference_metadata",
+      "upload_reference_image (GCS helper)",
+      "analyze_reference_image (Vision AI)",
+      "frontend/src/components/ReferenceUpload.tsx",
+      "RunPreflightRequest (Pydantic schema)",
+      "/upload/reference-image (endpoint)",
+      "_load_reference_image",
+      "image_current_prompt_template",
+      "image_aspirational_prompt_template_with_product"
+    ],
+    "creation_registry_size": 15
+  },
+  "summary": {
+    "total_claims_extracted": 38,
+    "claims_by_type": {
+      "DEPENDENCIA": 23,
+      "ENTREGA": 15,
+      "MODIFICACAO": 0
+    },
+    "validated_claims": 23,
+    "findings_by_severity": {
+      "P0": 8,
+      "P0-A": 6,
+      "P0-B": 2,
+      "P1": 4,
+      "P2": 3,
+      "P3": 2,
+      "P3-Extended": 1
+    },
+    "symbol_coverage": "100%",
+    "matching_precision": "91.3%",
+    "phantom_links_rate": "4.3%",
+    "blast_radius": "HIGH"
+  },
+  "findings": [
+    {
+      "id": "P0-A-001",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "module",
+        "name": "app/schemas/reference_assets.py",
+        "context": "Novo módulo sugerido contendo ReferenceImageMetadata",
+        "section": "4. Modelo de Dados & Estado",
+        "line": 21,
+        "expected_signature": "class ReferenceImageMetadata(BaseModel)",
+        "expected_file": "app/schemas/reference_assets.py",
+        "references": 7
+      },
+      "code_evidence": {
+        "found": false,
+        "searched_paths": [
+          "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/schemas/",
+          "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/schemas/__init__.py"
+        ],
+        "existing_files": [
+          "app/schemas/__init__.py",
+          "app/schemas/storybrand.py"
+        ],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Criar módulo app/schemas/reference_assets.py",
+        "description": "Implementar schema Pydantic ReferenceImageMetadata conforme especificação do plano (linhas 21-32)",
+        "acceptance_criteria": [
+          "Classe ReferenceImageMetadata herda de BaseModel",
+          "Campos: id (str), type (Literal['character', 'product']), gcs_uri (str), signed_url (str), labels (list[str]), safe_search_flags (dict[str, str]), user_description (str | None), uploaded_at (datetime)",
+          "Método model_dump(mode='json') retorna dicionário JSON-serializável",
+          "Registrado em app/schemas/__init__.py"
+        ],
+        "blocks_tasks": [
+          "ImageAssetsAgent._run_async_impl (linha 139-158)",
+          "upload_reference_image endpoint (linha 94-102)",
+          "run_preflight reference resolution (linha 113-130)"
+        ]
+      }
+    },
+    {
+      "id": "P0-A-002",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "module",
+        "name": "app/utils/reference_cache.py",
+        "context": "Utilitário dedicado para resolver IDs de referência",
+        "section": "4. Modelo de Dados & Estado",
+        "line": 49,
+        "expected_signature": "module with resolve_reference_metadata, build_reference_summary, etc.",
+        "expected_file": "app/utils/reference_cache.py",
+        "references": 5
+      },
+      "code_evidence": {
+        "found": false,
+        "searched_paths": [
+          "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/utils/"
+        ],
+        "existing_files": [
+          "app/utils/cache.py",
+          "app/utils/gcs.py",
+          "app/utils/json_tools.py",
+          "app/utils/session_state.py"
+        ],
+        "similar_candidates": [
+          {
+            "name": "app/utils/cache.py",
+            "similarity": 0.67,
+            "reason": "Similar naming but different purpose (general caching)"
+          }
+        ]
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Criar módulo app/utils/reference_cache.py",
+        "description": "Implementar sistema de cache em memória com TTL para metadados de referências visuais",
+        "acceptance_criteria": [
+          "resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None",
+          "build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]",
+          "merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None",
+          "cache_reference_metadata(metadata: ReferenceImageMetadata) -> None",
+          "TTL configurável via environment variable",
+          "Logging estruturado para diagnósticos"
+        ],
+        "blocks_tasks": [
+          "run_preflight reference resolution (linha 113-130)",
+          "upload_reference_image caching (linha 109)"
+        ]
+      }
+    },
+    {
+      "id": "P0-A-003",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "function",
+        "name": "upload_reference_image (GCS helper)",
+        "context": "Nova função em app/utils/gcs.py para subir referências visuais",
+        "section": "6.1 Upload",
+        "line": 105,
+        "expected_signature": "async def upload_reference_image(...)",
+        "expected_file": "app/utils/gcs.py",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/utils/gcs.py",
+        "existing_functions": [
+          "create_bucket_if_not_exists"
+        ],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Adicionar função upload_reference_image em app/utils/gcs.py",
+        "description": "Implementar helper para upload de imagens de referência no Google Cloud Storage",
+        "acceptance_criteria": [
+          "Função assíncrona upload_reference_image(file_bytes, metadata, ...)",
+          "Valida content_type e tamanho do arquivo",
+          "Gera nome único com timestamp e tipo (character/product)",
+          "Retorna gcs_uri e signed_url",
+          "Logging estruturado de upload",
+          "Tratamento de erros com fallback"
+        ],
+        "blocks_tasks": [
+          "/upload/reference-image endpoint implementation (linha 94-109)"
+        ]
+      }
+    },
+    {
+      "id": "P0-A-004",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "module",
+        "name": "app/utils/vision.py",
+        "context": "Nova função analyze_reference_image para Vision AI (SafeSearch + labels)",
+        "section": "6.1 Upload",
+        "line": 106,
+        "expected_signature": "async def analyze_reference_image(...)",
+        "expected_file": "app/utils/vision.py",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": false,
+        "searched_paths": [
+          "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/utils/"
+        ],
+        "existing_files": [],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Criar módulo app/utils/vision.py",
+        "description": "Implementar integração com Vertex AI Vision para análise de imagens (SafeSearch + Object/Label Detection)",
+        "acceptance_criteria": [
+          "analyze_reference_image(image_bytes) -> dict com safe_search_flags e labels",
+          "SafeSearch verifica adult, violence, racy (bloqueia se >= LIKELY)",
+          "Label/Object Detection retorna top 5-10 labels com confidence",
+          "Retry logic para falhas temporárias",
+          "Logging estruturado de análises",
+          "Fallback graceful se Vision API indisponível"
+        ],
+        "blocks_tasks": [
+          "/upload/reference-image endpoint validation (linha 106-107)"
+        ]
+      }
+    },
+    {
+      "id": "P0-A-005",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "endpoint",
+        "name": "/upload/reference-image",
+        "context": "Rota FastAPI para upload de referências visuais",
+        "section": "6.1 Upload",
+        "line": 94,
+        "expected_signature": "@app.post('/upload/reference-image')",
+        "expected_file": "app/server.py",
+        "references": 4
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/server.py",
+        "line_range": "90-410",
+        "existing_endpoints": [
+          "/feedback (line 129)",
+          "/run_preflight (line 162)"
+        ],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Adicionar endpoint POST /upload/reference-image",
+        "description": "Implementar rota FastAPI para receber uploads de imagens de personagem/produto com validação e análise",
+        "acceptance_criteria": [
+          "Aceita FormData com fields: file (UploadFile), type (character|product), user_id (opcional), session_id (opcional)",
+          "Valida content_type (image/png, image/jpeg) e tamanho (max 5MB)",
+          "Chama upload_reference_image (GCS) e analyze_reference_image (Vision AI)",
+          "Bloqueia upload se SafeSearch flags >= LIKELY",
+          "Persiste metadados em cache via cache_reference_metadata",
+          "Retorna JSON: {id, signed_url, labels, gcs_uri}",
+          "Logging estruturado de uploads e bloqueios"
+        ],
+        "blocks_tasks": [
+          "Frontend ReferenceUpload.tsx integration (linha 74-88)"
+        ]
+      }
+    },
+    {
+      "id": "P0-A-006",
+      "severity": "P0",
+      "classification": "P0-A",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "component",
+        "name": "frontend/src/components/ReferenceUpload.tsx",
+        "context": "Componente React dedicado para upload de referências",
+        "section": "5. UI (React + Vite)",
+        "line": 71,
+        "expected_signature": "React component with type prop",
+        "expected_file": "frontend/src/components/ReferenceUpload.tsx",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": false,
+        "searched_paths": [
+          "/Users/institutorecriare/VSCodeProjects/instagram_ads/frontend/src/components/"
+        ],
+        "existing_components": [
+          "InputForm.tsx",
+          "ChatMessagesView.tsx",
+          "AdsPreview.tsx",
+          "WizardForm/steps/*.tsx"
+        ],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "priority": "CRITICAL",
+        "title": "Criar componente frontend/src/components/ReferenceUpload.tsx",
+        "description": "Implementar componente React para upload de imagens de referência com preview e validações",
+        "acceptance_criteria": [
+          "Props: type ('character' | 'product'), onChange, value",
+          "Validação client-side: extensões (.png, .jpg, .jpeg), max 5MB, dimensões mínimas",
+          "Preview da imagem selecionada",
+          "Upload imediato via POST /upload/reference-image",
+          "Exibição de labels retornadas",
+          "Estados de loading/erro/sucesso",
+          "Integração com useReferenceImages hook",
+          "Acessibilidade (a11y) e responsividade"
+        ],
+        "blocks_tasks": [
+          "WizardForm integration com campos de upload"
+        ]
+      }
+    },
+    {
+      "id": "P0-B-007",
+      "severity": "P0",
+      "classification": "P0-B",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "schema",
+        "name": "RunPreflightRequest",
+        "context": "Schema Pydantic para validar corpo de /run_preflight",
+        "section": "6.2 Preflight",
+        "line": 112,
+        "expected_signature": "class RunPreflightRequest(BaseModel)",
+        "expected_file": "app/server.py ou app/schemas/",
+        "references": 1
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/server.py",
+        "line_range": "162-410",
+        "current_implementation": "Parse manual via payload.get() sem schema Pydantic",
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CLARIFY_OR_REMOVE",
+        "priority": "LOW",
+        "title": "Avaliar necessidade de RunPreflightRequest schema",
+        "description": "Plano menciona criação de schema Pydantic mas apenas 1 referência. Avaliar se é realmente necessário ou se parse manual atual é suficiente.",
+        "alternatives": [
+          "Manter parse manual atual (linha 175-188)",
+          "Criar schema Pydantic para validação tipada",
+          "Remover referência do plano se não for essencial"
+        ]
+      }
+    },
+    {
+      "id": "P0-B-008",
+      "severity": "P0",
+      "classification": "P0-B",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "function",
+        "name": "_load_reference_image",
+        "context": "Helper para download de imagens de GCS via metadata.gcs_uri",
+        "section": "8.1 Assinatura",
+        "line": 171,
+        "expected_signature": "def _load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image",
+        "expected_file": "app/tools/generate_transformation_images.py",
+        "references": 1
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/tools/generate_transformation_images.py",
+        "line_range": "1-294",
+        "existing_helpers": [
+          "_call_model (implícito)",
+          "_upload_image (implícito)",
+          "_notify (implícito)"
+        ],
+        "similar_candidates": []
+      },
+      "suggested_action": {
+        "type": "CLARIFY_OR_INLINE",
+        "priority": "LOW",
+        "title": "Avaliar necessidade de helper _load_reference_image",
+        "description": "Apenas 1 referência ao helper. Pode ser implementado inline ou extraído se houver reutilização futura.",
+        "alternatives": [
+          "Implementar inline no generate_transformation_images",
+          "Criar helper se houver reutilização em outros contextos",
+          "Simplificar para storage.Client().bucket().blob().download_as_bytes()"
+        ]
+      }
+    },
+    {
+      "id": "P1-001",
+      "severity": "P1",
+      "classification": "P1",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "function",
+        "name": "generate_transformation_images",
+        "context": "Alterar assinatura para aceitar reference_character e reference_product",
+        "section": "8.1 Assinatura",
+        "line": 164,
+        "expected_signature": "async def generate_transformation_images(..., reference_character: ReferenceImageMetadata | None = None, reference_product: ReferenceImageMetadata | None = None)",
+        "expected_file": "app/tools/generate_transformation_images.py",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/tools/generate_transformation_images.py",
+        "line": 209,
+        "current_signature": "async def generate_transformation_images(*, prompt_atual: str, prompt_intermediario: str, prompt_aspiracional: str, variation_idx: int, metadata: Dict[str, Any], progress_callback: Optional[ProgressCallback] = None) -> Dict[str, Dict[str, str]]",
+        "divergence": "Missing parameters: reference_character, reference_product"
+      },
+      "suggested_action": {
+        "type": "UPDATE_SIGNATURE",
+        "priority": "HIGH",
+        "title": "Atualizar assinatura de generate_transformation_images",
+        "description": "Adicionar parâmetros opcionais reference_character e reference_product conforme plano",
+        "patch": "--- a/app/tools/generate_transformation_images.py\n+++ b/app/tools/generate_transformation_images.py\n@@ -209,6 +209,8 @@\n async def generate_transformation_images(\n     *,\n     prompt_atual: str,\n     prompt_intermediario: str,\n     prompt_aspiracional: str,\n     variation_idx: int,\n     metadata: Dict[str, Any],\n     progress_callback: Optional[ProgressCallback] = None,\n+    reference_character: Optional['ReferenceImageMetadata'] = None,\n+    reference_product: Optional['ReferenceImageMetadata'] = None,\n ) -> Dict[str, Dict[str, str]]:",
+        "dependencies": [
+          "ReferenceImageMetadata schema must exist (P0-A-001)"
+        ]
+      }
+    },
+    {
+      "id": "P1-002",
+      "severity": "P1",
+      "classification": "P1",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "function",
+        "name": "ImageAssetsAgent._run_async_impl",
+        "context": "Recuperar reference_images do state e passar para generate_transformation_images",
+        "section": "7.2 ImageAssetsAgent._run_async_impl",
+        "line": 139,
+        "expected_behavior": "Read state['reference_images'], validate, and pass to generator",
+        "expected_file": "app/agent.py",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/agent.py",
+        "line": 316,
+        "current_implementation": "No reference to state['reference_images']",
+        "divergence": "Missing logic to extract and pass reference metadata"
+      },
+      "suggested_action": {
+        "type": "ADD_LOGIC",
+        "priority": "HIGH",
+        "title": "Adicionar lógica de referências visuais em ImageAssetsAgent",
+        "description": "Implementar recuperação de reference_images do state e passagem para generate_transformation_images conforme linhas 139-158 do plano",
+        "patch": "--- a/app/agent.py\n+++ b/app/agent.py\n@@ -316,6 +316,19 @@\n     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:\n         state = ctx.session.state\n+\n+        # Recuperar referências visuais do state (se existirem)\n+        reference_images = state.get('reference_images') or {}\n+        reference_character_dict = reference_images.get('character')\n+        reference_product_dict = reference_images.get('product')\n+        \n+        # Reidratar para ReferenceImageMetadata se existirem\n+        from app.schemas.reference_assets import ReferenceImageMetadata\n+        reference_character = (\n+            ReferenceImageMetadata.model_validate(reference_character_dict)\n+            if reference_character_dict else None\n+        )\n+        reference_product = (\n+            ReferenceImageMetadata.model_validate(reference_product_dict)\n+            if reference_product_dict else None\n+        )\n         \n         # Debug: verificar o que está no state",
+        "dependencies": [
+          "ReferenceImageMetadata schema (P0-A-001)",
+          "generate_transformation_images signature update (P1-001)"
+        ]
+      }
+    },
+    {
+      "id": "P1-003",
+      "severity": "P1",
+      "classification": "P1",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "function",
+        "name": "persist_final_delivery",
+        "context": "Atualizar para receber state e extrair reference_images",
+        "section": "10. Observabilidade & Persistência",
+        "line": 197,
+        "expected_behavior": "Extract state['reference_images'], sanitize, save to meta",
+        "expected_file": "app/callbacks/persist_outputs.py",
+        "references": 2
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/callbacks/persist_outputs.py",
+        "line": 35,
+        "current_signature": "def persist_final_delivery(callback_context: Any) -> None",
+        "current_implementation": "Does not extract or persist reference_images metadata",
+        "divergence": "Missing reference_images extraction and sanitization"
+      },
+      "suggested_action": {
+        "type": "ADD_LOGIC",
+        "priority": "HIGH",
+        "title": "Adicionar persistência de reference_images metadata",
+        "description": "Extrair reference_images do state, remover campos sensíveis (signed_url), e salvar em meta conforme linha 197 do plano",
+        "patch": "--- a/app/callbacks/persist_outputs.py\n+++ b/app/callbacks/persist_outputs.py\n@@ -110,6 +110,17 @@\n         # Write sidecar meta locally and to GCS for fast lookup by endpoints\n         try:\n             meta = {\n                 \"filename\": fname,\n+                # Adicionar metadados de referências visuais (sanitizados)\n+                \"reference_images\": None,\n             }\n+            \n+            # Extrair e sanitizar reference_images\n+            ref_imgs = state.get('reference_images')\n+            if ref_imgs and isinstance(ref_imgs, dict):\n+                sanitized = {}\n+                for key, val in ref_imgs.items():\n+                    if val and isinstance(val, dict):\n+                        # Remover signed_url e outros campos sensíveis\n+                        sanitized[key] = {k: v for k, v in val.items() if k not in ('signed_url', 'tokens')}\n+                meta['reference_images'] = sanitized\n+",
+        "test_update_required": true
+      }
+    },
+    {
+      "id": "P1-004",
+      "severity": "P1",
+      "classification": "P1",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "config",
+        "name": "run_preflight reference resolution",
+        "context": "Resolver IDs para metadados e montar initial_state com reference_images",
+        "section": "6.2 Preflight",
+        "line": 113,
+        "expected_behavior": "Call resolve_reference_metadata and build_reference_summary",
+        "expected_file": "app/server.py",
+        "references": 3
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/server.py",
+        "line": 334,
+        "current_implementation": "initial_state assembly without reference_images handling",
+        "divergence": "Missing reference resolution and summary building logic"
+      },
+      "suggested_action": {
+        "type": "ADD_LOGIC",
+        "priority": "HIGH",
+        "title": "Adicionar lógica de resolução de referências em run_preflight",
+        "description": "Implementar resolução de reference_images IDs e construção de summaries conforme linhas 113-131 do plano",
+        "patch": "--- a/app/server.py\n+++ b/app/server.py\n@@ -334,6 +334,30 @@\n     # Montar estado inicial para a sessão ADK\n     initial_state = {\n         \"landing_page_url\": data.get(\"landing_page_url\"),\n+        # ... existing fields ...\n+    }\n+    \n+    # Resolver referências visuais se presentes no payload\n+    reference_images_payload = payload.get('reference_images', {})\n+    if reference_images_payload:\n+        from app.utils.reference_cache import (\n+            resolve_reference_metadata,\n+            merge_user_description,\n+            build_reference_summary,\n+        )\n+        \n+        initial_state['reference_images'] = {\n+            'character': merge_user_description(\n+                resolve_reference_metadata(reference_images_payload.get('character', {}).get('id')),\n+                reference_images_payload.get('character', {}).get('user_description'),\n+            ),\n+            'product': merge_user_description(\n+                resolve_reference_metadata(reference_images_payload.get('product', {}).get('id')),\n+                reference_images_payload.get('product', {}).get('user_description'),\n+            ),\n+        }\n+        summary = build_reference_summary(initial_state['reference_images'], payload)\n+        initial_state['reference_image_summary'] = summary\n+        initial_state['reference_image_character_summary'] = summary.get('character')\n+        initial_state['reference_image_product_summary'] = summary.get('product')\n     }",
+        "dependencies": [
+          "app/utils/reference_cache.py (P0-A-002)",
+          "ReferenceImageMetadata schema (P0-A-001)"
+        ]
+      }
+    },
+    {
+      "id": "P2-001",
+      "severity": "P2",
+      "classification": "P2",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "config",
+        "name": "image_current_prompt_template",
+        "context": "Template para estado atual com referência de personagem",
+        "section": "9. Configuração & Templates",
+        "line": 187,
+        "expected_value": "\"Use the provided character reference ({character_labels}). {prompt_atual}\"",
+        "expected_file": "app/config.py",
+        "references": 2
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/config.py",
+        "existing_templates": [
+          "image_intermediate_prompt_template (line 67)",
+          "image_aspirational_prompt_template (line 71)"
+        ],
+        "divergence": "Template não existe, apenas intermediate e aspirational"
+      },
+      "suggested_action": {
+        "type": "ADD_CONFIG",
+        "priority": "MEDIUM",
+        "title": "Adicionar image_current_prompt_template em config.py",
+        "description": "Adicionar template para estado atual conforme linha 187 do plano",
+        "patch": "--- a/app/config.py\n+++ b/app/config.py\n@@ -66,6 +66,9 @@\n     image_signed_url_ttl: int = 60 * 60 * 24  # 24h\n+    image_current_prompt_template: str = (\n+        \"Use the provided character reference ({character_labels}). {prompt_atual}\"\n+    )\n     image_intermediate_prompt_template: str = (\n         \"Transform this scene to show the immediate positive action: {prompt_intermediario}. \""
+      }
+    },
+    {
+      "id": "P2-002",
+      "severity": "P2",
+      "classification": "P2",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "config",
+        "name": "image_aspirational_prompt_template_with_product",
+        "context": "Template para estado aspiracional com referência de produto",
+        "section": "9. Configuração & Templates",
+        "line": 190,
+        "expected_value": "\"Integrate the product from the reference image ({product_labels}). {prompt_aspiracional}\"",
+        "expected_file": "app/config.py",
+        "references": 2
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/config.py",
+        "existing_templates": [
+          "image_intermediate_prompt_template (line 67)",
+          "image_aspirational_prompt_template (line 71)"
+        ],
+        "divergence": "Template específico para produto não existe"
+      },
+      "suggested_action": {
+        "type": "ADD_CONFIG",
+        "priority": "MEDIUM",
+        "title": "Adicionar image_aspirational_prompt_template_with_product em config.py",
+        "description": "Adicionar template para estado aspiracional com produto conforme linha 190-192 do plano",
+        "patch": "--- a/app/config.py\n+++ b/app/config.py\n@@ -74,6 +74,9 @@\n     image_aspirational_prompt_template: str = (\n         \"Show the same person after some time has passed achieving the successful outcome: {prompt_aspiracional}. \"\n         \"Preserve identity and core features while allowing improvements in environment, wardrobe and expression.\"  # noqa: E501\n+    )\n+    image_aspirational_prompt_template_with_product: str = (\n+        \"Integrate the product from the reference image ({product_labels}). {prompt_aspiracional}\"\n     )"
+      }
+    },
+    {
+      "id": "P2-003",
+      "severity": "P2",
+      "classification": "P2",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "prompt",
+        "name": "final_assembler prompts",
+        "context": "Injetar reference_images nos prompts do final_assembler",
+        "section": "7.1 Prompts de geração",
+        "line": 137,
+        "expected_behavior": "Include reference_images.character.gcs_uri, labels, product fields in prompt",
+        "expected_file": "app/agent.py",
+        "references": 2
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/agent.py",
+        "line": 1033,
+        "current_prompt": "Does not include reference_images placeholders",
+        "divergence": "Missing reference_images.character.*, reference_images.product.* placeholders"
+      },
+      "suggested_action": {
+        "type": "UPDATE_PROMPT",
+        "priority": "MEDIUM",
+        "title": "Atualizar prompts do final_assembler para incluir referências visuais",
+        "description": "Adicionar placeholders para reference_images conforme linha 137 do plano",
+        "patch": "--- a/app/agent.py\n+++ b/app/agent.py\n@@ -1033,6 +1033,10 @@\n     instruction=\"\"\"\n## IDENTIDADE: Final Ads Assembler\n\nMonte **3 variações** de anúncio combinando `approved_code_snippets`.\n+\nReferências visuais disponíveis (se existirem):\n+- Personagem: {reference_image_character_summary} (GCS: {reference_images.character.gcs_uri}, Labels: {reference_images.character.labels})\n+- Produto: {reference_image_product_summary} (GCS: {reference_images.product.gcs_uri}, Labels: {reference_images.product.labels})\n\nCampos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):",
+        "notes": "Considerar pós-processamento se modelo não retornar reference_assets"
+      }
+    },
+    {
+      "id": "P3-001",
+      "severity": "P3",
+      "classification": "P3",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "prompt",
+        "name": "VISUAL_DRAFT placeholders",
+        "context": "Adicionar {reference_image_character_summary} e {reference_image_product_summary}",
+        "section": "7.1 Prompts de geração",
+        "line": 135,
+        "expected_behavior": "Include reference summaries in VISUAL_DRAFT prompt",
+        "expected_file": "app/agent.py",
+        "references": 1
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/agent.py",
+        "line": 880,
+        "current_prompt": "Does not include reference_image_* placeholders",
+        "divergence": "Missing reference summaries in VISUAL_DRAFT section"
+      },
+      "suggested_action": {
+        "type": "UPDATE_PROMPT",
+        "priority": "LOW",
+        "title": "Adicionar placeholders de referências em VISUAL_DRAFT prompt",
+        "description": "Incluir reference_image_character_summary e reference_image_product_summary no prompt VISUAL_DRAFT (c. linha 880)",
+        "note": "Baixa prioridade pois impacto é em qualidade de output, não bloqueante"
+      }
+    },
+    {
+      "id": "P3-002",
+      "severity": "P3",
+      "classification": "P3",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "prompt",
+        "name": "COPY_DRAFT labels integration",
+        "context": "Sugerir que headline/corpo mencionem produto usando labels",
+        "section": "7.1 Prompts de geração",
+        "line": 136,
+        "expected_behavior": "Include product labels hint in COPY_DRAFT prompt",
+        "expected_file": "app/agent.py",
+        "references": 1
+      },
+      "code_evidence": {
+        "found": true,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/app/agent.py",
+        "line": 884,
+        "current_prompt": "Does not reference product labels",
+        "divergence": "Missing product labels hint"
+      },
+      "suggested_action": {
+        "type": "UPDATE_PROMPT",
+        "priority": "LOW",
+        "title": "Adicionar hint de product labels em COPY_DRAFT",
+        "description": "Incluir instrução para usar product labels quando disponíveis (c. linha 884-898)",
+        "note": "Baixa prioridade, melhoria de qualidade não bloqueante"
+      }
+    },
+    {
+      "id": "P3-EXT-001",
+      "severity": "P3-Extended",
+      "classification": "P3-Extended",
+      "claim": {
+        "type": "DEPENDENCIA",
+        "category": "dependency",
+        "name": "google-cloud-vision",
+        "context": "Biblioteca necessária para Vision AI (SafeSearch + labels)",
+        "section": "6.1 Upload",
+        "line": 109,
+        "expected_version": ">=3.4.0",
+        "expected_files": [
+          "requirements.txt",
+          "pyproject.toml"
+        ],
+        "references": 3
+      },
+      "code_evidence": {
+        "found": false,
+        "file_path": "/Users/institutorecriare/VSCodeProjects/instagram_ads/requirements.txt",
+        "existing_dependencies": [
+          "google-genai",
+          "google-auth",
+          "google-cloud-storage",
+          "requests>=2.31.0",
+          "trafilatura>=1.6.0",
+          "beautifulsoup4>=4.12.0",
+          "lxml>=4.9.0",
+          "langextract>=1.0.9",
+          "pydantic>=2.0.0",
+          "fastapi>=0.100.0",
+          "uvicorn>=0.23.0",
+          "streamlit>=1.25.0"
+        ],
+        "pyproject_dependencies": [
+          "google-adk==1.4.2",
+          "google-cloud-logging>=3.5.0",
+          "google-cloud-storage>=2.10.0",
+          "vertexai>=1.40.0"
+        ],
+        "similar_candidates": [
+          {
+            "name": "google-cloud-storage",
+            "version": ">=2.10.0",
+            "reason": "Same google-cloud-* family but different service"
+          }
+        ]
+      },
+      "suggested_action": {
+        "type": "ADD_DEPENDENCY",
+        "priority": "MEDIUM",
+        "title": "Adicionar google-cloud-vision>=3.4.0 às dependências",
+        "description": "Adicionar biblioteca Vision AI aos arquivos de dependências conforme linha 109 do plano",
+        "patch": "--- a/requirements.txt\n+++ b/requirements.txt\n@@ -3,6 +3,7 @@\n google-auth\n google-cloud-storage\n+google-cloud-vision>=3.4.0\n \n # Web fetching and parsing\n\n--- a/pyproject.toml\n+++ b/pyproject.toml\n@@ -18,6 +18,7 @@\n     \"google-cloud-logging>=3.5.0\",\n     \"google-cloud-storage>=2.10.0\",\n+    \"google-cloud-vision>=3.4.0\",\n     \"google-auth>=2.23.0\",",
+        "post_install": "Run 'make install' or 'uv sync' after adding dependency"
+      }
+    }
+  ],
+  "extended_validations": {
+    "dependencies": {
+      "missing_libraries": [
+        {
+          "library": "google-cloud-vision",
+          "required_version": ">=3.4.0",
+          "mentioned_in": "Section 6.1 Upload, line 109",
+          "severity": "P3-Extended"
+        }
+      ],
+      "conflicting_versions": []
+    },
+    "state_management": {
+      "new_state_keys": [
+        "reference_images",
+        "reference_image_summary",
+        "reference_image_character_summary",
+        "reference_image_product_summary"
+      ],
+      "potential_conflicts": [],
+      "serialization_concerns": [
+        {
+          "key": "reference_images",
+          "issue": "Plan requires model_dump(mode='json') before state insertion (line 33)",
+          "severity": "HIGH",
+          "mitigation": "Always call metadata.model_dump(mode='json') before state assignment"
+        }
+      ]
+    },
+    "integration_points": [
+      {
+        "component": "ImageAssetsAgent → generate_transformation_images",
+        "status": "REQUIRES_UPDATE",
+        "changes": [
+          "Add reference_character parameter",
+          "Add reference_product parameter",
+          "Extract from state['reference_images']",
+          "Validate metadata before passing"
+        ]
+      },
+      {
+        "component": "run_preflight → reference_cache",
+        "status": "BLOCKED",
+        "blocker": "reference_cache.py module does not exist (P0-A-002)"
+      },
+      {
+        "component": "Frontend ReferenceUpload → /upload/reference-image",
+        "status": "BLOCKED",
+        "blocker": "Both component and endpoint do not exist (P0-A-005, P0-A-006)"
+      }
+    ]
+  },
+  "plan_code_mapping": [
+    {
+      "plan_element": "app/schemas/reference_assets.py",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "app/utils/reference_cache.py",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "app/utils/vision.py",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "upload_reference_image (GCS helper)",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "/upload/reference-image endpoint",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "frontend/src/components/ReferenceUpload.tsx",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P0-A"
+    },
+    {
+      "plan_element": "generate_transformation_images signature",
+      "code_element": "app/tools/generate_transformation_images.py:209",
+      "status": "DIVERGENT",
+      "severity": "P1"
+    },
+    {
+      "plan_element": "ImageAssetsAgent reference handling",
+      "code_element": "app/agent.py:316",
+      "status": "INCOMPLETE",
+      "severity": "P1"
+    },
+    {
+      "plan_element": "persist_final_delivery reference metadata",
+      "code_element": "app/callbacks/persist_outputs.py:35",
+      "status": "INCOMPLETE",
+      "severity": "P1"
+    },
+    {
+      "plan_element": "run_preflight reference resolution",
+      "code_element": "app/server.py:334",
+      "status": "INCOMPLETE",
+      "severity": "P1"
+    },
+    {
+      "plan_element": "image_current_prompt_template",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P2"
+    },
+    {
+      "plan_element": "image_aspirational_prompt_template_with_product",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P2"
+    },
+    {
+      "plan_element": "google-cloud-vision dependency",
+      "code_element": "NOT_FOUND",
+      "status": "MISSING",
+      "severity": "P3-Extended"
+    }
+  ],
+  "uncertainties": [
+    {
+      "element": "RunPreflightRequest schema",
+      "reason": "Only 1 reference in plan, unclear if Pydantic schema is necessary or manual parse is sufficient",
+      "recommendation": "Clarify with stakeholders if strict validation schema is required"
+    },
+    {
+      "element": "_load_reference_image helper",
+      "reason": "Only 1 reference, could be implemented inline",
+      "recommendation": "Consider inline implementation unless reuse is anticipated"
+    },
+    {
+      "element": "Vision AI fallback behavior",
+      "reason": "Plan mentions fallback (line 181) but does not specify complete fallback strategy",
+      "recommendation": "Define clear fallback path: reject upload vs allow with warning vs skip analysis"
+    },
+    {
+      "element": "Cache backend for reference_cache.py",
+      "reason": "Plan mentions 'cache em memória com TTL' but also notes 'Redis/Datastore' for multi-worker (line 221)",
+      "recommendation": "Decide on cache backend before implementation: in-memory dict vs Redis vs Datastore"
+    }
+  ],
+  "recommendations": {
+    "immediate_actions": [
+      "Create app/schemas/reference_assets.py with ReferenceImageMetadata (P0-A-001)",
+      "Create app/utils/reference_cache.py with all helper functions (P0-A-002)",
+      "Create app/utils/vision.py with Vision AI integration (P0-A-004)",
+      "Add google-cloud-vision>=3.4.0 to dependencies (P3-EXT-001)",
+      "Implement /upload/reference-image endpoint (P0-A-005)"
+    ],
+    "high_priority": [
+      "Update generate_transformation_images signature (P1-001)",
+      "Add reference handling in ImageAssetsAgent (P1-002)",
+      "Add reference resolution in run_preflight (P1-004)",
+      "Update persist_final_delivery to save reference metadata (P1-003)"
+    ],
+    "medium_priority": [
+      "Add image_current_prompt_template config (P2-001)",
+      "Add image_aspirational_prompt_template_with_product config (P2-002)",
+      "Update final_assembler prompts with reference placeholders (P2-003)",
+      "Create frontend/src/components/ReferenceUpload.tsx (P0-A-006)"
+    ],
+    "low_priority": [
+      "Update VISUAL_DRAFT prompts (P3-001)",
+      "Update COPY_DRAFT prompts (P3-002)",
+      "Clarify RunPreflightRequest necessity (P0-B-007)",
+      "Decide on _load_reference_image implementation (P0-B-008)"
+    ]
+  }
+}

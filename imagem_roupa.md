@@ -105,12 +105,12 @@
   2. Subir para GCS via helper `app/utils/gcs.py` (nova função `upload_reference_image`).
   3. Chamar Vision AI (`app/utils/vision.py`, nova função `analyze_reference_image`) para SafeSearch + Label/Object detection.
   4. Bloquear upload se `adult | violence | racy >= LIKELY`.
-  5. Persistir metadados em cache (dicionário em memória com TTL ou Datastore opcional) e retornar `{"id": ..., "signed_url": ..., "labels": [...]}`.
+  5. Persistir metadados em cache (dicionário em memória com TTL ou Datastore opcional) usando `cache_reference_metadata` e retornar apenas identificadores/resumos para que etapas posteriores resolvam os detalhes via cache (`{"id": ..., "signed_url": ..., "labels": [...]}`).
   6. Adicionar `google-cloud-vision>=3.4.0` (ou a biblioteca Vertex AI equivalente) a `requirements.txt`/`uv.lock` e documentar que `make install` deve ser reexecutado.
 
 ### 6.2 Preflight (`run_preflight`) — `app/server.py:300-393`
 - Criar um schema Pydantic (`RunPreflightRequest`) para validar o corpo recebido, aceitando `reference_images` opcionais além de `text`/flags existentes e substituindo o parse manual atual.
-- Resolver IDs para metadados completos antes de montar `initial_state`:
+- Resolver IDs para metadados completos **dentro de `/run_preflight`** (único local que monta `initial_state`):
   ```python
   reference_images = payload.get("reference_images", {})
   initial_state["reference_images"] = {
@@ -128,7 +128,7 @@
   initial_state["reference_image_product_summary"] = initial_state["reference_image_summary"].get("product")
   ```
 - `build_reference_summary` deve combinar labels + descrições do usuário, retornando strings curtas para cada tipo. Caso não haja metadados, devolver `None` e manter o campo ausente no initial state.
-- Antes de finalizar o endpoint, executar `initial_state.update(...)` para incluir essas chaves no payload retornado por `/run_preflight`.
+- Após montar esses campos, retornar o `initial_state` enriquecido na resposta de `/run_preflight`, garantindo que nenhuma outra parte do sistema tente mutar `initial_state` diretamente (toda replicação ocorre via ADK após a criação da sessão).
 
 ## 7. Agentes (`app/agent.py`)
 ### 7.1 Prompts de geração
@@ -194,7 +194,7 @@
 - Em `ImageAssetsAgent`, selecionar o template conforme existência das referências.
 
 ## 10. Observabilidade & Persistência
-- Atualizar `app/callbacks/persist_outputs.py:45-56` para receber `state` no `persist_final_delivery`, extrair `state.get("reference_images")`, remover campos sensíveis (`signed_url`, tokens) e salvar o restante em `meta["reference_images"]`. Ajustar os testes correspondentes para validar o novo contrato.
+- Refatorar `app/callbacks/persist_outputs.py:35-141` mantendo a assinatura `persist_final_delivery(callback_context)`, mas sanitizando `reference_images` dentro da função (a partir do `state = resolve_state(callback_context)`) antes de persistir os metadados. Se útil, criar helper `sanitize_reference_images(state: dict) -> dict` e cobrir o comportamento em testes unitários.
 - Garantir que `logger.log_struct` (em `app/server.py` e `app/agent.py`) capture uploads, decisões de SafeSearch e uso efetivo na geração.
 - Configurar TTL curto nas `signed_url`; armazenar apenas `gcs_uri` no JSON final e documentar como essa política se relaciona com `config.image_signed_url_ttl`.
 
@@ -204,7 +204,7 @@
   - `tests/unit/tools/test_generate_transformation_images.py`: verificar chamadas a `_call_model` com referências.
   - `tests/unit/agent/test_image_assets_agent.py`: garantir passagem dos metadados corretos.
 - **Integração**:
-  - `tests/integration/api/test_reference_upload.py`: upload → análise → resposta.
+  - `tests/integration/api/test_reference_upload.py`: upload → análise → cache → `/run_preflight` recuperando metadados no `initial_state`.
   - `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com fixtures de referência.
 - **Frontend**:
   - Atualizar testes de componentes/upload (React Testing Library) e cenários em Cypress se existente.
