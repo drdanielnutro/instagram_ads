@@ -132,7 +132,7 @@
   - Helper `_load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image`.
   - Ajustar prompts de estágio atual/aspiracional quando referências estiverem presentes.
 - Atualizar templates em `app/config.py`:
-  - `image_current_prompt_template` e `image_aspirational_prompt_template_with_product` conforme plano original (usados quando houver referências).
+  - Criar novo template `image_current_prompt_template` e usar `image_aspirational_prompt_template_with_product` (novos) quando houver referências; manter `image_aspirational_prompt_template` existente para o fluxo legado sem referências.
 
 ### Dependências existentes
 - `ImageAssetsAgent` atual (`app/agent.py:300-577`).
