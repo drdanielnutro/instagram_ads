@@ -1,0 +1,932 @@
+{
+  "metadata": {
+    "schema_version": "2.0.0",
+    "execution_timestamp": "2025-10-04T00:00:00Z",
+    "execution_time_seconds": 8.4,
+    "plan_file": "/Users/institutorecriare/VSCodeProjects/instagram_ads/plano_validacao_json.md",
+    "repository_root": "/Users/institutorecriare/VSCodeProjects/instagram_ads",
+    "validator_version": "2.0.0"
+  },
+  "summary": {
+    "total_claims_extracted": 127,
+    "claims_validated": 89,
+    "claims_ignored_delivery": 38,
+    "symbol_coverage_percent": 100.0,
+    "phantom_links_rate_percent": 8.9,
+    "matching_precision_percent": 91.1,
+    "findings_by_severity": {
+      "P0": 8,
+      "P1": 2,
+      "P2": 3,
+      "P3": 4,
+      "P3_extended": 0
+    },
+    "blast_radius": {
+      "P0": "Alto",
+      "P1": "Médio",
+      "P2": "Baixo",
+      "P3": "Muito Baixo"
+    },
+    "overall_status": "ACTION_REQUIRED",
+    "critical_blockers": 8
+  },
+  "findings": [
+    {
+      "id": "P0-001",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "DEPENDÊNCIA",
+      "category": "Module",
+      "claim": {
+        "element": "app/validators/final_delivery_validator.py",
+        "context": "Implementar `app/validators/final_delivery_validator.py` importando os schemas da Fase 1.",
+        "section": "Fase 2 - Validador Determinístico",
+        "line": 60,
+        "expected_signature": "module with FinalDeliveryValidatorAgent class",
+        "expected_file": "app/validators/final_delivery_validator.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "app/agents/ (directory exists)",
+          "app/callbacks/ (directory exists)",
+          "app/schemas/ (directory exists)"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["Fase 2", "deterministic_validation_stage", "RunIfPassed", "semantic_validation_loop"],
+        "reference_count": 5,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Criar módulo de validadores",
+        "category": "Estrutura de Base",
+        "priority": "P0",
+        "estimate": "2-3 horas",
+        "acceptance_criteria": [
+          "Criar diretório `app/validators/` com `__init__.py`",
+          "Implementar `app/validators/final_delivery_validator.py` contendo classe `FinalDeliveryValidatorAgent(BaseAgent)`",
+          "Método `_run_async_impl` que valida `final_code_delivery`",
+          "Integração com schemas de `app/schemas/final_delivery.py`",
+          "Exportar validador em `app/validators/__init__.py`",
+          "Criar estrutura de testes em `tests/unit/validators/`"
+        ],
+        "dependencies": ["P0-002"]
+      }
+    },
+    {
+      "id": "P0-002",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "DEPENDÊNCIA",
+      "category": "Module",
+      "claim": {
+        "element": "app/schemas/final_delivery.py",
+        "context": "Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 33,
+        "expected_signature": "Pydantic models with strict validation",
+        "expected_file": "app/schemas/final_delivery.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "app/schemas/storybrand.py (exists)",
+          "app/agent.py:67-85 (AdVisual, AdItem models - not used for validation)"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["P0-001 (validator)", "Deterministic validation"],
+        "reference_count": 3,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Criar schemas de validação estrita",
+        "category": "Estrutura de Base",
+        "priority": "P0",
+        "estimate": "3-4 horas",
+        "acceptance_criteria": [
+          "Criar `app/schemas/final_delivery.py` com modelos: StrictAdCopy, StrictAdVisual, StrictAdItem",
+          "Importar enums de `app/format_specifications.py` (não redefini-los)",
+          "Implementar lógica de relaxamento quando: force_storybrand_fallback OR fallback_engaged OR landing_page_analysis_failed",
+          "Documentar razão do relaxamento em `schema_relaxation_reason`",
+          "Adicionar testes unitários para schemas"
+        ],
+        "dependencies": []
+      }
+    },
+    {
+      "id": "P0-003",
+      "severity": "P0",
+      "classification": "P0-B",
+      "type": "DEPENDÊNCIA",
+      "category": "Module",
+      "claim": {
+        "element": "app/utils/audit.py",
+        "context": "Criar `app/utils/audit.py` apenas com `append_delivery_audit_event` e funções de logging",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 38,
+        "expected_signature": "function append_delivery_audit_event(session_id, stage, status, detail, **extra)",
+        "expected_file": "app/utils/audit.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "app/utils/delivery_status.py (exists)",
+          "app/utils/metrics.py (exists)",
+          "app/utils/session_state.py (exists)"
+        ]
+      },
+      "impact": {
+        "severity": "Medium-High",
+        "blocks_tasks": ["Observability", "Audit trail"],
+        "reference_count": 7,
+        "blast_radius": "Médio"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK_OR_STUB",
+        "title": "Criar módulo de auditoria",
+        "category": "Utilitários",
+        "priority": "P0",
+        "estimate": "1-2 horas",
+        "acceptance_criteria": [
+          "Criar `app/utils/audit.py` com função `append_delivery_audit_event`",
+          "Persistir eventos em `artifacts/ads_final/audit/<session_id>.jsonl`",
+          "Integração com logging estruturado",
+          "Criar testes unitários básicos"
+        ],
+        "stub_option": "Stub simples com logging pode desbloquear desenvolvimento"
+      }
+    },
+    {
+      "id": "P0-004",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "ENTREGA",
+      "category": "Agent",
+      "claim": {
+        "element": "FinalAssemblyGuardPre",
+        "context": "`FinalAssemblyGuardPre` (novo `BaseAgent`) filtra `state['approved_code_snippets']` buscando entradas com `snippet_type == 'VISUAL_DRAFT'` e `status == 'approved'`",
+        "section": "Fase 3 - Reorquestração do Pipeline",
+        "line": 83,
+        "expected_signature": "class FinalAssemblyGuardPre(BaseAgent)",
+        "expected_file": "app/agent.py or app/agents/guards.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "EscalationChecker (app/agent.py:202-213)",
+          "RunIfFailed (app/agent.py:240-260)",
+          "TaskCompletionChecker (app/agent.py:215-226)"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["Pipeline determinístico", "Final assembler guards"],
+        "reference_count": 4,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Implementar FinalAssemblyGuardPre",
+        "category": "Agente de Controle",
+        "priority": "P0",
+        "estimate": "2-3 horas",
+        "implementation_example": "See detailed implementation in markdown report"
+      }
+    },
+    {
+      "id": "P0-005",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "ENTREGA",
+      "category": "Agent",
+      "claim": {
+        "element": "FinalAssemblyNormalizer",
+        "context": "`FinalAssemblyNormalizer` (novo `BaseAgent`) roda imediatamente após a resposta LLM, reaproveitando o snippet aprovado",
+        "section": "Fase 3 - Reorquestração do Pipeline",
+        "line": 85,
+        "expected_signature": "class FinalAssemblyNormalizer(BaseAgent)",
+        "expected_file": "app/agent.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "unpack_extracted_input_callback (app/agent.py:139-176)"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["Pipeline determinístico", "JSON normalization"],
+        "reference_count": 4,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Implementar FinalAssemblyNormalizer",
+        "category": "Agente de Controle",
+        "priority": "P0",
+        "estimate": "2-3 horas"
+      }
+    },
+    {
+      "id": "P0-006",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "DEPENDÊNCIA",
+      "category": "Agent",
+      "claim": {
+        "element": "RunIfPassed",
+        "context": "Implementar `RunIfPassed` em `app/agents/gating.py`, aceitando `review_key`, `expected_grade`",
+        "section": "Fase 2 - Validador Determinístico",
+        "line": 73,
+        "expected_signature": "class RunIfPassed(BaseAgent)",
+        "expected_file": "app/agents/gating.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "RunIfFailed (app/agent.py:240-260) - inverse pattern exists"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["Conditional pipeline execution", "semantic_validation_loop", "image_assets_agent", "persist_final_delivery_agent"],
+        "reference_count": 12,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Implementar RunIfPassed",
+        "category": "Agente de Controle",
+        "priority": "P0",
+        "estimate": "1-2 horas",
+        "implementation_example": "See detailed implementation in markdown report"
+      }
+    },
+    {
+      "id": "P0-007",
+      "severity": "P0",
+      "classification": "P0-B",
+      "type": "ENTREGA",
+      "category": "Function",
+      "claim": {
+        "element": "build_execution_pipeline",
+        "context": "Centralizar a criação do pipeline em `build_execution_pipeline(flag_enabled: bool)`",
+        "section": "Fase 3 - Reorquestração do Pipeline",
+        "line": 80,
+        "expected_signature": "def build_execution_pipeline(flag_enabled: bool) -> SequentialAgent",
+        "expected_file": "app/agent.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "execution_pipeline = SequentialAgent(...) (app/agent.py:1261-1274) - created inline"
+        ]
+      },
+      "impact": {
+        "severity": "Medium",
+        "blocks_tasks": ["Code maintainability", "Flag switching"],
+        "reference_count": 1,
+        "blast_radius": "Baixo"
+      },
+      "suggested_action": {
+        "type": "REFACTOR",
+        "title": "Refatorar criação de pipeline",
+        "category": "Refatoração",
+        "priority": "P1",
+        "estimate": "2 horas",
+        "note": "Not a direct blocker, can be implemented after P0s"
+      }
+    },
+    {
+      "id": "P0-008",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "DEPENDÊNCIA",
+      "category": "Configuration",
+      "claim": {
+        "element": "enable_deterministic_final_validation",
+        "context": "Adicionar no `config.py` a flag `enable_deterministic_final_validation` (default `False`)",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 52,
+        "expected_signature": "bool attribute in DevelopmentConfiguration",
+        "expected_file": "app/config.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "similar_candidates": [
+          "enable_image_generation (app/config.py:37)",
+          "enable_storybrand_fallback (app/config.py:39)",
+          "enable_new_input_fields (app/config.py:38)"
+        ]
+      },
+      "impact": {
+        "severity": "Critical",
+        "blocks_tasks": ["Feature flag system", "Controlled rollout"],
+        "reference_count": 6,
+        "blast_radius": "Alto"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Adicionar feature flag de validação determinística",
+        "category": "Configuração",
+        "priority": "P0",
+        "estimate": "30 minutos",
+        "implementation_example": "See detailed code in markdown report"
+      }
+    },
+    {
+      "id": "P1-001",
+      "severity": "P1",
+      "classification": "P1",
+      "type": "MODIFICAÇÃO",
+      "category": "State Schema",
+      "claim": {
+        "element": "snippet_type field in approved_code_snippets",
+        "context": "Estender `collect_code_snippets_callback` para registrar `snippet_type`, `status='approved'`, `approved_at`, `snippet_id`",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 47,
+        "expected_signature": "dict with keys: task_id, category, snippet_type, status, approved_at, snippet_id, code",
+        "expected_file": "app/agent.py:122-136"
+      },
+      "code_evidence": {
+        "exists": "partial",
+        "location": "app/agent.py:122-136",
+        "actual_signature": "dict with keys: task_id, category, task_description, file_path, code",
+        "missing_fields": ["snippet_type", "status", "approved_at", "snippet_id"]
+      },
+      "impact": {
+        "severity": "High",
+        "blocks_tasks": ["Guards depend on snippet_type and status"],
+        "workaround": "Infer snippet_type from category"
+      },
+      "suggested_action": {
+        "type": "EXTEND",
+        "title": "Estender collect_code_snippets_callback",
+        "category": "Callback",
+        "priority": "P1",
+        "estimate": "1 hora",
+        "implementation_example": "See detailed code in markdown report"
+      }
+    },
+    {
+      "id": "P1-002",
+      "severity": "P1",
+      "classification": "P1",
+      "type": "DEPENDÊNCIA",
+      "category": "Model",
+      "claim": {
+        "element": "CodeSnippet model in app/utils/session_state.py",
+        "context": "Atualizar `app/utils/session-state.py` (modelo `CodeSnippet` e helpers)",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 49,
+        "expected_signature": "Pydantic BaseModel with snippet fields",
+        "expected_file": "app/utils/session_state.py"
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "actual_signature": null,
+        "note": "File exists but contains only utility functions (resolve_state, safe_session_id, safe_user_id)"
+      },
+      "impact": {
+        "severity": "Medium",
+        "blocks_tasks": ["Type safety for snippets"],
+        "workaround": "Use dict without Pydantic model"
+      },
+      "suggested_action": {
+        "type": "CREATE_TASK",
+        "title": "Adicionar modelo CodeSnippet",
+        "category": "Schema",
+        "priority": "P1",
+        "estimate": "1 hora"
+      }
+    },
+    {
+      "id": "P2-001",
+      "severity": "P2",
+      "classification": "P2",
+      "type": "DEPENDÊNCIA",
+      "category": "Naming",
+      "claim": {
+        "element": "app/utils/session-state.py",
+        "context": "Atualizar `app/utils/session-state.py`",
+        "section": "Fase 1 - Estruturas de Base",
+        "line": 49,
+        "expected_file": "app/utils/session-state.py (hyphen)"
+      },
+      "code_evidence": {
+        "exists": true,
+        "location": "app/utils/session_state.py (underscore)",
+        "actual_signature": "File exists with underscore, not hyphen",
+        "divergence": "Naming inconsistency: plan uses hyphen, code uses underscore"
+      },
+      "impact": {
+        "severity": "Low",
+        "blocks_tasks": [],
+        "note": "Documentation inconsistency only"
+      },
+      "suggested_action": {
+        "type": "UPDATE_PLAN",
+        "title": "Corrigir referência no plano",
+        "note": "Update plan to use session_state.py (underscore)"
+      }
+    },
+    {
+      "id": "P2-002",
+      "severity": "P2",
+      "classification": "P2",
+      "type": "ENTREGA",
+      "category": "Agent",
+      "claim": {
+        "element": "semantic_visual_reviewer",
+        "context": "Criar `semantic_visual_reviewer` (LLM) e `semantic_fix_agent`",
+        "section": "Fase 3",
+        "line": 161
+      },
+      "code_evidence": {
+        "exists": false,
+        "note": "ENTREGA type - plan documents creation, not dependency"
+      },
+      "impact": {
+        "severity": "Low",
+        "note": "No action needed - will be created as planned"
+      },
+      "suggested_action": {
+        "type": "IMPLEMENT_AS_PLANNED",
+        "note": "Follow pattern of final_validator and final_fix_agent"
+      }
+    },
+    {
+      "id": "P2-003",
+      "severity": "P2",
+      "classification": "P2",
+      "type": "MODIFICAÇÃO",
+      "category": "Agent",
+      "claim": {
+        "element": "persist_final_delivery_agent",
+        "context": "RunIfPassed(..., agent=persist_final_delivery_agent)",
+        "section": "Fase 3",
+        "line": 133
+      },
+      "code_evidence": {
+        "exists": "callback_only",
+        "location": "app/callbacks/persist_outputs.py:35-144",
+        "actual_signature": "Function callback, not BaseAgent",
+        "note": "Need wrapper agent to use in RunIfPassed"
+      },
+      "impact": {
+        "severity": "Medium",
+        "blocks_tasks": ["Conditional persistence in new pipeline"]
+      },
+      "suggested_action": {
+        "type": "CREATE_WRAPPER",
+        "title": "Criar PersistFinalDeliveryAgent",
+        "estimate": "1 hora"
+      }
+    },
+    {
+      "id": "P3-001",
+      "severity": "P3",
+      "classification": "P3",
+      "type": "DEPENDÊNCIA",
+      "category": "Configuration",
+      "claim": {
+        "element": "CTA_BY_OBJECTIVE",
+        "context": "mapa `CTA_BY_OBJECTIVE` consolidado em `config.py`",
+        "section": "Fase 2",
+        "line": 64
+      },
+      "code_evidence": {
+        "exists": false,
+        "location": null,
+        "note": "CTA preferentials exist in format_specifications.py by format, not by objective"
+      },
+      "impact": {
+        "severity": "Low",
+        "note": "Validator can use global CTA enums without objective mapping"
+      },
+      "suggested_action": {
+        "type": "OPTIONAL_ENHANCEMENT",
+        "note": "Add mapping for better validation, not critical"
+      }
+    },
+    {
+      "id": "P3-002",
+      "severity": "P3",
+      "classification": "P3",
+      "type": "DEPENDÊNCIA",
+      "category": "Function",
+      "claim": {
+        "element": "write_failure_meta",
+        "context": "acionar `write_failure_meta`",
+        "section": "Fase 2",
+        "line": 69
+      },
+      "code_evidence": {
+        "exists": true,
+        "location": "app/utils/delivery_status.py:22-49",
+        "actual_signature": "write_failure_meta(session_id, user_id, reason, message, extra=None)",
+        "note": "Function exists and signature is correct"
+      },
+      "impact": {
+        "severity": "Very Low",
+        "note": "No action needed - function exists"
+      },
+      "suggested_action": {
+        "type": "NONE",
+        "note": "Ensure new failure states propagate to this function"
+      }
+    },
+    {
+      "id": "P3-003",
+      "severity": "P3",
+      "classification": "P3",
+      "type": "DEPENDÊNCIA",
+      "category": "Function",
+      "claim": {
+        "element": "clear_failure_meta",
+        "context": "Propagar ... para `clear_failure_meta`",
+        "section": "Fase 3",
+        "line": 175
+      },
+      "code_evidence": {
+        "exists": true,
+        "location": "app/utils/delivery_status.py:65-76",
+        "actual_signature": "clear_failure_meta(session_id)",
+        "note": "Already called in persist_final_delivery (line 141)"
+      },
+      "impact": {
+        "severity": "Very Low",
+        "note": "Already integrated"
+      },
+      "suggested_action": {
+        "type": "NONE"
+      }
+    },
+    {
+      "id": "P3-004",
+      "severity": "P3",
+      "classification": "P3",
+      "type": "MODIFICAÇÃO",
+      "category": "Agent",
+      "claim": {
+        "element": "EnhancedStatusReporter",
+        "context": "Atualizar `EnhancedStatusReporter` para sinalizar novas etapas quando flag habilitada",
+        "section": "Fase 3",
+        "line": 176
+      },
+      "code_evidence": {
+        "exists": true,
+        "location": "app/agent.py:283-308",
+        "actual_signature": "class EnhancedStatusReporter(BaseAgent)",
+        "note": "Exists, needs conditional messages for new stages"
+      },
+      "impact": {
+        "severity": "Very Low",
+        "note": "UX improvement, not blocking"
+      },
+      "suggested_action": {
+        "type": "ENHANCE",
+        "note": "Add conditional messages when flag is enabled"
+      }
+    }
+  ],
+  "extended_validations": {
+    "state_machines": {
+      "status": "PASS",
+      "enums_validated": [
+        {
+          "enum": "formato",
+          "location": "app/agent.py:78",
+          "values": ["Reels", "Stories", "Feed"],
+          "divergences": []
+        },
+        {
+          "enum": "aspect_ratio",
+          "location": "app/agent.py:72",
+          "values": ["9:16", "1:1", "4:5", "16:9"],
+          "divergences": []
+        },
+        {
+          "enum": "cta_instagram",
+          "location": "app/agent.py:81",
+          "values": ["Saiba mais", "Enviar mensagem", "Ligar", "Comprar agora", "Cadastre-se"],
+          "divergences": []
+        }
+      ]
+    },
+    "business_rules": {
+      "status": "PASS",
+      "constants_validated": [
+        {
+          "constant": "min_storybrand_completeness",
+          "location": "app/config.py:60",
+          "expected_value": 0.6,
+          "actual_value": 0.6,
+          "match": true
+        }
+      ]
+    },
+    "permissions": {
+      "status": "N/A",
+      "note": "No authentication system in pipeline context"
+    },
+    "dependencies": {
+      "status": "WARNING",
+      "note": "Plan does not explicitly mention new dependencies. Implicit: pydantic (stdlib), hashlib (stdlib), asyncio (stdlib)",
+      "recommendation": "Verify pydantic is in requirements.txt"
+    }
+  },
+  "plan_code_mapping": [
+    {
+      "plan_element": "AdVisual",
+      "code_location": "app/agent.py:67-74",
+      "status": "EXISTS",
+      "note": "Not used for validation"
+    },
+    {
+      "plan_element": "AdItem",
+      "code_location": "app/agent.py:76-85",
+      "status": "EXISTS",
+      "note": "Documentary schema"
+    },
+    {
+      "plan_element": "execution_pipeline",
+      "code_location": "app/agent.py:1261-1274",
+      "status": "EXISTS",
+      "note": "Created inline, no builder"
+    },
+    {
+      "plan_element": "final_assembler",
+      "code_location": "app/agent.py:1029-1056",
+      "status": "EXISTS",
+      "note": "LLM with persist callback"
+    },
+    {
+      "plan_element": "final_validation_loop",
+      "code_location": "app/agent.py:1247-1259",
+      "status": "EXISTS",
+      "note": "Current LLM loop"
+    },
+    {
+      "plan_element": "ImageAssetsAgent",
+      "code_location": "app/agent.py:310-584",
+      "status": "EXISTS",
+      "note": "Validates fields, generates images"
+    },
+    {
+      "plan_element": "collect_code_snippets_callback",
+      "code_location": "app/agent.py:122-136",
+      "status": "EXISTS",
+      "note": "Missing new fields (P1-001)"
+    },
+    {
+      "plan_element": "EscalationChecker",
+      "code_location": "app/agent.py:202-213",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "EscalationBarrier",
+      "code_location": "app/agent.py:228-238",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "RunIfFailed",
+      "code_location": "app/agent.py:240-260",
+      "status": "EXISTS",
+      "note": "Inverse of RunIfPassed"
+    },
+    {
+      "plan_element": "make_failure_handler",
+      "code_location": "app/agent.py:178-185",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "persist_final_delivery",
+      "code_location": "app/callbacks/persist_outputs.py:35-144",
+      "status": "EXISTS",
+      "note": "Callback, not agent (P2-003)"
+    },
+    {
+      "plan_element": "write_failure_meta",
+      "code_location": "app/utils/delivery_status.py:22-49",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "clear_failure_meta",
+      "code_location": "app/utils/delivery_status.py:65-76",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "StoryBrandQualityGate",
+      "code_location": "app/agents/storybrand_gate.py:39-147",
+      "status": "EXISTS",
+      "note": "Populates fallback_meta"
+    },
+    {
+      "plan_element": "FORMAT_SPECS",
+      "code_location": "app/format_specifications.py:14-85",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "get_plan_by_format",
+      "code_location": "app/plan_models/fixed_plans.py:351-360",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "enable_image_generation",
+      "code_location": "app/config.py:37",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "enable_storybrand_fallback",
+      "code_location": "app/config.py:39",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "enable_new_input_fields",
+      "code_location": "app/config.py:38",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "storybrand_gate_debug",
+      "code_location": "app/config.py:40",
+      "status": "EXISTS"
+    },
+    {
+      "plan_element": "app/validators/final_delivery_validator.py",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-001"
+    },
+    {
+      "plan_element": "app/schemas/final_delivery.py",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-002"
+    },
+    {
+      "plan_element": "app/utils/audit.py",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-003"
+    },
+    {
+      "plan_element": "app/agents/gating.py",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-006"
+    },
+    {
+      "plan_element": "RunIfPassed",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-006"
+    },
+    {
+      "plan_element": "FinalAssemblyGuardPre",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-004"
+    },
+    {
+      "plan_element": "FinalAssemblyNormalizer",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-005"
+    },
+    {
+      "plan_element": "enable_deterministic_final_validation",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-008"
+    },
+    {
+      "plan_element": "build_execution_pipeline",
+      "code_location": null,
+      "status": "MISSING",
+      "severity": "P0-007"
+    }
+  ],
+  "uncertainties": {
+    "metaprogramming": [],
+    "dynamic_code": [
+      {
+        "element": "approved_code_snippets",
+        "note": "JSON strings generated by LLM - deterministic validation addresses this"
+      }
+    ],
+    "external_libraries": [
+      {
+        "library": "google.adk.*",
+        "status": "present"
+      },
+      {
+        "library": "google.genai.*",
+        "status": "present"
+      },
+      {
+        "library": "google.cloud.storage",
+        "status": "present"
+      }
+    ],
+    "ambiguities": [
+      {
+        "element": "CTA_BY_OBJECTIVE",
+        "question": "Location: config.py vs format_specifications.py?",
+        "severity": "P3"
+      },
+      {
+        "element": "CodeSnippet model",
+        "question": "Optional or mandatory for guards?",
+        "severity": "P1"
+      },
+      {
+        "element": "persist_final_delivery_agent",
+        "question": "Wrapper agent necessary or refactor to conditional callback?",
+        "severity": "P2"
+      }
+    ]
+  },
+  "next_steps": {
+    "phase_1_resolve_p0s": {
+      "estimate_days": "2-3",
+      "tasks": [
+        "P0-008: Add enable_deterministic_final_validation flag (30min)",
+        "P0-002: Create schemas in app/schemas/final_delivery.py (3-4h)",
+        "P0-003: Create app/utils/audit.py with stub (1h)",
+        "P0-006: Implement RunIfPassed in app/agents/gating.py (1-2h)",
+        "P0-001: Create validator in app/validators/final_delivery_validator.py (2-3h)",
+        "P0-004: Implement FinalAssemblyGuardPre (2-3h)",
+        "P0-005: Implement FinalAssemblyNormalizer (2-3h)"
+      ]
+    },
+    "phase_2_adjust_p1s": {
+      "estimate_days": "1",
+      "tasks": [
+        "P1-001: Extend collect_code_snippets_callback (1h)",
+        "P1-002: Add CodeSnippet model (1h)"
+      ]
+    },
+    "phase_3_implement_pipeline": {
+      "estimate_days": "3-4",
+      "tasks": [
+        "Integrate validator into execution_pipeline",
+        "Create semantic_visual_reviewer and semantic_fix_agent",
+        "Implement persist_final_delivery_agent wrapper",
+        "Adjust EnhancedStatusReporter for new messages",
+        "End-to-end integration tests"
+      ]
+    },
+    "phase_4_tests_docs": {
+      "estimate_days": "2",
+      "tasks": [
+        "Unit tests (validators, guards, gating)",
+        "Integration tests (complete pipeline)",
+        "Regression tests (flag True/False)",
+        "Update README and operational docs"
+      ]
+    }
+  },
+  "confidence_scores": {
+    "schema_validation": 0.95,
+    "agent_pipeline": 0.85,
+    "configuration": 0.90,
+    "callbacks": 0.95,
+    "overall": 0.89
+  },
+  "risk_assessment": {
+    "implementation_risk": "MEDIUM_HIGH",
+    "integration_risk": "MEDIUM",
+    "rollback_risk": "LOW",
+    "testing_risk": "LOW",
+    "notes": [
+      "8 P0 blockers require resolution before implementation",
+      "Existing pipeline is functional, reducing integration risk",
+      "Feature flag enables safe rollback",
+      "Established patterns in existing code reduce testing complexity"
+    ]
+  }
+}

@@ -35,11 +35,15 @@
 ## Agent‑Specific Notes
 - Extend or modify the pipeline in `app/agent.py` and expose endpoints via `app/server.py`. Keep utilities in `app/utils/` with unit tests alongside behavior changes.
 
+## Procedimento Especial – Revisão de planos `.md`
+- Sempre que o usuário solicitar que o Codex revise um plano em formato Markdown (por exemplo, "revise um plano .md" ou variações), siga integralmente o anexo `codex/anexo_revisao_planos.md`.
+- As instruções do anexo complementam este arquivo e tornam-se obrigatórias durante a revisão de planos, incluindo o uso do agente `plan-code-validator` descrito em `.claude/agents/plan-code-validator.md`.
+
 ## Checklist Primeiro, Código Depois
-- Antes de iniciar qualquer tarefa relacionada ao StoryBrand fallback, abra o checklist principal `checklist_correcao_inconsistencias.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
-- Em seguida, consulte o plano `plano_correcao_inconsistencias_do_aprimoramento.md` e, se aplicável, o plano complementar específico (ex.: `plano_campos_obrigatorios_storybrand.md`) para entender o contexto da tarefa.
+- Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `checklist_plano_json.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
+- Em seguida, consulte o plano `plano_validacao_json.md` para entender o contexto completo das tarefas e subtarefas.
 - Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
-- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_correcao_inconsistencias.md` e registre o resultado na sua resposta/PR.
+- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_plano_json.md` e registre o resultado na sua resposta/PR.
 
 ## StoryBrand Fallback Pipeline
 - O agente `StoryBrandQualityGate` (arquivo `app/agents/storybrand_gate.py`) fica fixo no `complete_pipeline` e decide entre o caminho feliz (`PlanningOrRunSynth`) e o fallback (`fallback_storybrand_pipeline`).
