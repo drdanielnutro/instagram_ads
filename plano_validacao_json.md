@@ -32,24 +32,27 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 
 1. **Schema de validação compartilhado**
    - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
-   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Documentar no estado o motivo da flexibilização.
+   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Registrar em `deterministic_final_validation['schema_relaxation_reason']` o motivo da flexibilização.
    - Reutilizar enums já existentes em `app/format_specifications.py`/`config.py`; o schema apenas os importa, não define valores próprios (evita múltiplas fontes de verdade) e centraliza os limites de caracteres.
-   - Criar helper `storybrand_fallback_meta` consumindo `state["storybrand_gate_metrics"]` (ver Fase 3) e usá-lo como fonte oficial para relaxamentos, evitando depender de estruturas inexistentes em `storybrand_audit_trail`.
 
 2. **Helper de auditoria e metadados**
    - Criar `app/utils/audit.py` apenas com `append_delivery_audit_event` e funções de logging; mapeamentos de CTA permanecem onde já estão (`format_specifications`/`config`).
    - Revisar utilitários existentes (`app/utils/delivery_status.py`) apenas se precisarem expor helpers comuns (o helper não deve assumir responsabilidade por enums).
 
-3. **Feature flag de ativação**
+3. **Metadados StoryBrand e landing page**
+   - Atualizar `StoryBrandQualityGate` para produzir `state['storybrand_fallback_meta'] = {"decision_path", "trigger_reason", "fallback_engaged"}` e manter `storybrand_audit_trail` como lista de eventos.
+   - Garantir que o analisador de landing page preencha `state['landing_page_analysis_failed']` (bool) em vez de depender de chaves livres como `landing_page_context['error']`.
+
+4. **Enriquecimento dos snippets aprovados**
+   - Estender `collect_code_snippets_callback` para registrar, além de `task_id`/`category`, os campos `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` (hash SHA-256 de `task_id::snippet_type::payload`).
+   - Criar estrutura auxiliar `state['approved_visual_drafts']` (mapa `variation_id -> snippet`) que os guards utilizarão sem quebrar consumidores existentes.
+   - Atualizar `app/utils/session-state.py` (modelo `CodeSnippet` e helpers `get_session_state`/`add_approved_snippet`) para aceitar e preservar esses novos campos, evitando que o guard perca metadados ao alternar entre pipelines.
+
+5. **Feature flag de ativação**
    - Adicionar no `config.py` a flag `enable_deterministic_final_validation` (default `False`) com suporte a env `ENABLE_DETERMINISTIC_FINAL_VALIDATION`.
    - Documentar que, enquanto `False`, o pipeline segue usando `final_validation_loop` + `ImageAssetsAgent` como hoje; quando `True`, o novo fluxo determinístico substitui essa etapa.
-   - Atualizar README/ops docs para orientar rollout controlado e ambientes canário, explicitando que a flag é lida apenas durante `build_execution_pipeline()` e que alternâncias exigem restart do processo (sem hot-reload).
-   - Introduzir helper `log_config_flag(flag_name, value)` para registrar o valor carregado em runtime.
-
-4. **Enriquecimento do callback de snippets**
-   - Estender `collect_code_snippets_callback` para registrar, além de `task_id`/`category`, os campos `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` (hash SHA-256 de `task_id::snippet_type::payload`).
-   - Preservar compatibilidade adicionando esses campos ao dicionário existente (superset), garantindo que consumidores atuais continuem operando.
-   - Atualizar `app/utils/session-state.py` (modelo `CodeSnippet` e helpers `get_session_state`/`add_approved_snippet`) para aceitar e preservar esses novos campos, evitando que o guard perca metadados ao alternar entre pipelines.
+   - Registrar explicitamente que a flag é avaliada na inicialização do processo (exige restart para alternar) e salvar o valor lido em log estruturado (`log_config_flag`).
+   - Atualizar README/ops docs para orientar rollout controlado e ambientes canário.
 
 ### Fase 2 – Validador Determinístico (Etapa 5.2)
 Objetivo: Construir o agente que consome os componentes da Fase 1.
@@ -74,7 +77,7 @@ Objetivo: Construir o agente que consome os componentes da Fase 1.
 Objetivo: Integrar o validador, reorganizar agentes e garantir observabilidade consistente.
 
 #### 4.3.1 Reordenar o `execution_pipeline`
-- Quando `config.enable_deterministic_final_validation` estiver `True`, ativar o novo fluxo determinístico; caso contrário, manter a configuração atual (`final_assembler` com callback → `EscalationBarrier(final_validation_loop)` → `image_assets_agent` → persistência).
+- Centralizar a criação do pipeline em `build_execution_pipeline(flag_enabled: bool)`, chamado na inicialização do módulo. O builder retorna duas versões (determinística e legado) sem mutar instâncias em runtime, evitando inconsistências quando a flag alternar.
 - Converter o antigo `final_validation_loop` em `semantic_validation_loop`, focado apenas em coerência narrativa, mantendo o `EscalationBarrier` como etapa explícita após o `EscalationChecker` dentro do fluxo ativado pela flag.
 - Substituir o `LlmAgent` `final_assembler` por um estágio composto, orquestrado via `SequentialAgent` com dois novos guards:
   - `FinalAssemblyGuardPre` (novo `BaseAgent`) filtra `state["approved_code_snippets"]` buscando entradas com `snippet_type == "VISUAL_DRAFT"` e `status == "approved"`, normaliza o fragmento (string JSON) e registra falha auditável quando o snippet estiver ausente, duplicado ou ilegível. Persistir o resultado em `state["approved_visual_drafts"]` como lista de dicionários `{snippet_id, task_id, approved_at, content}`. Em caso de falha, deve atualizar `state["deterministic_final_validation"] = {"grade": "fail", ...}`, definir `state["deterministic_final_blocked"] = True` e emitir `EventActions(escalate=True)` para impedir a continuação do estágio.
@@ -150,7 +153,7 @@ else:
 - Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `deterministic_final_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed`, mantendo compatibilidade com `final_validation_result_failed` durante a transição e encerrando o pipeline em caso de falha determinística.
 
 #### 4.3.2 Ajustes no `final_assembler`
-- `FinalAssemblyGuardPre` realizará a checagem determinística pelos snippets `VISUAL_DRAFT` em `approved_code_snippets`, validando unicidade por `snippet_id` e presença de `content` serializável.
+- `FinalAssemblyGuardPre` realizará a checagem determinística pelos snippets `VISUAL_DRAFT` em `approved_code_snippets`, validando unicidade por `snippet_id`, presença de `code` serializável e preenchendo `state['approved_visual_drafts'][variation_id]` para consumo posterior.
 - O `final_assembler_llm` terá o prompt reforçado para exigir reutilização do snippet aprovado e retornar JSON pronto para uso.
 - `FinalAssemblyNormalizer` transformará a resposta LLM em string JSON canônica (`json.dumps(..., ensure_ascii=False)`), garantirá sincronismo com o snippet reutilizado e atualizará `state["final_code_delivery"]` e `state["deterministic_final_validation"]` (grade `pending`, `source="normalizer"`) antes de acionar o validador determinístico.
 
@@ -178,11 +181,13 @@ else:
 Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
 
 1. **Testes unitários**
-   - Criar `tests/unit/validators/test_final_delivery_validator.py` cobrindo casos de sucesso/falha (campos vazios, aspect ratio inválido, CTA incoerente, duplicidades, strings vazias) e incluindo cenários com `force_storybrand_fallback=True` onde campos vazios são aceitáveis.
+   - Criar `tests/unit/validators/test_final_delivery_validator.py` cobrindo casos de sucesso/falha (campos vazios, aspect ratio inválido, CTA incoerente, duplicidades, strings vazias) e incluindo cenários com `force_storybrand_fallback=True` e `storybrand_fallback_meta.fallback_engaged=True` onde campos vazios são aceitáveis.
+   - Adicionar testes para o normalizador do assembler (reuso do snippet aprovado, conversão de `contexto_landing` dict→string, limpeza de espaços) e para o helper `reset_deterministic_validation_state`.
 
 2. **Testes de integração/regressão**
-   - Atualizar ou criar testes que simulem o pipeline completo (`final_assembler` → validador → loop semântico → imagens).
-   - Incluir cenários com `force_storybrand_fallback=True` e diferentes objetivos para assegurar compatibilidade.
+   - Atualizar ou criar testes que simulem o pipeline completo (`final_assembler` → validador → loop semântico → imagens) exercitando `RunIfPassed`, `EscalationBarrier` e o novo agente de persistência.
+   - Incluir cenários com `force_storybrand_fallback=True`, `storybrand_fallback_meta` populado pelo gate e diferentes objetivos para assegurar compatibilidade.
+   - Cobrir alternância da flag (`True`→`False`) verificando que `reset_deterministic_validation_state` remove chaves específicas e que o fluxo legado volta a persistir via callbacks.
    - Adicionar verificações automáticas para detectar divergências entre enums de CTA, specs e configurações (falha caso `config.py` e `format_specifications` entrem em conflito).
 
 3. **Documentação e comunicação**
@@ -213,11 +218,11 @@ Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
   - Validar `RunIfPassed`/`ResetDeterministicValidationState` nos cenários pass/fail/ausente.
 - **Integration Tests:**
   - Simular pipeline parcial (`final_assembler` → validador) com estado mockado.
-  - Garantir que falha determinística impede execução do `ImageAssetsAgent`.
+  - Garantir que falha determinística impede execução do `ImageAssetsAgent`, registrando o motivo no audit trail.
   - Exercitar `ImageAssetsAgent` nas rotas com geração desativada ou JSON ausente, verificando que `image_assets_review` produz `grade="skipped"`/`issues=[]` e que a persistência ainda é liberada pelo `RunIfPassed`.
-  - Validar sessões com `force_storybrand_fallback=True`, cobrindo campos opcionais/estruturados emitidos pelo fallback.
+  - Validar sessões com `force_storybrand_fallback=True` e `storybrand_fallback_meta.fallback_engaged=True`, cobrindo campos opcionais/estruturados emitidos pelo fallback e confirmando normalização posterior.
   - Utilizar fakes de `LlmAgent`/`BaseAgent` do ADK (ex.: `FakeAgent`) para orquestrar `RunIfPassed`, `EscalationBarrier` e `SequentialAgent`, evitando dependência de chamadas reais ao LLM.
-  - Exercitar os dois estados da flag (`True`/`False`) garantindo que o fluxo legado continue funcional e que o novo pipeline seja acionado somente quando habilitado.
+  - Exercitar os dois estados da flag (`True`/`False`) garantindo que o fluxo legado continue funcional, que `reset_deterministic_validation_state` limpe o estado ao reverter e que o novo pipeline seja acionado somente quando habilitado.
   - Verificar rollback da flag: habilitar → gerar entrega → desabilitar → confirmar limpeza de `deterministic_final_validation`/`approved_visual_drafts` e ausência de callbacks duplicados.
   - Assegurar que `persist_final_delivery` é chamado exatamente uma vez por execução e que `image_assets_review` reflete `pass`/`skipped` quando imagens são puladas.
   - Cobrir cenários de fallback StoryBrand medindo `storybrand_fallback_meta` e `landing_page_analysis_failed`, garantindo que o schema relaxado aceite os campos vazios esperados.

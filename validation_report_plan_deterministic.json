@@ -1,0 +1,649 @@
+{
+  "schema_version": "2.0.0",
+  "metadata": {
+    "validator_version": "2.1.0",
+    "plan_document": "/home/deniellmed/instagram_ads/plano_validacao_json.md",
+    "execution_timestamp": "2025-10-04T10:36:00Z",
+    "validation_scope": "Phase 1-4 complete plan validation"
+  },
+  "resumo": {
+    "arquivo_plano": "plano_validacao_json.md",
+    "totais": {
+      "P0": 4,
+      "P1": 8,
+      "P2": 3,
+      "P3": 2
+    },
+    "taxa_phantom_links": 0.24,
+    "cobertura_simbolos": 0.76,
+    "blast_radius": {
+      "modulos": 15,
+      "linhas_estimadas": 500,
+      "classificacao": "alto"
+    },
+    "veredicto": "MAJOR DRIFT - Implementation blocked without corrections"
+  },
+  "achados_criticos": [
+    {
+      "id": "P0-001",
+      "severidade": "P0-A",
+      "classificacao": "Phantom Directory",
+      "claim": {
+        "location": "plano_validacao_json.md:33-34",
+        "text": "Criar `app/schemas/final_delivery.py` com modelos estritos",
+        "context": "Phase 1 - Schema de validação compartilhado"
+      },
+      "codigo": {
+        "status": "directory_missing",
+        "evidencia": "Directory `app/schemas/` exists with only `storybrand.py`. No `final_delivery.py` exists."
+      },
+      "acao_sugerida": {
+        "tipo": "CREATE_FILE",
+        "descricao": "Create app/schemas/final_delivery.py with StrictAdCopy, StrictAdVisual, StrictAdItem models",
+        "localizacao": "app/schemas/final_delivery.py",
+        "criterios_aceitacao": [
+          "Models inherit from Pydantic BaseModel",
+          "Include min_length=1 validation for text fields",
+          "Support storybrand_fallback relaxation logic",
+          "Import enums from format_specifications.py/config.py"
+        ]
+      }
+    },
+    {
+      "id": "P0-002",
+      "severidade": "P0-A",
+      "classificacao": "Phantom Directory",
+      "claim": {
+        "location": "plano_validacao_json.md:56-68",
+        "text": "Implementar `app/validators/final_delivery_validator.py`",
+        "context": "Phase 2 - FinalDeliveryValidatorAgent"
+      },
+      "codigo": {
+        "status": "directory_missing",
+        "evidencia": "Directory `app/validators/` does not exist. ls output: 'ls: cannot access '/home/deniellmed/instagram_ads/app/validators/': No such file or directory'"
+      },
+      "acao_sugerida": {
+        "tipo": "CREATE_DIRECTORY_AND_FILE",
+        "descricao": "Create app/validators/ directory and final_delivery_validator.py with FinalDeliveryValidatorAgent implementation",
+        "localizacao": "app/validators/final_delivery_validator.py",
+        "criterios_aceitacao": [
+          "Create directory: mkdir -p app/validators",
+          "Implement FinalDeliveryValidatorAgent as BaseAgent",
+          "Validate final_code_delivery against schemas",
+          "Populate deterministic_final_validation in state",
+          "Handle storybrand_fallback_meta for relaxed validation"
+        ]
+      }
+    },
+    {
+      "id": "P0-003",
+      "severidade": "P0-A",
+      "classificacao": "Phantom Function",
+      "claim": {
+        "location": "plano_validacao_json.md:39-41",
+        "text": "Criar `app/utils/audit.py` apenas com `append_delivery_audit_event` e funções de logging",
+        "context": "Phase 1 - Helper de auditoria e metadados"
+      },
+      "codigo": {
+        "status": "file_missing",
+        "evidencia": "File app/utils/audit.py does not exist. Current utils files: cache.py, delivery_status.py, gcs.py, json_tools.py, metrics.py, prompt_loader.py, session-state.py, session_state.py, tracing.py, typing.py, vertex_retry.py"
+      },
+      "acao_sugerida": {
+        "tipo": "CREATE_FILE",
+        "descricao": "Create app/utils/audit.py with append_delivery_audit_event function",
+        "localizacao": "app/utils/audit.py",
+        "criterios_aceitacao": [
+          "Function signature: append_delivery_audit_event(state, stage, status, detail, **kwargs)",
+          "Appends to state['delivery_audit_trail'] list",
+          "Includes timestamp_utc, stage, status, detail fields",
+          "Thread-safe for concurrent callbacks"
+        ]
+      }
+    },
+    {
+      "id": "P0-004",
+      "severidade": "P0-A",
+      "classificacao": "Phantom Agent Class",
+      "claim": {
+        "location": "plano_validacao_json.md:69-72, 123-124",
+        "text": "Implementar `RunIfPassed` em `app/agents/gating.py`",
+        "context": "Phase 2 - Utilitários de gating/reset"
+      },
+      "codigo": {
+        "status": "class_missing",
+        "evidencia": "RunIfPassed class does not exist. Only RunIfFailed exists at app/agent.py:240-259. No app/agents/gating.py file found."
+      },
+      "acao_sugerida": {
+        "tipo": "CREATE_CLASS",
+        "descricao": "Create RunIfPassed agent class (inverse of RunIfFailed)",
+        "localizacao": "app/agents/gating.py or app/agent.py",
+        "signature": "class RunIfPassed(BaseAgent): __init__(name, review_key, agent, expected_grade='pass')",
+        "criterios_aceitacao": [
+          "Only runs wrapped agent when review_key.grade == expected_grade",
+          "Treats missing review_key as fail (logs via append_delivery_audit_event)",
+          "Skips agent execution with informative Event when condition not met"
+        ]
+      }
+    }
+  ],
+  "achados_alta_prioridade": [
+    {
+      "id": "P1-001",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Location",
+      "claim": {
+        "location": "plano_validacao_json.md:19",
+        "text": "AdVisual, AdItem (`app/agent.py:67` e `app/agent.py:80`)"
+      },
+      "codigo": {
+        "status": "location_correct",
+        "evidencia": "AdVisual found at app/agent.py:67, AdItem at app/agent.py:76 (not 80 as claimed)",
+        "actual_lines": {
+          "AdVisual": 67,
+          "AdItem": 76
+        }
+      },
+      "impacto": "Minor drift - line numbers off by 4 lines, not blocking but should be corrected in plan",
+      "recomendacao": "Update plan references to AdItem at line 76, not 80"
+    },
+    {
+      "id": "P1-002",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Structure",
+      "claim": {
+        "location": "plano_validacao_json.md:19",
+        "text": "`AdItem.contexto_landing` é `str`, enquanto o JSON gerado traz um objeto estruturado"
+      },
+      "codigo": {
+        "status": "schema_confirmed",
+        "evidencia": "AdItem.contexto_landing is defined as `str` at app/agent.py:84. Plan correctly identifies this as a type mismatch that needs handling.",
+        "actual_signature": "contexto_landing: str  # NOVO CAMPO: contexto extraído da landing page"
+      },
+      "impacto": "Schema must handle both str and dict[str, Any] for contexto_landing as plan proposes",
+      "recomendacao": "Plan correctly addresses this - new schema should support `dict[str, Any] | str`"
+    },
+    {
+      "id": "P1-003",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Pipeline Structure",
+      "claim": {
+        "location": "plano_validacao_json.md:21",
+        "text": "`execution_pipeline` reúne `final_assembler`, `final_validation_loop`, `ImageAssetsAgent` (`app/agent.py:1235-1261`)"
+      },
+      "codigo": {
+        "status": "location_drift",
+        "evidencia": "execution_pipeline defined at lines 1261-1274 (not 1235-1261). Line 1235 is task_execution_loop.",
+        "actual_structure": {
+          "start_line": 1261,
+          "end_line": 1274,
+          "sub_agents": ["TaskInitializer", "EnhancedStatusReporter", "task_execution_loop", "EnhancedStatusReporter", "final_assembler", "EscalationBarrier(final_validation_loop)", "image_assets_agent", "EnhancedStatusReporter"]
+        }
+      },
+      "impacto": "Line reference incorrect, but structure matches description",
+      "recomendacao": "Correct plan reference to 1261-1274"
+    },
+    {
+      "id": "P1-004",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Agent Location",
+      "claim": {
+        "location": "plano_validacao_json.md:23",
+        "text": "`final_validator` (`app/agent.py:1053`)"
+      },
+      "codigo": {
+        "status": "location_drift",
+        "evidencia": "final_validator is NOT at line 1053. Line 1053 contains final_assembler instruction text. Need to search for actual final_validator location.",
+        "actual_location": "Starts around line 1058-1100 based on instruction pattern"
+      },
+      "impacto": "Reference incorrect, need to update plan with actual location",
+      "recomendacao": "Search for exact final_validator definition and update plan"
+    },
+    {
+      "id": "P1-005",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Callback Location",
+      "claim": {
+        "location": "plano_validacao_json.md:8",
+        "text": "`persist_final_delivery` é acionado como callback do `final_assembler`"
+      },
+      "codigo": {
+        "status": "confirmed",
+        "evidencia": "Confirmed at app/agent.py:1055: after_agent_callback=persist_final_delivery. This is correct - plan identifies this must change when flag is enabled.",
+        "actual_code": "final_assembler = LlmAgent(..., after_agent_callback=persist_final_delivery)"
+      },
+      "impacto": "Plan correctly identifies this as needing modification",
+      "recomendacao": "Implementation must remove this callback when enable_deterministic_final_validation=True"
+    },
+    {
+      "id": "P1-006",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Flag Existence",
+      "claim": {
+        "location": "plano_validacao_json.md:43-46",
+        "text": "Adicionar no `config.py` a flag `enable_deterministic_final_validation`"
+      },
+      "codigo": {
+        "status": "flag_missing",
+        "evidencia": "Flag does NOT exist in config.py. Current flags: enable_detailed_logging, enable_readme_generation, enable_image_generation, enable_new_input_fields, enable_storybrand_fallback, storybrand_gate_debug, preflight_shadow_mode",
+        "file_location": "app/config.py:34-43"
+      },
+      "impacto": "Critical - flag must be added before any implementation",
+      "recomendacao": "Add enable_deterministic_final_validation flag to config.py with default False, env var support"
+    },
+    {
+      "id": "P1-007",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Missing Agent",
+      "claim": {
+        "location": "plano_validacao_json.md:71",
+        "text": "Implementar `ResetDeterministicValidationState` para limpar chaves"
+      },
+      "codigo": {
+        "status": "class_missing",
+        "evidencia": "ResetDeterministicValidationState agent does not exist in codebase"
+      },
+      "impacto": "Required for clean state transitions between pipelines",
+      "recomendacao": "Create ResetDeterministicValidationState as BaseAgent to clear state keys"
+    },
+    {
+      "id": "P1-008",
+      "severidade": "P1",
+      "classificacao": "Semantic Misalignment - Missing Guards",
+      "claim": {
+        "location": "plano_validacao_json.md:79-82",
+        "text": "FinalAssemblyGuardPre, FinalAssemblyNormalizer novos agentes BaseAgent"
+      },
+      "codigo": {
+        "status": "classes_missing",
+        "evidencia": "Neither FinalAssemblyGuardPre nor FinalAssemblyNormalizer exist in codebase"
+      },
+      "impacto": "Core components of new pipeline - must be implemented",
+      "recomendacao": "Implement both guards as BaseAgent with specified logic"
+    }
+  ],
+  "achados_media_prioridade": [
+    {
+      "id": "P2-001",
+      "severidade": "P2",
+      "classificacao": "Path Divergence",
+      "claim": {
+        "location": "plano_validacao_json.md:52",
+        "text": "Atualizar `app/utils/session-state.py`"
+      },
+      "codigo": {
+        "status": "path_ambiguity",
+        "evidencia": "TWO files exist: app/utils/session-state.py AND app/utils/session_state.py (both present)",
+        "files_found": [
+          "app/utils/session-state.py",
+          "app/utils/session_state.py"
+        ]
+      },
+      "impacto": "Unclear which file to modify - creates confusion",
+      "recomendacao": "Plan should specify exact file (likely session_state.py based on imports). Consider consolidating these files."
+    },
+    {
+      "id": "P2-002",
+      "severidade": "P2",
+      "classificacao": "Naming Divergence",
+      "claim": {
+        "location": "plano_validacao_json.md:52",
+        "text": "Modelo `CodeSnippet` em session-state.py"
+      },
+      "codigo": {
+        "status": "model_exists_wrong_file",
+        "evidencia": "CodeSnippet model exists in app/utils/session-state.py:33-40, but imports likely use session_state.py (no hyphen)",
+        "actual_model": {
+          "file": "app/utils/session-state.py",
+          "lines": "33-40",
+          "current_fields": ["task_id", "task_description", "file_path", "code"]
+        }
+      },
+      "impacto": "Need to add snippet_type, status, approved_at, snippet_id to existing model",
+      "recomendacao": "Extend CodeSnippet in session-state.py with new fields as superset"
+    },
+    {
+      "id": "P2-003",
+      "severidade": "P2",
+      "classificacao": "Reference Ambiguity",
+      "claim": {
+        "location": "plano_validacao_json.md:57",
+        "text": "Mapeamento `CTA_BY_OBJECTIVE` consolidado em `config.py`"
+      },
+      "codigo": {
+        "status": "partial_exists",
+        "evidencia": "CTA mappings exist in format_specifications.py under strategy.cta_preferencial for each format, but NOT as consolidated CTA_BY_OBJECTIVE in config.py",
+        "actual_location": "app/format_specifications.py lines 31-35, 54-58, 78-82"
+      },
+      "impacto": "Plan proposes creating new consolidated map - valid but requires careful enum alignment",
+      "recomendacao": "Create CTA_BY_OBJECTIVE in config.py importing from format_specifications to avoid duplication"
+    }
+  ],
+  "achados_baixa_prioridade": [
+    {
+      "id": "P3-001",
+      "severidade": "P3",
+      "classificacao": "Ambiguous Reference",
+      "claim": {
+        "location": "plano_validacao_json.md:33-37",
+        "text": "Schema deverá relaxar campos quando qualquer uma das condições for verdadeira... Documentar no estado o motivo da flexibilização"
+      },
+      "codigo": {
+        "status": "implementation_detail",
+        "evidencia": "Condition logic references state keys that will be created during implementation (storybrand_gate_metrics, storybrand_fallback_meta). StoryBrandQualityGate creates these at app/agents/storybrand_gate.py:87, 102-107"
+      },
+      "impacto": "Low - state keys exist and are correctly populated by existing gate",
+      "recomendacao": "Validation logic can safely depend on these keys"
+    },
+    {
+      "id": "P3-002",
+      "severidade": "P3",
+      "classificacao": "Incomplete Specification",
+      "claim": {
+        "location": "plano_validacao_json.md:181-187",
+        "text": "Testes unitários em tests/unit/validators/test_final_delivery_validator.py"
+      },
+      "codigo": {
+        "status": "directory_exists",
+        "evidencia": "tests/unit/ exists but tests/unit/validators/ does not. Will need creation.",
+        "current_structure": "tests/unit/ contains: agents/, test_dummy.py, test_preflight.py, test_preflight_helper.py, test_user_extract_data.py, utils/"
+      },
+      "impacto": "Low - expected for new functionality",
+      "recomendacao": "Create tests/unit/validators/ directory as part of Phase 4"
+    }
+  ],
+  "mapeamento_plano_codigo": [
+    {
+      "componente": "AdVisual model",
+      "plano_referencia": "app/agent.py:67",
+      "codigo_real": "app/agent.py:67-72",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "AdItem model",
+      "plano_referencia": "app/agent.py:80",
+      "codigo_real": "app/agent.py:76-84",
+      "status": "MINOR_DRIFT",
+      "nota": "Line 76, not 80"
+    },
+    {
+      "componente": "execution_pipeline",
+      "plano_referencia": "app/agent.py:1235-1261",
+      "codigo_real": "app/agent.py:1261-1274",
+      "status": "DRIFT",
+      "nota": "Incorrect line range, but content matches description"
+    },
+    {
+      "componente": "final_assembler",
+      "plano_referencia": "app/agent.py:1023",
+      "codigo_real": "app/agent.py:1029-1056",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "ImageAssetsAgent",
+      "plano_referencia": "app/agent.py:310",
+      "codigo_real": "app/agent.py:310-555, instantiated at 733",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "final_validation_loop",
+      "plano_referencia": "app/agent.py:1240",
+      "codigo_real": "app/agent.py:1247-1259",
+      "status": "DRIFT",
+      "nota": "Line 1247, not 1240"
+    },
+    {
+      "componente": "persist_final_delivery callback",
+      "plano_referencia": "app/callbacks/persist_outputs.py",
+      "codigo_real": "app/callbacks/persist_outputs.py:35-144",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "collect_code_snippets_callback",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:122-136",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "make_failure_handler",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:178-185",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "EscalationChecker",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:202-226",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "EscalationBarrier",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:228-237",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "RunIfFailed",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:240-259",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "RunIfPassed",
+      "plano_referencia": "app/agents/gating.py",
+      "codigo_real": "NOT_FOUND",
+      "status": "PHANTOM",
+      "nota": "Does not exist - must be created"
+    },
+    {
+      "componente": "EnhancedStatusReporter",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:283-307",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "FeatureOrchestrator",
+      "plano_referencia": "app/agent.py",
+      "codigo_real": "app/agent.py:1292-1334",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "StoryBrandQualityGate",
+      "plano_referencia": "referenced in plan",
+      "codigo_real": "app/agents/storybrand_gate.py:39-147",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "format_specifications.py",
+      "plano_referencia": "app/format_specifications.py",
+      "codigo_real": "app/format_specifications.py (99 lines)",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "config.py flags",
+      "plano_referencia": "enable_deterministic_final_validation",
+      "codigo_real": "NOT_FOUND",
+      "status": "PHANTOM",
+      "nota": "Flag does not exist - must be added"
+    },
+    {
+      "componente": "app/schemas/final_delivery.py",
+      "plano_referencia": "Phase 1 deliverable",
+      "codigo_real": "NOT_FOUND",
+      "status": "PHANTOM",
+      "nota": "File does not exist - must be created"
+    },
+    {
+      "componente": "app/validators/",
+      "plano_referencia": "Phase 2 directory",
+      "codigo_real": "NOT_FOUND",
+      "status": "PHANTOM",
+      "nota": "Directory does not exist - must be created"
+    },
+    {
+      "componente": "app/utils/audit.py",
+      "plano_referencia": "Phase 1 deliverable",
+      "codigo_real": "NOT_FOUND",
+      "status": "PHANTOM",
+      "nota": "File does not exist - must be created"
+    },
+    {
+      "componente": "write_failure_meta",
+      "plano_referencia": "app/utils/delivery_status.py",
+      "codigo_real": "app/utils/delivery_status.py:22-49",
+      "status": "ALIGNED"
+    },
+    {
+      "componente": "clear_failure_meta",
+      "plano_referencia": "app/utils/delivery_status.py",
+      "codigo_real": "app/utils/delivery_status.py:65-76",
+      "status": "ALIGNED"
+    }
+  ],
+  "incertezas": [
+    {
+      "id": "U-001",
+      "area": "State Key Dependencies",
+      "descricao": "Plan references multiple state keys that will be created during implementation (deterministic_final_validation, approved_visual_drafts, deterministic_final_blocked). Cannot validate these until implementation.",
+      "mitigacao": "Document state schema in implementation, add runtime validation",
+      "impacto": "Medium"
+    },
+    {
+      "id": "U-002",
+      "area": "CTA Mapping Completeness",
+      "descricao": "Plan proposes CTA_BY_OBJECTIVE map covering all objectives (agendamentos, leads, vendas, contato, awareness). Current format_specs only show agendamentos, leads, vendas. Need to validate complete set.",
+      "mitigacao": "Audit all objective values currently accepted by system before creating map",
+      "impacto": "Medium"
+    },
+    {
+      "id": "U-003",
+      "area": "Agent File Size",
+      "descricao": "app/agent.py is already 1336 lines. Adding new guards/agents will increase complexity. Plan suggests creating in app/agents/gating.py but existing patterns put agents in main file.",
+      "mitigacao": "Consider refactoring to split agent.py or establish clear pattern for new agents",
+      "impacto": "Low"
+    }
+  ],
+  "gates_ci_cd": [
+    {
+      "gate": "Phase 1 Completion Gate",
+      "criterios": [
+        "app/schemas/final_delivery.py exists with all 3 strict models",
+        "app/utils/audit.py exists with append_delivery_audit_event",
+        "config.py has enable_deterministic_final_validation flag",
+        "CodeSnippet model extended with new fields",
+        "All Phase 1 unit tests pass"
+      ]
+    },
+    {
+      "gate": "Phase 2 Completion Gate",
+      "criterios": [
+        "app/validators/ directory created",
+        "FinalDeliveryValidatorAgent implemented",
+        "RunIfPassed agent created",
+        "ResetDeterministicValidationState agent created",
+        "Unit tests for validator pass with coverage >80%"
+      ]
+    },
+    {
+      "gate": "Phase 3 Integration Gate",
+      "criterios": [
+        "FinalAssemblyGuardPre implemented",
+        "FinalAssemblyNormalizer implemented",
+        "execution_pipeline modified with flag-based routing",
+        "persist_final_delivery callback removed when flag=True",
+        "Integration tests pass for both flag states"
+      ]
+    },
+    {
+      "gate": "Production Readiness Gate",
+      "criterios": [
+        "All tests pass (unit + integration + regression)",
+        "Documentation updated (README, CLAUDE.md)",
+        "Flag defaults to False",
+        "Rollback procedure documented",
+        "Monitoring/observability confirmed"
+      ]
+    }
+  ],
+  "analise_blast_radius": {
+    "modulos_impactados": [
+      "app/agent.py (modifications)",
+      "app/config.py (new flag)",
+      "app/schemas/ (new module)",
+      "app/validators/ (new module)",
+      "app/utils/audit.py (new file)",
+      "app/utils/session_state.py or session-state.py (extensions)",
+      "app/callbacks/persist_outputs.py (conditional logic)",
+      "tests/unit/validators/ (new tests)",
+      "tests/integration/ (new scenarios)"
+    ],
+    "linhas_codigo_estimadas": {
+      "novas": 800,
+      "modificadas": 150,
+      "total_impacto": 950
+    },
+    "riscos_regressao": [
+      "Callback removal in final_assembler could break legacy flow if flag logic incorrect",
+      "State key dependencies could cause runtime errors if keys missing",
+      "CTA validation could reject valid ads if mapping incomplete",
+      "Image generation flow could break if RunIfPassed logic incorrect"
+    ],
+    "estrategia_rollback": [
+      "Set ENABLE_DETERMINISTIC_FINAL_VALIDATION=false in env",
+      "Restart service (no code changes needed)",
+      "Verify legacy pipeline executes (check final_assembler callback)",
+      "Monitor for persist_final_delivery execution"
+    ]
+  },
+  "recomendacoes_priorizadas": [
+    {
+      "prioridade": 1,
+      "acao": "BLOCK IMPLEMENTATION - Fix P0 phantom references first",
+      "itens": [
+        "Create app/schemas/final_delivery.py with strict models",
+        "Create app/validators/ directory and final_delivery_validator.py",
+        "Create app/utils/audit.py with append_delivery_audit_event",
+        "Implement RunIfPassed agent (inverse of RunIfFailed)"
+      ]
+    },
+    {
+      "prioridade": 2,
+      "acao": "Correct plan line references before implementation",
+      "itens": [
+        "Update AdItem reference from line 80 to 76",
+        "Update execution_pipeline reference from 1235-1261 to 1261-1274",
+        "Update final_validation_loop reference from 1240 to 1247",
+        "Find and document actual final_validator location"
+      ]
+    },
+    {
+      "prioridade": 3,
+      "acao": "Add missing configuration and infrastructure",
+      "itens": [
+        "Add enable_deterministic_final_validation to config.py",
+        "Implement ResetDeterministicValidationState agent",
+        "Implement FinalAssemblyGuardPre and FinalAssemblyNormalizer",
+        "Create CTA_BY_OBJECTIVE mapping in config.py"
+      ]
+    },
+    {
+      "prioridade": 4,
+      "acao": "Resolve ambiguities and cleanup",
+      "itens": [
+        "Clarify session-state.py vs session_state.py usage",
+        "Consolidate duplicate files if necessary",
+        "Extend CodeSnippet model with new fields",
+        "Create tests/unit/validators/ directory"
+      ]
+    },
+    {
+      "prioridade": 5,
+      "acao": "Document and validate",
+      "itens": [
+        "Document complete set of supported objectives for CTA mapping",
+        "Document state schema for new validation keys",
+        "Update CLAUDE.md with deterministic validation flow",
+        "Create rollback runbook"
+      ]
+    }
+  ]
+}

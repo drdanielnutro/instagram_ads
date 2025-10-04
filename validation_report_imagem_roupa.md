@@ -9,12 +9,12 @@
 ## Executive Summary
 
 ### Validation Metrics
-- **Total Findings**: 23 issues identified
+- **Total Findings**: 19 issues identified
 - **P0 (Critical-Blocking)**: 8 findings
 - **P1 (High-Semantic)**: 9 findings
-- **P2 (Low-Naming)**: 6 findings
+- **P2 (Low-Naming)**: 2 findings
 - **Symbol Coverage**: 100% of claims validated
-- **Phantom Links Rate**: 34.8% (8/23 - HIGH RISK)
+- **Phantom Links Rate**: 42.1% (8/19 - HIGH RISK)
 - **Blast Radius**: MEDIUM (12-15 modules, ~500-700 lines of new code)
 
 ### Risk Assessment
@@ -581,30 +581,7 @@ instruction="""
 
 ## Low-Priority Naming Divergences (P2)
 
-### P2-001: MODULE PATH ASSUMPTION - Test files
-**Severity**: P2 (Low)
-**Type**: Path-Assumption
-
-**Plan References**:
-- Line 204: `tests/unit/utils/test_vision.py`
-- Line 205: `tests/unit/tools/test_generate_transformation_images.py`
-- Line 206: `tests/unit/agent/test_image_assets_agent.py`
-- Line 208: `tests/integration/api/test_reference_upload.py`
-- Line 209: `tests/integration/agents/test_reference_pipeline.py`
-
-**Current State**:
-```bash
-$ ls tests/
-# (tests/ directory structure unknown - not validated)
-```
-
-**Impact**: LOW - Test file organization, doesn't affect runtime
-
-**Recommendation**: Follow existing test structure patterns once confirmed
-
----
-
-### P2-002: DEPENDENCY VERSION SPECIFICITY
+### P2-001: DEPENDENCY VERSION SPECIFICITY
 **Severity**: P2 (Low)
 **Type**: Dependency-Version
 
@@ -627,7 +604,7 @@ Then run: `uv sync` or `make install`
 
 ---
 
-### P2-003: FIELD NAMING - `foco` dual usage
+### P2-002: FIELD NAMING - `foco` dual usage
 **Severity**: P2 (Low)
 **Type**: Semantic-Ambiguity
 
@@ -641,62 +618,6 @@ Then run: `uv sync` or `make install`
 **Impact**: LOW - Semantic overload, may confuse users
 
 **Recommendation**: Keep `foco` for theme only, add separate optional field `produto_descricao_textual` if needed
-
----
-
-### P2-004: ENV VAR MISMATCH - Bucket naming
-**Severity**: P2 (Low)
-**Type**: Config-Naming
-
-**Plan Assumption**: Uses `DELIVERIES_BUCKET` for reference uploads
-
-**Current State** (`app/server.py:52`, `app/callbacks/persist_outputs.py:85`):
-- `DELIVERIES_BUCKET` ✓ exists and is used
-- `ARTIFACTS_BUCKET` also exists (line 52)
-
-**Impact**: LOW - Clarify which bucket for reference images
-
-**Recommendation**: Document that reference images go to `DELIVERIES_BUCKET/references/` prefix
-
----
-
-### P2-005: CACHE IMPLEMENTATION AMBIGUITY
-**Severity**: P2 (Low)
-**Type**: Architecture-Ambiguity
-
-**Plan Claim** (Line 51):
-> "consultar um cache em memória com TTL configurável"
-
-**Plan Warning** (Line 221):
-> "Cache local sem compartilhamento entre workers | armazenar metadados em backend compartilhado (Redis/Datastore)"
-
-**Impact**: MEDIUM - In-memory cache won't work in multi-instance Cloud Run
-
-**Recommendation**:
-- Phase 1: Simple in-memory dict (works in dev, single instance)
-- Phase 2: Redis/Memorystore for production multi-instance
-- Document limitation in plan
-
----
-
-### P2-006: STATE SERIALIZATION PATTERN
-**Severity**: P2 (Low)
-**Type**: Pattern-Consistency
-
-**Plan Emphasis** (Lines 33-34, 53):
-> "sempre chamar `metadata.model_dump(mode="json")`"
-
-**Actual Pattern** (observed in codebase):
-- Most state fields are primitives or plain dicts
-- No explicit `model_dump` calls in `run_preflight` currently
-
-**Impact**: LOW - Good practice, prevents serialization errors
-
-**Recommendation**: Follow pattern consistently, add helper:
-```python
-def to_state_value(obj: BaseModel | None) -> dict | None:
-    return obj.model_dump(mode="json") if obj else None
-```
 
 ---
 
@@ -881,12 +802,12 @@ Gradual rollout:
 
 ## Conclusion
 
-This implementation plan contains **23 significant plan-code drift issues**, including:
+This implementation plan contains **19 significant plan-code drift issues**, including:
 - **8 P0 (Critical-Blocking)** issues that would prevent compilation/runtime
 - **9 P1 (High-Semantic)** issues requiring careful alignment
-- **6 P2 (Low-Naming)** issues for cleanup
+- **2 P2 (Low-Naming)** issues for cleanup
 
-**Primary Risk**: 34.8% phantom link rate indicates the plan assumes significant infrastructure that doesn't exist. All P0 issues MUST be resolved before beginning implementation.
+**Primary Risk**: 42.1% phantom link rate indicates the plan assumes significant infrastructure that doesn't exist. All P0 issues MUST be resolved before beginning implementation.
 
 **Estimated Implementation Effort**:
 - New code: ~500-600 lines
