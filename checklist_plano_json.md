@@ -3,6 +3,9 @@
 > Convenção: `[ ]` pendente · `[>]` em andamento · `[x]` concluído
 > Referência principal: `plano_validacao_json.md`
 
+## 0. Revisões de Planos
+- [x] Revisar `plano_validacao_json_v3.md` (Codex) – 2025-10-04.
+
 ## 1. Fase 1 – Estruturas de Base (Etapa 5.1)
 ### 1.1 Schema de validação compartilhado
 - [ ] Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
