@@ -49,6 +49,7 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 4. **Enriquecimento do callback de snippets**
    - Estender `collect_code_snippets_callback` para registrar, além de `task_id`/`category`, os campos `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` (hash SHA-256 de `task_id::snippet_type::payload`).
    - Preservar compatibilidade adicionando esses campos ao dicionário existente (superset), garantindo que consumidores atuais continuem operando.
+   - Atualizar `app/utils/session-state.py` (modelo `CodeSnippet` e helpers `get_session_state`/`add_approved_snippet`) para aceitar e preservar esses novos campos, evitando que o guard perca metadados ao alternar entre pipelines.
 
 ### Fase 2 – Validador Determinístico (Etapa 5.2)
 Objetivo: Construir o agente que consome os componentes da Fase 1.
@@ -145,6 +146,7 @@ else:
 
 - No caminho legado (`flag=False`), inserir agente auxiliar `ResetDeterministicValidationState` logo antes do `final_assembler` para limpar chaves específicas (`approved_visual_drafts`, `deterministic_final_validation`, etc.) e evitar resíduos quando alternar entre os pipelines.
 - Quando a flag estiver ativa, remover o `after_agent_callback` do `final_assembler` e a chamada direta a `persist_final_delivery` dentro do `ImageAssetsAgent`; a persistência passa a ser responsabilidade exclusiva do novo agente dedicado, que só roda quando `image_assets_review.grade == "pass"` (ou `"skipped"` documentado) ou quando explicitamente liberado por falhas toleráveis documentadas em `state["image_assets"]`. Com a flag desativada, manter os callbacks atuais para preservar o comportamento legado.
+- Revisar o `ImageAssetsAgent` para sempre popular `state["image_assets_review"]` antes de retornar (ex.: `grade="skipped"`, `issues=[]` quando a geração estiver desativada ou o JSON ausente) e garantir que `RunIfPassed` trate `grade="skipped"` como passagem válida rumo à persistência.
 - Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `deterministic_final_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed`, mantendo compatibilidade com `final_validation_result_failed` durante a transição e encerrando o pipeline em caso de falha determinística.
 
 #### 4.3.2 Ajustes no `final_assembler`
@@ -212,6 +214,7 @@ Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
 - **Integration Tests:**
   - Simular pipeline parcial (`final_assembler` → validador) com estado mockado.
   - Garantir que falha determinística impede execução do `ImageAssetsAgent`.
+  - Exercitar `ImageAssetsAgent` nas rotas com geração desativada ou JSON ausente, verificando que `image_assets_review` produz `grade="skipped"`/`issues=[]` e que a persistência ainda é liberada pelo `RunIfPassed`.
   - Validar sessões com `force_storybrand_fallback=True`, cobrindo campos opcionais/estruturados emitidos pelo fallback.
   - Utilizar fakes de `LlmAgent`/`BaseAgent` do ADK (ex.: `FakeAgent`) para orquestrar `RunIfPassed`, `EscalationBarrier` e `SequentialAgent`, evitando dependência de chamadas reais ao LLM.
   - Exercitar os dois estados da flag (`True`/`False`) garantindo que o fluxo legado continue funcional e que o novo pipeline seja acionado somente quando habilitado.
