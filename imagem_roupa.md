@@ -18,7 +18,8 @@
   - `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None`.
   - `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]`.
   - Implementar cache em memória com TTL configurável (`config.reference_cache_ttl_seconds`) e ganchos para futura troca por Redis/Datastore.
-- Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) e estender `app/utils/vision.py` com `analyze_reference_image()` usando Vertex AI Vision (SafeSearch + labels).
+- Criar módulo `app/utils/vision.py` com helper assíncrono `analyze_reference_image(..., type: Literal["character", "product"]) -> ReferenceImageMetadata` encapsulando chamadas ao Vertex AI Vision (SafeSearch + labels).
+- Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) que utilizará `analyze_reference_image` (criado nesta fase) antes de devolver o ID ao cliente.
 
 ### Dependências existentes
 - `BaseModel` (Pydantic) disponível em `app/agent.py:63`.
@@ -27,13 +28,15 @@
 
 ### Integrações planejadas
 1. `/run_preflight` (Fase 2) consumirá `resolve_reference_metadata` e `build_reference_summary` (criados nesta fase).
-2. `ImageAssetsAgent` (Fase 4) reidratará `ReferenceImageMetadata` a partir dos dicionários retornados pelas funções desta fase.
+2. Endpoint `/upload/reference-image` (Fase 2) chamará `upload_reference_image` e `analyze_reference_image` (ambos criados nesta fase).
+3. `ImageAssetsAgent` (Fase 4) reidratará `ReferenceImageMetadata` a partir dos dicionários retornados pelas funções desta fase.
 
 ### Critérios de aceitação
 - [ ] Arquivo `app/schemas/reference_assets.py` criado com classes tipadas e métodos helper.
 - [ ] Cache em `app/utils/reference_cache.py` suporta `cache`, `resolve`, `merge` e `build_summary` com TTL configurável.
-- [ ] Funções GCS/Vision retornam dados serializáveis e lidam com erros (SafeSearch bloqueia `LIKELY` ou superior).
-- [ ] Testes unitários cobrindo cache (Fase 6) executados com sucesso.
+- [ ] Módulo `app/utils/vision.py` exporta `analyze_reference_image` e trata respostas/erros do Vertex AI Vision.
+- [ ] Helper `upload_reference_image` em `app/utils/gcs.py` integra-se ao módulo de visão sem expor dados sensíveis.
+- [ ] Testes unitários cobrindo cache e visão (Fase 6) executados com sucesso.
 
 ---
 ## Fase 2 – Backend: Upload & Preflight
