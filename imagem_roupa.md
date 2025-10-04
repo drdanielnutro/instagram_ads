@@ -1,234 +1,254 @@
 # Plano Estendido — Referências Visuais de Personagem e Produto/Serviço
 
-## 1. Visão Geral
-- Evoluir o fluxo de geração de imagens para aceitar **dois uploads opcionais** (personagem e produto/serviço) e integrá-los nos estágios adequados do pipeline (`app/tools/generate_transformation_images.py`).
-- Garantir segurança, consistência narrativa e alinhamento entre os prompts gerados em `app/agent.py` e as imagens finais.
-- Utilizar **Vertex AI Vision** (SafeSearch + Label/Object Detection) para classificar as imagens logo após o upload, armazenando metadados no estado do agente e em GCS.
-
-## 2. Motivação
-- Permitir que anunciantes “vistam” um personagem real com o produto fornecido (ex.: vestir uma modelo com a peça da coleção).
-- Reduzir discrepância entre o que o prompt descreve e o que a imagem sintetiza, aumentando confiabilidade para segmentos de moda, beleza, serviços premium etc.
-
-## 3. Escopo Funcional
-1. Upload de **Personagem** (imagem base usada no estágio “estado atual”).
-2. Upload de **Produto/Serviço** (incorporado no estágio “estado aspiracional”).
-3. Integração opcional: se nenhum upload for fornecido, o pipeline permanece idêntico ao atual.
-4. Análise automática das imagens (conteúdo impróprio + rótulos principais).
-5. Exposição de metadados (labels, descrições) para os agentes de copy/visual.
-6. Registro das referências usadas no JSON final e nos logs estruturados.
-
-## 4. Modelo de Dados & Estado
-- Novo módulo sugerido: `app/schemas/reference_assets.py` contendo:
-  ```python
-  class ReferenceImageMetadata(BaseModel):
-      id: str
-      type: Literal["character", "product"]
-      gcs_uri: str
-      signed_url: str
-      labels: list[str]
-      safe_search_flags: dict[str, str]
-      user_description: str | None = None
-      uploaded_at: datetime
-  ```
-- **Importante**: antes de colocar esses metadados no estado compartilhado, sempre chamar `metadata.model_dump(mode="json")`
-  (ou expor um método `to_state_dict()` equivalente) para garantir apenas tipos JSON-serializáveis.
-- Estado compartilhado montado em `run_preflight` antes da criação da sessão ADK:
-  ```python
-  initial_state["reference_images"] = {
-      "character": dict | None,
-      "product": dict | None,
-  }
-  initial_state["reference_image_summary"] = {
-      "character": "Modelo feminina, cabelos cacheados...",
-      "product": "Bolsa de couro caramelo com alça metálica...",
-  }
-  initial_state["reference_image_character_summary"] = initial_state["reference_image_summary"].get("character")
-  initial_state["reference_image_product_summary"] = initial_state["reference_image_summary"].get("product")
-  ```
-  (apenas quando as referências existirem). Esses campos precisam estar presentes no dicionário retornado por `/run_preflight` para que o ADK os replique em `state` após `createSession`.
-- Resolver IDs recebidos por `run_preflight` usando utilitário dedicado `app/utils/reference_cache.py`:
-  ```python
-  from app.utils.reference_cache import resolve_reference_metadata
-  ```
-  `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None` deve consultar um cache em memória com TTL configurável, retornar `None` para IDs ausentes e registrar logs estruturados para diagnósticos. Sempre que o metadado for retornado, convertê-lo para `dict` com `model_dump(mode="json")` antes de inseri-lo no estado.
-- No mesmo módulo, implementar `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]` agregando labels e descrições (`user_description`) e produzindo frases curtas usadas pelos prompts.
-- Implementar helper `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None` que receba o metadado resolvido, faça `model_dump(mode="json")` quando existir e injete `user_description` (se fornecida) no dicionário resultante.
-- Expor também `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None` para ser chamado logo após cada upload, garantindo que `resolve_reference_metadata` encontre os valores durante o `run_preflight` seguinte.
-- JSON final (produzido pelo `final_assembler` em `app/agent.py:1023-1049`):
-  ```json
-  "visual": {
-    ...,
-    "reference_assets": {
-      "character": {"gcs_uri": "gs://...", "labels": [...]},
-      "product": {"gcs_uri": "gs://...", "labels": [...]}
-    }
-  }
-  ```
-  (apenas quando as referências existirem).
-
-## 5. UI (React + Vite)
-- Arquivos relevantes: `frontend/src/App.tsx`, `frontend/src/components/*`.
-- Criar componente dedicado `frontend/src/components/ReferenceUpload.tsx` com propriedades `type="character" | "product"`.
-- Validações no cliente: extensões (`.png`, `.jpg`, `.jpeg`), limite de 5 MB, dimensões mínimas.
-- Fluxo recomendado para upload:
-  1. Permitir que o usuário selecione o arquivo e envie `POST /upload/reference-image` imediatamente com `FormData` (`file`, `type`, `userId?`, `sessionId?`).
-  2. Tratar `userId` e `sessionId` como opcionais; quando ausentes, o backend gera `reference_id` e associa aos metadados do upload.
-  3. Armazenar a resposta (`referenceId`, `signedUrl`, `labels`) em um store (ex.: hook `useReferenceImages`) para reaproveitar no submit principal.
-- Utilizar o campo existente `foco` no formulário para capturar a descrição textual do produto/elemento visual obrigatório quando não houver imagem.
-- Atualizar `handleSubmit` (`frontend/src/App.tsx`) para enviar payload contendo o texto original e as referências:
-  ```json
-  {
-    "text": "...",
-    "reference_images": {
-      "character": {"id": "ref-123", "user_description": "Modelo plus size"},
-      "product": {"id": "ref-456", "user_description": "Bolsa caramelo P"}
-    }
-  }
-  ```
-  Certifique-se de montar esse objeto a partir do store/hook de referências, enviando apenas os uploads efetivamente realizados.
-
-## 6. Backend — Endpoints FastAPI (`app/server.py`)
-### 6.1 Upload
-- Adicionar rota perto das demais definições (após `run_preflight` para manter agrupamento):
-  ```python
-  @app.post("/upload/reference-image")
-  async def upload_reference_image(
-      file: UploadFile = File(...),
-      type: Literal["character", "product"] = Form(...),
-      user_id: str | None = Form(default=None),
-      session_id: str | None = Form(default=None),
-  ) -> dict:
-      ...
-  ```
-- Passos internos:
-  1. Validar `content_type` e tamanho (`file.spool_max_size`).
-  2. Subir para GCS via helper `app/utils/gcs.py` (nova função `upload_reference_image`).
-  3. Chamar Vision AI (`app/utils/vision.py`, nova função `analyze_reference_image`) para SafeSearch + Label/Object detection.
-  4. Bloquear upload se `adult | violence | racy >= LIKELY`.
-  5. Persistir metadados em cache (dicionário em memória com TTL ou Datastore opcional) usando `cache_reference_metadata` e retornar apenas identificadores/resumos para que etapas posteriores resolvam os detalhes via cache (`{"id": ..., "signed_url": ..., "labels": [...]}`).
-  6. Adicionar `google-cloud-vision>=3.4.0` (ou a biblioteca Vertex AI equivalente) a `requirements.txt`/`uv.lock` e documentar que `make install` deve ser reexecutado.
-
-### 6.2 Preflight (`run_preflight`) — `app/server.py:300-393`
-- Criar um schema Pydantic (`RunPreflightRequest`) para validar o corpo recebido, aceitando `reference_images` opcionais além de `text`/flags existentes e substituindo o parse manual atual.
-- Resolver IDs para metadados completos **dentro de `/run_preflight`** (único local que monta `initial_state`):
-  ```python
-  reference_images = payload.get("reference_images", {})
-  initial_state["reference_images"] = {
-      "character": merge_user_description(
-          resolve_reference_metadata(reference_images.get("character", {}).get("id")),
-          reference_images.get("character", {}).get("user_description"),
-      ),
-      "product": merge_user_description(
-          resolve_reference_metadata(reference_images.get("product", {}).get("id")),
-          reference_images.get("product", {}).get("user_description"),
-      ),
-  }
-  initial_state["reference_image_summary"] = build_reference_summary(initial_state["reference_images"], payload)
-  initial_state["reference_image_character_summary"] = initial_state["reference_image_summary"].get("character")
-  initial_state["reference_image_product_summary"] = initial_state["reference_image_summary"].get("product")
-  ```
-- `build_reference_summary` deve combinar labels + descrições do usuário, retornando strings curtas para cada tipo. Caso não haja metadados, devolver `None` e manter o campo ausente no initial state.
-- Após montar esses campos, retornar o `initial_state` enriquecido na resposta de `/run_preflight`, garantindo que nenhuma outra parte do sistema tente mutar `initial_state` diretamente (toda replicação ocorre via ADK após a criação da sessão).
-
-## 7. Agentes (`app/agent.py`)
-### 7.1 Prompts de geração
-- **VISUAL_DRAFT (c. linha 880)**: adicionar placeholders planos `{reference_image_character_summary}` e `{reference_image_product_summary}` e instruir o agente a alinhar narrativa com as referências disponíveis.
-- **COPY_DRAFT (c. linha 830)**: caso haja labels de produto, sugerir que headline/corpo mencionem a peça real usando as mesmas chaves planas.
-- **final_assembler (linhas 1023-1049)**: injetar explicitamente no prompt os campos `reference_images.character.gcs_uri`, `reference_images.character.labels`, `reference_images.product.gcs_uri` e `reference_images.product.labels` provenientes do estado (após conversão para `dict`). Reforçar que variações devem incorporar `visual.reference_assets` quando existirem e que `descricao_imagem` precisa citar o produto real usando esses valores. Se algum campo não existir, remover o placeholder antes de enviar ao modelo. Caso o modelo não retorne esses campos, realizar pós-processamento programático para preencher `visual.reference_assets` com os valores factuais.
-
-### 7.2 `ImageAssetsAgent._run_async_impl` (`app/agent.py:316-577`)
-- Recuperar `reference_images = state.get("reference_images") or {}` garantindo dicionário vazio quando não houver uploads (importar `ReferenceImageMetadata` no topo do módulo).
-- Montar argumentos para `generate_transformation_images` apenas quando os metadados existirem, reidratando-os para `ReferenceImageMetadata`:
-  ```python
-  reference_character = reference_images.get("character")
-  reference_product = reference_images.get("product")
-  assets = await generate_transformation_images(
-      ...,
-      reference_character=(
-          ReferenceImageMetadata.model_validate(reference_character)
-          if reference_character else None
-      ),
-      reference_product=(
-          ReferenceImageMetadata.model_validate(reference_product)
-          if reference_product else None
-      ),
-  )
-  ```
-- Registrar em `summary` se as referências foram usadas ou se houve fallback.
-
-### 7.3 Logs/Auditoria
-- Inserir eventos adicionais usando `logger.info` (ex.: `"reference_image_attached"`) e armazenar no estado (`state['image_generation_audit']`).
-
-## 8. Ferramenta de Geração (`app/tools/generate_transformation_images.py`)
-### 8.1 Assinatura
-- Alterar função (linhas 209-293) para aceitar:
-  ```python
-  async def generate_transformation_images(...,
-      reference_character: ReferenceImageMetadata | None = None,
-      reference_product: ReferenceImageMetadata | None = None,
-  )
-  ```
-- Criar helper `_load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image` que faça download de `metadata.gcs_uri` via `storage.Client` (com cache simples em dicionário local).
-
-### 8.2 Etapas
-- **Etapa 1 (estado atual)**:
-  - Se `reference_character`, usar `_call_model([character_image, prompt_atual_com_labels])`.
-  - `prompt_atual_com_labels` deriva de `config.image_current_prompt_template` + labels/descrição.
-- **Etapa 2 (intermediária)**: manter fluxo atual.
-- **Etapa 3 (aspiracional)**:
-  - Montar `prompt_aspiracional_enriquecido` com labels do produto e contexto (“incorpore a bolsa marrom da imagem de referência”).
-  - Se `reference_product`, chamar `_call_model([image_intermediario, product_image, prompt_aspiracional_enriquecido])`.
-- Em caso de falha no download ou no modelo, registrar `logger.warning` e prosseguir sem a referência (garantia de fallback).
-- Retorno `meta` deve incluir flags `"character_reference_used"` e `"product_reference_used"`.
-
-## 9. Configuração & Templates (`app/config.py`)
-- Adicionar novas strings:
-  ```python
-  image_current_prompt_template = (
-      "Use the provided character reference ({character_labels}). {prompt_atual}"
-  )
-  image_aspirational_prompt_template_with_product = (
-      "Integrate the product from the reference image ({product_labels}). {prompt_aspiracional}"
-  )
-  ```
-- Em `ImageAssetsAgent`, selecionar o template conforme existência das referências.
-
-## 10. Observabilidade & Persistência
-- Refatorar `app/callbacks/persist_outputs.py:35-141` mantendo a assinatura `persist_final_delivery(callback_context)`, mas sanitizando `reference_images` dentro da função (a partir do `state = resolve_state(callback_context)`) antes de persistir os metadados. Se útil, criar helper `sanitize_reference_images(state: dict) -> dict` e cobrir o comportamento em testes unitários.
-- Garantir que `logger.log_struct` (em `app/server.py` e `app/agent.py`) capture uploads, decisões de SafeSearch e uso efetivo na geração.
-- Configurar TTL curto nas `signed_url`; armazenar apenas `gcs_uri` no JSON final e documentar como essa política se relaciona com `config.image_signed_url_ttl`.
-
-## 11. Estratégia de Testes
-- **Unitários**:
-  - `tests/unit/utils/test_vision.py`: mocks da Vision API (SafeSearch + labels).
-  - `tests/unit/tools/test_generate_transformation_images.py`: verificar chamadas a `_call_model` com referências.
-  - `tests/unit/agent/test_image_assets_agent.py`: garantir passagem dos metadados corretos.
-- **Integração**:
-  - `tests/integration/api/test_reference_upload.py`: upload → análise → cache → `/run_preflight` recuperando metadados no `initial_state`.
-  - `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com fixtures de referência.
-- **Frontend**:
-  - Atualizar testes de componentes/upload (React Testing Library) e cenários em Cypress se existente.
-- **QA manual**:
-  - Cenários com apenas personagem, apenas produto, ambos, e nenhum.
-
-## 12. Riscos e Mitigações
-| Risco | Mitigação |
-|-------|-----------|
-| Vision AI indisponível | fallback que rejeita upload com mensagem amigável; monitorar via logging |
-| Latência adicional | medir tempos; ajustar `config.image_generation_timeout` se necessário |
-| Inconsistência narrativa | reforçar prompts (copy + visual) com labels e descrições; incluir QA manual inicialmente |
-| Crescimento de arquivos em GCS | planejar job de limpeza (Cloud Scheduler + função que remove uploads sem uso em X dias) |
-| Cache local sem compartilhamento entre workers | armazenar metadados em backend compartilhado (Redis/Datastore) ou garantir afinidade de sessão |
-
-## 13. Roadmap Sugerido
-1. **Infra**: endpoint de upload + Vision integration + schema `ReferenceImageMetadata`.
-2. **UI**: componentes de upload e integração com novo endpoint.
-3. **Estado & Prompts**: ajustes em `run_preflight`, prompts VISUAL/COPY, `final_assembler`.
-4. **Ferramenta de imagem**: suporte aos novos parâmetros e fallback.
-5. **Validação/Logs**: persistência e auditoria.
-6. **Testes**: unitários, integração e QA manual.
-7. **Documentação**: atualizar `README.md` (seção imagem) e materiais internos.
+## 0. Visão Geral & Metas
+- **Objetivo**: habilitar uploads opcionais de imagens de personagem e produto/serviço, reaproveitando os metadados (SafeSearch + labels) em todo o pipeline de geração de anúncios (copy + visual + imagens finais).
+- **Abordagem**: introduzir novos schemas e cache compartilhado, estender endpoints/backend e atualizar agentes e prompts, mantendo compatibilidade quando nenhuma referência for enviada.
+- **Princípios chave**: distinguir entregas novas vs. código existente, garantir sanitização de dados sensíveis e cobrir o fluxo completo com testes automatizados.
 
 ---
+## Fase 1 – Schemas e Cache de Referências
 
-**Conclusão**: esta versão do plano mapeia arquivos e trechos específicos, define estruturas de estado, detalha integrações (Vision AI + GCS) e estabelece passos de implementação/testes. Com a adoção das referências visuais, o pipeline passa a combinar criatividade controlada com fidelidade ao produto real, entregando valor direto para verticais que precisam de consistência visual.
+### Entregáveis
+- Criar `app/schemas/reference_assets.py` com:
+  - `ReferenceImageMetadata` (campos: `id`, `type`, `gcs_uri`, `signed_url`, `labels`, `safe_search_flags`, `user_description | None`, `uploaded_at`).
+  - Métodos `model_dump(mode="json")` e `to_state_dict()` para garantir serialização.
+- Criar `app/utils/reference_cache.py` com funções:
+  - `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None`.
+  - `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None`.
+  - `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None`.
+  - `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]`.
+  - Implementar cache em memória com TTL configurável (`config.reference_cache_ttl_seconds`) e ganchos para futura troca por Redis/Datastore.
+- Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) e estender `app/utils/vision.py` com `analyze_reference_image()` usando Vertex AI Vision (SafeSearch + labels).
+
+### Dependências existentes
+- `BaseModel` (Pydantic) disponível em `app/agent.py:63`.
+- Utilitário `resolve_state` em `app/utils/session_state.py:13-78` (já utilizado por callbacks).
+- Configurações genéricas em `app/config.py` (feature flags e tempo de TTL).
+
+### Integrações planejadas
+1. `/run_preflight` (Fase 2) consumirá `resolve_reference_metadata` e `build_reference_summary` (criados nesta fase).
+2. `ImageAssetsAgent` (Fase 4) reidratará `ReferenceImageMetadata` a partir dos dicionários retornados pelas funções desta fase.
+
+### Critérios de aceitação
+- [ ] Arquivo `app/schemas/reference_assets.py` criado com classes tipadas e métodos helper.
+- [ ] Cache em `app/utils/reference_cache.py` suporta `cache`, `resolve`, `merge` e `build_summary` com TTL configurável.
+- [ ] Funções GCS/Vision retornam dados serializáveis e lidam com erros (SafeSearch bloqueia `LIKELY` ou superior).
+- [ ] Testes unitários cobrindo cache (Fase 6) executados com sucesso.
+
+---
+## Fase 2 – Backend: Upload & Preflight
+
+### Entregáveis
+- Implementar endpoint `POST /upload/reference-image` em `app/server.py`:
+  - Assinatura com `UploadFile`, `type: Literal["character", "product"]`, `user_id | None`, `session_id | None`.
+  - Passos: validar content-type/tamanho, enviar ao GCS (`upload_reference_image`), analisar via Vision (`analyze_reference_image`), aplicar SafeSearch e `cache_reference_metadata` (Fase 1), devolver `{ "id", "signed_url", "labels" }`.
+- Criar schema `RunPreflightRequest` (novo módulo `app/schemas/run_preflight.py`) substituindo parse manual atual.
+- Modificar `run_preflight` em `app/server.py:163-395`:
+  - Reutilizar `RunPreflightRequest`.
+  - Resolver metadados via `resolve_reference_metadata` (criada na Fase 1).
+  - Construir `initial_state["reference_images"]`, `reference_image_summary`, `reference_image_character_summary`, `reference_image_product_summary`.
+  - Devolver `initial_state` enriquecido sem manipulações externas.
+- Registrar logs estruturados (`logger.log_struct`) para uploads e preflight.
+
+### Dependências existentes
+- Função `run_preflight` atual em `app/server.py:163-395` (retorna `initial_state`).
+- Logging estruturado (`logger.log_struct`) já usado em preflight (`app/server.py:299-320`).
+- Configs `ENABLE_NEW_INPUT_FIELDS` e `ENABLE_STORYBRAND_FALLBACK` (`app/config.py:120-170`).
+
+### Modificações planejadas (resumo/diff)
+```diff
+# app/server.py
++@app.post("/upload/reference-image")
++async def upload_reference_image(...):
++    metadata = analyze_reference_image(...)
++    cache_reference_metadata(metadata)
++    return {"id": metadata.id, ...}
+ 
+-async def run_preflight(payload: dict = Body(...)) -> dict:
++@app.post("/run_preflight")
++async def run_preflight(request: RunPreflightRequest) -> dict:
+     ...
+-    initial_state = {...}
++    reference_images = request.reference_images or {}
++    initial_state["reference_images"] = {
++        "character": merge_user_description(
++            resolve_reference_metadata(reference_images.get("character", {}).get("id")),
++            reference_images.get("character", {}).get("user_description"),
++        ),
++        ...
++    }
+```
+
+### Critérios de aceitação
+- [ ] `/upload/reference-image` retorna 200 com ID válido e bloqueia imagens `LIKELY` em SafeSearch.
+- [ ] `/run_preflight` enriquece `initial_state` quando IDs válidos são enviados; mantém comportamento atual quando não há referências.
+- [ ] Logs estruturados registram uploads e uso de cache.
+- [ ] Teste de integração (Fase 6) cobre upload → cache → preflight.
+
+---
+## Fase 3 – Frontend (React + Vite)
+
+### Entregáveis
+- Criar componente `frontend/src/components/ReferenceUpload.tsx` com props `type="character" | "product"`, validações de extensão e tamanho (máx. 5 MB).
+- Criar hook/store `useReferenceImages` em `frontend/src/state/referenceImages.ts` para gerenciar IDs e descrições.
+- Atualizar `frontend/src/App.tsx` (linhas ~420-520):
+  - Submeter uploads imediatamente para `/upload/reference-image` (Fase 2) via `FormData`.
+  - No `handleSubmit`, incluir `reference_images` no payload com `{ id, user_description }` apenas quando houver upload.
+- Atualizar `frontend/src/components/InputForm.tsx` para usar o novo componente e capturar descrições.
+- Adicionar mensagens de feedback (sucesso/erro) relacionadas ao upload de referências.
+
+### Dependências existentes
+- Função `handleSubmit` em `frontend/src/App.tsx:423-498`.
+- Campo `foco` já presente em `frontend/src/components/InputForm.tsx:250-270`.
+
+### Integrações planejadas
+- Payload submetido continuará compatível com `/run` atual, apenas adicionando `reference_images` (consumido na Fase 2).
+- Hooks serão usados na Fase 6 (testes de frontend).
+
+### Critérios de aceitação
+- [ ] Uploads exibem progresso, validam extensões e retornos do backend.
+- [ ] `handleSubmit` envia `reference_images` somente quando disponíveis.
+- [ ] Plano de testes de frontend (RTL/Cypress) cobre cenários com e sem uploads.
+- [ ] UX mantém comportamento original quando recursos não são usados.
+
+---
+## Fase 4 – Integração no Pipeline de Agents & Prompts
+
+### Entregáveis
+- Atualizar prompts em `app/agent.py`:
+  - **VISUAL_DRAFT** (linhas ~880-930): adicionar placeholders `{reference_image_character_summary}` e `{reference_image_product_summary}` (criados na Fase 2) com instruções condicionais.
+  - **COPY_DRAFT** (linhas ~830-880): permitir menção ao produto real utilizando labels do cache.
+  - **final_assembler** (`app/agent.py:1030-1075`):
+    - Injetar `reference_images.character.gcs_uri`, `reference_images.character.labels`, `reference_images.product.gcs_uri`, `reference_images.product.labels`.
+    - Pós-processar saída para preencher `visual.reference_assets` com valores factuais quando presentes.
+- Atualizar `ImageAssetsAgent` (`app/agent.py:300-577`):
+  - Carregar `state["reference_images"]` (dicionários), reidratar com `ReferenceImageMetadata.model_validate` (criado na Fase 1).
+  - Registrar no summary flags `character_reference_used`, `product_reference_used`.
+- Estender `generate_transformation_images` (`app/tools/generate_transformation_images.py:180-330`):
+  - Novos parâmetros `reference_character: ReferenceImageMetadata | None` e `reference_product: ReferenceImageMetadata | None`.
+  - Helper `_load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image`.
+  - Ajustar prompts de estágio atual/aspiracional quando referências estiverem presentes.
+- Atualizar templates em `app/config.py`:
+  - `image_current_prompt_template` e `image_aspirational_prompt_template_with_product` conforme plano original (usados quando houver referências).
+
+### Dependências existentes
+- `ImageAssetsAgent` atual (`app/agent.py:300-577`).
+- Função `generate_transformation_images` (`app/tools/generate_transformation_images.py:180-330`).
+- Config `image_signed_url_ttl` (`app/config.py:240`).
+
+### Modificações planejadas (resumo)
+```diff
+# app/agent.py (final_assembler)
+-    "visual": {..., "referencia_padroes": "..."}
++    "visual": {...,
++        "referencia_padroes": "...",
++        "reference_assets": {
++            "character": <valores do state>,
++            "product": <valores do state>
++        }
++    }
+```
+
+### Critérios de aceitação
+- [ ] Prompts utilizam placeholders condicionais; plano feliz sem referências permanece intacto.
+- [ ] `ImageAssetsAgent` gera flags de uso de referência e mantém fallback quando dados ausentes.
+- [ ] `generate_transformation_images` aceita novos parâmetros sem quebrar assinaturas existentes (ver testes Fase 6).
+- [ ] JSON final inclui `visual.reference_assets` apenas quando metadados existem.
+
+---
+## Fase 5 – Observabilidade, Persistência e Sanitização
+
+### Entregáveis
+- Refatorar `persist_final_delivery(callback_context)` (`app/callbacks/persist_outputs.py:35-141`):
+  - Criar helper `sanitize_reference_images(state: dict[str, Any]) -> dict[str, Any]` removendo `signed_url`, tokens e payloads crus da Vision.
+  - Persistir metadados sanitizados em `meta["reference_images"]` e nos logs.
+  - Manter assinatura atual (usa `resolve_state(callback_context)`).
+- Adicionar logs estruturados (`logger.log_struct`) nos pontos-chave:
+  - Upload (Fase 2), preflight (Fase 2), pipeline de agentes (Fase 4) e persistência (esta fase).
+- Avaliar TTL curto para `signed_url` via `config.image_signed_url_ttl` e documentar política.
+
+### Dependências existentes
+- `resolve_state` (`app/utils/session_state.py:13-78`).
+- `clear_failure_meta` (`app/utils/delivery_status.py:12-40`).
+- Logging com `logger.log_struct` já usado nos endpoints principais.
+
+### Critérios de aceitação
+- [ ] `persist_final_delivery` salva metadados sem campos sensíveis e mantém compatibilidade com callbacks existentes (`ImageAssetsAgent` e `final_assembler`).
+- [ ] Logs estruturados exibem referências usadas e decisões do SafeSearch.
+- [ ] Documentação de TTL e limpeza de signed URLs atualizada (Fase 7).
+
+---
+## Fase 6 – Testes Automatizados & QA
+
+### Entregáveis
+- **Unit Tests**:
+  - `tests/unit/utils/test_reference_cache.py` (cache, TTL, merge com descrições).
+  - `tests/unit/utils/test_vision.py` (mocks do SafeSearch e labels).
+  - `tests/unit/tools/test_generate_transformation_images.py` (parâmetros com referências vs. fallback).
+  - `tests/unit/agents/test_image_assets_agent.py` (reidratação de metadados e flags de summary).
+  - `tests/unit/callbacks/test_persist_outputs.py` (sanitização de `reference_images`).
+- **Integração**:
+  - `tests/integration/api/test_reference_upload.py`: upload → análise → cache → `/run_preflight` recuperando metadados no `initial_state`.
+  - `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com referências, verificando JSON final e `reference_assets`.
+- **Frontend**:
+  - RTL tests para `ReferenceUpload` e `handleSubmit` com/sem uploads.
+  - Cenários Cypress (se suite existir) para formulário completo.
+- **QA manual**: roteiro com quatro cenários (nenhuma referência, apenas personagem, apenas produto, ambos) para validar UX e resultados.
+
+### Critérios de aceitação
+- [ ] `make test` cobre novas suites sem regressões.
+- [ ] Testes de integração validam ciclo completo (incluindo sanitização).
+- [ ] Roteiro manual documenta prints/logs de cada cenário.
+
+---
+## Fase 7 – Documentação & Rollout
+
+### Entregáveis
+- Atualizar `README.md` (seção de geração de imagens) com fluxo de uploads, limitações (5 MB, formatos) e política de TTL.
+- Criar/atualizar playbooks internos (`docs/`) descrevendo auditoria (`state['image_generation_audit']`) e monitoramento.
+- Adicionar notas de migração (changelog) destacando schema `reference_images` no JSON final e novos endpoints.
+- Planejar estratégia de rollout (flag `ENABLE_REFERENCE_IMAGES` opcional em `app/config.py`) para ativar gradualmente.
+
+### Critérios de aceitação
+- [ ] Documentação revisada pelo time.
+- [ ] Plano de rollback inclui desativar flag e limpar cache/GCS de uploads não usados.
+
+---
+## Dependências Externas e Configuração
+- `google-cloud-vision>=3.4.0` — adicionar a `requirements.txt` (linha nova) e `uv.lock`.
+- `google-cloud-storage` já presente (`requirements.txt:15`) – reutilizado.
+- Configurações novas em `app/config.py`:
+  - `reference_cache_ttl_seconds` (int, default 3600).
+  - `enable_reference_images` (bool, default `False` para rollout).
+
+## Riscos & Mitigações
+| Risco | Mitigação |
+|-------|-----------|
+| Indisponibilidade do Vision AI | Capturar exceções em `analyze_reference_image`, retornar erro amigável ao usuário e registrar log estruturado; fallback permite continuar sem referências. |
+| Latência adicional de upload/análise | Medir tempos (logs de duração), ajustar `config.image_generation_timeout` e permitir operação sem referências. |
+| Inconsistência narrativa entre copy/visual | Prompts (Fase 4) reforçam uso das labels; QA manual cobre cenários com e sem referências. |
+| Crescimento de arquivos no GCS | Incluir job de limpeza (planejado em docs de rollout) para remover uploads não utilizados após TTL; documentação explicita política. |
+| Cache em memória entre múltiplos workers | Abstrair utilitário permitindo futura troca por Redis/Datastore; documentar limitação e recomendar afinidade de sessão até adoção do backend compartilhado. |
+
+---
+## Checklist Final do Plano
+- [ ] Entregáveis usam verbos declarativos (Criar/Implementar/Modificar/Estender).
+- [ ] Dependências existentes possuem caminho e, quando relevante, intervalo de linhas.
+- [ ] Itens referenciados em fases posteriores indicam “(criado na Fase X)”.
+- [ ] Diffs ou resumos de modificações em arquivos existentes estão presentes.
+- [ ] Critérios de aceitação definidos para cada fase.
+- [ ] Dependências externas e flags documentadas.
+- [ ] Fluxo de testes cobre unitário, integração, frontend e QA manual.
+- [ ] Plano pode ser validado pelo `plan-code-validator` sem falsos P0.
+
+---
+## Resumo Executivo da Implementação
+1. **Fase 1 (Fundação)**: schemas e cache para metadados de referência.
+2. **Fase 2 (Backend)**: endpoint de upload + `/run_preflight` enriquecido.
+3. **Fase 3 (Frontend)**: componentes de upload e payload estendido.
+4. **Fase 4 (Pipeline)**: prompts, agentes e ferramenta de imagens incorporando referências.
+5. **Fase 5 (Observabilidade)**: sanitização de persistência e logs.
+6. **Fase 6 (Qualidade)**: testes automatizados e QA manual asseguram fluxo ponta a ponta.
+7. **Fase 7 (Docs/Rollout)**: documentação e estratégia de ativação gradual.
+
+Sequenciar dessa forma evita dependências circulares (schemas e cache devem existir antes de endpoints, que precisam estar prontos antes dos agentes, etc.) e garante rastreabilidade completa para validação automática e implementação por múltiplos times ou agentes.
