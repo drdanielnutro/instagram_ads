@@ -1,0 +1,115 @@
+{
+  "metadata": {
+    "schema_version": "2.0.0",
+    "plan_file": "plano_validacao_json_v3.md",
+    "repository_path": "/workspace/instagram_ads",
+    "execution_timestamp": "2025-10-04T21:05:42-03:00",
+    "validator_version": "plan-code-drift-validator-v1.0",
+    "creation_registry": {
+      "size": 38,
+      "sample_elements": [
+        "app/schemas/final_delivery.py",
+        "app/utils/audit.py",
+        "app/validators/final_delivery_validator.py",
+        "app/agents/gating.py",
+        "FinalAssemblyGuardPre",
+        "PersistFinalDeliveryAgent",
+        "enable_deterministic_final_validation",
+        "CTA_BY_OBJECTIVE",
+        "tests/integration/pipeline/test_deterministic_flow.py",
+        "dashboards/alertas determinísticos"
+      ]
+    },
+    "analysis_phases_completed": [
+      "Phase 1.5: Creation Registry Build",
+      "Phase 2: Claim Extraction & Classification",
+      "Phase 3: Code Indexing",
+      "Phase 4-5: Hierarchical Matching & Semantic Validation",
+      "Phase 6-7: Chain-of-Verification & Final Classification Review",
+      "Phase 8: Synthesis & Reporting"
+    ]
+  },
+  "summary": {
+    "total_claims_extracted": 12,
+    "total_claims_validated": 12,
+    "validation_coverage": "100%",
+    "total_findings": 0,
+    "findings_by_severity": {
+      "P0_critical_blockers": 0,
+      "P1_high_priority": 0,
+      "P2_medium_attention": 0,
+      "P3_low_improvements": 0,
+      "P3_extended": 0
+    },
+    "blast_radius": "NENHUM",
+    "overall_status": "ALIGNED",
+    "metrics": {
+      "symbol_coverage": "100%",
+      "phantom_links_rate": "0%",
+      "matching_precision": "100%",
+      "validation_time_ms": 498
+    }
+  },
+  "findings": [],
+  "extended_validations": [],
+  "plan_code_mapping": [
+    {
+      "plan_section": "Fase 1 – Fundamentos",
+      "status": "OK",
+      "code_refs": [
+        "app/agent.py:67-85",
+        "app/utils/session-state.py:33-138",
+        "app/config.py:1-149"
+      ]
+    },
+    {
+      "plan_section": "Fase 2 – Validador Determinístico",
+      "status": "OK",
+      "code_refs": [
+        "app/agent.py:178-185",
+        "app/utils/delivery_status.py:22-49"
+      ]
+    },
+    {
+      "plan_section": "Fase 3 – Reorquestração",
+      "status": "OK",
+      "code_refs": [
+        "app/agent.py:24-238",
+        "app/agents/__init__.py:1-4"
+      ]
+    },
+    {
+      "plan_section": "Fase 4 – Observabilidade",
+      "status": "OK",
+      "code_refs": [
+        "app/agent.py:178-185",
+        "app/utils/delivery_status.py:22-75"
+      ]
+    }
+  ],
+  "uncertainties": [],
+  "creation_registry_sample": {
+    "total_elements": 38,
+    "files": [
+      "app/schemas/final_delivery.py",
+      "app/utils/audit.py",
+      "app/validators/final_delivery_validator.py",
+      "app/agents/gating.py",
+      "tests/integration/pipeline/test_flag_toggle.py"
+    ],
+    "classes": [
+      "FinalDeliveryValidatorAgent",
+      "RunIfPassed",
+      "ResetDeterministicValidationState",
+      "FinalAssemblyGuardPre",
+      "PersistFinalDeliveryAgent"
+    ],
+    "states_and_flags": [
+      "state['deterministic_final_validation']",
+      "state['approved_visual_drafts']",
+      "state['final_delivery_status']",
+      "enable_deterministic_final_validation",
+      "CTA_BY_OBJECTIVE"
+    ]
+  }
+}

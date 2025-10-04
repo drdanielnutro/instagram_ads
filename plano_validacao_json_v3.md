@@ -50,9 +50,9 @@
 - Atualizar `app/utils/delivery_status.py:12-60` se necessário para expor helpers usados pelo validador.
 
 ### Dependências existentes
-- Base class `BaseAgent` (`app/agents/base.py`) e utilitários de gating já disponíveis.
+- Base class `BaseAgent` exposta por `google.adk.agents` e utilitários de gating já disponíveis.
 - `config.CTA_BY_OBJECTIVE` ou mapa equivalente (criar se ainda não existir; caso ausente, incluí-lo nesta fase).
-- Funções `write_failure_meta` e `make_failure_handler` em `app/agent.py`.
+- Função `write_failure_meta` definida em `app/utils/delivery_status.py:20-47` e helper `make_failure_handler` em `app/agent.py:178-185`.
 
 ### Integrações planejadas
 1. Fase 3 usará `FinalDeliveryValidatorAgent` dentro de `deterministic_validation_stage`.
@@ -82,7 +82,8 @@
 - Inserir `ResetDeterministicValidationState` antes do assembler no caminho legado (`flag=False`).
 
 ### Dependências existentes
-- `SequentialAgent`, `LoopAgent`, `EscalationBarrier`, `EscalationChecker` em `app/agents`.
+- `SequentialAgent` e `LoopAgent` exportados por `google.adk.agents` (importados em `app/agent.py:24-33`).
+- `EscalationBarrier` e `EscalationChecker` implementados em `app/agent.py:202-238`.
 - `ImageAssetsAgent` (`app/agent.py:300-577`).
 - `persist_final_delivery` callback em `app/callbacks/persist_outputs.py:35-141` (será encapsulado pelo novo agente).
 
@@ -109,7 +110,7 @@
 ## Fase 4 – Observabilidade e Persistência
 
 ### Entregáveis
-- Modificar `make_failure_handler` (`app/agent.py:1140-1180`) para lidar com chaves determinísticas sem sobrescrever resultados do caminho legado.
+- Modificar `make_failure_handler` (`app/agent.py:178-185`) para lidar com chaves determinísticas sem sobrescrever resultados do caminho legado.
 - Atualizar `write_failure_meta`/`clear_failure_meta` (`app/utils/delivery_status.py`) para persistir status `deterministic_final_validation`, `semantic_visual_review`, `image_assets_review`.
 - Modificar `persist_final_delivery` (`app/callbacks/persist_outputs.py:35-141`) para:
   - Gravar JSON normalizado (pós-validador) e limpar chaves legadas quando o pipeline determinístico estiver ativo.
