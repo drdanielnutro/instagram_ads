@@ -700,6 +700,7 @@ class LandingPageStage(BaseAgent):
         self, ctx: InvocationContext
     ) -> AsyncGenerator[Event, None]:  # type: ignore[override]
         state = ctx.session.state
+        state["landing_page_analysis_failed"] = False
         fallback_enabled = bool(
             getattr(config, "enable_storybrand_fallback", False)
             and getattr(config, "enable_new_input_fields", False)
@@ -710,6 +711,7 @@ class LandingPageStage(BaseAgent):
         if fallback_enabled and (force_flag or debug_flag):
             if not isinstance(state.get("landing_page_context"), dict):
                 state["landing_page_context"] = {}
+            state["landing_page_analysis_failed"] = True
             logger.info(
                 "storybrand_landing_page_skipped",
                 extra={
@@ -722,6 +724,10 @@ class LandingPageStage(BaseAgent):
 
         async for event in self._landing_page_agent.run_async(ctx):
             yield event
+
+        landing_ctx = state.get("landing_page_context")
+        if not isinstance(landing_ctx, dict) or not landing_ctx:
+            state["landing_page_analysis_failed"] = True
 
 
 image_assets_agent = ImageAssetsAgent()

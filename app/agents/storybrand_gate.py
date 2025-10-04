@@ -86,6 +86,26 @@ class StoryBrandQualityGate(BaseAgent):
 
         state["storybrand_gate_metrics"] = metrics
 
+        if should_run_fallback:
+            trigger_reason = (
+                "forced"
+                if forced_reason
+                else "missing_score"
+                if score_missing
+                else "score_below_threshold"
+                if score_below_threshold
+                else "unknown"
+            )
+        else:
+            trigger_reason = block_reason or "happy_path"
+
+        state["storybrand_fallback_meta"] = {
+            "fallback_engaged": should_run_fallback,
+            "decision_path": metrics["decision_path"],
+            "trigger_reason": trigger_reason,
+            "timestamp_utc": timestamp,
+        }
+
         debug_payload = {
             "force_flag_active": force_flag,
             "fallback_enabled": fallback_enabled,
