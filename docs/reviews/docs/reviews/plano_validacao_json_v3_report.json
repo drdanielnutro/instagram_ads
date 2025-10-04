@@ -1,0 +1,188 @@
+{
+  "metadata": {
+    "schema_version": "2.0.0",
+    "execution_timestamp": "2025-10-04T12:00:00-03:00",
+    "execution_time_seconds": 6.5,
+    "plan_file": "plano_validacao_json_v3.md",
+    "repository_root": ".",
+    "validator_version": "plan-code-validator/1.0"
+  },
+  "summary": {
+    "total_claims_extracted": 12,
+    "claims_validated": 9,
+    "claims_ignored_delivery": 37,
+    "symbol_coverage_percent": 100.0,
+    "phantom_links_rate_percent": 0.0,
+    "matching_precision_percent": 75.0,
+    "findings_by_severity": {
+      "P0": 3,
+      "P1": 0,
+      "P2": 1,
+      "P3": 0,
+      "P3_extended": 0
+    },
+    "blast_radius": {
+      "P0": "Alto",
+      "P1": "N/A",
+      "P2": "Baixo",
+      "P3": "N/A"
+    },
+    "overall_status": "ACTION_REQUIRED",
+    "critical_blockers": 3
+  },
+  "metrics": {
+    "creation_registry_size": 37
+  },
+  "findings": [
+    {
+      "id": "P0-001",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "MODIFICACAO",
+      "claim": {
+        "text": "Modificar app/utils/session_state.py:13-120 para aceitar os novos campos persistidos (snippet_type, approved_at, snippet_id, approved_visual_drafts).",
+        "phase": "Fase 1 – Fundamentos"
+      },
+      "evidence": [
+        {
+          "type": "code",
+          "path": "app/utils/session_state.py",
+          "lines": "10-91"
+        },
+        {
+          "type": "code",
+          "path": "app/utils/session-state.py",
+          "lines": "33-138"
+        }
+      ],
+      "issue": "O plano aponta o arquivo errado: o helper add_approved_snippet e o modelo CodeSnippet residem em app/utils/session-state.py, que hoje descarta campos extras. Atualizar apenas session_state.py não preservará snippet_type/approved_at/snippet_id, bloqueando o guard determinístico.",
+      "recommended_action": "Incluir a atualização de app/utils/session-state.py (ou migrar o uso desses helpers) para aceitar e serializar os novos campos antes de prosseguir com a implementação."
+    },
+    {
+      "id": "P0-002",
+      "severity": "P0",
+      "classification": "P0-B",
+      "type": "DEPENDENCIA",
+      "claim": {
+        "text": "final_assembler_llm (existente) comporá o estágio junto ao guard e normalizer.",
+        "phase": "Fase 3 – Reorquestração"
+      },
+      "evidence": [
+        {
+          "type": "code",
+          "path": "app/agent.py",
+          "lines": "1029-1056"
+        },
+        {
+          "type": "search",
+          "command": "rg final_assembler_llm"
+        }
+      ],
+      "issue": "O código possui apenas o agente final_assembler; não existe símbolo final_assembler_llm. Sem criar esse agente (ou renomear o atual), o estágio composto descrito no plano não pode ser montado.",
+      "recommended_action": "Adicionar instruções explícitas para introduzir/renomear o agente LLM (ex.: criar final_assembler_llm e ajustar referências) antes de encadear o guard/normalizer."
+    },
+    {
+      "id": "P0-003",
+      "severity": "P0",
+      "classification": "P0-A",
+      "type": "DEPENDENCIA",
+      "claim": {
+        "text": "Encadear RunIfPassed com semantic_validation_stage, image_assets_agent e persist_final_delivery_agent (existente).",
+        "phase": "Fase 3 – Reorquestração"
+      },
+      "evidence": [
+        {
+          "type": "code",
+          "path": "app/agent.py",
+          "lines": "520-583"
+        },
+        {
+          "type": "code",
+          "path": "app/agent.py",
+          "lines": "1261-1272"
+        },
+        {
+          "type": "search",
+          "command": "rg persist_final_delivery_agent"
+        }
+      ],
+      "issue": "Não há agente persist_final_delivery_agent no pipeline atual; a persistência ocorre diretamente dentro do ImageAssetsAgent via callback. O plano pressupõe um wrapper existente e não define sua criação, impossibilitando o encadeamento proposto.",
+      "recommended_action": "Registrar explicitamente a criação do agente de persistência (ou ajustar o plano para manter o callback) antes de mover RunIfPassed para essa etapa."
+    },
+    {
+      "id": "P2-001",
+      "severity": "P2",
+      "classification": "P2",
+      "type": "MODIFICACAO",
+      "claim": {
+        "text": "Modificar app/agent.py:880-950 para estender collect_code_snippets_callback com novos metadados.",
+        "phase": "Fase 1 – Fundamentos"
+      },
+      "evidence": [
+        {
+          "type": "code",
+          "path": "app/agent.py",
+          "lines": "122-136"
+        }
+      ],
+      "issue": "O alvo existe, porém está localizado nas linhas 122-136, não na faixa 880-950 indicada. A referência incorreta pode causar confusão ao executar o plano.",
+      "recommended_action": "Atualizar a seção do plano com a faixa correta (≈122-136) ou remover a referência numérica para evitar buscas equivocadas."
+    }
+  ],
+  "plan_code_mapping": [
+    {
+      "plan_reference": "Coletar snippets aprovados (Fase 1)",
+      "status": "Alinhado",
+      "code_reference": "app/agent.py:122-136"
+    },
+    {
+      "plan_reference": "Helpers de sessão (Fase 1)",
+      "status": "Bloqueado",
+      "code_reference": "app/utils/session-state.py:33-138"
+    },
+    {
+      "plan_reference": "Pipeline de execução (Fase 3)",
+      "status": "Bloqueado",
+      "code_reference": "app/agent.py:1261-1272"
+    }
+  ],
+  "creation_registry": [
+    "app/schemas/final_delivery.py",
+    "StrictAdCopy",
+    "StrictAdVisual",
+    "StrictAdItem",
+    "final_delivery.model_dump helper",
+    "final_delivery.from_state helper",
+    "app/utils/audit.py",
+    "append_delivery_audit_event",
+    "app/validators/final_delivery_validator.py",
+    "FinalDeliveryValidatorAgent",
+    "app/agents/gating.py",
+    "RunIfPassed",
+    "ResetDeterministicValidationState",
+    "build_execution_pipeline",
+    "FinalAssemblyGuardPre",
+    "FinalAssemblyNormalizer",
+    "deterministic_validation_stage",
+    "semantic_validation_stage",
+    "semantic_visual_reviewer",
+    "semantic_fix_agent",
+    "state['approved_visual_drafts']",
+    "state['deterministic_final_validation']",
+    "state['deterministic_final_blocked']",
+    "state['semantic_visual_review']",
+    "state['image_assets_review']",
+    "config.CTA_BY_OBJECTIVE",
+    "config.enable_deterministic_final_validation",
+    "tests/unit/schemas/test_final_delivery_schema.py",
+    "tests/unit/validators/test_final_delivery_validator.py",
+    "tests/unit/agents/test_final_assembly_guard.py",
+    "tests/unit/agents/test_final_assembly_normalizer.py",
+    "tests/unit/agents/test_run_if_passed.py",
+    "tests/unit/agents/test_reset_deterministic_validation_state.py",
+    "tests/unit/callbacks/test_persist_final_delivery.py",
+    "tests/integration/pipeline/test_deterministic_flow.py",
+    "tests/integration/pipeline/test_flag_toggle.py"
+  ],
+  "uncertainties": []
+}
