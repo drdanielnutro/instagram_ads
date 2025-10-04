@@ -202,3 +202,89 @@ The Makefile automatically kills processes on ports 8000 and 5173 before startin
 - Worker agents: `gemini-2.5-flash`
 - Critic agents: `gemini-2.5-pro`
 - LangExtract: `gemini-2.5-flash` (via Vertex AI)
+
+## Subagent Usage Policy
+
+This section defines **deterministic triggers** for mandatory use of specialized subagents from [.claude/agents/](.claude/agents/). These rules override general tool usage policies when conditions are met.
+
+### Priority Rules
+
+When processing user requests, apply this hierarchy:
+1. **Deterministic subagent triggers** (defined below) - HIGHEST priority
+2. **Specialized subagents** (when task matches agent description)
+3. **General-purpose agents** (for complex multi-step tasks)
+
+### Mandatory Subagent Triggers
+
+#### 1. Plan Validation & Drift Detection
+**Subagent**: [plan-code-validator](.claude/agents/plan-code-validator.md)
+
+**MUST USE** when user request contains ANY of these terms:
+- Portuguese: "revisar plano", "validar plano", "buscar inconsistências", "identificar inconsistências", "checar plano", "analisar drift", "verificar plano"
+- English: "review plan", "validate plan", "find inconsistencies", "identify inconsistencies", "check plan", "analyze drift", "verify plan"
+
+**Required Conditions**:
+- Target file MUST have `.md` extension
+- File should contain implementation plan (tasks, phases, dependencies, deliverables)
+
+**Invocation**:
+```python
+Task tool with parameters:
+- subagent_type: "plan-code-validator"
+- prompt: "Validate the implementation plan in <file_path> against the codebase in <repo_root>"
+```
+
+**Examples**:
+```markdown
+✅ MUST use plan-code-validator:
+user: "Revise o plano em docs/refactoring_plan.md"
+user: "Validate the plan in docs/api_migration.md for inconsistencies"
+user: "Buscar inconsistências no plano docs/feature_implementation.md"
+
+❌ Do NOT use (wrong file type):
+user: "Review the code in src/validators.py"
+user: "Check the JSON in config/settings.json"
+```
+
+**Validation Scope**:
+- Dependencies claimed to exist but not found in codebase (P0 blockers)
+- Signature mismatches between plan and actual code (P1-P2)
+- Missing libraries in requirements.txt (P3-Extended)
+- State machine divergences, business rule conflicts
+
+---
+
+### Template for Additional Subagents
+
+To add new deterministic triggers for other subagents in [.claude/agents/](.claude/agents/):
+
+```markdown
+#### N. [Subagent Purpose]
+**Subagent**: [subagent-name](.claude/agents/subagent-name.md)
+
+**MUST USE** when: [trigger keywords/patterns]
+
+**Required Conditions**:
+- [File type requirements]
+- [Context requirements]
+
+**Invocation**:
+```python
+Task tool with parameters:
+- subagent_type: "subagent-name"
+- prompt: "[specific instruction format]"
+```
+
+**Examples**: [concrete use cases]
+```
+
+### Available Specialized Subagents
+
+Other subagents available for specialized tasks (add deterministic triggers as needed):
+
+- [contextual-software-engineer](.claude/agents/contextual-software-engineer.md) - Project-specific solutions using context.md
+- [solution-validator-expert](.claude/agents/solution-validator-expert.md) - Cross-validate AI solutions against codebase
+- [ui-ux-auditor-typescript](.claude/agents/ui-ux-auditor-typescript.md) - Frontend UI/UX improvements
+- [implementation-consistency-auditor](.claude/agents/implementation-consistency-auditor.md) - Compare deliverables vs plans
+- [mobile-feature-mapper](.claude/agents/mobile-feature-mapper.md) - Mobile feature analysis
+- [plan-drift-corrector](.claude/agents/plan-drift-corrector.md) - Apply validated corrections to plans

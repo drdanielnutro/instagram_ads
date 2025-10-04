@@ -16,7 +16,7 @@
 
 ## 3. Inventário da Arquitetura Atual
 - **Modelos Pydantic (referência, não utilizados para validação):**
-  - `AdVisual`, `AdItem` (`app/agent.py:67` e `app/agent.py:80`). Hoje estão acoplados a `app/agent.py`, e `AdItem.contexto_storybrand` é `str`, enquanto o JSON gerado traz um objeto estruturado; o plano precisa extrair/copiar esses modelos para um módulo neutro antes de reforçar o schema.
+  - `AdVisual`, `AdItem` (`app/agent.py:67` e `app/agent.py:80`). Hoje estão acoplados a `app/agent.py`, e `AdItem.contexto_landing` é `str`, enquanto o JSON gerado traz um objeto estruturado; o plano precisa extrair/copiar esses modelos para um módulo neutro antes de reforçar o schema.
 - **Orquestração do pipeline de execução:**
   - `execution_pipeline` reúne `final_assembler`, `final_validation_loop`, `ImageAssetsAgent` (`app/agent.py:1261-1274`).
 - **Validação LLM:**
@@ -32,7 +32,7 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 
 1. **Schema de validação compartilhado**
    - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
-   - Permitir `contexto_storybrand` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Registrar em `deterministic_final_validation['schema_relaxation_reason']` o motivo da flexibilização.
+   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Registrar em `deterministic_final_validation['schema_relaxation_reason']` o motivo da flexibilização.
    - Reutilizar enums já existentes em `app/format_specifications.py`/`config.py`; o schema apenas os importa, não define valores próprios (evita múltiplas fontes de verdade) e centraliza os limites de caracteres.
 
 2. **Helper de auditoria e metadados**
@@ -40,8 +40,8 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
    - Revisar utilitários existentes (`app/utils/delivery_status.py`) apenas se precisarem expor helpers comuns (o helper não deve assumir responsabilidade por enums).
 
 3. **Metadados StoryBrand e landing page**
-   - Atualizar `StoryBrandQualityGate` para produzir `state['storybrand_fallback_meta'] = {"decision_path", "trigger_reason", "fallback_engaged"}` e manter `storybrand_audit_trail` como lista de eventos.
-   - Garantir que o analisador de landing page preencha `state['landing_page_analysis_failed']` (bool) em vez de depender de chaves livres como `landing_page_context['error']`.
+  - Revisar `StoryBrandQualityGate` para documentar o comportamento atual de `state['storybrand_fallback_meta'] = {"decision_path", "trigger_reason", "fallback_engaged", "timestamp_utc"}` e complementar apenas se novos campos ou logs forem necessários.
+  - Confirmar (e, se preciso, complementar com observabilidade) que o analisador de landing page preenche `state['landing_page_analysis_failed']` como flag booleana; hoje a flag já é inicializada com `False` e atualizada para `True` em fallback forçado ou erro de análise.
 
 4. **Enriquecimento dos snippets aprovados**
    - Estender `collect_code_snippets_callback` para registrar, além de `task_id`/`category`, os campos `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` (hash SHA-256 de `task_id::snippet_type::payload`).

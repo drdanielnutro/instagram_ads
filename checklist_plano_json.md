@@ -14,8 +14,8 @@
 - [ ] Revisar `app/utils/delivery_status.py` apenas para expor helpers comuns necessários sem assumir responsabilidade por enums.
 
 ### 1.3 Metadados StoryBrand e landing page
-- [ ] Atualizar `StoryBrandQualityGate` para preencher `state['storybrand_fallback_meta'] = {"decision_path", "trigger_reason", "fallback_engaged"}` e manter `storybrand_audit_trail` como lista de eventos.
-- [ ] Garantir que o analisador de landing page defina `state['landing_page_analysis_failed']` como booleano em vez de chaves livres.
+- [ ] Revisar `StoryBrandQualityGate` documentando o preenchimento existente de `state['storybrand_fallback_meta'] = {"decision_path", "trigger_reason", "fallback_engaged", "timestamp_utc"}`, acrescentando apenas os complementos necessários (ex.: novos campos/logs).
+- [ ] Confirmar que o analisador de landing page mantém `state['landing_page_analysis_failed']` como flag booleana (inicializa com `False`, marca `True` para fallback forçado/erro) e complementar apenas se forem necessários observabilidade ou contratos adicionais.
 
 ### 1.4 Enriquecimento dos snippets aprovados
 - [ ] Estender `collect_code_snippets_callback` com `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` = SHA-256 de `task_id::snippet_type::payload`.
@@ -73,7 +73,7 @@
 - [ ] Documentar o contrato de saída do `semantic_visual_reviewer` (`grade`, `issues`, `fix_instructions`) e limitar `semantic_fix_agent` a correções narrativas.
 - [ ] Documentar endpoints afetados (`/delivery/final/meta`, `/delivery/final/download`, SSE, mensagens do `FeatureOrchestrator`) em planilha/checklist interno.
 - [ ] Ajustar consumidores para checar flags `deterministic_final_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed` antes de solicitar imagens.
-- [ ] Garantir que `LandingPageStage` inicialize `state["landing_page_analysis_failed"] = False` e atualize para `True` quando aplicável, e que `StoryBrandQualityGate` preencha `state["storybrand_fallback_meta"] = {fallback_engaged, decision_path, trigger_reason, timestamp}`.
+- [ ] Confirmar que `LandingPageStage` mantém o ciclo `state["landing_page_analysis_failed"] = False → True` nos cenários previstos e que `StoryBrandQualityGate` continua fornecendo `state["storybrand_fallback_meta"]` com os campos atuais, documentando eventuais complementos necessários.
 
 ### 3.4 Observabilidade e persistência
 - [ ] Registrar eventos estruturados via `append_delivery_audit_event` em guard, validador, revisor e persistência.
