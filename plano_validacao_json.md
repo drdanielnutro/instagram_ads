@@ -1,8 +1,8 @@
 # Plano de Validação Determinística do JSON Final de Ads
 
 ## 1. Contexto e Problema Atual
-- O `final_assembler` (`app/agent.py:1023`) monta as três variações do anúncio exclusivamente via LLM, sem reaproveitar determinística e integralmente o fragmento aprovado de `VISUAL_DRAFT`.
-- A validação estrutural depende de outro LLM (`final_validator`, `app/agent.py:1053`), que deveria barrar campos obrigatórios vazios, mas pode aprovar falsos positivos (ex.: `null` em `visual.prompt_estado_intermediario`).
+- O `final_assembler` (`app/agent.py:1029`) monta as três variações do anúncio exclusivamente via LLM, sem reaproveitar determinística e integralmente o fragmento aprovado de `VISUAL_DRAFT`.
+- A validação estrutural depende de outro LLM (`final_validator`, `app/agent.py:1059`), que deveria barrar campos obrigatórios vazios, mas pode aprovar falsos positivos (ex.: `null` em `visual.prompt_estado_intermediario`).
 - O único gate determinístico hoje é o `ImageAssetsAgent` (`app/agent.py:310`), que apenas detecta campos ausentes momentos antes da geração de imagens, resultando em variações ignoradas em vez de corrigidas.
 - Não existe uma validação em código (schema ou regra) que garanta contratos mínimos antes das etapas finais.
 - O `persist_final_delivery` é acionado como callback do `final_assembler`, gravando artefatos locais/GCS mesmo quando as validações subsequentes falham.
@@ -16,9 +16,9 @@
 
 ## 3. Inventário da Arquitetura Atual
 - **Modelos Pydantic (referência, não utilizados para validação):**
-  - `AdVisual`, `AdItem` (`app/agent.py:67` e `app/agent.py:80`). Hoje estão acoplados a `app/agent.py`, e `AdItem.contexto_landing` é `str`, enquanto o JSON gerado traz um objeto estruturado; o plano precisa extrair/copiar esses modelos para um módulo neutro antes de reforçar o schema.
+  - `AdVisual`, `AdItem` (`app/agent.py:67` e `app/agent.py:80`). Hoje estão acoplados a `app/agent.py`, e `AdItem.contexto_storybrand` é `str`, enquanto o JSON gerado traz um objeto estruturado; o plano precisa extrair/copiar esses modelos para um módulo neutro antes de reforçar o schema.
 - **Orquestração do pipeline de execução:**
-  - `execution_pipeline` reúne `final_assembler`, `final_validation_loop`, `ImageAssetsAgent` (`app/agent.py:1235-1261`).
+  - `execution_pipeline` reúne `final_assembler`, `final_validation_loop`, `ImageAssetsAgent` (`app/agent.py:1261-1274`).
 - **Validação LLM:**
   - `final_validation_loop` → `final_validator` (LLM) → `EscalationChecker` → `final_fix_agent` (`app/agent.py:1240`). Atualmente o loop executa antes de qualquer validação determinística.
 - **Dados auxiliares:**
@@ -32,7 +32,7 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 
 1. **Schema de validação compartilhado**
    - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
-   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Registrar em `deterministic_final_validation['schema_relaxation_reason']` o motivo da flexibilização.
+   - Permitir `contexto_storybrand` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Registrar em `deterministic_final_validation['schema_relaxation_reason']` o motivo da flexibilização.
    - Reutilizar enums já existentes em `app/format_specifications.py`/`config.py`; o schema apenas os importa, não define valores próprios (evita múltiplas fontes de verdade) e centraliza os limites de caracteres.
 
 2. **Helper de auditoria e metadados**
