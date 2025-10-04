@@ -32,8 +32,9 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 
 1. **Schema de validação compartilhado**
    - Criar `app/schemas/final_delivery.py` com modelos estritos (`StrictAdCopy`, `StrictAdVisual`, `StrictAdItem`).
-   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, presença de `state.get("storybrand_audit_trail", {}).get("fallback_triggered")` ou erros da landing page em `state.get("landing_page_context", {}).get("error")`. Documentar no estado o motivo da flexibilização.
+   - Permitir `contexto_landing` como `dict[str, Any] | str`; campos textuais terão `min_length=1`, exceto quando o pipeline entrar de fato no fallback StoryBrand. O schema deverá relaxar campos quando qualquer uma das condições for verdadeira: `state.get("force_storybrand_fallback")`, `state.get("storybrand_gate_metrics", {}).get("decision_path") == "fallback"`, `state.get("storybrand_fallback_meta", {}).get("fallback_engaged")` ou `state.get("landing_page_analysis_failed")`. Documentar no estado o motivo da flexibilização.
    - Reutilizar enums já existentes em `app/format_specifications.py`/`config.py`; o schema apenas os importa, não define valores próprios (evita múltiplas fontes de verdade) e centraliza os limites de caracteres.
+   - Criar helper `storybrand_fallback_meta` consumindo `state["storybrand_gate_metrics"]` (ver Fase 3) e usá-lo como fonte oficial para relaxamentos, evitando depender de estruturas inexistentes em `storybrand_audit_trail`.
 
 2. **Helper de auditoria e metadados**
    - Criar `app/utils/audit.py` apenas com `append_delivery_audit_event` e funções de logging; mapeamentos de CTA permanecem onde já estão (`format_specifications`/`config`).
@@ -42,7 +43,12 @@ Objetivo: Preparar contratos e utilitários independentes antes de tocar no pipe
 3. **Feature flag de ativação**
    - Adicionar no `config.py` a flag `enable_deterministic_final_validation` (default `False`) com suporte a env `ENABLE_DETERMINISTIC_FINAL_VALIDATION`.
    - Documentar que, enquanto `False`, o pipeline segue usando `final_validation_loop` + `ImageAssetsAgent` como hoje; quando `True`, o novo fluxo determinístico substitui essa etapa.
-   - Atualizar README/ops docs para orientar rollout controlado e ambientes canário.
+   - Atualizar README/ops docs para orientar rollout controlado e ambientes canário, explicitando que a flag é lida apenas durante `build_execution_pipeline()` e que alternâncias exigem restart do processo (sem hot-reload).
+   - Introduzir helper `log_config_flag(flag_name, value)` para registrar o valor carregado em runtime.
+
+4. **Enriquecimento do callback de snippets**
+   - Estender `collect_code_snippets_callback` para registrar, além de `task_id`/`category`, os campos `snippet_type`, `status="approved"`, `approved_at` (UTC) e `snippet_id` (hash SHA-256 de `task_id::snippet_type::payload`).
+   - Preservar compatibilidade adicionando esses campos ao dicionário existente (superset), garantindo que consumidores atuais continuem operando.
 
 ### Fase 2 – Validador Determinístico (Etapa 5.2)
 Objetivo: Construir o agente que consome os componentes da Fase 1.
@@ -53,11 +59,15 @@ Objetivo: Construir o agente que consome os componentes da Fase 1.
      - Carregar `final_code_delivery` (string/list/objeto) e efetuar parsing único.
      - Validar com o schema estrito, incluindo regras por formato (`app/format_specifications.py`) e checagem de `cta_instagram` coerente com `state["objetivo_final"]`. O plano prevê um mapa `CTA_BY_OBJECTIVE` consolidado em `config.py` cobrindo todas as metas hoje aceitas (`agendamentos`, `leads`, `vendas`, `contato`, `awareness` e afins); quando o objetivo não estiver no mapa, o agente recorrerá ao enum global de CTAs sem reprovar automaticamente.
      - Detectar duplicidades entre variações usando tuplas normalizadas (`headline`, `corpo`, `prompt_estado_*`).
-     - Persistir `final_delivery_validation = {"grade", "issues", "normalized_payload"}` no estado (mantido como referência) e sincronizar `state["final_code_delivery"]` para apontar para o JSON normalizado.
+     - Persistir `deterministic_final_validation = {"grade", "issues", "normalized_payload", "source": "validator"}` no estado (mantido como referência) e sincronizar `state["final_code_delivery"]` para apontar para o JSON normalizado.
    - Tratamento de falhas:
-     - Não lançar exceções customizadas; registrar `final_delivery_validation = {"grade": "fail", ...}` e chamar `append_delivery_audit_event`.
-     - Configurar `after_agent_callback=make_failure_handler("final_delivery_validation", "JSON final não passou na validação determinística.")` e, quando necessário, acionar `write_failure_meta`.
+     - Não lançar exceções customizadas; registrar `deterministic_final_validation = {"grade": "fail", ...}` e chamar `append_delivery_audit_event`.
+     - Configurar `after_agent_callback=make_failure_handler("deterministic_final_validation", "JSON final não passou na validação determinística.")` e, quando necessário, acionar `write_failure_meta`.
      - Atualizar `state["final_code_delivery"]` com a versão normalizada aprovada (string JSON), mantendo o payload alinhado para agentes subsequentes.
+
+4. **Utilitários de gating/reset**
+   - Implementar `RunIfPassed` em `app/agents/gating.py`, aceitando `review_key`, `expected_grade` (default `"pass"`) e comportamento explícito para chaves ausentes (tratar como reprovação, logar via `append_delivery_audit_event`).
+   - Implementar `ResetDeterministicValidationState` para limpar `approved_visual_drafts`, `deterministic_final_validation`, `deterministic_final_blocked`, `final_code_delivery_parsed` e demais artefatos quando o pipeline legado estiver ativo.
 
 ### Fase 3 – Reorquestração do Pipeline (Etapas 5.3–5.5)
 Objetivo: Integrar o validador, reorganizar agentes e garantir observabilidade consistente.
@@ -66,13 +76,14 @@ Objetivo: Integrar o validador, reorganizar agentes e garantir observabilidade c
 - Quando `config.enable_deterministic_final_validation` estiver `True`, ativar o novo fluxo determinístico; caso contrário, manter a configuração atual (`final_assembler` com callback → `EscalationBarrier(final_validation_loop)` → `image_assets_agent` → persistência).
 - Converter o antigo `final_validation_loop` em `semantic_validation_loop`, focado apenas em coerência narrativa, mantendo o `EscalationBarrier` como etapa explícita após o `EscalationChecker` dentro do fluxo ativado pela flag.
 - Substituir o `LlmAgent` `final_assembler` por um estágio composto, orquestrado via `SequentialAgent` com dois novos guards:
-  - `FinalAssemblyGuardPre` (novo `BaseAgent`) filtra `state["approved_code_snippets"]` buscando entradas com `snippet_type == "VISUAL_DRAFT"` e `status == "approved"`, normaliza o fragmento (string JSON) e registra falha auditável quando o snippet estiver ausente, duplicado ou ilegível.
+  - `FinalAssemblyGuardPre` (novo `BaseAgent`) filtra `state["approved_code_snippets"]` buscando entradas com `snippet_type == "VISUAL_DRAFT"` e `status == "approved"`, normaliza o fragmento (string JSON) e registra falha auditável quando o snippet estiver ausente, duplicado ou ilegível. Persistir o resultado em `state["approved_visual_drafts"]` como lista de dicionários `{snippet_id, task_id, approved_at, content}`. Em caso de falha, deve atualizar `state["deterministic_final_validation"] = {"grade": "fail", ...}`, definir `state["deterministic_final_blocked"] = True` e emitir `EventActions(escalate=True)` para impedir a continuação do estágio.
   - `final_assembler_llm` mantém o prompt atual e gera as três variações; o callback de coleta de snippets permanece inalterado.
-  - `FinalAssemblyNormalizer` (novo `BaseAgent`) roda imediatamente após a resposta LLM, reaproveitando o snippet aprovado, garantindo que `state["final_code_delivery"]` contenha JSON serializado e empurrando metadados para `state["final_delivery_validation"]` com `grade="pending"` até o validador determinístico executar.
+  - `FinalAssemblyNormalizer` (novo `BaseAgent`) roda imediatamente após a resposta LLM, reaproveitando o snippet aprovado e validando a presença de seções obrigatórias (`copy`, `visual`, `cta_instagram`, `fluxo`, `referencia_padroes`). Se faltarem dados essenciais, deve falhar como o guard (atualizando `deterministic_final_validation`/`deterministic_final_blocked` e escalando o evento). Quando tudo estiver coerente, garante que `state["final_code_delivery"]` contenha JSON serializado e empurra metadados para `state["deterministic_final_validation"]` com `grade="pending"` e `source="normalizer"` até o validador determinístico executar.
 - Inserir `deterministic_validation_stage` logo após o assembler composto.
 - Introduzir dois utilitários leves:
-  - `RunIfPassed` executa o agente encapsulado quando a revisão indicada possui `grade == "pass"`.
+  - `RunIfPassed` executa o agente encapsulado apenas quando `deterministic_final_validation.grade == "pass"` (ou outra chave configurada); definir comportamento explícito para ausência de chave (tratar como `fail`).
   - `RunIfFailed` continua disponível para loops que exigem correção (semântico).
+- Ajustar `make_failure_handler` para escrever/limpar `deterministic_final_validation_*` apenas quando o `state_key` for `"deterministic_final_validation"`; no caso do `final_validation_result` (LLM), manter compatibilidade com flags legadas sem sobrescrever os resultados determinísticos.
 - Encadear `RunIfPassed` com o loop semântico e com os agentes de imagens/persistência, garantindo que nenhum deles seja chamado após falha determinística ou semântica e envolvendo o loop com um `EscalationBarrier` dedicado para consumir `EventActions(escalate=True)` sem abortar o pipeline antes que `make_failure_handler` atue.
 
 ```python
@@ -80,7 +91,7 @@ deterministic_validation_stage = SequentialAgent(
     name="deterministic_validation_stage",
     sub_agents=[final_delivery_validator_agent],
     after_agent_callback=make_failure_handler(
-        "final_delivery_validation",
+        "deterministic_final_validation",
         "JSON final não passou na validação determinística."
     ),
 )
@@ -113,7 +124,7 @@ if config.enable_deterministic_final_validation:
             final_assembler_llm,
             FinalAssemblyNormalizer(...),
             deterministic_validation_stage,
-            RunIfPassed(name="semantic_only_if_passed", review_key="final_delivery_validation", agent=semantic_validation_stage),
+            RunIfPassed(name="semantic_only_if_passed", review_key="deterministic_final_validation", agent=semantic_validation_stage),
             RunIfPassed(name="images_only_if_passed", review_key="semantic_visual_review", agent=image_assets_agent),
             RunIfPassed(name="persist_only_if_passed", review_key="image_assets_review", agent=persist_final_delivery_agent),
             ...
@@ -132,13 +143,14 @@ else:
     )
 ```
 
-- Quando a flag estiver ativa, remover o `after_agent_callback` do `final_assembler` e a chamada direta a `persist_final_delivery` dentro do `ImageAssetsAgent`; a persistência passa a ser responsabilidade exclusiva do novo agente dedicado, que só roda quando `image_assets_review.grade == "pass"` ou quando explicitamente liberado por falhas toleráveis documentadas em `state["image_assets"]`. Com a flag desativada, manter os callbacks atuais para preservar o comportamento legado.
-- Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `final_delivery_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed`, mantendo compatibilidade com `final_validation_result_failed` durante a transição e encerrando o pipeline em caso de falha determinística.
+- No caminho legado (`flag=False`), inserir agente auxiliar `ResetDeterministicValidationState` logo antes do `final_assembler` para limpar chaves específicas (`approved_visual_drafts`, `deterministic_final_validation`, etc.) e evitar resíduos quando alternar entre os pipelines.
+- Quando a flag estiver ativa, remover o `after_agent_callback` do `final_assembler` e a chamada direta a `persist_final_delivery` dentro do `ImageAssetsAgent`; a persistência passa a ser responsabilidade exclusiva do novo agente dedicado, que só roda quando `image_assets_review.grade == "pass"` (ou `"skipped"` documentado) ou quando explicitamente liberado por falhas toleráveis documentadas em `state["image_assets"]`. Com a flag desativada, manter os callbacks atuais para preservar o comportamento legado.
+- Atualizar `FeatureOrchestrator` e endpoints de entrega para observar `deterministic_final_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed`, mantendo compatibilidade com `final_validation_result_failed` durante a transição e encerrando o pipeline em caso de falha determinística.
 
 #### 4.3.2 Ajustes no `final_assembler`
 - `FinalAssemblyGuardPre` realizará a checagem determinística pelos snippets `VISUAL_DRAFT` em `approved_code_snippets`, validando unicidade por `snippet_id` e presença de `content` serializável.
 - O `final_assembler_llm` terá o prompt reforçado para exigir reutilização do snippet aprovado e retornar JSON pronto para uso.
-- `FinalAssemblyNormalizer` transformará a resposta LLM em string JSON canônica (`json.dumps(..., ensure_ascii=False)`), garantirá sincronismo com o snippet reutilizado e atualizará `state["final_code_delivery"]` e `state["final_delivery_validation"]` (grade `pending`) antes de acionar o validador determinístico.
+- `FinalAssemblyNormalizer` transformará a resposta LLM em string JSON canônica (`json.dumps(..., ensure_ascii=False)`), garantirá sincronismo com o snippet reutilizado e atualizará `state["final_code_delivery"]` e `state["deterministic_final_validation"]` (grade `pending`, `source="normalizer"`) antes de acionar o validador determinístico.
 
 #### 4.3.3 Revisor semântico e agentes auxiliares
 - Criar `semantic_visual_reviewer` (LLM) e `semantic_fix_agent`, ambos reutilizando o schema `Feedback`.
@@ -149,13 +161,16 @@ else:
 - Documentar o contrato de saída do `semantic_visual_reviewer` (`Feedback` com `grade`, `issues`, `fix_instructions`) e alinhar o `semantic_fix_agent` para atuar somente em problemas narrativos (não reescrever campos estruturais já validados).
 
 - Em paralelo, documentar (em planilha/checklist interno) os endpoints afetados: `/delivery/final/meta`, `/delivery/final/download`, streaming SSE e mensagens do `FeatureOrchestrator`.
-- Ajustar consumidores para checar `final_delivery_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed` antes de solicitar imagens.
+- Ajustar consumidores para checar `deterministic_final_validation_failed`, `semantic_visual_review_failed` e `image_assets_review_failed` antes de solicitar imagens.
+- Garantir que `LandingPageStage` inicialize `state["landing_page_analysis_failed"] = False` e atualize para `True` em cenários de fallback forçado ou erro de fetch, e que `StoryBrandQualityGate` preencherá `state["storybrand_fallback_meta"] = {fallback_engaged, decision_path, trigger_reason, timestamp}` para consumo do schema determinístico.
 
 #### 4.3.4 Observabilidade e persistência
 - Registrar eventos estruturados via `append_delivery_audit_event` em cada estágio (guard, validador, revisor, persistência).
 - Com a flag ativa, `persist_final_delivery_agent` chamará `persist_final_delivery` exatamente uma vez, lendo `state["image_assets"]` para decidir entre anexar imagens, registrar falha parcial (`image_assets_review.grade == "fail"`) ou persistir somente o JSON. O agente deve também popular `state["image_assets_review"]` com `grade` e `issues` antes de liberar a persistência. Quando a flag estiver desativada, manter o fluxo legado de callbacks.
-- Propagar `final_delivery_validation`, `semantic_visual_review` e `image_assets_review` para `write_failure_meta`/`clear_failure_meta`, garantindo que as APIs de entrega reflitam o status real e preservem o contrato atual (`final_delivery_status`).
+- Propagar `deterministic_final_validation`, `semantic_visual_review` e `image_assets_review` para `write_failure_meta`/`clear_failure_meta`, garantindo que as APIs de entrega reflitam o status real e preservem o contrato atual (`final_delivery_status`).
 - Atualizar `EnhancedStatusReporter` para sinalizar as novas etapas ao usuário final apenas quando a flag estiver habilitada; fora desse cenário, preservar as mensagens atuais.
+- Definir contrato dos eventos de auditoria (`stage`, `status`, `detail`, `deterministic_grade`, `storybrand_fallback_engaged`) e das métricas associadas, facilitando monitoramento paralelo dos pipelines legado e determinístico.
+- Registrar e limpar a flag auxiliar `deterministic_final_blocked` (exposta para status reporters) para diferenciar falhas do guard/normalizer de reprovações do LLM.
 
 ### Fase 4 – Testes, Documentação e Qualidade (Etapas 5.6–6)
 Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
@@ -172,6 +187,7 @@ Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
    - Atualizar README/playbooks detalhando a nova ordem de validação e impactos nas APIs de entrega.
    - Registrar notas de migração (ex.: remoção do `after_agent_callback` no `final_assembler`) e sinalizar a necessidade de testes quando novos formatos/CTAs forem adicionados.
    - Documentar a flag `ENABLE_DETERMINISTIC_FINAL_VALIDATION`, incluindo valores recomendados por ambiente, passos para rollout gradual e plano de rollback.
+   - Atualizar guias de observabilidade e SSE com as novas chaves de estado (`deterministic_final_validation`, `deterministic_final_blocked`, `image_assets_review` com status `skipped`) e mensagens do `FeatureOrchestrator`.
 
 ## 5. Checklist Operacional
 1. **Fase 1** – Schema compartilhado (com regras para fallback) e helper de auditoria disponíveis, sem duplicar enums.
@@ -189,12 +205,19 @@ Objetivo: Validar o fluxo ponta a ponta e comunicar as mudanças.
     - CTA incompatível com objetivo (usar fixtures de `format_specs`).
     - Strings contendo apenas espaços.
   - Testar comparações de unicidade entre variações.
+  - Cobrir `collect_code_snippets_callback` enriquecendo metadados (`snippet_id`, `approved_at`).
+  - Exercitar `FinalAssemblyGuardPre` bloqueando quando não houver VISUAL_DRAFT ou quando duplicado (verificando `EventActions.escalate` e `deterministic_final_validation` = fail).
+  - Exercitar `FinalAssemblyNormalizer` garantindo que campos obrigatórios permaneçam presentes, serialização de `contexto_landing` e falha quando o payload retornar apenas blocos parciais.
+  - Validar `RunIfPassed`/`ResetDeterministicValidationState` nos cenários pass/fail/ausente.
 - **Integration Tests:**
   - Simular pipeline parcial (`final_assembler` → validador) com estado mockado.
   - Garantir que falha determinística impede execução do `ImageAssetsAgent`.
   - Validar sessões com `force_storybrand_fallback=True`, cobrindo campos opcionais/estruturados emitidos pelo fallback.
   - Utilizar fakes de `LlmAgent`/`BaseAgent` do ADK (ex.: `FakeAgent`) para orquestrar `RunIfPassed`, `EscalationBarrier` e `SequentialAgent`, evitando dependência de chamadas reais ao LLM.
   - Exercitar os dois estados da flag (`True`/`False`) garantindo que o fluxo legado continue funcional e que o novo pipeline seja acionado somente quando habilitado.
+  - Verificar rollback da flag: habilitar → gerar entrega → desabilitar → confirmar limpeza de `deterministic_final_validation`/`approved_visual_drafts` e ausência de callbacks duplicados.
+  - Assegurar que `persist_final_delivery` é chamado exatamente uma vez por execução e que `image_assets_review` reflete `pass`/`skipped` quando imagens são puladas.
+  - Cobrir cenários de fallback StoryBrand medindo `storybrand_fallback_meta` e `landing_page_analysis_failed`, garantindo que o schema relaxado aceite os campos vazios esperados.
 - **Regression:**
   - Atualizar testes existentes que assumem ausência de validação.
   - Cobrir mapeamentos de CTA para objetivos suportados (agendamentos, leads, vendas, contato) assegurando que alterações futuras nos specs não quebrem o validador.
