@@ -11,8 +11,8 @@
 ### Entregáveis
 - Criar `app/schemas/final_delivery.py` com modelos estritos `StrictAdCopy`, `StrictAdVisual`, `StrictAdItem` e funções auxiliares (`model_dump`, `from_state`) tratando `contexto_landing: str | dict[str, Any]`.
 - Criar `app/utils/audit.py` com helper `append_delivery_audit_event(state: dict, *, stage: str, status: str, detail: str | None = None, **extras) -> None` reutilizável por guard/validator/persistência.
-- Modificar `app/agent.py:880-950` para estender `collect_code_snippets_callback` registrando `snippet_type`, `status`, `approved_at`, `snippet_id` (SHA-256) e popular `state['approved_visual_drafts']`.
-- Modificar `app/utils/session_state.py:13-120` para aceitar os novos campos persistidos (`snippet_type`, `approved_at`, `snippet_id`, `approved_visual_drafts`).
+- Modificar `app/agent.py:120-150` (faixa aproximada) para estender `collect_code_snippets_callback` registrando `snippet_type`, `status`, `approved_at`, `snippet_id` (SHA-256) e popular `state['approved_visual_drafts']`.
+- Modificar `app/utils/session-state.py:33-138` para preservar os novos campos persistidos (`snippet_type`, `approved_at`, `snippet_id`, `approved_visual_drafts`) quando a flag determinística estiver ativa.
 - Modificar `app/config.py:120-215` adicionando:
   - Flag `enable_deterministic_final_validation: bool = False` com suporte a `ENABLE_DETERMINISTIC_FINAL_VALIDATION`.
   - Config `fallback_storybrand_max_iterations` (se ainda não existir) e centralização dos limites utilizados pelo schema.
@@ -21,7 +21,7 @@
 ### Dependências existentes
 - `AdVisual`/`AdItem` definidos em `app/agent.py:63-130` (servem de referência para o schema estrito).
 - Utilitário `hashlib.sha256` (biblioteca padrão).
-- Estrutura atual de sessão (helpers `resolve_state`, `add_approved_snippet`) em `app/utils/session_state.py:13-120`.
+- Estrutura atual de sessão (classe `CodeSnippet`, helpers `get_session_state`, `add_approved_snippet`) em `app/utils/session-state.py:33-138`.
 
 ### Integrações planejadas
 1. Fase 2 consumirá `StrictAd*` e o helper de auditoria para o `FinalDeliveryValidatorAgent`.
@@ -32,7 +32,7 @@
 - [ ] Arquivo `app/schemas/final_delivery.py` criado com modelos estritos e métodos auxiliares.
 - [ ] `append_delivery_audit_event` grava eventos sem duplicar lógica existente.
 - [ ] `collect_code_snippets_callback` registra metadados adicionais e mantém compatibilidade com consumidores atuais.
-- [ ] `session_state` persiste e recupera os novos campos sem perdas.
+- [ ] `session-state` persiste e recupera os novos campos sem perdas quando a flag estiver ativa.
 - [ ] Flag `enable_deterministic_final_validation` disponível em `config` e via variável de ambiente.
 
 ---
@@ -71,19 +71,20 @@
 ### Entregáveis
 - Implementar `build_execution_pipeline(flag_enabled: bool)` em `app/agent.py` retornando duas versões do pipeline (determinístico vs legado) sem mutação em runtime.
 - Criar `FinalAssemblyGuardPre` (`app/agent.py`) para validar presença/qualidade de snippets `VISUAL_DRAFT`, preenchendo `state['approved_visual_drafts']`, atualizando `state['deterministic_final_validation']` em caso de bloqueio e emitindo `EventActions(escalate=True)`.
-- Modificar `final_assembler` para rodar como estágio composto: `FinalAssemblyGuardPre` → `final_assembler_llm` (existente) → `FinalAssemblyNormalizer` (novo) que sincroniza JSON final com snippet aprovado e define `state['deterministic_final_validation'] = {grade: "pending", source: "normalizer"}`.
+- Extrair o prompt LLM atual do `final_assembler` para um novo agente `FinalAssemblerLLM` (mesmo arquivo), responsável exclusivamente por chamar o modelo e retornar as três variações (mantém instruções atuais).
+- Modificar `final_assembler` para rodar como estágio composto: `FinalAssemblyGuardPre` → `FinalAssemblerLLM` (novo) → `FinalAssemblyNormalizer` (novo) que sincroniza JSON final com snippet aprovado e define `state['deterministic_final_validation'] = {grade: "pending", source: "normalizer"}`.
 - Introduzir `deterministic_validation_stage = SequentialAgent([...])` contendo `FinalDeliveryValidatorAgent + make_failure_handler("deterministic_final_validation", ...)`.
 - Converter `final_validation_loop` em `semantic_validation_loop` (apenas coerência narrativa) seguido por `EscalationBarrier` dedicado.
 - Encadear `RunIfPassed` em série:
   - `RunIfPassed(review_key="deterministic_final_validation", agent=semantic_validation_stage)`.
   - `RunIfPassed(review_key="semantic_visual_review", agent=image_assets_agent)`.
-  - `RunIfPassed(review_key="image_assets_review", agent=persist_final_delivery_agent)`.
+- Criar `PersistFinalDeliveryAgent` (`app/agent.py` ou módulo dedicado) que invoca `persist_final_delivery` exatamente uma vez, atualiza audit trail e publica status; encadear com `RunIfPassed(review_key="image_assets_review", agent=persist_final_delivery_agent)`.
 - Inserir `ResetDeterministicValidationState` antes do assembler no caminho legado (`flag=False`).
 
 ### Dependências existentes
 - `SequentialAgent`, `LoopAgent`, `EscalationBarrier`, `EscalationChecker` em `app/agents`.
 - `ImageAssetsAgent` (`app/agent.py:300-577`).
-- `persist_final_delivery_agent` já definido em `app/agent.py:560-600` (confirmar).
+- `persist_final_delivery` callback em `app/callbacks/persist_outputs.py:35-141` (será encapsulado pelo novo agente).
 
 ### Modificações planejadas (diff resumido)
 ```diff
@@ -100,7 +101,8 @@
 ### Critérios de aceitação
 - [ ] Pipeline determinístico bloqueia agentes posteriores quando `deterministic_final_validation.grade != "pass"`.
 - [ ] Fluxo legado permanece funcional quando a flag estiver `False`.
-- [ ] Guard/Normalizer atualizam `state` e audit trail apropriadamente.
+- [ ] Guard/Normalizer/FinalAssemblerLLM atualizam `state` e audit trail apropriadamente.
+- [ ] `PersistFinalDeliveryAgent` encapsula o callback e respeita o gating por `RunIfPassed`.
 - [ ] `build_execution_pipeline` é testável isoladamente (Fase 5).
 
 ---
