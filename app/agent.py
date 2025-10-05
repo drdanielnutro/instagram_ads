@@ -15,9 +15,11 @@
 
 import asyncio
 import contextlib
+import hashlib
 import json
 import logging
 import re
+from datetime import datetime, timezone
 from collections.abc import AsyncGenerator
 from typing import Any, Dict, Literal
 
@@ -123,17 +125,43 @@ def collect_code_snippets_callback(callback_context: CallbackContext) -> None:
     """
     Coleta/empilha fragmentos aprovados (podem ser JSONs parciais por categoria).
     """
-    code_snippets = callback_context.state.get("approved_code_snippets", [])
+    existing_snippets = callback_context.state.get("approved_code_snippets", [])
+    code_snippets = list(existing_snippets)
     if "generated_code" in callback_context.state:
         task_info = callback_context.state.get("current_task_info", {}) or {}
+        category = task_info.get("category", "UNKNOWN")
+        snippet_type = str(category) if isinstance(category, str) else "UNKNOWN"
+        task_id = task_info.get("id", "unknown")
+        code_content = callback_context.state["generated_code"]
+        snippet_payload = f"{task_id}::{snippet_type}::{code_content}".encode("utf-8")
+        snippet_id = hashlib.sha256(snippet_payload).hexdigest()
+        approved_at = datetime.now(timezone.utc).isoformat()
         code_snippets.append({
-            "task_id": task_info.get("id", "unknown"),
-            "category": task_info.get("category", "UNKNOWN"),
+            "task_id": task_id,
+            "category": category,
+            "snippet_type": snippet_type,
+            "status": "approved",
+            "approved_at": approved_at,
+            "snippet_id": snippet_id,
             "task_description": task_info.get("description", ""),
             "file_path": task_info.get("file_path", ""),
-            "code": callback_context.state["generated_code"]
+            "code": code_content
         })
     callback_context.state["approved_code_snippets"] = code_snippets
+
+    visual_drafts = [
+        {
+            "snippet_id": snippet.get("snippet_id"),
+            "task_id": snippet.get("task_id"),
+            "approved_at": snippet.get("approved_at"),
+            "code": snippet.get("code"),
+            "status": snippet.get("status"),
+            "snippet_type": snippet.get("snippet_type"),
+        }
+        for snippet in code_snippets
+        if snippet.get("snippet_type") == "VISUAL_DRAFT" and snippet.get("status") == "approved"
+    ]
+    callback_context.state["approved_visual_drafts"] = visual_drafts
 
 
 def unpack_extracted_input_callback(callback_context: CallbackContext) -> None:

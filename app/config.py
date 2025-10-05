@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import google.auth
 
@@ -17,6 +17,23 @@ else:
         os.environ.setdefault("GOOGLE_CLOUD_PROJECT", "default-project")
     os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
     os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
+
+
+CTA_INSTAGRAM_CHOICES: tuple[str, ...] = (
+    "Saiba mais",
+    "Enviar mensagem",
+    "Ligar",
+    "Comprar agora",
+    "Cadastre-se",
+)
+
+CTA_BY_OBJECTIVE: dict[str, tuple[str, ...]] = {
+    "agendamentos": ("Enviar mensagem", "Ligar"),
+    "leads": ("Cadastre-se", "Saiba mais"),
+    "vendas": ("Comprar agora", "Saiba mais"),
+    "contato": ("Enviar mensagem", "Ligar"),
+    "awareness": ("Saiba mais",),
+}
 
 
 @dataclass
@@ -38,6 +55,7 @@ class DevelopmentConfiguration:
     enable_new_input_fields: bool = False
     enable_storybrand_fallback: bool = False
     storybrand_gate_debug: bool = False  # Force fallback path for testing purposes
+    enable_deterministic_final_validation: bool = False
     fallback_storybrand_max_iterations: int = 3
     fallback_storybrand_model: str | None = None
     preflight_shadow_mode: bool = True
@@ -46,6 +64,10 @@ class DevelopmentConfiguration:
     code_style: str = "standard"
     parallel_task_execution: bool = False
     cache_generated_code: bool = True
+
+    # Deterministic validation shared limits
+    supported_cta_instagram: tuple[str, ...] = field(default_factory=lambda: CTA_INSTAGRAM_CHOICES)
+    cta_by_objective: dict[str, tuple[str, ...]] = field(default_factory=lambda: CTA_BY_OBJECTIVE)
 
     # Legacy (sem uso direto em Ads, mantido por compatibilidade)
     min_code_coverage: float = 0.8
@@ -105,6 +127,11 @@ if os.getenv("ENABLE_STORYBRAND_FALLBACK"):
 if os.getenv("STORYBRAND_GATE_DEBUG"):
     config.storybrand_gate_debug = (
         os.getenv("STORYBRAND_GATE_DEBUG").lower() == "true"
+    )
+
+if os.getenv("ENABLE_DETERMINISTIC_FINAL_VALIDATION"):
+    config.enable_deterministic_final_validation = (
+        os.getenv("ENABLE_DETERMINISTIC_FINAL_VALIDATION").lower() == "true"
     )
 
 if os.getenv("FALLBACK_STORYBRAND_MAX_ITERATIONS"):
