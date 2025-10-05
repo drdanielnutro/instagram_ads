@@ -10,6 +10,8 @@ from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event
 from google.genai.types import Content, Part
 
+from app.utils.audit import append_delivery_audit_event
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,15 @@ class RunIfPassed(BaseAgent):
         message = (
             f"Skipping {self._agent.name}; {self._review_key} grade é {reason!s} "
             f"(esperado {self._expected_grade})."
+        )
+        append_delivery_audit_event(
+            state,
+            stage=f"gating::{self._agent.name}",
+            status="skipped",
+            detail=message,
+            review_key=self._review_key,
+            expected_grade=self._expected_grade,
+            actual_grade=grade,
         )
         yield Event(
             author=self.name,
@@ -108,4 +119,3 @@ class ResetDeterministicValidationState(BaseAgent):
 
 
 __all__ = ["ResetDeterministicValidationState", "RunIfPassed"]
-

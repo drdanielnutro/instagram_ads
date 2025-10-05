@@ -39,11 +39,15 @@
 - Sempre que o usuário solicitar que o Codex revise um plano em formato Markdown (por exemplo, "revise um plano .md" ou variações), siga integralmente o anexo `codex/anexo_revisao_planos.md`.
 - As instruções do anexo complementam este arquivo e tornam-se obrigatórias durante a revisão de planos, incluindo o uso do agente `plan-code-validator` descrito em `.claude/agents/plan-code-validator.md`.
 
+## Procedimento Especial – Revisão de código implementado
+- Sempre que for necessário auditar entregas concluídas do plano de validação determinística, siga o anexo `codex/anexo_revisao_codigo.md`.
+- Esse anexo define o fluxo fase a fase (checklist → plano → código) e os critérios de sucesso/erro para validar implementação, testes, documentação e efeitos colaterais.
+
 ## Checklist Primeiro, Código Depois
 - Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `checklist_plano_json_v3.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
 - Em seguida, consulte o plano `plano_validacao_json_v3.md` para entender o contexto completo das tarefas e subtarefas.
 - Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
-- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_plano_json.md` e registre o resultado na sua resposta/PR.
+- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_plano_json_v3.md` e registre o resultado na sua resposta/PR.
 
 ## StoryBrand Fallback Pipeline
 - O agente `StoryBrandQualityGate` (arquivo `app/agents/storybrand_gate.py`) fica fixo no `complete_pipeline` e decide entre o caminho feliz (`PlanningOrRunSynth`) e o fallback (`fallback_storybrand_pipeline`).
