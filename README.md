@@ -102,6 +102,13 @@ curl -X POST http://localhost:8000/run_sse \
 
 ## Refatorações Recentes
 
+### 2025-09-20 - Validação determinística e rollout controlado
+- ✅ `build_execution_pipeline` agora separa caminhos determinístico e legado, encadeando `RunIfPassed` para revisão semântica, geração de imagens e persistência. 【F:app/agent.py†L1834-L1883】
+- ✅ Guard, normalizer e validador alimentam `state['deterministic_final_validation']`/`state['deterministic_final_blocked']`, bloqueando o pipeline quando `grade != "pass"`. 【F:app/agent.py†L1293-L1352】【F:app/validators/final_delivery_validator.py†L71-L93】
+- ✅ Persistência e sidecar `meta.json` passaram a incluir `deterministic_final_validation`, `semantic_visual_review` e `image_assets_review`, além dos blocos StoryBrand para observabilidade unificada. 【F:app/callbacks/persist_outputs.py†L31-L185】
+- ✅ `FeatureOrchestrator` e SSE expõem mensagens específicas para falhas determinísticas, revisão semântica e imagens, mantendo compatibilidade com o fallback legado. 【F:app/agent.py†L1937-L1955】
+- ✅ Flag `ENABLE_DETERMINISTIC_FINAL_VALIDATION` documentada para ativar o novo caminho por ambiente, com rollback simples via `.env`. 【F:app/config.py†L44-L85】
+
 ### 2025-09-18 - Estabilização Vertex AI e observabilidade
 - ✅ Retry exponencial com respeito ao cabeçalho `Retry-After` (`VERTEX_RETRY_*`) e limite de concorrência configurável (`VERTEX_CONCURRENCY_LIMIT`).
 - ✅ Truncagem adaptativa (head+tail) para inputs grandes (`STORYBRAND_SOFT_CHAR_LIMIT`, `STORYBRAND_HARD_CHAR_LIMIT`, `STORYBRAND_TAIL_RATIO`).
@@ -148,6 +155,12 @@ curl -X POST http://localhost:8000/run_sse \
 - **Fase 2 – Frontend**: disponibilizar o wizard com os novos passos em ambientes internos com `VITE_ENABLE_NEW_FIELDS=false` para validação.
 - **Fase 3 – Liberação total**: ativar `VITE_ENABLE_NEW_FIELDS=true` e `ENABLE_NEW_INPUT_FIELDS=true` após o período de monitoramento.
 
+### Rollout recomendado da validação determinística
+1. **Preparação (flag desligada)** – manter `ENABLE_DETERMINISTIC_FINAL_VALIDATION=false` para preservar o fluxo legado e limpar chaves determinísticas automaticamente via `ResetDeterministicValidationState`. 【F:app/agent.py†L1874-L1883】【F:app/agents/gating.py†L83-L124】
+2. **Canário** – habilitar a flag apenas em um ambiente controlado, monitorando `deterministic_final_validation`, `semantic_visual_review` e `image_assets_review` via SSE/`meta.json` para confirmar grades esperadas. 【F:app/config.py†L44-L85】【F:app/agent.py†L1917-L1955】【F:app/callbacks/persist_outputs.py†L98-L185】
+3. **Expansão gradual** – após estabilidade do canário, promover a flag para staging e depois produção acompanhando dashboards/alertas (ver playbook) e confirmando que `RunIfPassed` libera apenas execuções aprovadas. 【F:app/agent.py†L1850-L1883】【F:app/agents/gating.py†L19-L81】
+4. **Rollback** – em caso de anomalias, retornar a `ENABLE_DETERMINISTIC_FINAL_VALIDATION=false` e reiniciar o processo; o primeiro agente do caminho legado limpará resíduos determinísticos antes de retomar o `final_validation_loop`. 【F:app/agent.py†L1874-L1883】【F:app/agents/gating.py†L83-L124】
+
 ## Arquitetura do Sistema
 
 O sistema utiliza múltiplos agentes ADK organizados em pipeline sequencial:
@@ -168,6 +181,15 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
 - Ao final do pipeline, o JSON é salvo localmente em `artifacts/ads_final/<timestamp>_<session>_<formato>.json`.
 - Em produção, use um bucket dedicado para entregas finais: `DELIVERIES_BUCKET=gs://…`. O upload vai para `gs://<deliveries_bucket>/deliveries/<user_id>/<session_id>/<arquivo>.json` e um sidecar `meta.json` é salvo no mesmo prefixo.
 - Os caminhos ficam no state da sessão: `final_delivery_local_path` e (se houver upload) `final_delivery_gcs_uri`. O sidecar facilita o lookup por sessão.
+
+### Ordem de validação determinística (flag ON)
+1. **FinalAssemblyGuardPre** garante que existem snippets `VISUAL_DRAFT` aprovados, normaliza os conteúdos e bloqueia o pipeline quando encontra problemas, registrando `deterministic_final_validation.grade = "fail"` e `deterministic_final_blocked=True`. 【F:app/agent.py†L1288-L1316】
+2. **FinalAssemblyNormalizer** reserializa o JSON do assembler, verifica campos obrigatórios e sinaliza `grade="pending"` até que o validador processe o payload. Falhas estruturais mantêm `deterministic_final_blocked=True`. 【F:app/agent.py†L1343-L1524】
+3. **FinalDeliveryValidatorAgent** aplica o schema estrito e atualiza `state['deterministic_final_validation']`, limpando `deterministic_final_blocked` somente quando `grade="pass"`; reprovações mantêm `issues`/`failure_reason` no estado. 【F:app/validators/final_delivery_validator.py†L71-L93】
+4. **RunIfPassed** libera o restante do pipeline apenas quando os reviews estão aprovados (`deterministic_final_validation`, `semantic_visual_review`, `image_assets_review`), tratando `grade="skipped"` como sucesso aceitável para imagens. 【F:app/agent.py†L1850-L1883】
+5. **PersistFinalDeliveryAgent** chama `persist_final_delivery` uma única vez, garantindo que o sidecar `meta.json` reflita os estados de revisão (`deterministic_final_validation`, `semantic_visual_review`, `image_assets_review`) e agregue métricas StoryBrand. 【F:app/agent.py†L1537-L1569】【F:app/callbacks/persist_outputs.py†L31-L185】
+
+> Quando `ENABLE_DETERMINISTIC_FINAL_VALIDATION=false`, o pipeline legado usa `ResetDeterministicValidationState` e mantém o `final_validation_loop` original antes de persistir. 【F:app/agent.py†L1874-L1883】
 
 ### 1. Input Processor
 Extrai campos estruturados da entrada do usuário:
@@ -321,6 +343,7 @@ DELIVERIES_BUCKET=gs://instagram-ads-472021-deliveries             # JSON final 
 # Flags de novos campos (backend)
 ENABLE_NEW_INPUT_FIELDS=false
 ENABLE_STORYBRAND_FALLBACK=false
+ENABLE_DETERMINISTIC_FINAL_VALIDATION=false
 FALLBACK_STORYBRAND_MAX_ITERATIONS=3
 FALLBACK_STORYBRAND_MODEL=
 STORYBRAND_GATE_DEBUG=false
@@ -336,6 +359,9 @@ PREFLIGHT_SHADOW_MODE=true
 - **ENABLE_STORYBRAND_FALLBACK** (default: false)
   - false: o gate monitora métricas, mas nunca executa o fallback.
   - true: o gate pode acionar o `fallback_storybrand_pipeline` (requer ENABLE_NEW_INPUT_FIELDS=true).
+- **ENABLE_DETERMINISTIC_FINAL_VALIDATION** (default: false)
+  - false: usa o pipeline legado (`final_validation_loop` + callbacks do `ImageAssetsAgent`).
+  - true: ativa guard → normalizer → validador determinístico + `RunIfPassed` para revisão semântica, imagens e persistência.
 - **FALLBACK_STORYBRAND_MAX_ITERATIONS** (default: 3)
   - Controla o número máximo de ciclos writer→reviewer→corrector por seção.
 - **FALLBACK_STORYBRAND_MODEL** (opcional)
@@ -407,6 +433,11 @@ Acesso:
 - Frontend: http://localhost:5173/app/
 - Backend API: http://localhost:8000/docs
 
+## Mensagens SSE e chaves de estado
+- O `FeatureOrchestrator` envia mensagens distintas quando qualquer estágio falha: planejamento, revisão de conteúdo, execução, validação determinística, revisão semântica ou geração de imagens. 【F:app/agent.py†L1917-L1955】
+- A sessão expõe `deterministic_final_validation`, `deterministic_final_blocked`, `semantic_visual_review` e `image_assets_review` para que consumidores verifiquem status e motivos (`*_failure_reason`). 【F:app/agent.py†L1293-L1524】【F:app/validators/final_delivery_validator.py†L71-L93】
+- `clear_failure_meta` elimina indicadores de falha antigos após persistência bem-sucedida, mantendo `final_delivery_status` alinhado com o pipeline determinístico. 【F:app/callbacks/persist_outputs.py†L167-L185】
+
 ## API Endpoints
 
 ### POST /run_preflight
@@ -426,13 +457,15 @@ Logs úteis: `[preflight] start` → `result` → `blocked` (422) → `plan_sele
 
 ### GET /delivery/final/meta
 - Parâmetros: `user_id`, `session_id`
-- Resposta: `{ ok: true, filename, formato, timestamp, size_bytes, final_delivery_local_path, final_delivery_gcs_uri, user_id, session_id }`
-- 404 quando o artefato ainda não estiver disponível
+- Resposta: `{ ok: true, filename, formato, stage, grade, deterministic_final_validation, semantic_visual_review, image_assets_review, storybrand_audit_trail, storybrand_gate_metrics, storybrand_fallback_meta, delivery_audit_trail, final_delivery_local_path, final_delivery_gcs_uri, user_id, session_id }`
+- 503 quando somente `failure_meta` existe (falha determinística/semântica/imagens registrada), 404 se nenhum artefato foi encontrado
+- A resposta é abastecida pelo sidecar `meta.json` salvo em disco/GCS pelo callback de persistência. 【F:app/callbacks/persist_outputs.py†L98-L185】【F:app/routers/delivery.py†L63-L92】
 
 ### GET /delivery/final/download
 - Parâmetros: `user_id`, `session_id`
 - Produção (GCS): retorna `{ signed_url: "...", expires_in: 600 }` (v4, GET, 10 min, com `Content-Disposition` e `Content-Type` para download)
 - Desenvolvimento: stream do arquivo local (`application/json`)
+- Quando `inline=true`, valida que todas as variações possuem URLs de imagem e falha com 424 se algo estiver ausente, reportando quais campos faltam. 【F:app/routers/delivery.py†L93-L173】
 
 ### POST /run
 Executa o agente de forma síncrona

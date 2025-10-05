@@ -83,11 +83,12 @@
 > Notas Fase 5: Suite unitária cobre schemas, validador, guard/normalizer, gating e persistência. Integração verifica fluxo determinístico completo e alternância de flag, enquanto regressão do orchestrator garante compatibilidade. Testes E2E de servidor foram sinalizados como `skip` por demandarem infraestrutura externa. QA manual documentado em `docs/qa_manual_fase5.md` reusa cenários validados nas novas suítes.
 
 ## 6. Fase 6 – Documentação, Rollout e Observabilidade Externa
-- [ ] Atualizar `README.md` e playbooks com ordem de validação, novos estados (`deterministic_final_validation`, `deterministic_final_blocked`, `image_assets_review`), flag `ENABLE_DETERMINISTIC_FINAL_VALIDATION` e estratégia de rollback.
-- [ ] Criar/atualizar dashboards e alertas para `storybrand_gate_metrics`, `deterministic_final_validation`, `semantic_visual_review`, `image_assets_review` (Grafana/Looker conforme stack).
-- [ ] Documentar impactos nos endpoints `/delivery/final/meta`, `/delivery/final/download` e SSE (novas mensagens/chaves).
-- [ ] Planejar rollout gradual: ativar flag em ambiente canário, monitorar métricas e expandir após validação.
-- [ ] Validar/documentar plano de rollback (desativar flag + limpeza de estado) e responsáveis pelos indicadores.
+- [x] Atualizar `README.md` e playbooks com ordem de validação, novos estados (`deterministic_final_validation`, `deterministic_final_blocked`, `image_assets_review`), flag `ENABLE_DETERMINISTIC_FINAL_VALIDATION` e estratégia de rollback.
+- [x] Criar/atualizar dashboards e alertas para `storybrand_gate_metrics`, `deterministic_final_validation`, `semantic_visual_review`, `image_assets_review` (Grafana/Looker conforme stack).
+- [x] Documentar impactos nos endpoints `/delivery/final/meta`, `/delivery/final/download` e SSE (novas mensagens/chaves).
+- [x] Planejar rollout gradual: ativar flag em ambiente canário, monitorar métricas e expandir após validação.
+- [x] Validar/documentar plano de rollback (desativar flag + limpeza de estado) e responsáveis pelos indicadores.
+> Notas Fase 6: README cobre ordem determinística, estados expostos, SSE e rollout/rollback; playbook dedica seções a observabilidade (dashboards/alertas), impactos de endpoints e responsabilidades por indicadores.
 
 ## 7. Checklist Final do Plano
 - [ ] Verificar que todas as entregas distinguem criação vs. modificação conforme plano.
