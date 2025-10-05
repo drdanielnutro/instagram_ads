@@ -43,21 +43,43 @@ def persist_final_delivery(callback_context: Any) -> None:
     try:
         state = resolve_state(callback_context)
         payload = state.get("final_code_delivery")
-        if not payload:
-            logger.warning("persist_final_delivery: no final_code_delivery in state; skipping")
-            return
+        deterministic_result = state.get("deterministic_final_validation")
+        normalized_payload: dict[str, Any] | None = None
+        if isinstance(deterministic_result, dict):
+            candidate = deterministic_result.get("normalized_payload")
+            if isinstance(candidate, dict):
+                normalized_payload = candidate
 
-        # Parse/validate JSON (string or list)
-        if isinstance(payload, str):
-            parsed, data_obj = try_parse_json_string(payload)
-            if not parsed:
-                try:
-                    data_obj = json.loads(payload)
-                except json.JSONDecodeError:
-                    # Not valid JSON -> wrap as string content
-                    data_obj = payload
+        normalized_variations: list[Any] | None = None
+        if normalized_payload:
+            variations = normalized_payload.get("variations")
+            if isinstance(variations, list):
+                normalized_variations = variations
+
+        if normalized_variations is None:
+            parsed_variations = state.get("final_code_delivery_parsed")
+            if isinstance(parsed_variations, list):
+                normalized_variations = parsed_variations
+
+        data_obj: Any
+        if normalized_variations is not None:
+            data_obj = normalized_variations
         else:
-            data_obj = payload
+            if not payload:
+                logger.warning("persist_final_delivery: no final_code_delivery in state; skipping")
+                return
+
+            # Parse/validate JSON (string or list)
+            if isinstance(payload, str):
+                parsed, data_obj = try_parse_json_string(payload)
+                if not parsed:
+                    try:
+                        data_obj = json.loads(payload)
+                    except json.JSONDecodeError:
+                        # Not valid JSON -> wrap as string content
+                        data_obj = payload
+            else:
+                data_obj = payload
 
         # Determine format for naming (best effort)
         fmt = state.get("formato_anuncio") or "unknown"
@@ -101,12 +123,48 @@ def persist_final_delivery(callback_context: Any) -> None:
         state["final_delivery_local_path"] = str(local_path)
         if gcs_uri:
             state["final_delivery_gcs_uri"] = gcs_uri
+
+        # Atualiza representação normalizada no estado (garante consistência pós-validador)
+        if normalized_variations is not None:
+            state["final_code_delivery_parsed"] = normalized_variations
+            state["final_code_delivery"] = json.dumps(normalized_variations, ensure_ascii=False)
+
+        stage_name = "legacy_final_validation"
+        grade = "pass"
+        if isinstance(deterministic_result, dict):
+            stage_name = "deterministic_final_validation"
+            grade = deterministic_result.get("grade") or grade
+
+        storybrand_audit = state.get("storybrand_audit_trail")
+        if not isinstance(storybrand_audit, list):
+            storybrand_audit = [] if storybrand_audit is None else [storybrand_audit]
+        storybrand_metrics = state.get("storybrand_gate_metrics")
+        if not isinstance(storybrand_metrics, dict):
+            storybrand_metrics = {}
+        storybrand_fallback = state.get("storybrand_fallback_meta")
+        if not isinstance(storybrand_fallback, dict):
+            storybrand_fallback = {}
+        delivery_audit = state.get("delivery_audit_trail")
+        if not isinstance(delivery_audit, list):
+            delivery_audit = [] if delivery_audit is None else [delivery_audit]
+
         state["final_delivery_status"] = {
             "status": "completed",
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "session_id": session_id,
             "user_id": user_id,
+            "stage": stage_name,
+            "grade": grade,
+            "storybrand_audit_trail": storybrand_audit,
+            "storybrand_gate_metrics": storybrand_metrics,
+            "storybrand_fallback_meta": storybrand_fallback,
+            "delivery_audit_trail": delivery_audit,
         }
+
+        if stage_name == "deterministic_final_validation":
+            # Evita sinalizadores legados quando a validação determinística foi concluída.
+            state.pop("final_validation_result_failed", None)
+            state.pop("final_validation_result_failure_reason", None)
 
         # Write sidecar meta locally and to GCS for fast lookup by endpoints
         try:
@@ -119,6 +177,15 @@ def persist_final_delivery(callback_context: Any) -> None:
                 "final_delivery_gcs_uri": gcs_uri,
                 "user_id": user_id,
                 "session_id": session_id,
+                "stage": stage_name,
+                "grade": grade,
+                "deterministic_final_validation": state.get("deterministic_final_validation"),
+                "semantic_visual_review": state.get("semantic_visual_review"),
+                "image_assets_review": state.get("image_assets_review"),
+                "storybrand_audit_trail": storybrand_audit,
+                "storybrand_gate_metrics": storybrand_metrics,
+                "storybrand_fallback_meta": storybrand_fallback,
+                "delivery_audit_trail": delivery_audit,
             }
             meta_dir = base_dir / "meta"
             _ensure_dir(meta_dir)
@@ -138,6 +205,6 @@ def persist_final_delivery(callback_context: Any) -> None:
         except Exception as e:
             logger.error("Failed to persist final delivery meta: %s", e)
 
-        clear_failure_meta(session_id)
+        clear_failure_meta(session_id, state=state)
     except Exception as e:
         logger.error("persist_final_delivery error: %s", e)

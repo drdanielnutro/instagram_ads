@@ -58,6 +58,7 @@ def _mark_storybrand_failure(
         reason=reason,
         message=message,
         extra={"retry_after": retry_after, "attempts": attempts},
+        state=state,
     )
     record_delivery_failure(reason)
 

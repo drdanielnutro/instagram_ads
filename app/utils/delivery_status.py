@@ -6,6 +6,45 @@ import time
 from pathlib import Path
 from typing import Any
 
+REVIEW_STATUS_KEYS: tuple[str, ...] = (
+    "deterministic_final_validation",
+    "semantic_visual_review",
+    "image_assets_review",
+)
+
+
+def _snapshot_review(state: dict[str, Any] | None, key: str) -> dict[str, Any] | None:
+    if not state:
+        return None
+
+    review = state.get(key)
+    data: dict[str, Any] = {}
+
+    if isinstance(review, dict):
+        grade = review.get("grade")
+        if grade is not None:
+            data["grade"] = grade
+        issues = review.get("issues")
+        if issues:
+            data["issues"] = issues
+        source = review.get("source")
+        if source:
+            data["source"] = source
+        normalized = review.get("normalized_payload")
+        if normalized:
+            data["normalized_payload"] = normalized
+    elif review is not None:
+        data["grade"] = review
+
+    failed_flag = state.get(f"{key}_failed")
+    if failed_flag is not None:
+        data["failed"] = bool(failed_flag)
+        reason = state.get(f"{key}_failure_reason")
+        if reason:
+            data["failure_reason"] = reason
+
+    return data or None
+
 logger = logging.getLogger(__name__)
 
 _META_DIR = Path("artifacts/ads_final/meta")
@@ -26,6 +65,7 @@ def write_failure_meta(
     reason: str,
     message: str,
     extra: dict[str, Any] | None = None,
+    state: dict[str, Any] | None = None,
 ) -> Path:
     """Persist a failure sidecar so the delivery endpoints can surface the error."""
 
@@ -40,6 +80,11 @@ def write_failure_meta(
     }
     if extra:
         payload.update(extra)
+
+    for key in REVIEW_STATUS_KEYS:
+        snapshot = _snapshot_review(state, key)
+        if snapshot:
+            payload[key] = snapshot
 
     path = _META_DIR / f"{session_id}{_FAILURE_SUFFIX}"
     try:
@@ -62,15 +107,19 @@ def load_failure_meta(session_id: str) -> dict[str, Any] | None:
         return None
 
 
-def clear_failure_meta(session_id: str) -> None:
+def clear_failure_meta(session_id: str, state: dict[str, Any] | None = None) -> None:
     """Remove failure metadata sidecar for a session if present."""
 
     path = _META_DIR / f"{session_id}{_FAILURE_SUFFIX}"
-    if not path.exists():
-        return
-    try:
-        path.unlink()
-    except FileNotFoundError:
-        return
-    except Exception:  # pragma: no cover - filesystem guard
-        logger.exception("delivery_status: failed to remove failure meta for session %s", session_id)
+    if path.exists():
+        try:
+            path.unlink()
+        except FileNotFoundError:
+            pass
+        except Exception:  # pragma: no cover - filesystem guard
+            logger.exception("delivery_status: failed to remove failure meta for session %s", session_id)
+
+    if state is not None:
+        for key in REVIEW_STATUS_KEYS:
+            state.pop(f"{key}_failed", None)
+            state.pop(f"{key}_failure_reason", None)

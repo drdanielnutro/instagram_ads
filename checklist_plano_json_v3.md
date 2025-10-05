@@ -57,11 +57,13 @@
 > Notas Fase 3: Pipeline determinístico reconstruído com guard/normalizer, `build_execution_pipeline` entrega caminhos independentes e gating sequencial (`RunIfPassed`) cobre revisão semântica, imagens e persistência. Guard e normalizer alimentam `deterministic_final_validation`; `ImageAssetsAgent` fornece `image_assets_review` com suporte a `grade="skipped"` e persistência fica centralizada no novo agente.
 
 ## 4. Fase 4 – Observabilidade e Persistência
-- [ ] Modificar `make_failure_handler` em `app/agent.py` para suportar chaves determinísticas sem sobrescrever fluxo legado.
-- [ ] Atualizar `write_failure_meta`/`clear_failure_meta` em `app/utils/delivery_status.py` para incluir `deterministic_final_validation`, `semantic_visual_review`, `image_assets_review`.
-- [ ] Ajustar `persist_final_delivery` (`app/callbacks/persist_outputs.py`) para gravar JSON normalizado, limpar chaves legadas e popular `state['final_delivery_status']` com origem determinística.
-- [ ] Garantir preenchimento consistente de `state['storybrand_audit_trail']`, `state['storybrand_gate_metrics']`, `state['storybrand_fallback_meta']` e novos eventos de auditoria determinística.
-- [ ] Atualizar `EnhancedStatusReporter` e endpoints `/delivery/final/*` para exibir status determinístico sem quebrar consumidores existentes.
+- [x] Modificar `make_failure_handler` em `app/agent.py` para suportar chaves determinísticas sem sobrescrever fluxo legado.
+- [x] Atualizar `write_failure_meta`/`clear_failure_meta` em `app/utils/delivery_status.py` para incluir `deterministic_final_validation`, `semantic_visual_review`, `image_assets_review`.
+- [x] Ajustar `persist_final_delivery` (`app/callbacks/persist_outputs.py`) para gravar JSON normalizado, limpar chaves legadas e popular `state['final_delivery_status']` com origem determinística.
+- [x] Garantir preenchimento consistente de `state['storybrand_audit_trail']`, `state['storybrand_gate_metrics']`, `state['storybrand_fallback_meta']` e novos eventos de auditoria determinística.
+- [x] Atualizar `EnhancedStatusReporter` e endpoints `/delivery/final/*` para exibir status determinístico sem quebrar consumidores existentes.
+
+> Notas Fase 4: Flags de falha agora usam handler extensível, metadados persistidos incluem snapshots das revisões (determinística, semântica e imagens) e status finais incorporam métricas/auditoria StoryBrand. Persistência grava payload normalizado, limpa artefatos legados e enriquece meta/endpoints com o estágio atual.
 
 ## 5. Fase 5 – Testes Automatizados & QA
 ### 5.1 Testes unitários
