@@ -25,12 +25,17 @@ class RunIfPassed(BaseAgent):
         name: str,
         review_key: str,
         agent: BaseAgent,
-        expected_grade: str = "pass",
+        expected_grade: str | Iterable[str] = "pass",
     ) -> None:
         super().__init__(name=name)
         self._review_key = review_key
         self._agent = agent
-        self._expected_grade = expected_grade
+        if isinstance(expected_grade, str):
+            self._expected_grades: tuple[str, ...] = (expected_grade,)
+        else:
+            self._expected_grades = tuple(expected_grade)
+        if not self._expected_grades:
+            raise ValueError("expected_grade must include at least one grade")
 
     async def _run_async_impl(
         self, ctx: InvocationContext
@@ -43,7 +48,7 @@ class RunIfPassed(BaseAgent):
         elif isinstance(result, str):
             grade = result
 
-        if grade == self._expected_grade:
+        if grade in self._expected_grades:
             async for event in self._agent.run_async(ctx):
                 yield event
             return
@@ -53,12 +58,12 @@ class RunIfPassed(BaseAgent):
             self._agent.name,
             self._review_key,
             grade,
-            self._expected_grade,
+            ",".join(self._expected_grades),
         )
         reason = grade or "ausente"
         message = (
             f"Skipping {self._agent.name}; {self._review_key} grade é {reason!s} "
-            f"(esperado {self._expected_grade})."
+            f"(esperado {', '.join(self._expected_grades)})."
         )
         append_delivery_audit_event(
             state,
@@ -66,7 +71,7 @@ class RunIfPassed(BaseAgent):
             status="skipped",
             detail=message,
             review_key=self._review_key,
-            expected_grade=self._expected_grade,
+            expected_grade=tuple(self._expected_grades),
             actual_grade=grade,
         )
         yield Event(
