@@ -91,10 +91,12 @@
 > Notas Fase 6: README cobre ordem determinística, estados expostos, SSE e rollout/rollback; playbook dedica seções a observabilidade (dashboards/alertas), impactos de endpoints e responsabilidades por indicadores.
 
 ## 7. Checklist Final do Plano
-- [ ] Verificar que todas as entregas distinguem criação vs. modificação conforme plano.
-- [ ] Confirmar que dependências existentes citam caminhos/linhas relevantes.
-- [ ] Registrar referências cruzadas indicando fases de criação quando aplicável.
-- [ ] Consolidar resumos/diffs para arquivos modificados chave.
-- [ ] Validar que critérios de aceitação por fase foram atendidos.
-- [ ] Registrar riscos e mitigação conforme seção dedicada do plano.
-- [ ] Certificar compatibilidade com o validador automático (`plan-code-validator`).
+- [x] Verificar que todas as entregas distinguem criação vs. modificação conforme plano.
+- [x] Confirmar que dependências existentes citam caminhos/linhas relevantes.
+- [x] Registrar referências cruzadas indicando fases de criação quando aplicável.
+- [x] Consolidar resumos/diffs para arquivos modificados chave.
+- [x] Validar que critérios de aceitação por fase foram atendidos.
+- [x] Registrar riscos e mitigação conforme seção dedicada do plano.
+- [x] Certificar compatibilidade com o validador automático (`plan-code-validator`).
+
+> Notas Fase 7: Plano atualizado com seção de consolidação (tabelas de entregas, dependências, diffs e critérios), revisão documentada em `docs/reviews/plano_validacao_json_v3_fase7.md` e confirmação do `plan-code-validator` via `validation_report_plano_v3.{json,md}`.
