@@ -38,21 +38,23 @@
 
 ## 3. Fase 3 – Reorquestração do Pipeline de Execução
 ### 3.1 Montagem do pipeline
-- [ ] Implementar `build_execution_pipeline(flag_enabled: bool)` em `app/agent.py`, retornando versões determinística e legado sem mutação runtime.
-- [ ] Substituir `final_validation_loop` por `semantic_validation_loop` e manter `EscalationBarrier` após `EscalationChecker` quando a flag estiver ativa.
-- [ ] Introduzir `deterministic_validation_stage = SequentialAgent([...])` com `FinalDeliveryValidatorAgent` + `make_failure_handler` dedicado.
-- [ ] Encadear `RunIfPassed` para `semantic_validation_stage`, `image_assets_agent` e `PersistFinalDeliveryAgent`.
-- [ ] Inserir `ResetDeterministicValidationState` antes do assembler no caminho legado (flag desativada).
+- [x] Implementar `build_execution_pipeline(flag_enabled: bool)` em `app/agent.py`, retornando versões determinística e legado sem mutação runtime.
+- [x] Substituir `final_validation_loop` por `semantic_validation_loop` e manter `EscalationBarrier` após `EscalationChecker` quando a flag estiver ativa.
+- [x] Introduzir `deterministic_validation_stage = SequentialAgent([...])` com `FinalDeliveryValidatorAgent` + `make_failure_handler` dedicado.
+- [x] Encadear `RunIfPassed` para `semantic_validation_stage`, `image_assets_agent` e `PersistFinalDeliveryAgent`.
+- [x] Inserir `ResetDeterministicValidationState` antes do assembler no caminho legado (flag desativada).
 
 ### 3.2 Guard, assembler e normalização
-- [ ] Criar `FinalAssemblyGuardPre` verificando snippets `VISUAL_DRAFT`, preenchendo `approved_visual_drafts` e emitindo `EventActions(escalate=True)` quando necessário.
-- [ ] Extrair `FinalAssemblerLLM` (agente dedicado ao prompt atual) e criar `FinalAssemblyNormalizer` para gerar JSON canônico, definindo `state['deterministic_final_validation'] = {grade: "pending", source: "normalizer"}`.
-- [ ] Garantir que `FinalAssembler` composto reutilize snippets aprovados e alimente o validador determinístico.
+- [x] Criar `FinalAssemblyGuardPre` verificando snippets `VISUAL_DRAFT`, preenchendo `approved_visual_drafts` e emitindo `EventActions(escalate=True)` quando necessário.
+- [x] Extrair `FinalAssemblerLLM` (agente dedicado ao prompt atual) e criar `FinalAssemblyNormalizer` para gerar JSON canônico, definindo `state['deterministic_final_validation'] = {grade: "pending", source: "normalizer"}`.
+- [x] Garantir que `FinalAssembler` composto reutilize snippets aprovados e alimente o validador determinístico.
 
 ### 3.3 Persistência e agentes auxiliares
-- [ ] Criar `PersistFinalDeliveryAgent` encapsulando `persist_final_delivery`, atualizando audit trail e status.
-- [ ] Ajustar `ImageAssetsAgent` para cooperar com `RunIfPassed` e preencher `state['image_assets_review']` (incluindo `grade="skipped"`).
-- [ ] Atualizar `FeatureOrchestrator` e endpoints afetados para lidar com chaves `deterministic_final_validation_failed`, `semantic_visual_review_failed`, `image_assets_review_failed` mantendo compatibilidade legada.
+- [x] Criar `PersistFinalDeliveryAgent` encapsulando `persist_final_delivery`, atualizando audit trail e status.
+- [x] Ajustar `ImageAssetsAgent` para cooperar com `RunIfPassed` e preencher `state['image_assets_review']` (incluindo `grade="skipped"`).
+- [x] Atualizar `FeatureOrchestrator` e endpoints afetados para lidar com chaves `deterministic_final_validation_failed`, `semantic_visual_review_failed`, `image_assets_review_failed` mantendo compatibilidade legada.
+
+> Notas Fase 3: Pipeline determinístico reconstruído com guard/normalizer, `build_execution_pipeline` entrega caminhos independentes e gating sequencial (`RunIfPassed`) cobre revisão semântica, imagens e persistência. Guard e normalizer alimentam `deterministic_final_validation`; `ImageAssetsAgent` fornece `image_assets_review` com suporte a `grade="skipped"` e persistência fica centralizada no novo agente.
 
 ## 4. Fase 4 – Observabilidade e Persistência
 - [ ] Modificar `make_failure_handler` em `app/agent.py` para suportar chaves determinísticas sem sobrescrever fluxo legado.

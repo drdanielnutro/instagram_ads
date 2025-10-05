@@ -34,6 +34,7 @@ from pydantic import BaseModel, Field
 from .config import config
 from .tools.generate_transformation_images import generate_transformation_images
 from .tools.web_fetch import web_fetch_tool
+from .utils.audit import append_delivery_audit_event
 from .utils.json_tools import try_parse_json_string
 
 
@@ -352,6 +353,15 @@ class ImageAssetsAgent(BaseAgent):
         logger.info(f"ImageAssetsAgent: Keys in state: {list(state.keys())}")
         logger.info(f"ImageAssetsAgent: final_code_delivery exists: {'final_code_delivery' in state}")
 
+        review = {
+            "grade": "skipped",
+            "issues": [],
+            "summary": [],
+            "source": self.name,
+        }
+        state["image_assets_review"] = review
+        state.pop("image_assets_review_failed", None)
+
         raw_delivery = state.get("final_code_delivery")
 
         # Fallback: tentar ler do arquivo se não estiver no state
@@ -363,12 +373,18 @@ class ImageAssetsAgent(BaseAgent):
                     with local_path.open("r", encoding="utf-8") as f:
                         raw_delivery = f.read()
                     logger.info(f"ImageAssetsAgent: Loaded JSON from file: {local_path}")
-                    # Salvar de volta no state para próximos agentes
                     state["final_code_delivery"] = raw_delivery
-            except Exception as e:
-                logger.warning(f"ImageAssetsAgent: Failed to load from file: {e}")
+            except Exception as exc:
+                logger.warning(f"ImageAssetsAgent: Failed to load from file: {exc}")
 
         if not getattr(config, "enable_image_generation", True):
+            review["issues"].append("Image generation disabled by configuration.")
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="skipped",
+                detail="Image generation disabled",
+            )
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(
@@ -378,6 +394,13 @@ class ImageAssetsAgent(BaseAgent):
             return
 
         if not raw_delivery:
+            review["issues"].append("Missing final_code_delivery payload; skipped image generation.")
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="skipped",
+                detail="final_code_delivery ausente",
+            )
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text="ℹ️ JSON final ausente; geração de imagens não executada.")]),
@@ -396,13 +419,28 @@ class ImageAssetsAgent(BaseAgent):
             else:
                 raise TypeError("Estrutura inesperada em final_code_delivery")
         except (json.JSONDecodeError, TypeError) as exc:
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text=f"❌ JSON final inválido para geração de imagens: {exc}")]),
+            message = f"❌ JSON final inválido para geração de imagens: {exc}"
+            review["grade"] = "fail"
+            review["issues"].append(str(exc))
+            state["image_assets_review_failed"] = True
+            state["image_assets_review_failure_reason"] = str(exc)
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=str(exc),
             )
+            yield Event(author=self.name, content=Content(parts=[Part(text=message)]))
             return
 
         if not isinstance(variations, list) or not variations:
+            review["issues"].append("Nenhuma variação encontrada para gerar imagens.")
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="skipped",
+                detail="Nenhuma variação para processar",
+            )
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text="ℹ️ Nenhuma variação encontrada para gerar imagens.")]),
@@ -418,6 +456,8 @@ class ImageAssetsAgent(BaseAgent):
         )
 
         summary: list[Dict[str, Any]] = []
+        critical_errors: list[str] = []
+        generated_any = False
 
         for idx, variation in enumerate(variations):
             variation_number = idx + 1
@@ -440,6 +480,9 @@ class ImageAssetsAgent(BaseAgent):
                     "status": "skipped",
                     "missing_fields": missing_fields,
                 })
+                review["issues"].append(
+                    f"Variation {variation_number} skipped due to missing fields: {', '.join(missing_fields)}"
+                )
                 yield Event(author=self.name, content=Content(parts=[Part(text=message)]))
                 continue
 
@@ -501,7 +544,6 @@ class ImageAssetsAgent(BaseAgent):
                         )
                         progress_queue.task_done()
                         if task.done():
-                            # Task is done, get the result before breaking
                             try:
                                 assets = task.result()
                             except Exception as exc:  # pragma: no cover - depende de runtime externo
@@ -538,11 +580,6 @@ class ImageAssetsAgent(BaseAgent):
                     progress_queue.task_done()
 
             if error or not assets:
-                # Debug: log what actually happened
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.warning(f"Image generation failed for variation {idx}: error={error}, assets={assets}")
-
                 error_message = error or "Falha desconhecida na geração de imagens."
                 visual["image_generation_error"] = error_message
                 summary.append({
@@ -550,6 +587,10 @@ class ImageAssetsAgent(BaseAgent):
                     "status": "error",
                     "error": error_message,
                 })
+                critical_errors.append(error_message)
+                review["issues"].append(
+                    f"Erro ao gerar imagens da variação {variation_number}: {error_message}"
+                )
                 yield Event(
                     author=self.name,
                     content=Content(parts=[Part(
@@ -573,6 +614,7 @@ class ImageAssetsAgent(BaseAgent):
                 "status": "ok",
                 "assets": assets,
             })
+            generated_any = True
 
             yield Event(
                 author=self.name,
@@ -584,6 +626,17 @@ class ImageAssetsAgent(BaseAgent):
         try:
             state["final_code_delivery"] = json.dumps(variations, ensure_ascii=False)
         except Exception as exc:  # pragma: no cover
+            review["grade"] = "fail"
+            review["issues"].append(str(exc))
+            state["image_assets_review_failed"] = True
+            state["image_assets_review_failure_reason"] = str(exc)
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail="Erro ao serializar JSON final",
+                error=str(exc),
+            )
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text=f"❌ Erro ao serializar JSON final com imagens: {exc}")]),
@@ -592,25 +645,71 @@ class ImageAssetsAgent(BaseAgent):
 
         state["image_assets"] = summary
 
-        try:
-            persist_final_delivery(ctx)
-        except Exception as exc:  # pragma: no cover - persistência externa
-            logger.error("Falha ao persistir JSON atualizado com imagens: %s", exc, exc_info=True)
+        if critical_errors:
+            review["grade"] = "fail"
+            state["image_assets_review_failed"] = True
+            state["image_assets_review_failure_reason"] = "; ".join(review["issues"]) or "Falha na geração de imagens."
+        elif generated_any:
+            review["grade"] = "pass"
+            state.pop("image_assets_review_failed", None)
+            state.pop("image_assets_review_failure_reason", None)
+        else:
+            review["grade"] = "skipped"
+            state.pop("image_assets_review_failed", None)
+            state.pop("image_assets_review_failure_reason", None)
+
+        review["summary"] = summary
+        append_delivery_audit_event(
+            state,
+            stage=self.name,
+            status=review["grade"],
+            detail="Resumo da geração de imagens",
+            summary=summary,
+            issues=review["issues"],
+        )
+
+        deterministic_flag = bool(getattr(config, "enable_deterministic_final_validation", False))
+        if not deterministic_flag:
+            try:
+                persist_final_delivery(ctx)
+            except Exception as exc:  # pragma: no cover - persistência externa
+                logger.error(
+                    "Falha ao persistir JSON atualizado com imagens: %s", exc, exc_info=True
+                )
+                yield Event(
+                    author=self.name,
+                    content=Content(parts=[Part(
+                        text="⚠️ Imagens geradas, mas houve erro ao persistir a entrega final.""\n" + str(exc)
+                    )]),
+                )
+                return
+
+        if summary:
+            summary_text = "\n".join(
+                f"• Variação {item['variation_index'] + 1}: {item['status']}" for item in summary
+            )
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(
-                    text="⚠️ Imagens geradas, mas houve erro ao persistir a entrega final.""\n" + str(exc)
+                    text=(
+                        "📊 Resultado da geração de imagens:\n" + summary_text
+                    )
                 )]),
             )
-            return
+        else:
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text="ℹ️ Nenhuma imagem gerada.")]),
+            )
 
-        sucesso = sum(1 for item in summary if item.get("status") == "ok")
-        yield Event(
-            author=self.name,
-            content=Content(parts=[Part(
-                text=f"✅ Imagens geradas e salvas (variações bem-sucedidas: {sucesso}/{total_variations})."
-            )]),
-        )
+        if review["grade"] == "pass":
+            sucesso = sum(1 for item in summary if item.get("status") == "ok")
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(
+                    text=f"✅ Imagens geradas e salvas (variações bem-sucedidas: {sucesso}/{total_variations})."
+                )]),
+            )
 
 class TaskInitializer(BaseAgent):
     def __init__(self, name: str):
@@ -1056,11 +1155,342 @@ Responda com confirmação simples.
 )
 
 
-final_assembler = LlmAgent(
-    model=config.critic_model,
-    name="final_assembler",  # mantido
-    description="Monta o JSON final do anúncio a partir dos fragmentos aprovados.",
-    instruction="""
+class FinalAssemblyGuardPre(BaseAgent):
+    """Valida a presença de snippets VISUAL_DRAFT antes da montagem final."""
+
+    def __init__(self, name: str = "final_assembly_guard_pre") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        snippets = state.get("approved_code_snippets") or []
+        visual_snippets: list[dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        issues: list[str] = []
+
+        for snippet in snippets:
+            if not isinstance(snippet, dict):
+                continue
+            if snippet.get("snippet_type") != "VISUAL_DRAFT":
+                continue
+            if snippet.get("status") != "approved":
+                continue
+            snippet_id = str(
+                snippet.get("snippet_id")
+                or snippet.get("task_id")
+                or f"snippet-{len(visual_snippets)}"
+            )
+            if snippet_id in seen_ids:
+                issues.append(f"Snippet VISUAL_DRAFT duplicado: {snippet_id}")
+                continue
+            seen_ids.add(snippet_id)
+            code = snippet.get("code")
+            if not code:
+                issues.append(f"Snippet {snippet_id} sem conteúdo.")
+                continue
+            normalized_code = code
+            parsed, parsed_value = try_parse_json_string(code)
+            if parsed and parsed_value is not None:
+                try:
+                    normalized_code = json.dumps(parsed_value, ensure_ascii=False)
+                except (TypeError, ValueError):
+                    normalized_code = code
+            visual_snippets.append(
+                {
+                    "snippet_id": snippet_id,
+                    "task_id": snippet.get("task_id"),
+                    "approved_at": snippet.get("approved_at"),
+                    "code": normalized_code,
+                    "status": snippet.get("status"),
+                    "snippet_type": snippet.get("snippet_type"),
+                }
+            )
+
+        if issues or not visual_snippets:
+            if not visual_snippets:
+                issues.append("Nenhum snippet VISUAL_DRAFT aprovado disponível.")
+            detail = "; ".join(issues)
+            state["approved_visual_drafts"] = []
+            state["deterministic_final_validation"] = {
+                "grade": "fail",
+                "issues": issues,
+                "source": "guard",
+            }
+            state["deterministic_final_blocked"] = True
+            state["deterministic_final_validation_failed"] = True
+            state["deterministic_final_validation_failure_reason"] = detail
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=detail,
+                issues=issues,
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Guard do assembler bloqueou execução: {detail}")]),
+                actions=EventActions(escalate=True),
+            )
+            return
+
+        state["approved_visual_drafts"] = visual_snippets
+        state["deterministic_final_blocked"] = False
+        state.pop("deterministic_final_validation_failed", None)
+        state.pop("deterministic_final_validation_failure_reason", None)
+        append_delivery_audit_event(
+            state,
+            stage=self.name,
+            status="passed",
+            detail=f"{len(visual_snippets)} VISUAL_DRAFT aprovados.",
+        )
+        yield Event(
+            author=self.name,
+            content=Content(
+                parts=[Part(text=f"✅ {len(visual_snippets)} VISUAL_DRAFT aprovados prontos para montagem.")]
+            ),
+        )
+
+
+class FinalAssemblyNormalizer(BaseAgent):
+    """Normaliza a saída do assembler e prepara estado para validação determinística."""
+
+    def __init__(self, name: str = "final_assembly_normalizer") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        raw_payload = state.get("final_code_delivery")
+
+        if not raw_payload:
+            detail = "final_code_delivery ausente após montagem."
+            state["deterministic_final_validation"] = {
+                "grade": "fail",
+                "issues": [detail],
+                "source": "normalizer",
+            }
+            state["deterministic_final_blocked"] = True
+            state["deterministic_final_validation_failed"] = True
+            state["deterministic_final_validation_failure_reason"] = detail
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=detail,
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
+                actions=EventActions(escalate=True),
+            )
+            return
+
+        try:
+            if isinstance(raw_payload, str):
+                parsed, parsed_value = try_parse_json_string(raw_payload)
+                if not parsed:
+                    parsed_value = json.loads(raw_payload)
+                variations = parsed_value
+            elif isinstance(raw_payload, list):
+                variations = raw_payload
+            else:
+                raise TypeError("Estrutura inesperada recebida pelo normalizer")
+        except (json.JSONDecodeError, TypeError, ValueError) as exc:
+            detail = f"Payload inválido: {exc}"
+            state["deterministic_final_validation"] = {
+                "grade": "fail",
+                "issues": [detail],
+                "source": "normalizer",
+            }
+            state["deterministic_final_blocked"] = True
+            state["deterministic_final_validation_failed"] = True
+            state["deterministic_final_validation_failure_reason"] = detail
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=detail,
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
+                actions=EventActions(escalate=True),
+            )
+            return
+
+        if not isinstance(variations, list) or not variations:
+            detail = "Lista de variações vazia ou inválida."
+            state["deterministic_final_validation"] = {
+                "grade": "fail",
+                "issues": [detail],
+                "source": "normalizer",
+            }
+            state["deterministic_final_blocked"] = True
+            state["deterministic_final_validation_failed"] = True
+            state["deterministic_final_validation_failure_reason"] = detail
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=detail,
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
+                actions=EventActions(escalate=True),
+            )
+            return
+
+        def _is_blank(value: Any) -> bool:
+            if value is None:
+                return True
+            if isinstance(value, str) and not value.strip():
+                return True
+            return False
+
+        normalized_variations: list[dict[str, Any]] = []
+        structural_issues: list[str] = []
+
+        for idx, variation in enumerate(variations):
+            if not isinstance(variation, dict):
+                structural_issues.append(f"Variação {idx + 1} não é um objeto JSON.")
+                continue
+
+            required_fields = [
+                "landing_page_url",
+                "formato",
+                "cta_instagram",
+                "fluxo",
+                "referencia_padroes",
+                "contexto_landing",
+            ]
+            missing = [field for field in required_fields if _is_blank(variation.get(field))]
+
+            copy_block = variation.get("copy") or {}
+            visual_block = variation.get("visual") or {}
+            if not isinstance(copy_block, dict) or not isinstance(visual_block, dict):
+                structural_issues.append(
+                    f"Variação {idx + 1} possui 'copy' ou 'visual' inválidos."
+                )
+                continue
+
+            copy_missing = [
+                field for field in ("headline", "corpo", "cta_texto") if _is_blank(copy_block.get(field))
+            ]
+            visual_missing = [
+                field
+                for field in (
+                    "descricao_imagem",
+                    "prompt_estado_atual",
+                    "prompt_estado_intermediario",
+                    "prompt_estado_aspiracional",
+                    "aspect_ratio",
+                )
+                if _is_blank(visual_block.get(field))
+            ]
+
+            if missing or copy_missing or visual_missing:
+                details = []
+                if missing:
+                    details.append(
+                        "campos principais: " + ", ".join(sorted(set(missing)))
+                    )
+                if copy_missing:
+                    details.append("copy: " + ", ".join(copy_missing))
+                if visual_missing:
+                    details.append("visual: " + ", ".join(visual_missing))
+                structural_issues.append(
+                    f"Variação {idx + 1} incompleta ({'; '.join(details)})."
+                )
+                continue
+
+            contexto = variation.get("contexto_landing")
+            if isinstance(contexto, (dict, list)):
+                variation["contexto_landing"] = json.dumps(contexto, ensure_ascii=False)
+
+            normalized_variations.append(variation)
+
+        if structural_issues:
+            detail = "; ".join(structural_issues)
+            state["deterministic_final_validation"] = {
+                "grade": "fail",
+                "issues": structural_issues,
+                "source": "normalizer",
+            }
+            state["deterministic_final_blocked"] = True
+            state["deterministic_final_validation_failed"] = True
+            state["deterministic_final_validation_failure_reason"] = detail
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=detail,
+                issues=structural_issues,
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
+                actions=EventActions(escalate=True),
+            )
+            return
+
+        state["final_code_delivery_parsed"] = normalized_variations
+        state["final_code_delivery"] = json.dumps(normalized_variations, ensure_ascii=False)
+        state["deterministic_final_validation"] = {
+            "grade": "pending",
+            "issues": [],
+            "source": "normalizer",
+        }
+        state["deterministic_final_blocked"] = False
+        state.pop("deterministic_final_validation_failed", None)
+        state.pop("deterministic_final_validation_failure_reason", None)
+        append_delivery_audit_event(
+            state,
+            stage=self.name,
+            status="pending",
+            detail="Payload normalizado; aguardando validador determinístico.",
+        )
+        yield Event(
+            author=self.name,
+            content=Content(parts=[Part(text="🧮 JSON final normalizado para validação determinística.")]),
+        )
+
+
+class PersistFinalDeliveryAgent(BaseAgent):
+    """Encapsula a persistência do JSON final normalizado."""
+
+    def __init__(self, name: str = "persist_final_delivery_agent") -> None:
+        super().__init__(name=name)
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        try:
+            persist_final_delivery(ctx)
+        except Exception as exc:  # pragma: no cover - persistência externa
+            append_delivery_audit_event(
+                state,
+                stage=self.name,
+                status="failed",
+                detail=str(exc),
+            )
+            yield Event(
+                author=self.name,
+                content=Content(parts=[Part(text=f"❌ Falha ao persistir entrega final: {exc}")]),
+            )
+            return
+
+        append_delivery_audit_event(
+            state,
+            stage=self.name,
+            status="completed",
+            detail="Persistência concluída.",
+        )
+        yield Event(
+            author=self.name,
+            content=Content(parts=[Part(text="💾 JSON final persistido com sucesso.")]),
+        )
+
+
+final_assembler_instruction = """
 ## IDENTIDADE: Final Ads Assembler
 
 Monte **3 variações** de anúncio combinando `approved_code_snippets`.
@@ -1069,75 +1499,98 @@ Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 - "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
 - "formato": usar {formato_anuncio} especificado pelo usuário
 - "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
-- "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_intermediario", "prompt_estado_aspiracional", "aspect_ratio" } (sem duracao - apenas imagens)
+- "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_intermediario", "prompt_estado_aspiracional", "aspect_ratio" } (sem duração - apenas imagens)
 - "cta_instagram": do COPY_DRAFT
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
 - "contexto_landing": resumo do {landing_page_context}
 
 Regras:
-- Criar 3 variações diferentes de copy e visual
+- Criar 3 variações diferentes de copy e visual reutilizando os snippets aprovados sempre que possível.
 - Complete faltantes de forma conservadora.
 - Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
 - **Saída**: apenas JSON válido (sem markdown).
-""",
+"""
+
+final_assembler_llm = LlmAgent(
+    model=config.critic_model,
+    name="final_assembler_llm",
+    description="Gera o JSON final a partir dos snippets aprovados.",
+    instruction=final_assembler_instruction,
+    output_key="final_code_delivery",
+)
+
+legacy_final_assembler_llm = LlmAgent(
+    model=config.critic_model,
+    name="final_assembler",  # manter nome legado
+    description="Monta o JSON final do anúncio a partir dos fragmentos aprovados.",
+    instruction=final_assembler_instruction,
     output_key="final_code_delivery",
     after_agent_callback=persist_final_delivery,
 )
 
-# Validador final (schema estrito + coerência)
-final_validator = LlmAgent(
-    model=config.critic_model,
-    name="final_validator",
-    description="Valida o JSON final contra o schema e regras de coerência.",
-    instruction=r"""
-## IDENTIDADE: Final Schema & Coherence Validator
+final_assembly_guard_pre = FinalAssemblyGuardPre()
+final_assembly_normalizer = FinalAssemblyNormalizer()
+persist_final_delivery_agent = PersistFinalDeliveryAgent()
 
-Valide `final_code_delivery` (string JSON).
-Critérios (deve ser **pass** se TODOS forem verdadeiros):
-1) JSON válido e lista com 3 objetos (3 variações).
-2) Chaves obrigatórias presentes:
-   landing_page_url, formato, copy{headline,corpo,cta_texto}, 
-   visual{descricao_imagem,prompt_estado_atual,prompt_estado_intermediario,prompt_estado_aspiracional,aspect_ratio}, cta_instagram, fluxo, referencia_padroes, contexto_landing
-3) Enums:
-   - formato ∈ {"Reels","Stories","Feed"}
-   - aspect_ratio ∈ {"9:16","1:1","4:5","16:9"}
-   - cta_instagram ∈ {"Saiba mais","Enviar mensagem","Ligar","Comprar agora","Cadastre-se"}
-4) Coerência com objetivo_final: CTA e fluxo fazem sentido (ex.: leads → "Saiba mais" ou "Cadastre-se").
-   Se houver "foco" definido, as mensagens devem refletir esse tema sem contradizer o conteúdo da landing page.
-5) Campos não vazios/placeholder.
-6) As 3 variações devem ser diferentes entre si.
-
-7) Quando `format_specs_json` estiver presente:
-   - O `aspect_ratio` e demais características do formato devem obedecer às especificações do formato selecionado.
-   - A copy deve respeitar limites/estilo indicados (ex.: headline curta em Reels/Stories; informativa em Feed).
-
-## SAÍDA
-{"grade":"pass"|"fail","comment":"Se fail, liste campos/problemas específicos."}
-""",
-    output_schema=Feedback,
-    output_key="final_validation_result",
+deterministic_final_assembly_stage = SequentialAgent(
+    name="final_assembly_stage",
+    sub_agents=[
+        final_assembly_guard_pre,
+        final_assembler_llm,
+        final_assembly_normalizer,
+    ],
 )
 
-# Fixador final (aplica correções apontadas pelo validador)
-final_fix_agent = LlmAgent(
+
+def _mirror_semantic_review(callback_context: CallbackContext) -> None:
+    result = callback_context.state.get("semantic_visual_review")
+    if isinstance(result, dict):
+        callback_context.state["final_validation_result"] = result
+
+
+semantic_visual_reviewer = LlmAgent(
+    model=config.critic_model,
+    name="semantic_visual_reviewer",
+    description="Avalia narrativa, consistência visual e aderência ao briefing após validação determinística.",
+    instruction=r"""
+## IDENTIDADE: Semantic Visual Reviewer
+
+Analise `final_code_delivery` (JSON já normalizado) verificando:
+1. Consistência narrativa entre copy e visual de cada variação.
+2. Aderência ao objetivo final `{objetivo_final}` e ao foco `{foco}` (se informado).
+3. Fidelidade ao conteúdo real da landing page `{landing_page_context}` e ao StoryBrand.
+4. Coerência dos prompts visuais com as descrições e com o formato `{formato_anuncio}`.
+5. Ausência de promessas indevidas, termos proibidos ou discrepâncias gritantes.
+
+Não repita validações estruturais já cobertas pelo validador determinístico (campos obrigatórios, enums, etc.).
+
+Retorne `grade="pass"` quando todas as variações estiverem coerentes. Caso contrário, `grade="fail"` e detalhe problemas específicos em `comment`.
+""",
+    output_schema=Feedback,
+    output_key="semantic_visual_review",
+    after_agent_callback=_mirror_semantic_review,
+)
+
+semantic_fix_agent = LlmAgent(
     model=config.worker_model,
-    name="final_fix_agent",
-    description="Corrige o JSON final com base no feedback do validador.",
+    name="semantic_fix_agent",
+    description="Corrige incoerências narrativas apontadas pelo revisor semântico.",
     instruction="""
-## IDENTIDADE: Final JSON Fixer
+## IDENTIDADE: Semantic Fixer
 
 Tarefas:
 1) Leia `final_code_delivery` (JSON).
-2) Leia `final_validation_result.comment` e **corrija** exatamente os pontos citados (enums, chaves faltantes, etc.).
-3) Garanta coerência com:
+2) Leia `semantic_visual_review.comment` e corrija APENAS os pontos citados (consistência narrativa, tom, aderência ao foco/objetivo).
+3) Preserve estrutura validada (chaves, enums) – não remova campos obrigatórios.
+4) Garanta coerência com:
    - landing_page_url: {landing_page_url}
    - objetivo_final: {objetivo_final}
    - perfil_cliente: {perfil_cliente}
    - formato_anuncio: {formato_anuncio}
    - foco: {foco}
    - landing_page_context: {landing_page_context}
-4) Retorne **apenas** o JSON final corrigido com 3 variações.
+5) Retorne **apenas** o JSON final ajustado com 3 variações.
 """,
     output_key="final_code_delivery",
 )
@@ -1276,62 +1729,88 @@ task_execution_loop = LoopAgent(
     after_agent_callback=task_execution_failure_handler,
 )
 
-# Validação final em loop: valida → (pass?) → corrige → revalida
-final_validation_loop = LoopAgent(
-    name="final_validation_loop",
+semantic_validation_loop = LoopAgent(
+    name="semantic_validation_loop",
     max_iterations=3,
     sub_agents=[
-        final_validator,
-        EscalationChecker(name="final_validation_escalator", review_key="final_validation_result"),
-        RunIfFailed(name="final_fix_if_failed", review_key="final_validation_result", agent=final_fix_agent),
+        semantic_visual_reviewer,
+        EscalationChecker(name="semantic_validation_escalator", review_key="semantic_visual_review"),
+        RunIfFailed(
+            name="semantic_fix_if_failed",
+            review_key="semantic_visual_review",
+            agent=semantic_fix_agent,
+        ),
     ],
     after_agent_callback=make_failure_handler(
-        "final_validation_result",
-        "JSON final não passou na validação de schema/coerência."
+        "semantic_visual_review",
+        "Não foi possível garantir coerência narrativa após as iterações.",
     ),
 )
 
-final_validation_stage = EscalationBarrier(
-    name="final_validation_stage", agent=final_validation_loop
+semantic_validation_stage = EscalationBarrier(
+    name="semantic_validation_stage", agent=semantic_validation_loop
 )
 
-if config.enable_deterministic_final_validation:
-    execution_sub_agents = [
+deterministic_validation_stage = SequentialAgent(
+    name="deterministic_validation_stage",
+    sub_agents=[final_delivery_validator_agent],
+    after_agent_callback=make_failure_handler(
+        "deterministic_final_validation",
+        "JSON final não passou na validação determinística.",
+    ),
+)
+
+
+def build_execution_pipeline(flag_enabled: bool) -> SequentialAgent:
+    base_agents = [
         TaskInitializer(name="task_initializer"),
         EnhancedStatusReporter(name="status_reporter_start"),
         task_execution_loop,
         EnhancedStatusReporter(name="status_reporter_assembly"),
-        final_assembler,
-        final_delivery_validator_agent,
-        RunIfPassed(
-            name="semantic_validation_if_passed",
-            review_key="deterministic_final_validation",
-            agent=final_validation_stage,
-        ),
-        RunIfPassed(
-            name="image_assets_if_passed",
-            review_key="deterministic_final_validation",
-            agent=image_assets_agent,
-        ),
-        EnhancedStatusReporter(name="status_reporter_final"),
-    ]
-else:
-    execution_sub_agents = [
-        TaskInitializer(name="task_initializer"),
-        EnhancedStatusReporter(name="status_reporter_start"),
-        task_execution_loop,
-        EnhancedStatusReporter(name="status_reporter_assembly"),
-        reset_deterministic_validation_state,
-        final_assembler,
-        final_validation_stage,
-        image_assets_agent,
-        EnhancedStatusReporter(name="status_reporter_final"),
     ]
 
-execution_pipeline = SequentialAgent(
-    name="execution_pipeline",
-    description="Executa plano, gera fragmentos e monta/valida JSON final.",
-    sub_agents=execution_sub_agents,
+    if flag_enabled:
+        deterministic_agents = [
+            deterministic_final_assembly_stage,
+            deterministic_validation_stage,
+            RunIfPassed(
+                name="semantic_validation_if_passed",
+                review_key="deterministic_final_validation",
+                agent=semantic_validation_stage,
+            ),
+            RunIfPassed(
+                name="image_assets_if_passed",
+                review_key="semantic_visual_review",
+                agent=image_assets_agent,
+            ),
+            RunIfPassed(
+                name="persist_final_delivery_if_passed",
+                review_key="image_assets_review",
+                agent=persist_final_delivery_agent,
+                expected_grade=("pass", "skipped"),
+            ),
+            EnhancedStatusReporter(name="status_reporter_final"),
+        ]
+        sub_agents = base_agents + deterministic_agents
+    else:
+        legacy_agents = [
+            reset_deterministic_validation_state,
+            legacy_final_assembler_llm,
+            semantic_validation_stage,
+            image_assets_agent,
+            EnhancedStatusReporter(name="status_reporter_final"),
+        ]
+        sub_agents = base_agents + legacy_agents
+
+    return SequentialAgent(
+        name="execution_pipeline",
+        description="Executa plano, gera fragmentos e monta/valida JSON final.",
+        sub_agents=sub_agents,
+    )
+
+
+execution_pipeline = build_execution_pipeline(
+    flag_enabled=config.enable_deterministic_final_validation
 )
 
 complete_pipeline = SequentialAgent(
@@ -1383,6 +1862,18 @@ class FeatureOrchestrator(BaseAgent):
         elif ctx.session.state.get("task_execution_failed"):
             yield Event(author=self.name, content=Content(parts=[Part(
                 text=f"⚠️ Falha na Execução: {ctx.session.state.get('task_execution_failure_reason')}"
+            )]))
+        elif ctx.session.state.get("deterministic_final_validation_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Validação Determinística: {ctx.session.state.get('deterministic_final_validation_failure_reason')}"
+            )]))
+        elif ctx.session.state.get("semantic_visual_review_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Revisão Semântica: {ctx.session.state.get('semantic_visual_review_failure_reason')}"
+            )]))
+        elif ctx.session.state.get("image_assets_review_failed"):
+            yield Event(author=self.name, content=Content(parts=[Part(
+                text=f"⚠️ Falha na Geração de Imagens: {ctx.session.state.get('image_assets_review_failure_reason', 'Ver detalhes em image_assets_review')}"
             )]))
         elif ctx.session.state.get("final_validation_result_failed"):
             yield Event(author=self.name, content=Content(parts=[Part(
