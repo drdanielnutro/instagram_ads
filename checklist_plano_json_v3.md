@@ -23,16 +23,18 @@
 
 ## 2. Fase 2 – Validador Determinístico e Gating
 ### 2.1 `FinalDeliveryValidatorAgent`
-- [ ] Criar `app/validators/final_delivery_validator.py` realizando parsing único de `state['final_code_delivery']`.
-- [ ] Validar contra `StrictAd*`, limites de `app/format_specifications.py` e `config.CTA_BY_OBJECTIVE`, detectando duplicidades entre variações.
-- [ ] Popular `state['deterministic_final_validation']` com `{grade, issues, normalized_payload, source="validator"}` e sincronizar `state['final_code_delivery']` normalizado.
-- [ ] Registrar sucesso/falha via `append_delivery_audit_event` e acionar `make_failure_handler("deterministic_final_validation", ...)`/`write_failure_meta` quando necessário.
+- [x] Criar `app/validators/final_delivery_validator.py` realizando parsing único de `state['final_code_delivery']`.
+- [x] Validar contra `StrictAd*`, limites de `app/format_specifications.py` e `config.CTA_BY_OBJECTIVE`, detectando duplicidades entre variações.
+- [x] Popular `state['deterministic_final_validation']` com `{grade, issues, normalized_payload, source="validator"}` e sincronizar `state['final_code_delivery']` normalizado.
+- [x] Registrar sucesso/falha via `append_delivery_audit_event` e acionar `make_failure_handler("deterministic_final_validation", ...)`/`write_failure_meta` quando necessário.
 
 ### 2.2 Utilitários de gating/reset
-- [ ] Criar `RunIfPassed` em `app/agents/gating.py` com `review_key` e `expected_grade="pass"`, realizando logging quando a chave estiver ausente/inválida.
-- [ ] Criar `ResetDeterministicValidationState` para limpar `approved_visual_drafts`, `deterministic_final_validation`, `deterministic_final_blocked`, `final_code_delivery_parsed` e correlatos.
-- [ ] Ajustar `app/agent.py` (faixa 1180-1235) para utilizar `RunIfPassed`/`ResetDeterministicValidationState` e preparar o pipeline para a flag.
-- [ ] Atualizar `app/utils/delivery_status.py` caso novos helpers sejam necessários ao validador.
+- [x] Criar `RunIfPassed` em `app/agents/gating.py` com `review_key` e `expected_grade="pass"`, realizando logging quando a chave estiver ausente/inválida.
+- [x] Criar `ResetDeterministicValidationState` para limpar `approved_visual_drafts`, `deterministic_final_validation`, `deterministic_final_blocked`, `final_code_delivery_parsed` e correlatos.
+- [x] Ajustar `app/agent.py` (faixa 1180-1235) para utilizar `RunIfPassed`/`ResetDeterministicValidationState` e preparar o pipeline para a flag.
+- [x] Atualizar `app/utils/delivery_status.py` caso novos helpers sejam necessários ao validador.
+
+> Notas Fase 2: Validador determinístico normaliza e audita `final_code_delivery`, grava meta de falha quando necessário e bloqueia pipeline por meio de `RunIfPassed`. Pipeline legado limpa estados determinísticos via `ResetDeterministicValidationState`; nenhum helper adicional exigido em `delivery_status` nesta etapa.
 
 ## 3. Fase 3 – Reorquestração do Pipeline de Execução
 ### 3.1 Montagem do pipeline

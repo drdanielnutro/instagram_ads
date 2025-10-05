@@ -32,17 +32,19 @@ from google.genai.types import Content, Part
 from pydantic import BaseModel, Field
 
 from .config import config
-from .tools.web_fetch import web_fetch_tool
 from .tools.generate_transformation_images import generate_transformation_images
+from .tools.web_fetch import web_fetch_tool
 from .utils.json_tools import try_parse_json_string
 
 
 logger = logging.getLogger(__name__)
+from .agents.gating import RunIfPassed, ResetDeterministicValidationState
+from .agents.storybrand_fallback import fallback_storybrand_pipeline
+from .agents.storybrand_gate import StoryBrandQualityGate
 from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
 from .callbacks.persist_outputs import persist_final_delivery
 from .schemas.storybrand import StoryBrandAnalysis
-from .agents.storybrand_fallback import fallback_storybrand_pipeline
-from .agents.storybrand_gate import StoryBrandQualityGate
+from .validators.final_delivery_validator import FinalDeliveryValidatorAgent
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -1215,6 +1217,9 @@ plan_review_loop = LoopAgent(
     ),
 )
 
+final_delivery_validator_agent = FinalDeliveryValidatorAgent()
+reset_deterministic_validation_state = ResetDeterministicValidationState()
+
 planning_pipeline = SequentialAgent(
     name="planning_pipeline",
     description="Gera briefing e plano de tarefas (Ads).",
@@ -1286,19 +1291,47 @@ final_validation_loop = LoopAgent(
     ),
 )
 
-execution_pipeline = SequentialAgent(
-    name="execution_pipeline",
-    description="Executa plano, gera fragmentos e monta/valida JSON final.",
-    sub_agents=[
+final_validation_stage = EscalationBarrier(
+    name="final_validation_stage", agent=final_validation_loop
+)
+
+if config.enable_deterministic_final_validation:
+    execution_sub_agents = [
         TaskInitializer(name="task_initializer"),
         EnhancedStatusReporter(name="status_reporter_start"),
         task_execution_loop,
         EnhancedStatusReporter(name="status_reporter_assembly"),
         final_assembler,
-        EscalationBarrier(name="final_validation_stage", agent=final_validation_loop),
+        final_delivery_validator_agent,
+        RunIfPassed(
+            name="semantic_validation_if_passed",
+            review_key="deterministic_final_validation",
+            agent=final_validation_stage,
+        ),
+        RunIfPassed(
+            name="image_assets_if_passed",
+            review_key="deterministic_final_validation",
+            agent=image_assets_agent,
+        ),
+        EnhancedStatusReporter(name="status_reporter_final"),
+    ]
+else:
+    execution_sub_agents = [
+        TaskInitializer(name="task_initializer"),
+        EnhancedStatusReporter(name="status_reporter_start"),
+        task_execution_loop,
+        EnhancedStatusReporter(name="status_reporter_assembly"),
+        reset_deterministic_validation_state,
+        final_assembler,
+        final_validation_stage,
         image_assets_agent,
         EnhancedStatusReporter(name="status_reporter_final"),
-    ],
+    ]
+
+execution_pipeline = SequentialAgent(
+    name="execution_pipeline",
+    description="Executa plano, gera fragmentos e monta/valida JSON final.",
+    sub_agents=execution_sub_agents,
 )
 
 complete_pipeline = SequentialAgent(
