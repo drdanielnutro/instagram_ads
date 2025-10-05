@@ -40,8 +40,8 @@
 - As instruções do anexo complementam este arquivo e tornam-se obrigatórias durante a revisão de planos, incluindo o uso do agente `plan-code-validator` descrito em `.claude/agents/plan-code-validator.md`.
 
 ## Checklist Primeiro, Código Depois
-- Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `checklist_plano_json.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
-- Em seguida, consulte o plano `plano_validacao_json.md` para entender o contexto completo das tarefas e subtarefas.
+- Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `checklist_plano_json_v3.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
+- Em seguida, consulte o plano `plano_validacao_json_v3.md` para entender o contexto completo das tarefas e subtarefas.
 - Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
 - Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_plano_json.md` e registre o resultado na sua resposta/PR.
 
