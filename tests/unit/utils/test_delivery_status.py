@@ -94,12 +94,25 @@ def test_write_and_clear_failure_meta(tmp_path, monkeypatch):
     session_id = "test-session"
     user_id = "user-123"
 
+    state = {
+        "deterministic_final_validation": {
+            "grade": "fail",
+            "issues": ["CTA inválido"],
+            "source": "validator",
+        },
+        "deterministic_final_validation_failed": True,
+        "deterministic_final_validation_failure_reason": "CTA inválido",
+        "semantic_visual_review": {"grade": "pending"},
+        "image_assets_review": {"grade": "skipped"},
+    }
+
     path = delivery_status.write_failure_meta(
         session_id=session_id,
         user_id=user_id,
         reason="vertex_resource_exhausted",
         message="Vertex AI saturated",
         extra={"attempts": 3},
+        state=state,
     )
 
     assert path.exists()
@@ -111,6 +124,12 @@ def test_write_and_clear_failure_meta(tmp_path, monkeypatch):
     assert loaded["reason"] == "vertex_resource_exhausted"
     assert loaded["attempts"] == 3
 
-    delivery_status.clear_failure_meta(session_id)
+    assert loaded["deterministic_final_validation"]["grade"] == "fail"
+    assert loaded["semantic_visual_review"]["grade"] == "pending"
+    assert loaded["image_assets_review"]["grade"] == "skipped"
+
+    delivery_status.clear_failure_meta(session_id, state=state)
     assert delivery_status.load_failure_meta(session_id) is None
     assert not path.exists()
+    assert "deterministic_final_validation_failed" not in state
+    assert "deterministic_final_validation_failure_reason" not in state

@@ -206,13 +206,43 @@ def unpack_extracted_input_callback(callback_context: CallbackContext) -> None:
         pass
 
 
-def make_failure_handler(state_key: str, reason: str):
+def make_failure_handler(
+    state_key: str,
+    reason: str,
+    *,
+    expected_grades: tuple[str, ...] | str = ("pass",),
+    failure_flag_key: str | None = None,
+    failure_reason_key: str | None = None,
+):
+    if isinstance(expected_grades, str):
+        expected_set = {expected_grades}
+    else:
+        expected_set = set(expected_grades)
+
     def _callback(callback_context: CallbackContext) -> None:
-        result = callback_context.state.get(state_key)
-        grade = result.get("grade") if isinstance(result, dict) else result
-        if grade != "pass":
-            callback_context.state[f"{state_key}_failed"] = True
-            callback_context.state[f"{state_key}_failure_reason"] = reason
+        state = callback_context.state
+        result = state.get(state_key)
+        grade: str | None
+        if isinstance(result, dict):
+            grade = result.get("grade")
+        elif isinstance(result, str):
+            grade = result
+        else:
+            grade = None
+
+        if grade not in expected_set:
+            flag_key = failure_flag_key or f"{state_key}_failed"
+            reason_key = failure_reason_key or f"{state_key}_failure_reason"
+            state[flag_key] = True
+            if not state.get(reason_key):
+                state[reason_key] = reason
+
+            # Preserve legacy compatibility for final validation naming.
+            if state_key == "semantic_visual_review":
+                state.setdefault("final_validation_result_failed", True)
+                if not state.get("final_validation_result_failure_reason"):
+                    state["final_validation_result_failure_reason"] = state.get(reason_key, reason)
+
     return _callback
 
 
@@ -319,10 +349,32 @@ class EnhancedStatusReporter(BaseAgent):
         st = ctx.session.state
         tasks = st.get("implementation_tasks", [])
         idx = st.get("current_task_index", 0)
-        if not tasks:
+        det_failed = st.get("deterministic_final_validation_failed")
+        sem_failed = st.get("semantic_visual_review_failed")
+        img_failed = st.get("image_assets_review_failed")
+        det_review = st.get("deterministic_final_validation")
+        det_grade = det_review.get("grade") if isinstance(det_review, dict) else det_review
+
+        if det_failed:
+            reason = st.get("deterministic_final_validation_failure_reason") or "Validação determinística reprovada."
+            text = f"⚠️ **Validação Determinística** – {reason}"
+        elif sem_failed:
+            reason = st.get("semantic_visual_review_failure_reason") or "Revisão semântica reprovada."
+            text = f"⚠️ **Revisão Semântica** – {reason}"
+        elif img_failed:
+            reason = st.get("image_assets_review_failure_reason") or "Geração de imagens reprovada."
+            text = f"⚠️ **Revisão de Imagens** – {reason}"
+        elif det_grade == "pending":
+            text = "🧮 **Validação Determinística** – analisando JSON normalizado..."
+        elif not tasks:
             text = "🔄 **FASE: PLANEJAMENTO** – preparando plano de tarefas (Ads)..."
         elif "final_code_delivery" in st:
-            text = "✅ **PRONTO** – JSON final do anúncio disponível."
+            stage = st.get("final_delivery_status", {}).get("stage", "pipeline")
+            grade = st.get("final_delivery_status", {}).get("grade")
+            suffix = f" (estágio `{stage}`, nota `{grade}`)" if grade else ""
+            text = f"✅ **PRONTO** – JSON final do anúncio disponível{suffix}."
+        elif det_grade and det_grade not in ("pass", None):
+            text = f"ℹ️ **Validação Determinística** – status `{det_grade}`."
         elif idx < len(tasks):
             progress = idx / len(tasks) if tasks else 0
             bar = "█" * int(progress * 10) + "░" * (10 - int(progress * 10))
@@ -335,6 +387,33 @@ class EnhancedStatusReporter(BaseAgent):
             )
         else:
             text = "🧩 **Finalizando** – montagem/validação do JSON..."
+
+        review_lines: list[str] = []
+        for key, label in [
+            ("deterministic_final_validation", "Validação determinística"),
+            ("semantic_visual_review", "Revisão semântica"),
+            ("image_assets_review", "Revisão de imagens"),
+        ]:
+            review = st.get(key)
+            grade = review.get("grade") if isinstance(review, dict) else review
+            if not grade:
+                continue
+            detail = grade
+            if grade == "fail":
+                reason = st.get(f"{key}_failure_reason")
+                if not reason and isinstance(review, dict):
+                    issues = review.get("issues")
+                    if issues:
+                        reason = issues[0]
+                if reason:
+                    detail = f"{grade} – {reason}"
+            elif grade == "pending":
+                detail = "pending…"
+            review_lines.append(f"• {label}: `{detail}`")
+
+        if review_lines:
+            text = f"{text}\n\n" + "\n".join(review_lines)
+
         yield Event(author=self.name, content=Content(parts=[Part(text=text)]))
 
 

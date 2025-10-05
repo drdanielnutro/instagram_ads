@@ -213,5 +213,6 @@ class FinalDeliveryValidatorAgent(BaseAgent):
             reason="deterministic_final_validation_failed",
             message=failure_message,
             extra=extra,
+            state=state,
         )
 

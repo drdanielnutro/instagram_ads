@@ -46,6 +46,9 @@ class StoryBrandQualityGate(BaseAgent):
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
         state = ctx.session.state
+        state.setdefault("storybrand_audit_trail", [])
+        state.setdefault("storybrand_gate_metrics", {})
+        state.setdefault("storybrand_fallback_meta", {})
         threshold = getattr(config, "min_storybrand_completeness", 0.0)
         score = _extract_score(state)
         fallback_enabled = bool(getattr(config, "enable_storybrand_fallback", False) and getattr(config, "enable_new_input_fields", False))
