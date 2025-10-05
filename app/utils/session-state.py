@@ -15,7 +15,7 @@
 """Strongly typed session state models for the Flutter development agent."""
 
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TaskInfo(BaseModel):
@@ -32,11 +32,18 @@ class TaskInfo(BaseModel):
 
 class CodeSnippet(BaseModel):
     """Represents an approved code snippet."""
-    
+
     task_id: str = Field(description="ID of the task this code implements")
+    category: Optional[str] = Field(None, description="Task category at approval time")
+    snippet_type: Optional[str] = Field(None, description="Logical snippet type (e.g., VISUAL_DRAFT)")
+    status: Optional[str] = Field(None, description="Approval status for the snippet")
+    approved_at: Optional[str] = Field(None, description="UTC timestamp when the snippet was approved")
+    snippet_id: Optional[str] = Field(None, description="Stable identifier derived from the snippet content")
     task_description: str = Field(description="Description of what was implemented")
     file_path: str = Field(description="File path for this code")
     code: str = Field(description="The actual code content")
+
+    model_config = ConfigDict(extra="allow")
 
 
 class ImplementationPlan(BaseModel):
@@ -72,6 +79,10 @@ class SessionState(BaseModel):
     generated_code: Optional[str] = Field(None, description="Most recently generated code")
     code_review_result: Optional[Dict[str, Any]] = Field(None, description="Latest code review result")
     approved_code_snippets: List[CodeSnippet] = Field(default_factory=list, description="All approved code")
+    approved_visual_drafts: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="Cached VISUAL_DRAFT snippets approved for deterministic validation",
+    )
     
     # Pipeline states
     plan_review_result: Optional[Dict[str, Any]] = Field(None, description="Plan review feedback")
@@ -122,17 +133,45 @@ def add_approved_snippet(
     task_id: str,
     task_description: str,
     file_path: str,
-    code: str
+    code: str,
+    *,
+    category: Optional[str] = None,
+    snippet_type: Optional[str] = None,
+    status: Optional[str] = None,
+    approved_at: Optional[str] = None,
+    snippet_id: Optional[str] = None,
+    **extras: Any,
 ) -> Dict[str, Any]:
-    """Add an approved code snippet to the state."""
+    """Add an approved code snippet to the state while preserving metadata."""
+
     session_state = get_session_state(state_dict)
-    
-    snippet = CodeSnippet(
-        task_id=task_id,
-        task_description=task_description,
-        file_path=file_path,
-        code=code
-    )
-    
+
+    snippet_data = {
+        "task_id": task_id,
+        "category": category,
+        "snippet_type": snippet_type,
+        "status": status,
+        "approved_at": approved_at,
+        "snippet_id": snippet_id,
+        "task_description": task_description,
+        "file_path": file_path,
+        "code": code,
+    }
+    snippet_data.update(extras)
+
+    snippet = CodeSnippet(**snippet_data)
     session_state.approved_code_snippets.append(snippet)
+
+    if snippet.snippet_type == "VISUAL_DRAFT" and snippet.status == "approved":
+        visual_draft_entry = {
+            "snippet_id": snippet.snippet_id,
+            "task_id": snippet.task_id,
+            "approved_at": snippet.approved_at,
+            "code": snippet.code,
+            "status": snippet.status,
+            "snippet_type": snippet.snippet_type,
+        }
+        session_state.approved_visual_drafts.append(visual_draft_entry)
+
     return session_state.model_dump()
+

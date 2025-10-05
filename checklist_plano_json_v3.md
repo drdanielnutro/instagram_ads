@@ -5,19 +5,21 @@
 
 ## 1. Fase 1 – Fundamentos (Schemas, Auditoria, Config)
 ### 1.1 Schema e utilidades compartilhadas
-- [ ] Criar `app/schemas/final_delivery.py` com `StrictAdCopy`, `StrictAdVisual`, `StrictAdItem` (Pydantic estrito) e helpers `model_dump`/`from_state`.
-- [ ] Garantir suporte a `contexto_landing: str | dict[str, Any]` com validações e normalização apropriadas.
-- [ ] Centralizar limites/enums importando de `app/format_specifications.py`/`app/config.py`, evitando duplicação.
+- [x] Criar `app/schemas/final_delivery.py` com `StrictAdCopy`, `StrictAdVisual`, `StrictAdItem` (Pydantic estrito) e helpers `model_dump`/`from_state` (entrega em `app/schemas/final_delivery.py`).
+- [x] Garantir suporte a `contexto_landing: str | dict[str, Any]` com validações e normalização apropriadas.
+- [x] Centralizar limites/enums importando de `app/format_specifications.py`/`app/config.py`, evitando duplicação.
 
 ### 1.2 Auditoria e metadados de snippets
-- [ ] Criar `app/utils/audit.py` com `append_delivery_audit_event` reutilizável em guard, validador e persistência.
-- [ ] Estender `collect_code_snippets_callback` em `app/agent.py` para registrar `snippet_type`, `status`, `approved_at`, `snippet_id` e preencher `state['approved_visual_drafts']`.
-- [ ] Atualizar `app/utils/session-state.py` (classe `CodeSnippet`, `get_session_state`, `add_approved_snippet`) preservando os novos campos.
+- [x] Criar `app/utils/audit.py` com `append_delivery_audit_event` reutilizável em guard, validador e persistência.
+- [x] Estender `collect_code_snippets_callback` em `app/agent.py` para registrar `snippet_type`, `status`, `approved_at`, `snippet_id` e preencher `state['approved_visual_drafts']`.
+- [x] Atualizar `app/utils/session-state.py` (classe `CodeSnippet`, `get_session_state`, `add_approved_snippet`) preservando os novos campos.
 
 ### 1.3 Configuração e dependências
-- [ ] Adicionar `enable_deterministic_final_validation` em `app/config.py` (default `False`) com suporte à env `ENABLE_DETERMINISTIC_FINAL_VALIDATION`.
-- [ ] Introduzir/centralizar `fallback_storybrand_max_iterations` e limites usados pelo schema conforme `plano_validacao_json_v3.md`.
-- [ ] Avaliar necessidade de atualizar `requirements.txt` para hashing/validação adicional (caso novos pacotes sejam requeridos).
+- [x] Adicionar `enable_deterministic_final_validation` em `app/config.py` (default `False`) com suporte à env `ENABLE_DETERMINISTIC_FINAL_VALIDATION`.
+- [x] Introduzir/centralizar `fallback_storybrand_max_iterations` e limites usados pelo schema conforme `plano_validacao_json_v3.md`.
+- [x] Avaliar necessidade de atualizar `requirements.txt` para hashing/validação adicional (caso novos pacotes sejam requeridos). Nenhum pacote novo necessário.
+
+> Notas Fase 1: Schema estrito reutiliza limites do `FORMAT_SPECS`, `contexto_landing` aceita texto ou dicionário normalizado e os snippets aprovados agora mantêm `snippet_type`/hash/`approved_visual_drafts`. Flag determinística disponível em `config` com `CTA_BY_OBJECTIVE` consolidado. Nenhuma dependência extra exigida.
 
 ## 2. Fase 2 – Validador Determinístico e Gating
 ### 2.1 `FinalDeliveryValidatorAgent`
