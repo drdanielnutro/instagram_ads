@@ -119,9 +119,9 @@
 - Atualizar `EnhancedStatusReporter` e endpoints `/delivery/final/*` para expor status determinístico e mensagens diferenciadas.
 
 ### Dependências existentes
-- Estrutura de logs em `app/agent.py` (`logger.info`, `logger.log_struct`).
+- Logs estruturados (`logger.log_struct`) e telemetria já expostos em `app/utils/tracing.py:62-105` e nos endpoints principais de `app/server.py:129-410`.
 - `StoryBrandQualityGate` (`app/agents/storybrand_gate.py:70-140`) já preenchendo `storybrand_fallback_meta`.
-- Hooks de SSE/FeatureOrchestrator nos endpoints (`app/server.py:400+`).
+- Mensagens do `FeatureOrchestrator` e streaming SSE alinhados em `app/agent.py:1911-1955` e `app/server.py:129-410`.
 
 ### Critérios de aceitação
 - [ ] Audit trail registra eventos para guard, validador, loop semântico e persistência.
@@ -183,14 +183,58 @@
 | Observabilidade insuficiente | `append_delivery_audit_event` e atualizações de status/alertas (Fase 4/6) fornecem rastreabilidade. |
 
 ---
+## Fase 7 – Consolidação e Evidências
+
+### Entregas validadas (criação vs. modificação)
+| Item | Fase | Tipo | Evidência |
+| --- | --- | --- | --- |
+| `app/schemas/final_delivery.py` | Fase 1 | Criação | Modelos estritos (`StrictAdItem`, `StrictAdCopy`, `StrictAdVisual`) e helpers de normalização. `app/schemas/final_delivery.py:1-181` |
+| `app/utils/audit.py` | Fase 1 | Criação | `append_delivery_audit_event` registra eventos com metadados e timestamp. `app/utils/audit.py:1-41` |
+| `app/utils/session_state.py` / `session-state.py` | Fase 1 | Modificação | Persistência de `approved_visual_drafts` e metadados de snippets. `app/utils/session_state.py:10-90`; `app/utils/session-state.py:131-176` |
+| `app/validators/final_delivery_validator.py` | Fase 2 | Criação | Validação determinística popula `state['deterministic_final_validation']` e normaliza payload. `app/validators/final_delivery_validator.py:26-192` |
+| `app/agents/gating.py` | Fase 2 | Criação | `RunIfPassed` e `ResetDeterministicValidationState` aplicam gating e limpeza do estado. `app/agents/gating.py:19-124` |
+| `app/agent.py` | Fases 3-4 | Modificação | Guard, normalizer, pipeline determinístico e `FeatureOrchestrator` atualizados. `app/agent.py:1237-1888` |
+| `app/callbacks/persist_outputs.py` | Fase 4 | Modificação | Persistência escreve `final_delivery_status` determinístico e sidecar `meta`. `app/callbacks/persist_outputs.py:35-189` |
+
+### Dependências existentes auditadas
+- Logs estruturados e telemetria conferidos nos módulos referenciados (`app/utils/tracing.py:62-105`, `app/server.py:129-410`).
+- Gate StoryBrand reutilizado conforme previsto (`app/agents/storybrand_gate.py:70-140`).
+- `FeatureOrchestrator` e mensagens SSE existentes garantem compatibilidade com novos estados (`app/agent.py:1911-1955`).
+
+### Referências cruzadas entre fases
+- Modelos estritos da Fase 1 são consumidos pelo validador determinístico da Fase 2 (`app/validators/final_delivery_validator.py:17-71`).
+- Auditoria (`append_delivery_audit_event`) criada na Fase 1 alimenta guard, normalizer e persistência nas Fases 3-4 (`app/agent.py:1301-1568`).
+- Gating utilitário da Fase 2 controla pipeline montado na Fase 3 (`app/agent.py:1843-1888`).
+- Persistência atualizada na Fase 4 expõe dados usados por documentação e rollout (README/playbook). `app/callbacks/persist_outputs.py:120-189`.
+
+### Resumo de arquivos modificados chave
+| Arquivo | Destaques | Linhas |
+| --- | --- | --- |
+| `app/agent.py` | `FinalAssemblyGuardPre`, normalizer, `PersistFinalDeliveryAgent` e `build_execution_pipeline` reorganizam o fluxo determinístico antes da revisão semântica/imagens. | `app/agent.py:1237-1888` |
+| `app/validators/final_delivery_validator.py` | Normaliza variações, detecta duplicidades e sincroniza flags/falhas determinísticas. | `app/validators/final_delivery_validator.py:26-195` |
+| `app/callbacks/persist_outputs.py` | Persiste JSON normalizado, grava meta com estados determinísticos/StoryBrand e limpa indicadores legados. | `app/callbacks/persist_outputs.py:35-189` |
+| `tests/integration/pipeline/test_deterministic_flow.py` | Exercita guard → normalizer → validador → gating → persistência com checagem de `final_delivery_status`. | `tests/integration/pipeline/test_deterministic_flow.py:80-136` |
+| `tests/integration/pipeline/test_flag_toggle.py` | Confirma alternância do pipeline e limpeza do estado determinístico. | `tests/integration/pipeline/test_flag_toggle.py:27-54` |
+
+### Critérios de aceitação verificados
+- Suites de teste cobrem pipelines determinístico e legado (`tests/integration/pipeline/test_deterministic_flow.py:80-136`, `tests/integration/pipeline/test_flag_toggle.py:27-54`).
+- QA manual registra cenários válido/inválido/fallback/legado conforme requerido na Fase 5 (`docs/qa_manual_fase5.md:5-21`).
+- Documentação e playbook descrevem estados, endpoints e rollout (`README.md:436-469`, `docs/playbooks/deterministic_validation_rollout.md:1-45`).
+- Riscos permanecem atualizados sem novas descobertas durante a revisão (ver tabela acima).
+
+### Compatibilidade com `plan-code-validator`
+- Última execução do validador registrou alinhamento sem achados (`validation_report_plano_v3.json`).
+- Relatório em Markdown espelha cobertura e métricas (`validation_report_plano_v3.md`).
+
+---
 ## Checklist Final do Plano
-- [ ] Entregas usam verbos declarativos e distinguem criação/modificação.
-- [ ] Dependências existentes citam caminho/linhas quando relevante.
-- [ ] Referências cruzadas indicam fase de criação (“criado na Fase X”).
-- [ ] Diffs/resumos fornecidos para arquivos modificados.
-- [ ] Critérios de aceitação definidos por fase.
-- [ ] Riscos documentados com mitigação.
-- [ ] Plano compatível com validação automática (`plan-code-validator`).
+- [x] Entregas usam verbos declarativos e distinguem criação/modificação.
+- [x] Dependências existentes citam caminho/linhas quando relevante.
+- [x] Referências cruzadas indicam fase de criação (“criado na Fase X”).
+- [x] Diffs/resumos fornecidos para arquivos modificados.
+- [x] Critérios de aceitação definidos por fase.
+- [x] Riscos documentados com mitigação.
+- [x] Plano compatível com validação automática (`plan-code-validator`).
 
 ---
 ## Linha do Tempo Sugerida
