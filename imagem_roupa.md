@@ -22,7 +22,7 @@
 - Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) que utilizará `analyze_reference_image` (criado nesta fase) antes de devolver o ID ao cliente.
 
 ### Dependências existentes
-- `BaseModel` (Pydantic) disponível em `app/agent.py:63`.
+- `BaseModel` (Pydantic) importado no topo de `app/agent.py` (linhas 24-40).
 - Utilitário `resolve_state` em `app/utils/session_state.py:13-78` (já utilizado por callbacks).
 - Configurações genéricas em `app/config.py` (feature flags e tempo de TTL).
 
@@ -137,7 +137,7 @@
 ### Dependências existentes
 - `ImageAssetsAgent` atual (`app/agent.py:300-577`).
 - Função `generate_transformation_images` (`app/tools/generate_transformation_images.py:180-330`).
-- Config `image_signed_url_ttl` (`app/config.py:240`).
+- Config `image_signed_url_ttl` declarada em `app/config.py:66` e sobrescrita via env em `app/config.py:143-144`.
 
 ### Modificações planejadas (resumo)
 ```diff
@@ -172,7 +172,7 @@
 
 ### Dependências existentes
 - `resolve_state` (`app/utils/session_state.py:13-78`).
-- `clear_failure_meta` (`app/utils/delivery_status.py:12-40`).
+- `clear_failure_meta` (`app/utils/delivery_status.py:65-76`).
 - Logging com `logger.log_struct` já usado nos endpoints principais.
 
 ### Critérios de aceitação
