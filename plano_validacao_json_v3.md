@@ -142,7 +142,7 @@
   - `tests/integration/pipeline/test_deterministic_flow.py`: assembler → guard → normalizer → validador → loop semântico → imagens → persistência, com mocks de agentes LLM.
   - `tests/integration/pipeline/test_flag_toggle.py`: habilita flag → gera entrega → desabilita flag → confirma limpeza de estado.
 - **Regressão**:
-  - Atualizar suites existentes que assumiam fluxo legado (p. ex. `tests/integration/api/test_final_delivery.py`).
+  - Atualizar suites existentes que assumem fluxo legado (ex.: `tests/integration/test_agent.py`, `tests/integration/test_server_e2e.py`) ou criar cobertura equivalente se o cenário não estiver contemplado.
 - **QA manual**:
   - Cenários com JSON válido, JSON inválido, fallback StoryBrand engajado e pipeline legado (flag off).
 
