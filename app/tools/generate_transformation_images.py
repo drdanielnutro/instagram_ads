@@ -21,7 +21,7 @@ from app.config import config
 
 logger = logging.getLogger(__name__)
 
-_MODEL_NAME = "gemini-2.5-flash-image-preview"
+_MODEL_NAME = "gemini-2.5-flash-image"
 _PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 _LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1")
 _client = genai.Client(

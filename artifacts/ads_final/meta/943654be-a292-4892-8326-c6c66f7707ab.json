@@ -1,0 +1,106 @@
+{
+  "filename": "20251006-135539_943654be-a292-4892-8326-c6c66f7707ab_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-06T16:55:41Z",
+  "size_bytes": 12128,
+  "final_delivery_local_path": "artifacts/ads_final/20251006-135539_943654be-a292-4892-8326-c6c66f7707ab_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/943654be-a292-4892-8326-c6c66f7707ab/20251006-135539_943654be-a292-4892-8326-c6c66f7707ab_Feed.json",
+  "user_id": "u_999",
+  "session_id": "943654be-a292-4892-8326-c6c66f7707ab",
+  "stage": "legacy_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": null,
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "A análise semântica e visual de todas as variações de anúncio está concluída. Cada variação demonstra forte consistência narrativa, alinhamento com os objetivos estratégicos da campanha e aderência aos padrões criativos e de conformidade especificados. Os resultados finais estão aprovados."
+  },
+  "image_assets_review": {
+    "grade": "skipped",
+    "issues": [
+      "Variation 1 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+      "Variation 2 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+      "Variation 3 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario"
+    ],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "skipped",
+        "missing_fields": [
+          "prompt_estado_atual",
+          "prompt_estado_intermediario"
+        ]
+      },
+      {
+        "variation_index": 1,
+        "status": "skipped",
+        "missing_fields": [
+          "prompt_estado_atual",
+          "prompt_estado_intermediario"
+        ]
+      },
+      {
+        "variation_index": 2,
+        "status": "skipped",
+        "missing_fields": [
+          "prompt_estado_atual",
+          "prompt_estado_intermediario"
+        ]
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [],
+  "storybrand_gate_metrics": {
+    "score_obtained": 1.0,
+    "score_threshold": 0.6,
+    "decision_path": "happy_path",
+    "timestamp_utc": "2025-10-06T16:44:23Z",
+    "is_forced_fallback": false,
+    "debug_flag_active": false
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": false,
+    "decision_path": "happy_path",
+    "trigger_reason": "happy_path",
+    "timestamp_utc": "2025-10-06T16:44:23Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "image_assets_agent",
+      "status": "skipped",
+      "timestamp_utc": "2025-10-06T16:55:39.222363+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "skipped",
+          "missing_fields": [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario"
+          ]
+        },
+        {
+          "variation_index": 1,
+          "status": "skipped",
+          "missing_fields": [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario"
+          ]
+        },
+        {
+          "variation_index": 2,
+          "status": "skipped",
+          "missing_fields": [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario"
+          ]
+        }
+      ],
+      "issues": [
+        "Variation 1 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+        "Variation 2 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+        "Variation 3 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario"
+      ]
+    }
+  ]
+}

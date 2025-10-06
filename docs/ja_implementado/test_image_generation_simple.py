@@ -61,7 +61,7 @@ def test_simple_image_generation():
     try:
         # Chamada ao modelo
         response = client.models.generate_content(
-            model="gemini-2.5-flash-image-preview",
+            model="gemini-2.5-flash-image",
             contents=contents,
             config=config,
         )

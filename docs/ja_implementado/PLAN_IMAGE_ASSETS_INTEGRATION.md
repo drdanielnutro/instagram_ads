@@ -1,4 +1,4 @@
-# Plano de Integração da Geração de Imagens com Transformação Consistente (Gemini 2.5 Flash Image Preview) no Pipeline ADK
+# Plano de Integração da Geração de Imagens com Transformação Consistente (Gemini 2.5 Flash Image) no Pipeline ADK
 
 ## 1. Objetivo
 Adicionar a geração de nove imagens com transformação consistente (três por variação: estado atual, estado intermediário e estado aspiracional) logo após a produção do JSON final pelo pipeline ADK, garantindo que as seis URLs (3 GCS + 3 Signed URLs) por variação fiquem disponíveis no `final_code_delivery` entregue ao frontend e persistido no GCS.
@@ -13,7 +13,7 @@ Adicionar a geração de nove imagens com transformação consistente (três por
 1. **Agente dedicado** (`ImageAssetsAgent`) adicionado ao `execution_pipeline` entre `final_validation_stage` e `status_reporter_final`.
 2. **Ferramenta de transformação** (`generate_transformation_images_tool`) que:
    - Recebe `prompt_estado_atual`, `prompt_estado_intermediario` e `prompt_estado_aspiracional` para cada variação.
-   - Primeira chamada: gera imagem base apenas com `prompt_estado_atual` usando Gemini 2.5 Flash Image Preview.
+   - Primeira chamada: gera imagem base apenas com `prompt_estado_atual` usando Gemini 2.5 Flash Image.
    - Segunda chamada: usa a imagem base (PIL Image) + prompt intermediário para representar a decisão imediata mantendo cenário/vestuário.
    - Terceira chamada: usa a imagem intermediária + prompt aspiracional para representar o resultado de médio prazo, permitindo mudanças de cenário/roupa.
    - Salva TRÊS imagens por variação no bucket configurado (`DELIVERIES_BUCKET`) em `deliveries/{user_id}/{session_id}/images/`.
@@ -51,9 +51,9 @@ Adicionar a geração de nove imagens com transformação consistente (três por
         metadata: dict
     )`.
   - Fluxo de três chamadas encadeadas:
-    1. Gerar estado atual (texto → imagem): `client.models.generate_content(model="gemini-2.5-flash-image-preview", contents=[prompt_atual])`.
-    2. Transformar para estado intermediário reutilizando a primeira imagem: `client.models.generate_content(model="gemini-2.5-flash-image-preview", contents=[transform_prompt_intermediario, image_atual])`.
-    3. Transformar para estado aspiracional reutilizando a imagem intermediária: `client.models.generate_content(model="gemini-2.5-flash-image-preview", contents=[transform_prompt_aspiracional, image_intermediaria])`.
+    1. Gerar estado atual (texto → imagem): `client.models.generate_content(model="gemini-2.5-flash-image", contents=[prompt_atual])`.
+    2. Transformar para estado intermediário reutilizando a primeira imagem: `client.models.generate_content(model="gemini-2.5-flash-image", contents=[transform_prompt_intermediario, image_atual])`.
+    3. Transformar para estado aspiracional reutilizando a imagem intermediária: `client.models.generate_content(model="gemini-2.5-flash-image", contents=[transform_prompt_aspiracional, image_intermediaria])`.
   - Upload de TRÊS imagens ao GCS:
     - `deliveries/{user_id}/{session_id}/images/estado_atual_{idx}.png`
     - `deliveries/{user_id}/{session_id}/images/estado_intermediario_{idx}.png`
@@ -205,7 +205,7 @@ Adicionar a geração de nove imagens com transformação consistente (três por
 
 ### 4.7. Documentação
 - Atualizar `README.md` ou docs específicos explicando:
-  - Como configurar credenciais para Gemini 2.5 Flash Image Preview:
+- Como configurar credenciais para Gemini 2.5 Flash Image:
     - Configurar service account com permissões adequadas (roles/aiplatform.user)
     - Definir GOOGLE_APPLICATION_CREDENTIALS apontando para sa-key.json
     - Verificar que o projeto tem a API Vertex AI habilitada

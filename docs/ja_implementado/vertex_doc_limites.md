@@ -158,7 +158,7 @@ Modelo	Janela de Contexto Total (Tokens)	Tokens de Entrada Máximos	Tokens de Sa
 Gemini 2.5 Flash	1.114.112	1.048.576	65.536
 Gemini 2.5 Flash-Lite	1.114.112	1.048.576	65.536
 Gemini 2.0 Flash	1.056.768	1.048.576	8.192
-Gemini 2.5 Flash Image Preview	65.536	32.768	32.768
+Gemini 2.5 Flash Image	65.536	32.768	32.768
 Gemini 2.5 Flash Preview TTS	24.000	8.000	16.000
 Fonte:    
 

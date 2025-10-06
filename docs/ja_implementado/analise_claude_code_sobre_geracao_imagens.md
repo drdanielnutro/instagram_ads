@@ -91,7 +91,7 @@ from app.config import config
 
 logger = logging.getLogger(__name__)
 
-_MODEL_NAME = "gemini-2.5-flash-image-preview"
+_MODEL_NAME = "gemini-2.5-flash-image"
 
 # ✅ Cliente configurado corretamente
 _client = genai.Client(

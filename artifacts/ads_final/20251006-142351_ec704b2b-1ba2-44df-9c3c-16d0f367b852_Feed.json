@@ -1,0 +1,395 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo travado? Chega de se sentir frustrada.",
+      "corpo": "Você faz tudo certo, mas o peso não cede? A frustração de um metabolismo lento pode abalar sua autoestima. Com o Dr. Daniel Araújo, você tem um tratamento médico nutrológico que entende sua realidade, incluindo suporte farmacológico avançado para destravar seus resultados. Recupere sua energia e a confiança no seu corpo. Dê o primeiro passo para uma transformação que respeita sua jornada.",
+      "cta_texto": "Agende sua consulta e transforme sua saúde"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 40-50 anos, com olhar de frustração, tentando fechar um vestido que não serve mais, em frente a um espelho. Em seguida, a mesma mulher, com uma expressão focada e esperançosa, pesquisando em seu tablet em uma sala organizada. Por fim, ela aparece radiante e confiante, caminhando em um parque com roupas que lhe caem bem, sorrindo com energia.",
+      "prompt_estado_atual": "A 40-50 year old woman with a look of dismay, standing in front of a bedroom mirror, unable to close a favorite dress. Her posture reflects frustration and exhaustion. Soft, indoor lighting. Hyperrealistic photo, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "The same woman, now looking focused and hopeful, sitting comfortably on her sofa while browsing a tablet. The screen glows on her face, illuminating a newfound determination. The room around her is neat and calm. Natural, soft light. Hyperrealistic photo, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, now visibly radiant and confident, walking briskly through a sunlit park. She wears stylish, comfortable clothes that fit her perfectly, and she has an energetic, genuine smile. The scene is bright and vibrant, conveying health and happiness. Hyperrealistic photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance focam em visuais autênticos e aspiracionais (mulheres confiantes e saudáveis), combinados com headlines que abordam dores específicas e prometem transformação. Textos curtos, diretos e empáticos que utilizam a estrutura StoryBrand (problema, solução, benefício) e CTAs claros são essenciais, mantendo o mínimo de texto na imagem para legibilidade.",
+    "contexto_landing": {
+      "character": {
+        "description": "mulheres que buscam saúde e bem-estar",
+        "evidence": [
+          "Você",
+          "Você",
+          "Você"
+        ],
+        "confidence": 0.9
+      },
+      "problem": {
+        "description": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.; Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.; livre do ciclo de culpa e compulsão",
+        "evidence": [
+          "percebe que ele não serve",
+          "A decepção é tamanha que você pensa em desistir de ir",
+          "O estresse empurra você à comida, e cada mordida traz culpa, só aumentando a tensão — um ciclo infinito em que o prato conforta e machuca ao mesmo tempo",
+          "seu metabolismo parece travado",
+          "mesmo com todo esforço, seu metabolismo parece travado",
+          "sua jornada parece ainda mais solitária",
+          "sacrifício impossível de manter",
+          "ignoram seu dia corrido — trabalho, casa e família",
+          "Registrar cada mordida consome tempo e energia que já faltam, e o controle vira um fardo exaustivo",
+          "Prometem emagrecer rápido por um alto preço, sem prova de eficácia, e acabam só em frustração e riscos à saúde",
+          "Eles focam só nas calorias e não enxergam os gatilhos emocionais que dirigem o seu prato",
+          "Planos de exercícios pensados sem levar em conta a avalanche de tarefas do seu dia",
+          "você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+          "ciclo de alimentação emocional",
+          "passando de estresse à culpa sem encontrar saída",
+          "Cada trajetória de saúde é única e exige mais do que métodos genéricos.",
+          "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "livre do ciclo de culpa e compulsão"
+        ],
+        "types": {
+          "external": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "internal": "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "philosophical": "livre do ciclo de culpa e compulsão"
+        },
+        "confidence": 0.8
+      },
+      "guide": {
+        "description": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+        "authority": "Com o acompanhamento médico do Dr. Daniel Araújo",
+        "empathy": "Você se sente menos valorizada, e a autoestima cai",
+        "evidence": [
+          "Você merece uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+          "Tratamento que compreende suas lutas e respeita sua realidade",
+          "Médico Nutrólogo | CRM 48645 | RQE: 44715",
+          "Formado pela UFMG e especialista em Nutrologia pela Associação Brasileira de Nutrologia (ABRAN) e pela Associação Médica Brasileira (AMB)",
+          "meu foco é proporcionar um tratamento médico ajustado ao seu estilo de vida, para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+          "Com o acompanhamento médico do Dr. Daniel Araújo",
+          "Você se sente menos valorizada, e a autoestima cai"
+        ],
+        "confidence": 0.8
+      },
+      "plan": {
+        "description": "acompanhamento médico",
+        "steps": [
+          "acompanhamento médico"
+        ],
+        "evidence": [
+          "Um método estruturado, ajustado ao seu ritmo e à sua rotina. Receba uma estratégia médica completa, que integra orientação nutricional e, quando necessário, suporte farmacológico, pensado para caber na sua rotina atribulada. Acompanhamento regular para garantir que você se sinta motivada e apoiada em cada etapa, monitorando seu progresso e ajustando a abordagem conforme seu ritmo.",
+          "acompanhamento médico do Dr. Daniel Araújo, transforme sua saúde de maneira concreta e duradoura"
+        ],
+        "confidence": 0.85
+      },
+      "action": {
+        "primary": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+        "secondary": "Mulheres reais que encontraram um novo caminho",
+        "evidence": [
+          "Entre em contato pelo WhatsApp (37 98406-0914) e dê o primeiro passo para assumir o controle do seu bem-estar.",
+          "Pronta para começar sua transformação?",
+          "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+          "Mulheres reais que encontraram um novo caminho"
+        ],
+        "confidence": 0.9
+      },
+      "failure": {
+        "description": "perda de oportunidades de tratamento",
+        "consequences": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "evidence": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "confidence": 0.75
+      },
+      "success": {
+        "description": "",
+        "benefits": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "transformation": "saúde concreta e duradoura",
+        "evidence": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "confidence": 0.85
+      },
+      "completeness_score": 1,
+      "metadata": {
+        "total_headings": 0,
+        "total_ctas": 0,
+        "total_lists": 0,
+        "text_length": 0
+      }
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Recupere sua autoestima com um plano médico que funciona.",
+      "corpo": "Cansada de soluções que ignoram sua rotina e seu metabolismo? O Dr. Daniel Araújo oferece um tratamento médico personalizado para mulheres. Em um espaço acolhedor e sem julgamentos, criamos um plano que integra nutrição e, quando necessário, suporte farmacológico para acelerar seus resultados. Sinta-se confiante, com energia e em paz com seu corpo. Sua transformação começa aqui.",
+      "cta_texto": "Saiba mais e agende sua consulta"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 40-50 anos olhando para a balança com uma expressão triste. Em seguida, a mesma mulher durante uma consulta online, sorrindo e conversando com o médico pela tela do laptop. Na cena final, ela está em um café, rindo com uma amiga, comendo um pedaço de bolo sem culpa e com uma aparência saudável e feliz.",
+      "prompt_estado_atual": "A woman in her 40s looking down at a bathroom scale with a sad, resigned expression. The lighting is cold and clinical, emphasizing her disappointment. The scene feels private and isolating. Realistic photo, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "The same woman, sitting at her dining table, engaged in a video call on her laptop. She is smiling and listening attentively, her face illuminated by the screen, suggesting a positive, reassuring conversation with a doctor. The setting is warm and comfortable. Realistic photo, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, looking healthy and vibrant, laughing with a friend at a bright, modern café. She is casually enjoying a slice of cake, her body language relaxed and confident, free from food anxiety. Natural sunlight streams through the window. Realistic photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance focam em visuais autênticos e aspiracionais (mulheres confiantes e saudáveis), combinados com headlines que abordam dores específicas e prometem transformação. Textos curtos, diretos e empáticos que utilizam a estrutura StoryBrand (problema, solução, benefício) e CTAs claros são essenciais, mantendo o mínimo de texto na imagem para legibilidade.",
+    "contexto_landing": {
+      "character": {
+        "description": "mulheres que buscam saúde e bem-estar",
+        "evidence": [
+          "Você",
+          "Você",
+          "Você"
+        ],
+        "confidence": 0.9
+      },
+      "problem": {
+        "description": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.; Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.; livre do ciclo de culpa e compulsão",
+        "evidence": [
+          "percebe que ele não serve",
+          "A decepção é tamanha que você pensa em desistir de ir",
+          "O estresse empurra você à comida, e cada mordida traz culpa, só aumentando a tensão — um ciclo infinito em que o prato conforta e machuca ao mesmo tempo",
+          "seu metabolismo parece travado",
+          "mesmo com todo esforço, seu metabolismo parece travado",
+          "sua jornada parece ainda mais solitária",
+          "sacrifício impossível de manter",
+          "ignoram seu dia corrido — trabalho, casa e família",
+          "Registrar cada mordida consome tempo e energia que já faltam, e o controle vira um fardo exaustivo",
+          "Prometem emagrecer rápido por um alto preço, sem prova de eficácia, e acabam só em frustração e riscos à saúde",
+          "Eles focam só nas calorias e não enxergam os gatilhos emocionais que dirigem o seu prato",
+          "Planos de exercícios pensados sem levar em conta a avalanche de tarefas do seu dia",
+          "você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+          "ciclo de alimentação emocional",
+          "passando de estresse à culpa sem encontrar saída",
+          "Cada trajetória de saúde é única e exige mais do que métodos genéricos.",
+          "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "livre do ciclo de culpa e compulsão"
+        ],
+        "types": {
+          "external": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "internal": "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "philosophical": "livre do ciclo de culpa e compulsão"
+        },
+        "confidence": 0.8
+      },
+      "guide": {
+        "description": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+        "authority": "Com o acompanhamento médico do Dr. Daniel Araújo",
+        "empathy": "Você se sente menos valorizada, e a autoestima cai",
+        "evidence": [
+          "Você merece uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+          "Tratamento que compreende suas lutas e respeita sua realidade",
+          "Médico Nutrólogo | CRM 48645 | RQE: 44715",
+          "Formado pela UFMG e especialista em Nutrologia pela Associação Brasileira de Nutrologia (ABRAN) e pela Associação Médica Brasileira (AMB)",
+          "meu foco é proporcionar um tratamento médico ajustado ao seu estilo de vida, para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+          "Com o acompanhamento médico do Dr. Daniel Araújo",
+          "Você se sente menos valorizada, e a autoestima cai"
+        ],
+        "confidence": 0.8
+      },
+      "plan": {
+        "description": "acompanhamento médico",
+        "steps": [
+          "acompanhamento médico"
+        ],
+        "evidence": [
+          "Um método estruturado, ajustado ao seu ritmo e à sua rotina. Receba uma estratégia médica completa, que integra orientação nutricional e, quando necessário, suporte farmacológico, pensado para caber na sua rotina atribulada. Acompanhamento regular para garantir que você se sinta motivada e apoiada em cada etapa, monitorando seu progresso e ajustando a abordagem conforme seu ritmo.",
+          "acompanhamento médico do Dr. Daniel Araújo, transforme sua saúde de maneira concreta e duradoura"
+        ],
+        "confidence": 0.85
+      },
+      "action": {
+        "primary": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+        "secondary": "Mulheres reais que encontraram um novo caminho",
+        "evidence": [
+          "Entre em contato pelo WhatsApp (37 98406-0914) e dê o primeiro passo para assumir o controle do seu bem-estar.",
+          "Pronta para começar sua transformação?",
+          "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+          "Mulheres reais que encontraram um novo caminho"
+        ],
+        "confidence": 0.9
+      },
+      "failure": {
+        "description": "perda de oportunidades de tratamento",
+        "consequences": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "evidence": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "confidence": 0.75
+      },
+      "success": {
+        "description": "",
+        "benefits": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "transformation": "saúde concreta e duradoura",
+        "evidence": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "confidence": 0.85
+      },
+      "completeness_score": 1,
+      "metadata": {
+        "total_headings": 0,
+        "total_ctas": 0,
+        "total_lists": 0,
+        "text_length": 0
+      }
+    }
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Emagrecimento com Suporte Médico. Dr. Daniel Araújo",
+      "corpo": "Para mulheres com metabolismo lento, dietas e exercícios podem não ser o bastante. O Dr. Daniel Araújo, médico nutrólogo com 15 anos de experiência, oferece um tratamento completo com diagnóstico detalhado e suporte farmacológico avançado para otimizar seu emagrecimento. Chega de se sentir sozinha nessa jornada. Tenha um especialista ao seu lado para alcançar resultados duradouros.",
+      "cta_texto": "Comece sua transformação com apoio médico"
+    },
+    "visual": {
+      "descricao_imagem": "Uma mulher de 40-50 anos em seu escritório em casa, parecendo cansada e sobrecarregada pelo trabalho. Na cena seguinte, um close-up de suas mãos agendando uma consulta em seu celular, com um gesto decidido. Por fim, a mesma mulher, agora com uma aparência energizada e profissional, liderando uma reunião ou apresentando um projeto com confiança.",
+      "prompt_estado_atual": "A 40-50 year old woman at her home office desk late at night, looking tired and overwhelmed by piles of work. Her face shows fatigue and stress. Dim, artificial lighting. Cinematic, realistic photo, 4:5 aspect ratio.",
+      "prompt_estado_intermediario": "A focused close-up shot of the same woman's hands, decisively scheduling an appointment on her smartphone. The action of tapping the screen is clear, symbolizing her taking control of her health. Clean, focused lighting. Realistic photo, 4:5 aspect ratio.",
+      "prompt_estado_aspiracional": "The same woman, now looking sharp, energetic, and professional, confidently giving a presentation in a modern office. She commands the room with a vibrant presence and confident smile, showcasing her renewed vitality. Bright, professional lighting. Realistic photo, 4:5 aspect ratio.",
+      "aspect_ratio": "4:5"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance focam em visuais autênticos e aspiracionais (mulheres confiantes e saudáveis), combinados com headlines que abordam dores específicas e prometem transformação. Textos curtos, diretos e empáticos que utilizam a estrutura StoryBrand (problema, solução, benefício) e CTAs claros são essenciais, mantendo o mínimo de texto na imagem para legibilidade.",
+    "contexto_landing": {
+      "character": {
+        "description": "mulheres que buscam saúde e bem-estar",
+        "evidence": [
+          "Você",
+          "Você",
+          "Você"
+        ],
+        "confidence": 0.9
+      },
+      "problem": {
+        "description": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.; Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.; livre do ciclo de culpa e compulsão",
+        "evidence": [
+          "percebe que ele não serve",
+          "A decepção é tamanha que você pensa em desistir de ir",
+          "O estresse empurra você à comida, e cada mordida traz culpa, só aumentando a tensão — um ciclo infinito em que o prato conforta e machuca ao mesmo tempo",
+          "seu metabolismo parece travado",
+          "mesmo com todo esforço, seu metabolismo parece travado",
+          "sua jornada parece ainda mais solitária",
+          "sacrifício impossível de manter",
+          "ignoram seu dia corrido — trabalho, casa e família",
+          "Registrar cada mordida consome tempo e energia que já faltam, e o controle vira um fardo exaustivo",
+          "Prometem emagrecer rápido por um alto preço, sem prova de eficácia, e acabam só em frustração e riscos à saúde",
+          "Eles focam só nas calorias e não enxergam os gatilhos emocionais que dirigem o seu prato",
+          "Planos de exercícios pensados sem levar em conta a avalanche de tarefas do seu dia",
+          "você segue sem achar uma solução que se encaixe na rotina corrida e cheia de cobranças",
+          "ciclo de alimentação emocional",
+          "passando de estresse à culpa sem encontrar saída",
+          "Cada trajetória de saúde é única e exige mais do que métodos genéricos.",
+          "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "livre do ciclo de culpa e compulsão"
+        ],
+        "types": {
+          "external": "A tensão constante pode desencadear sérias questões físicas e psicológicas ao longo do tempo.",
+          "internal": "Você se sente menos valorizada, e a autoestima cai, dificultando novas tentativas.",
+          "philosophical": "livre do ciclo de culpa e compulsão"
+        },
+        "confidence": 0.8
+      },
+      "guide": {
+        "description": "Autoridade: Com o acompanhamento médico do Dr. Daniel Araújo; Empatia: Você se sente menos valorizada, e a autoestima cai",
+        "authority": "Com o acompanhamento médico do Dr. Daniel Araújo",
+        "empathy": "Você se sente menos valorizada, e a autoestima cai",
+        "evidence": [
+          "Você merece uma solução que funcione de verdade, feita para a sua saúde e rotina.",
+          "Tratamento que compreende suas lutas e respeita sua realidade",
+          "Médico Nutrólogo | CRM 48645 | RQE: 44715",
+          "Formado pela UFMG e especialista em Nutrologia pela Associação Brasileira de Nutrologia (ABRAN) e pela Associação Médica Brasileira (AMB)",
+          "meu foco é proporcionar um tratamento médico ajustado ao seu estilo de vida, para que você se sinta escutada e apoiada em cada etapa. Compartilhe sua história, desafios e objetivos em um espaço seguro, acolhedor e livre de julgamentos.",
+          "Com o acompanhamento médico do Dr. Daniel Araújo",
+          "Você se sente menos valorizada, e a autoestima cai"
+        ],
+        "confidence": 0.8
+      },
+      "plan": {
+        "description": "acompanhamento médico",
+        "steps": [
+          "acompanhamento médico"
+        ],
+        "evidence": [
+          "Um método estruturado, ajustado ao seu ritmo e à sua rotina. Receba uma estratégia médica completa, que integra orientação nutricional e, quando necessário, suporte farmacológico, pensado para caber na sua rotina atribulada. Acompanhamento regular para garantir que você se sinta motivada e apoiada em cada etapa, monitorando seu progresso e ajustando a abordagem conforme seu ritmo.",
+          "acompanhamento médico do Dr. Daniel Araújo, transforme sua saúde de maneira concreta e duradoura"
+        ],
+        "confidence": 0.85
+      },
+      "action": {
+        "primary": "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+        "secondary": "Mulheres reais que encontraram um novo caminho",
+        "evidence": [
+          "Entre em contato pelo WhatsApp (37 98406-0914) e dê o primeiro passo para assumir o controle do seu bem-estar.",
+          "Pronta para começar sua transformação?",
+          "Sua jornada para uma vida mais equilibrada e plena começa com uma decisão",
+          "Mulheres reais que encontraram um novo caminho"
+        ],
+        "confidence": 0.9
+      },
+      "failure": {
+        "description": "perda de oportunidades de tratamento",
+        "consequences": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "evidence": [
+          "Você fica presa no ciclo de alimentação emocional, passando de estresse à culpa sem encontrar saída.",
+          "Sem orientação médica, você deixa de aproveitar opções farmacológicas que ajudam no emagrecimento."
+        ],
+        "confidence": 0.75
+      },
+      "success": {
+        "description": "",
+        "benefits": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "transformation": "saúde concreta e duradoura",
+        "evidence": [
+          "solução que funcione de verdade, feita para a sua saúde e rotina",
+          "assumir o controle do seu bem-estar",
+          "Recupere sua energia para as atividades diárias, sinta-se mais confiante com seu corpo e melhore sua autoestima com resultados visíveis. Implemente mudanças que evitam doenças e promovem saúde integral ao longo dos anos. Mantenha um peso saudável, melhore seus exames laboratoriais e reduza riscos como diabetes e hipertensão. Desenvolva uma relação equilibrada com a comida, livre de culpa e ansiedade."
+        ],
+        "confidence": 0.85
+      },
+      "completeness_score": 1,
+      "metadata": {
+        "total_headings": 0,
+        "total_ctas": 0,
+        "total_lists": 0,
+        "text_length": 0
+      }
+    }
+  }
+]

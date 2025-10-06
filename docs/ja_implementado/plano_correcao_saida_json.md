@@ -23,19 +23,19 @@ O pipeline de fallback StoryBrand foi executado com **sucesso total** (score 1.0
 ### **Erro Observado (Variação 2):**
 ```json
 {
-  "image_generation_error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it.'}}"
+  "image_generation_error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image` was not found or your project does not have access to it.'}}"
 }
 ```
 
 ### **Causa Raiz:**
-O modelo `gemini-2.5-flash-image-preview` está hardcoded no código, mas **não existe** ou o projeto não tem acesso a ele.
+O modelo `gemini-2.5-flash-image` está hardcoded no código, mas **não existe** ou o projeto não tem acesso a ele.
 
 ### **Localização Exata do Problema:**
 **Arquivo**: `/home/deniellmed/instagram_ads/app/tools/generate_transformation_images.py`
 **Linha**: 24
 **Código Problemático**:
 ```python
-_MODEL_NAME = "gemini-2.5-flash-image-preview"
+_MODEL_NAME = "gemini-2.5-flash-image"
 ```
 
 ### **Verificação Necessária:**
@@ -55,7 +55,7 @@ _MODEL_NAME = "gemini-2.5-flash-image-preview"
 # Linha: 24
 
 # ANTES (INCORRETO):
-_MODEL_NAME = "gemini-2.5-flash-image-preview"
+_MODEL_NAME = "gemini-2.5-flash-image"
 
 # DEPOIS (CORRETO):
 _MODEL_NAME = "imagen-3.0-generate-001"  # ou outro modelo disponível

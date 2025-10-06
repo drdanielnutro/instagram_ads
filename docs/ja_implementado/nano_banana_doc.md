@@ -27,7 +27,7 @@ prompt = (
 )
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[prompt],
 )
 
@@ -64,7 +64,7 @@ prompt = (
 image = Image.open("/path/to/cat_image.png")
 
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[prompt, image],
 )
 
@@ -112,7 +112,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="A photorealistic close-up portrait of an elderly Japanese ceramicist with deep, sun-etched wrinkles and a warm, knowing smile. He is carefully inspecting a freshly glazed tea bowl. The setting is his rustic, sun-drenched workshop with pottery wheels and shelves of clay pots in the background. The scene is illuminated by soft, golden hour light streaming through a window, highlighting the fine texture of the clay and the fabric of his apron. Captured with an 85mm portrait lens, resulting in a soft, blurred background (bokeh). The overall mood is serene and masterful.",
 )
 
@@ -147,7 +147,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="A kawaii-style sticker of a happy red panda wearing a tiny bamboo hat. It's munching on a green bamboo leaf. The design features bold, clean outlines, simple cel-shading, and a vibrant color palette. The background must be white.",
 )
 
@@ -182,7 +182,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="Create a modern, minimalist logo for a coffee shop called 'The Daily Grind'. The text should be in a clean, bold, sans-serif font. The design should feature a simple, stylized icon of a a coffee bean seamlessly integrated with the text. The color scheme is black and white.",
 )
 
@@ -217,7 +217,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="A high-resolution, studio-lit product photograph of a minimalist ceramic coffee mug in matte black, presented on a polished concrete surface. The lighting is a three-point softbox setup designed to create soft, diffused highlights and eliminate harsh shadows. The camera angle is a slightly elevated 45-degree shot to showcase its clean lines. Ultra-realistic, with sharp focus on the steam rising from the coffee. Square image.",
 )
 
@@ -252,7 +252,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="A minimalist composition featuring a single, delicate red maple leaf positioned in the bottom-right of the frame. The background is a vast, empty off-white canvas, creating significant negative space for text. Soft, diffused lighting from the top left. Square image.",
 )
 
@@ -287,7 +287,7 @@ client = genai.Client()
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents="A single comic book panel in a gritty, noir art style with high-contrast black and white inks. In the foreground, a detective in a trench coat stands under a flickering streetlamp, rain soaking his shoulders. In the background, the neon sign of a desolate bar reflects in a puddle. A caption box at the top reads \"The city was a tough place to keep secrets.\" The lighting is harsh, creating a dramatic, somber mood. Landscape.",
 )
 
@@ -329,7 +329,7 @@ text_input = """Using the provided image of my cat, please add a small, knitted 
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[text_input, image_input],
 )
 
@@ -374,7 +374,7 @@ text_input = """Using the provided image of a living room, change only the blue 
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[living_room_image, text_input],
 )
 
@@ -419,7 +419,7 @@ text_input = """Transform the provided photograph of a modern city street at nig
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[city_image, text_input],
 )
 
@@ -468,7 +468,7 @@ text_input = """Create a professional e-commerce fashion photo. Take the blue fl
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[dress_image, model_image, text_input],
 )
 
@@ -520,7 +520,7 @@ text_input = """Take the first image of the woman with brown hair, blue eyes, an
 
 # Generate an image from a text prompt
 response = client.models.generate_content(
-    model="gemini-2.5-flash-image-preview",
+    model="gemini-2.5-flash-image",
     contents=[woman_image, logo_image, text_input],
 )
 
