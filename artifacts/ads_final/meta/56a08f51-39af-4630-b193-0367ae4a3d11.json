@@ -1,0 +1,1235 @@
+{
+  "filename": "20251006-082959_56a08f51-39af-4630-b193-0367ae4a3d11_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-06T11:30:00Z",
+  "size_bytes": 45960,
+  "final_delivery_local_path": "artifacts/ads_final/20251006-082959_56a08f51-39af-4630-b193-0367ae4a3d11_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/56a08f51-39af-4630-b193-0367ae4a3d11/20251006-082959_56a08f51-39af-4630-b193-0367ae4a3d11_Feed.json",
+  "user_id": "u_999",
+  "session_id": "56a08f51-39af-4630-b193-0367ae4a3d11",
+  "stage": "legacy_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": null,
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "A análise semântica e visual das três variações foi concluída. Todas estão consistentes, aderentes ao objetivo e ao briefing, e demonstram alta qualidade narrativa e visual. Não há pendências."
+  },
+  "image_assets_review": {
+    "grade": "fail",
+    "issues": [
+      "Erro ao gerar imagens da variação 1: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+      "Variation 2 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+      "Variation 3 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario"
+    ],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "error",
+        "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+      },
+      {
+        "variation_index": 1,
+        "status": "skipped",
+        "missing_fields": [
+          "prompt_estado_atual",
+          "prompt_estado_intermediario"
+        ]
+      },
+      {
+        "variation_index": 2,
+        "status": "skipped",
+        "missing_fields": [
+          "prompt_estado_atual",
+          "prompt_estado_intermediario"
+        ]
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "Dr. Daniel - Médico Nutrólogo",
+          "o_que_a_empresa_faz": "Ajudamos mulheres que querem perder peso, mas sofrem devido ao metabolismo lento a conquistarem seus objetivos de peso e imagem.",
+          "sexo_cliente_alvo": "feminino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-06T11:13:31Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-06T11:13:31Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-06T11:13:31Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 786
+      },
+      "timestamp_utc": "2025-10-06T11:13:39Z",
+      "duration_ms": 8170
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:13:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto se conecta de forma excelente com o público feminino, demonstrando profunda empatia pelas frustrações e tentativas anteriores. A menção ao 'metabolismo lento' e a busca por uma 'solução médica, mais assertiva' alinham-se perfeitamente com a proposta da empresa. O tom é inspirador ao ressaltar a esperança e estratégico ao posicionar a solução da empresa como a resposta para o ciclo de desapontamentos. Não há respostas vagas; pelo contrário, o texto é muito específico e acionável em seu propósito de descrever o herói.",
+      "timestamp_utc": "2025-10-06T11:13:46Z",
+      "duration_ms": 7070
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto se conecta de forma excelente com o público feminino, demonstrando profunda empatia pelas frustrações e tentativas anteriores. A menção ao 'metabolismo lento' e a busca por uma 'solução médica, mais assertiva' alinham-se perfeitamente com a proposta da empresa. O tom é inspirador ao ressaltar a esperança e estratégico ao posicionar a solução da empresa como a resposta para o ciclo de desapontamentos. Não há respostas vagas; pelo contrário, o texto é muito específico e acionável em seu propósito de descrever o herói.",
+      "timestamp_utc": "2025-10-06T11:13:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:13:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-06T11:13:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 829
+      },
+      "timestamp_utc": "2025-10-06T11:13:54Z",
+      "duration_ms": 7914
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:13:54Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente na forma como se conecta com o público feminino, demonstrando uma empatia profunda pelas suas frustrações e esforços. A linguagem utilizada é muito específica, abordando as experiências comuns de quem luta contra o peso, como a insatisfação com a balança e as roupas, a diminuição da energia e a sensação de que o metabolismo é um obstáculo. A menção de que a frustração 'não é um capricho, é um sinal de que algo mais profundo está em jogo' é crucial, pois valida a experiência da mulher e prepara o terreno para a solução que a empresa oferece (lidar com o metabolismo lento). O texto não é vago, é estratégico ao aprofundar a dor e inspirador ao reconhecer o merecimento da cliente em alcançar seus objetivos.",
+      "timestamp_utc": "2025-10-06T11:14:03Z",
+      "duration_ms": 9084
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente na forma como se conecta com o público feminino, demonstrando uma empatia profunda pelas suas frustrações e esforços. A linguagem utilizada é muito específica, abordando as experiências comuns de quem luta contra o peso, como a insatisfação com a balança e as roupas, a diminuição da energia e a sensação de que o metabolismo é um obstáculo. A menção de que a frustração 'não é um capricho, é um sinal de que algo mais profundo está em jogo' é crucial, pois valida a experiência da mulher e prepara o terreno para a solução que a empresa oferece (lidar com o metabolismo lento). O texto não é vago, é estratégico ao aprofundar a dor e inspirador ao reconhecer o merecimento da cliente em alcançar seus objetivos.",
+      "timestamp_utc": "2025-10-06T11:14:03Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:14:03Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-06T11:14:03Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 830
+      },
+      "timestamp_utc": "2025-10-06T11:14:16Z",
+      "duration_ms": 12929
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:14:16Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele capta a frustração de forma profunda e empática, falando diretamente ao público feminino que se dedica e não vê resultados. A menção explícita ao 'metabolismo me sabotando' e a necessidade de 'algo diferente' alinha-se perfeitamente com a proposta da empresa de ajudar mulheres com metabolismo lento. É estratégico ao pontuar o momento de clareza que leva à busca por uma solução, não é vago e o tom é inspirador ao abrir a porta para a transformação desejada.",
+      "timestamp_utc": "2025-10-06T11:14:23Z",
+      "duration_ms": 6795
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele capta a frustração de forma profunda e empática, falando diretamente ao público feminino que se dedica e não vê resultados. A menção explícita ao 'metabolismo me sabotando' e a necessidade de 'algo diferente' alinha-se perfeitamente com a proposta da empresa de ajudar mulheres com metabolismo lento. É estratégico ao pontuar o momento de clareza que leva à busca por uma solução, não é vago e o tom é inspirador ao abrir a porta para a transformação desejada.",
+      "timestamp_utc": "2025-10-06T11:14:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:14:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-06T11:14:23Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 963
+      },
+      "timestamp_utc": "2025-10-06T11:14:32Z",
+      "duration_ms": 8909
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:14:32Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente, demonstra uma empatia profunda e autêntica com as dores e frustrações do público feminino. Cada ponto levantado, como o inchaço, a exaustão, as roupas que não fecham e a balança estagnada, é extremamente específico e ressoa diretamente com a experiência de mulheres que se sentem sabotadas pelo próprio corpo. A menção à 'resistência interna' e a busca por uma solução que não seja 'apenas mais uma dieta' liga-se de forma estratégica e clara à proposta da empresa de tratar o metabolismo lento. O tom é inspirador ao validar a frustração e ao mesmo tempo acenar para a possibilidade de recuperar o controle e conquistar o corpo desejado, sem ser vago ou genérico. Prepara perfeitamente o terreno para a solução médica da empresa.",
+      "timestamp_utc": "2025-10-06T11:14:40Z",
+      "duration_ms": 8514
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente, demonstra uma empatia profunda e autêntica com as dores e frustrações do público feminino. Cada ponto levantado, como o inchaço, a exaustão, as roupas que não fecham e a balança estagnada, é extremamente específico e ressoa diretamente com a experiência de mulheres que se sentem sabotadas pelo próprio corpo. A menção à 'resistência interna' e a busca por uma solução que não seja 'apenas mais uma dieta' liga-se de forma estratégica e clara à proposta da empresa de tratar o metabolismo lento. O tom é inspirador ao validar a frustração e ao mesmo tempo acenar para a possibilidade de recuperar o controle e conquistar o corpo desejado, sem ser vago ou genérico. Prepara perfeitamente o terreno para a solução médica da empresa.",
+      "timestamp_utc": "2025-10-06T11:14:40Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:14:40Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-06T11:14:40Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 890
+      },
+      "timestamp_utc": "2025-10-06T11:14:51Z",
+      "duration_ms": 11234
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:14:51Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática, ressoando com a frustração das tentativas anteriores e o ciclo de desilusão. A transição para a necessidade de uma \"solução médica que entenda a biologia do meu corpo e me ajude a destravá-lo de verdade\" é feita de forma fluida e poderosa, ligando diretamente à proposta de valor da empresa para mulheres com metabolismo lento. Não há elementos vagos; a narrativa é específica e direcionada, com um tom inspirador que oferece esperança e valida a busca por uma abordagem mais eficaz e estratégica para atacar a raiz do problema.",
+      "timestamp_utc": "2025-10-06T11:14:58Z",
+      "duration_ms": 6789
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática, ressoando com a frustração das tentativas anteriores e o ciclo de desilusão. A transição para a necessidade de uma \"solução médica que entenda a biologia do meu corpo e me ajude a destravá-lo de verdade\" é feita de forma fluida e poderosa, ligando diretamente à proposta de valor da empresa para mulheres com metabolismo lento. Não há elementos vagos; a narrativa é específica e direcionada, com um tom inspirador que oferece esperança e valida a busca por uma abordagem mais eficaz e estratégica para atacar a raiz do problema.",
+      "timestamp_utc": "2025-10-06T11:14:58Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:14:58Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-06T11:14:58Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 907
+      },
+      "timestamp_utc": "2025-10-06T11:15:06Z",
+      "duration_ms": 8124
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:15:06Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com as frustrações do público feminino, reconhecendo o esforço e a desilusão com métodos anteriores. A menção explícita ao 'metabolismo lento que sabota cada avanço' e a busca por 'algo que realmente entenda a biologia por trás dessa resistência interna' alinha-se perfeitamente com a proposta da empresa. A transformação desejada ('conquiste o peso e a imagem que tanto sonha e merece') é claramente articulada como resultado de uma abordagem que 'ataque a raiz do problema'. Não há respostas vagas; a linguagem é específica e ressoa com as dores da persona. O tom é inspirador ao validar a experiência da mulher e estratégico ao posicionar a solução da empresa como a resposta definitiva para essa dor.",
+      "timestamp_utc": "2025-10-06T11:15:13Z",
+      "duration_ms": 6944
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com as frustrações do público feminino, reconhecendo o esforço e a desilusão com métodos anteriores. A menção explícita ao 'metabolismo lento que sabota cada avanço' e a busca por 'algo que realmente entenda a biologia por trás dessa resistência interna' alinha-se perfeitamente com a proposta da empresa. A transformação desejada ('conquiste o peso e a imagem que tanto sonha e merece') é claramente articulada como resultado de uma abordagem que 'ataque a raiz do problema'. Não há respostas vagas; a linguagem é específica e ressoa com as dores da persona. O tom é inspirador ao validar a experiência da mulher e estratégico ao posicionar a solução da empresa como a resposta definitiva para essa dor.",
+      "timestamp_utc": "2025-10-06T11:15:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:15:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-06T11:15:13Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 495
+      },
+      "timestamp_utc": "2025-10-06T11:15:19Z",
+      "duration_ms": 5823
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:15:19Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e empática com o público feminino, abordando as frustrações específicas como a balança que não se mexe, as roupas que não servem e a sensação de que o metabolismo lento sabota os esforços. Isso cria uma forte identificação. A descrição do problema externo está diretamente ligada à proposta da empresa de ajudar mulheres com metabolismo lento a conquistar peso e imagem. Não há elementos vagos; a linguagem é precisa e ressoa com a experiência da persona. O tom é estratégico ao focar no ponto de dor central (metabolismo lento) e inspirador ao validar a frustração da mulher e preparar o terreno para a solução.",
+      "timestamp_utc": "2025-10-06T11:15:25Z",
+      "duration_ms": 6175
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e empática com o público feminino, abordando as frustrações específicas como a balança que não se mexe, as roupas que não servem e a sensação de que o metabolismo lento sabota os esforços. Isso cria uma forte identificação. A descrição do problema externo está diretamente ligada à proposta da empresa de ajudar mulheres com metabolismo lento a conquistar peso e imagem. Não há elementos vagos; a linguagem é precisa e ressoa com a experiência da persona. O tom é estratégico ao focar no ponto de dor central (metabolismo lento) e inspirador ao validar a frustração da mulher e preparar o terreno para a solução.",
+      "timestamp_utc": "2025-10-06T11:15:25Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:15:25Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-06T11:15:25Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 973
+      },
+      "timestamp_utc": "2025-10-06T11:15:34Z",
+      "duration_ms": 8678
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:15:34Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com o público feminino, descrevendo as dores internas de forma extremamente empática. Aborda a culpa, a frustração, a baixa autoconfiança e o questionamento do próprio valor, que são sentimentos comuns em mulheres que lutam contra o peso e o metabolismo lento. A frase 'não é uma falha pessoal sua, e não um desafio metabólico' é chave e liga diretamente a dor interna à proposta da empresa. A menção de evitar o espelho, adiar planos sociais e se sentir envergonhada em momentos íntimos é muito específica e ressoa fortemente. O texto não é vago, é estratégico ao aprofundar a dor e inspirador ao reconhecer a esperança de se sentir 'verdadeiramente livre e confiante na sua própria pele'.",
+      "timestamp_utc": "2025-10-06T11:15:41Z",
+      "duration_ms": 6842
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com o público feminino, descrevendo as dores internas de forma extremamente empática. Aborda a culpa, a frustração, a baixa autoconfiança e o questionamento do próprio valor, que são sentimentos comuns em mulheres que lutam contra o peso e o metabolismo lento. A frase 'não é uma falha pessoal sua, e não um desafio metabólico' é chave e liga diretamente a dor interna à proposta da empresa. A menção de evitar o espelho, adiar planos sociais e se sentir envergonhada em momentos íntimos é muito específica e ressoa fortemente. O texto não é vago, é estratégico ao aprofundar a dor e inspirador ao reconhecer a esperança de se sentir 'verdadeiramente livre e confiante na sua própria pele'.",
+      "timestamp_utc": "2025-10-06T11:15:41Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:15:41Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-06T11:15:41Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 724
+      },
+      "timestamp_utc": "2025-10-06T11:15:48Z",
+      "duration_ms": 6829
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:15:48Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Demonstra uma empatia profunda com o público feminino, validando a frustração de se sentir traída pelo próprio corpo e desassociando a falta de resultados de uma falha de força de vontade, disciplina ou esforço. A menção explícita à 'injustiça biológica que seu metabolismo lento atue como um freio invisível' conecta diretamente com a proposta da empresa. A transformação desejada – 'sentir-se plena, leve e confiante na sua própria pele' e 'conquistar a imagem e o bem-estar' – está perfeitamente alinhada. O texto não é vago, é específico ao abordar a dor e o merecimento. O tom é inspirador ao afirmar o que a mulher merece e estratégico ao posicionar a condição metabólica como o verdadeiro obstáculo, preparando o terreno para a solução da empresa.",
+      "timestamp_utc": "2025-10-06T11:15:54Z",
+      "duration_ms": 6693
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Demonstra uma empatia profunda com o público feminino, validando a frustração de se sentir traída pelo próprio corpo e desassociando a falta de resultados de uma falha de força de vontade, disciplina ou esforço. A menção explícita à 'injustiça biológica que seu metabolismo lento atue como um freio invisível' conecta diretamente com a proposta da empresa. A transformação desejada – 'sentir-se plena, leve e confiante na sua própria pele' e 'conquistar a imagem e o bem-estar' – está perfeitamente alinhada. O texto não é vago, é específico ao abordar a dor e o merecimento. O tom é inspirador ao afirmar o que a mulher merece e estratégico ao posicionar a condição metabólica como o verdadeiro obstáculo, preparando o terreno para a solução da empresa.",
+      "timestamp_utc": "2025-10-06T11:15:54Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:15:54Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-06T11:15:54Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 1387
+      },
+      "timestamp_utc": "2025-10-06T11:16:04Z",
+      "duration_ms": 9337
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:16:04Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com o público feminino, demonstrando empatia genuína ao abordar a sensação de invisibilidade e a luta contra o metabolismo lento. A transformação proposta é explicitamente ligada à \"conquistar a imagem, a energia e a autoconfiança\", alinhando-se perfeitamente com a proposta da empresa. O texto rejeita respostas vagas ao detalhar a abordagem (\"investigar as causas reais\", \"exames precisos\", \"inovações farmacológicas e estratégias nutricionais\") e mantém um tom inspirador ao posicionar o Dr. Daniel como um guia estratégico que oferece um caminho assertivo e resultados duradouros, não sendo genérico em nenhum momento. Cumpre todos os critérios com maestria.",
+      "timestamp_utc": "2025-10-06T11:16:10Z",
+      "duration_ms": 6346
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta de forma profunda e autêntica com o público feminino, demonstrando empatia genuína ao abordar a sensação de invisibilidade e a luta contra o metabolismo lento. A transformação proposta é explicitamente ligada à \"conquistar a imagem, a energia e a autoconfiança\", alinhando-se perfeitamente com a proposta da empresa. O texto rejeita respostas vagas ao detalhar a abordagem (\"investigar as causas reais\", \"exames precisos\", \"inovações farmacológicas e estratégias nutricionais\") e mantém um tom inspirador ao posicionar o Dr. Daniel como um guia estratégico que oferece um caminho assertivo e resultados duradouros, não sendo genérico em nenhum momento. Cumpre todos os critérios com maestria.",
+      "timestamp_utc": "2025-10-06T11:16:10Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:16:10Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-06T11:16:10Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 1754
+      },
+      "timestamp_utc": "2025-10-06T11:16:22Z",
+      "duration_ms": 12166
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:16:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se conecta de forma profunda e empática com o público feminino, reconhecendo a compreensão da mulher sobre seu 'metabolismo lento' e as frustrações com abordagens convencionais. A transformação é claramente articulada, mostrando como o Dr. Daniel ajuda a 'conquistar o peso e a imagem que você tanto sonha e merece' ao destravar o metabolismo. O texto rejeita respostas vagas ao detalhar a 'abordagem médica e científica', 'avaliação nutrológica detalhada', 'exames avançados', e menciona especificamente medicamentos como 'Mounjaro ou Wegovy'. O tom é inspirador ao prometer o fim do 'ciclo de frustração' e a chance de 'viver leve e confiante na sua própria pele', estratégico ao diferenciar a solução do Dr. Daniel como superior e acionável ao descrever o processo e os resultados duradouros.",
+      "timestamp_utc": "2025-10-06T11:16:33Z",
+      "duration_ms": 10391
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se conecta de forma profunda e empática com o público feminino, reconhecendo a compreensão da mulher sobre seu 'metabolismo lento' e as frustrações com abordagens convencionais. A transformação é claramente articulada, mostrando como o Dr. Daniel ajuda a 'conquistar o peso e a imagem que você tanto sonha e merece' ao destravar o metabolismo. O texto rejeita respostas vagas ao detalhar a 'abordagem médica e científica', 'avaliação nutrológica detalhada', 'exames avançados', e menciona especificamente medicamentos como 'Mounjaro ou Wegovy'. O tom é inspirador ao prometer o fim do 'ciclo de frustração' e a chance de 'viver leve e confiante na sua própria pele', estratégico ao diferenciar a solução do Dr. Daniel como superior e acionável ao descrever o processo e os resultados duradouros.",
+      "timestamp_utc": "2025-10-06T11:16:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:16:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-06T11:16:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1919
+      },
+      "timestamp_utc": "2025-10-06T11:16:40Z",
+      "duration_ms": 7696
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:16:40Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, ao reconhecer suas frustrações e a busca por 'confiança' e 'leveza'. A transformação proposta está diretamente ligada à 'conquistar o corpo e a confiança que você tanto sonha', abordando explicitamente o 'metabolismo lento' como a causa raiz do problema e prometendo 'objetivos de peso e imagem' e 'saúde metabólica robusta'. O texto rejeita respostas vagas ao detalhar cada passo com ações muito específicas, como 'exames avançados', 'avaliação nutrológica completa', 'medicamentos de última geração, como Mounjaro ou Wegovy' e 'acompanhamento estratégico e contínuo'. O tom é inspirador ao oferecer uma nova esperança e a garantia de não estar sozinha, estratégico ao diferenciar a abordagem médica e científica da empresa e acionável ao apresentar um plano claro e estruturado em três passos.",
+      "timestamp_utc": "2025-10-06T11:16:49Z",
+      "duration_ms": 8482
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, ao reconhecer suas frustrações e a busca por 'confiança' e 'leveza'. A transformação proposta está diretamente ligada à 'conquistar o corpo e a confiança que você tanto sonha', abordando explicitamente o 'metabolismo lento' como a causa raiz do problema e prometendo 'objetivos de peso e imagem' e 'saúde metabólica robusta'. O texto rejeita respostas vagas ao detalhar cada passo com ações muito específicas, como 'exames avançados', 'avaliação nutrológica completa', 'medicamentos de última geração, como Mounjaro ou Wegovy' e 'acompanhamento estratégico e contínuo'. O tom é inspirador ao oferecer uma nova esperança e a garantia de não estar sozinha, estratégico ao diferenciar a abordagem médica e científica da empresa e acionável ao apresentar um plano claro e estruturado em três passos.",
+      "timestamp_utc": "2025-10-06T11:16:49Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:16:49Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-06T11:16:49Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 888
+      },
+      "timestamp_utc": "2025-10-06T11:16:58Z",
+      "duration_ms": 9075
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:16:58Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem utilizada é profundamente empática com o público feminino, abordando a frustração com o 'corpo que parece não cooperar' e inspirando a 'mulher leve, confiante e feliz' que ela merece ser. A transformação é diretamente ligada à proposta da empresa, mencionando explicitamente o 'destravar o metabolismo' e 'conquistar seus objetivos de peso e imagem'. O texto rejeita respostas vagas ao focar na 'solução médica' e citar 'Mounjaro ou Wegovy', sendo muito específico. O tom é inspirador ao motivar a ação, estratégico ao posicionar a abordagem médica como a chave e acionável com chamadas claras para 'Agende Sua Consulta' e 'Entre em Contato Via WhatsApp'.",
+      "timestamp_utc": "2025-10-06T11:17:05Z",
+      "duration_ms": 6587
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem utilizada é profundamente empática com o público feminino, abordando a frustração com o 'corpo que parece não cooperar' e inspirando a 'mulher leve, confiante e feliz' que ela merece ser. A transformação é diretamente ligada à proposta da empresa, mencionando explicitamente o 'destravar o metabolismo' e 'conquistar seus objetivos de peso e imagem'. O texto rejeita respostas vagas ao focar na 'solução médica' e citar 'Mounjaro ou Wegovy', sendo muito específico. O tom é inspirador ao motivar a ação, estratégico ao posicionar a abordagem médica como a chave e acionável com chamadas claras para 'Agende Sua Consulta' e 'Entre em Contato Via WhatsApp'.",
+      "timestamp_utc": "2025-10-06T11:17:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:17:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-06T11:17:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1777
+      },
+      "timestamp_utc": "2025-10-06T11:17:14Z",
+      "duration_ms": 9789
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:17:14Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, abordando de forma detalhada e específica as frustrações, a autocrítica, a diminuição da autoestima, o isolamento social e as consequências na saúde que a falta de tratamento para o metabolismo lento pode acarretar. A transformação desejada (conquistar objetivos de peso e imagem) está diretamente ligada ao combate a esses \"um futuro de mais desilusão, de saúde comprometida e de uma vida onde a leveza, a confiança e a imagem que você tanto sonha são apenas sonhos distantes\", que seria o resultado de não agir. O texto rejeita respostas vagas ao descrever cenários muito concretos e emocionais (\"roupas continuarão apertadas\", \"espelho refletirá uma imagem que você não reconhece\", \"voz interna de autocrítica\", \"evitando situações sociais e até mesmo momentos íntimos\"). O tom é estratégico ao pintar um quadro sombrio do futuro sem a solução médica, e inspirador ao reiterar que \"Você merece mais do que essa luta constante\" e \"Não se resigne a viver sem o corpo e a energia que você sabe que merece\", motivando a ação. Não há genericidade; o foco no metabolismo lento como a raiz dos problemas é central.",
+      "timestamp_utc": "2025-10-06T11:17:23Z",
+      "duration_ms": 9079
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, abordando de forma detalhada e específica as frustrações, a autocrítica, a diminuição da autoestima, o isolamento social e as consequências na saúde que a falta de tratamento para o metabolismo lento pode acarretar. A transformação desejada (conquistar objetivos de peso e imagem) está diretamente ligada ao combate a esses \"um futuro de mais desilusão, de saúde comprometida e de uma vida onde a leveza, a confiança e a imagem que você tanto sonha são apenas sonhos distantes\", que seria o resultado de não agir. O texto rejeita respostas vagas ao descrever cenários muito concretos e emocionais (\"roupas continuarão apertadas\", \"espelho refletirá uma imagem que você não reconhece\", \"voz interna de autocrítica\", \"evitando situações sociais e até mesmo momentos íntimos\"). O tom é estratégico ao pintar um quadro sombrio do futuro sem a solução médica, e inspirador ao reiterar que \"Você merece mais do que essa luta constante\" e \"Não se resigne a viver sem o corpo e a energia que você sabe que merece\", motivando a ação. Não há genericidade; o foco no metabolismo lento como a raiz dos problemas é central.",
+      "timestamp_utc": "2025-10-06T11:17:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:17:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-06T11:17:23Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 1383
+      },
+      "timestamp_utc": "2025-10-06T11:17:31Z",
+      "duration_ms": 7499
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:17:31Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. Ele se conecta de forma profunda e autêntica com o público feminino, abordando as dores e frustrações passadas (\"ciclo vicioso de frustração e desilusão\") e projetando um futuro de \"energia renovada\", \"confiança restaurada\" e \"sorriso genuíno\", com clareza e empatia. A transformação está diretamente ligada à proposta da empresa, destacando como o \"metabolismo, que antes parecia um freio invisível, agora funciona a seu favor\" e que a conquista dos \"objetivos de peso e imagem\" se deu por meio de uma \"abordagem médica personalizada e baseada em ciência, que respeitou a biologia do seu corpo e destravou o que te impedia\". O texto rejeita respostas vagas ao ser muito específico sobre os benefícios e a metodologia, e o tom é inspirador ao descrever a liberdade, o bem-estar e o controle, estratégico ao diferenciar a abordagem médica, e implicitamente acionável ao mostrar o resultado da ação. Não há genericidade; o foco no metabolismo lento como o problema superado é central.",
+      "timestamp_utc": "2025-10-06T11:17:37Z",
+      "duration_ms": 6523
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. Ele se conecta de forma profunda e autêntica com o público feminino, abordando as dores e frustrações passadas (\"ciclo vicioso de frustração e desilusão\") e projetando um futuro de \"energia renovada\", \"confiança restaurada\" e \"sorriso genuíno\", com clareza e empatia. A transformação está diretamente ligada à proposta da empresa, destacando como o \"metabolismo, que antes parecia um freio invisível, agora funciona a seu favor\" e que a conquista dos \"objetivos de peso e imagem\" se deu por meio de uma \"abordagem médica personalizada e baseada em ciência, que respeitou a biologia do seu corpo e destravou o que te impedia\". O texto rejeita respostas vagas ao ser muito específico sobre os benefícios e a metodologia, e o tom é inspirador ao descrever a liberdade, o bem-estar e o controle, estratégico ao diferenciar a abordagem médica, e implicitamente acionável ao mostrar o resultado da ação. Não há genericidade; o foco no metabolismo lento como o problema superado é central.",
+      "timestamp_utc": "2025-10-06T11:17:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:17:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-06T11:17:37Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 918
+      },
+      "timestamp_utc": "2025-10-06T11:17:46Z",
+      "duration_ms": 8843
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-06T11:17:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, abordando as frustrações passadas (\"refém de um metabolismo lento e de dietas sem fim\", \"frustração e autocrítica\", \"fonte de desilusão\") e projetando uma imagem futura de empoderamento e bem-estar (\"versão mais plena e autêntica\", \"energia vibrante\", \"sorriso confiante\", \"alegria de viver sem amarras\"). A transformação está diretamente ligada à proposta da empresa, destacando o \"metabolismo destravado\" e a conquista dos \"objetivos de peso e imagem alcançados de forma duradoura através de uma abordagem médica personalizada\". O texto rejeita respostas vagas ao ser muito específico sobre as dores e a solução. O tom é inspirador ao detalhar a nova identidade da mulher, estratégico ao conectar essa identidade diretamente à abordagem da empresa, e acionável ao validar a aspiração da cliente de se sentir bem na própria pele e celebrar a transformação.",
+      "timestamp_utc": "2025-10-06T11:17:54Z",
+      "duration_ms": 7268
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente e cumpre todos os critérios com maestria. A linguagem é profundamente empática com o público feminino, abordando as frustrações passadas (\"refém de um metabolismo lento e de dietas sem fim\", \"frustração e autocrítica\", \"fonte de desilusão\") e projetando uma imagem futura de empoderamento e bem-estar (\"versão mais plena e autêntica\", \"energia vibrante\", \"sorriso confiante\", \"alegria de viver sem amarras\"). A transformação está diretamente ligada à proposta da empresa, destacando o \"metabolismo destravado\" e a conquista dos \"objetivos de peso e imagem alcançados de forma duradoura através de uma abordagem médica personalizada\". O texto rejeita respostas vagas ao ser muito específico sobre as dores e a solução. O tom é inspirador ao detalhar a nova identidade da mulher, estratégico ao conectar essa identidade diretamente à abordagem da empresa, e acionável ao validar a aspiração da cliente de se sentir bem na própria pele e celebrar a transformação.",
+      "timestamp_utc": "2025-10-06T11:17:54Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "compiler",
+      "status": "started",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success",
+          "storybrand_identity"
+        ]
+      },
+      "timestamp_utc": "2025-10-06T11:17:54Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "compiler",
+      "status": "completed",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "text_length": 17423
+      },
+      "timestamp_utc": "2025-10-06T11:17:54Z",
+      "duration_ms": 0
+    }
+  ],
+  "storybrand_gate_metrics": {
+    "score_obtained": null,
+    "score_threshold": 0.6,
+    "decision_path": "fallback",
+    "timestamp_utc": "2025-10-06T11:13:26Z",
+    "is_forced_fallback": true,
+    "debug_flag_active": true
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": true,
+    "decision_path": "fallback",
+    "trigger_reason": "forced",
+    "timestamp_utc": "2025-10-06T11:13:26Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "image_assets_agent",
+      "status": "fail",
+      "timestamp_utc": "2025-10-06T11:29:59.355911+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "error",
+          "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+        },
+        {
+          "variation_index": 1,
+          "status": "skipped",
+          "missing_fields": [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario"
+          ]
+        },
+        {
+          "variation_index": 2,
+          "status": "skipped",
+          "missing_fields": [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario"
+          ]
+        }
+      ],
+      "issues": [
+        "Erro ao gerar imagens da variação 1: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+        "Variation 2 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario",
+        "Variation 3 skipped due to missing fields: prompt_estado_atual, prompt_estado_intermediario"
+      ]
+    }
+  ]
+}

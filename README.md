@@ -394,6 +394,8 @@ Fases sugeridas:
 
 O fallback é ativado pelo agente `StoryBrandQualityGate` quando o score de completude StoryBrand fica abaixo de `config.min_storybrand_completeness`, quando `state['force_storybrand_fallback']` está habilitado ou quando `config.storybrand_gate_debug` está `True`.
 
+- O fallback forçado realmente entrega narrativas mais longas, com contextualização meticulosa (principalmente em `contexto_landing` e nas `copy`). Isso acontece porque o pipeline sintético reconstrói 16 seções do StoryBrand a partir de prompts específicos – ele gera blocos grandes e articulados, mesmo sem ler a landing page.
+
 - **Pipeline**: `fallback_storybrand_pipeline` (`app/agents/storybrand_fallback.py`) executa inicialização, coleta/validação de inputs, geração das 16 seções, compilação (`FallbackStorybrandCompiler`) e relatório de qualidade.
 - **Coleta**: o coletor reforça `nome_empresa`/`o_que_a_empresa_faz`, tenta inferir `sexo_cliente_alvo` a partir de `landing_page_context` e aborta o pipeline com `EventActions(escalate=True)` quando os campos não podem ser recuperados.
 - **Prompts**: ficam em `prompts/storybrand_fallback/` e são carregados pelo utilitário `PromptLoader` (`app/utils/prompt_loader.py`). Faltas disparam `FileNotFoundError`.

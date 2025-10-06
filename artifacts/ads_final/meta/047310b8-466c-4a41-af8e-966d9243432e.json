@@ -1,0 +1,88 @@
+{
+  "filename": "20251006-090405_047310b8-466c-4a41-af8e-966d9243432e_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-06T12:04:05Z",
+  "size_bytes": 14504,
+  "final_delivery_local_path": "artifacts/ads_final/20251006-090405_047310b8-466c-4a41-af8e-966d9243432e_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/047310b8-466c-4a41-af8e-966d9243432e/20251006-090405_047310b8-466c-4a41-af8e-966d9243432e_Feed.json",
+  "user_id": "u_999",
+  "session_id": "047310b8-466c-4a41-af8e-966d9243432e",
+  "stage": "legacy_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": null,
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "Revisão final confirmada. O processo está concluído e todas as variações de anúncio foram aprovadas. A análise semântica e visual corrobora o alinhamento completo do material com a estratégia, persona e objetivos definidos. Não há mais pendências de revisão."
+  },
+  "image_assets_review": {
+    "grade": "fail",
+    "issues": [
+      "Erro ao gerar imagens da variação 1: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+      "Erro ao gerar imagens da variação 2: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+      "Erro ao gerar imagens da variação 3: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+    ],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "error",
+        "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+      },
+      {
+        "variation_index": 1,
+        "status": "error",
+        "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+      },
+      {
+        "variation_index": 2,
+        "status": "error",
+        "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [],
+  "storybrand_gate_metrics": {
+    "score_obtained": 1.0,
+    "score_threshold": 0.6,
+    "decision_path": "happy_path",
+    "timestamp_utc": "2025-10-06T11:53:53Z",
+    "is_forced_fallback": false,
+    "debug_flag_active": false
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": false,
+    "decision_path": "happy_path",
+    "trigger_reason": "happy_path",
+    "timestamp_utc": "2025-10-06T11:53:53Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "image_assets_agent",
+      "status": "fail",
+      "timestamp_utc": "2025-10-06T12:04:05.076643+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "error",
+          "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+        },
+        {
+          "variation_index": 1,
+          "status": "error",
+          "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+        },
+        {
+          "variation_index": 2,
+          "status": "error",
+          "error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+        }
+      ],
+      "issues": [
+        "Erro ao gerar imagens da variação 1: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+        "Erro ao gerar imagens da variação 2: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}",
+        "Erro ao gerar imagens da variação 3: Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+      ]
+    }
+  ]
+}
