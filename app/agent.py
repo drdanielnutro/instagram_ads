@@ -1108,14 +1108,16 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
 - VISUAL_DRAFT:
   {
     "visual": {
-      "descricao_imagem": "Descrição em pt-BR narrando a sequência: estado_atual (dor) → estado_intermediario (decisão imediata) → estado_aspiracional (transformação)...",
-      "prompt_estado_atual": "Prompt técnico em inglês descrevendo o estado de dor (emoções, postura, cenário)...",
-      "prompt_estado_intermediario": "Prompt técnico em inglês mantendo cenário/vestuário e mostrando a ação imediata de mudança...",
-      "prompt_estado_aspiracional": "Prompt técnico em inglês descrevendo o estado transformado (emoções positivas, resultados visíveis, cenário)...",
+      "descricao_imagem": "OBRIGATÓRIO: descreva em pt-BR uma sequência de três cenas numeradas (1, 2, 3) com a mesma persona vivenciando: 1) o estado atual com dor ou frustração específica, 2) o estado intermediário mostrando a decisão ou primeiro passo mantendo cenário/vestuário coerentes, 3) o estado aspiracional depois da transformação. Nunca mencione 'imagem única' nem omita cenas.",
+      "prompt_estado_atual": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 1 (estado atual), com emoção negativa clara, postura coerente e cenário alinhado ao problema, sempre com a mesma persona.",
+      "prompt_estado_intermediario": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 2 (estado intermediário), destacando o momento de ação ou decisão, mantendo persona, cenário e elementos visuais em transição positiva.",
+      "prompt_estado_aspiracional": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 3 (estado aspiracional), mostrando resultados visíveis, emoções positivas e ambiente coerente com o sucesso da mesma persona.",
       "aspect_ratio": "definido conforme especificação do formato"
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
   }
+
+  Se qualquer campo do bloco "visual" ficar vazio, nulo ou repetir outra cena, regenere o fragmento antes de responder.
 
 - VISUAL_QA:
   {
@@ -1177,10 +1179,10 @@ Aplique critérios **por categoria**:
   * Avaliação honesta; se "ajustar", razões acionáveis
 
 - VISUAL_DRAFT:
-  * Descrição visual com gancho, contexto e elementos on-screen
-  * Narrativa deve mostrar a sequência: estado_atual (dor) → estado_intermediario (decisão imediata/mudança) → estado_aspiracional (transformação) mantendo coerência com a persona/contexto
-  * Incluir prompts técnicos em inglês (`prompt_estado_atual`, `prompt_estado_intermediario`, `prompt_estado_aspiracional`) alinhados à narrativa e mostrando evolução honesta
-  * Aspect ratio coerente com o formato (conforme {format_specs_json}); aparência nativa do posicionamento
+  * Verificar que a descricao_imagem explicita três cenas distintas (estado atual, intermediário e aspiracional) da mesma persona; reprovar se aparecer "imagem única" ou menção a apenas uma cena.
+  * Reprovar automaticamente se qualquer `prompt_estado_*` estiver ausente, vazio, nulo, repetido ou incoerente com a cena correspondente; informe qual campo precisa ser corrigido.
+  * Garantir continuidade narrativa entre os três prompts (mesma persona, cenário evoluindo de dor → decisão → transformação) e que cada um descreve apenas a sua cena.
+  * Conferir se o aspect_ratio segue {format_specs_json} e se o conteúdo é acionável para geração de imagem.
 
 - VISUAL_QA:
   * Avaliação honesta; se "ajustar", razões acionáveis
@@ -1211,6 +1213,8 @@ Tarefas:
 1) Aplique TODAS as correções do review {code_review_result} ao fragmento {generated_code}.
 2) Se houver `follow_up_queries`, execute-as via `google_search` e incorpore boas práticas.
 3) Retorne o **mesmo fragmento** corrigido em **JSON válido**.
+
+Se o review apontar ausência ou inconsistência em `prompt_estado_atual`, `prompt_estado_intermediario` ou `prompt_estado_aspiracional`, complete cada campo antes de responder. Utilize {landing_page_context}: dores e obstáculos alimentam o estado atual, proposta/CTA alimenta o estado intermediário e benefícios/transformação alimentam o estado aspiracional. Nunca devolva campos vazios; se não for possível completar, explique o motivo ao revisor.
 """,
     tools=[google_search],
     output_key="generated_code",
@@ -1582,11 +1586,12 @@ Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 - "cta_instagram": do COPY_DRAFT
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
-- "contexto_landing": resumo do {landing_page_context}
+- "contexto_landing": OBRIGATÓRIO em TODAS as variações. Copie integralmente {landing_page_context} ou, se ausente, gere resumo com as chaves StoryBrand (storybrand_persona, storybrand_dores, storybrand_proposta, storybrand_beneficios, storybrand_transformacao, storybrand_cta_principal, storybrand_completeness)
 
 Regras:
 - Criar 3 variações diferentes de copy e visual reutilizando os snippets aprovados sempre que possível.
-- Complete faltantes de forma conservadora.
+- Se qualquer variação chegar sem descrição completa ou sem os três prompts de visual, gere o conteúdo faltante usando o contexto StoryBrand (mesma persona, cenas 1-3) antes de finalizar.
+- Não devolva prompts vazios; se não conseguir completar, pare e sinalize que o snippet VISUAL_DRAFT precisa ser refeito.
 - Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
 - **Saída**: apenas JSON válido (sem markdown).
 """

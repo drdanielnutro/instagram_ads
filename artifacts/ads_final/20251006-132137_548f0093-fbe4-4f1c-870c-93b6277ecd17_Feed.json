@@ -1,0 +1,62 @@
+[
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Cansada de comer pouco e não emagrecer?",
+      "corpo": "Seu metabolismo lento não é falha sua. É um problema médico real que tem solução! Com o Dr. Daniel, você encontra uma abordagem personalizada e tratamentos como Mounjaro ou Wegovy para reativar seu corpo e emagrecer de forma saudável. Pare de lutar sozinha!",
+      "cta_texto": "Agende sua Avaliação Metabólica"
+    },
+    "visual": {
+      "descricao_imagem": "Cena 1: Uma mulher, aparentando 35-45 anos, em seu quarto, com uma calça jeans apertada em uma mão e uma expressão de frustração e desânimo. Cena 2: A mesma mulher, sentada em um sofá, pesquisando no celular com um olhar de esperança recém-descoberta. Cena 3: A mesma mulher, agora caminhando leve e confiante em um parque, sorrindo, vestindo roupas que lhe caem bem, irradiando bem-estar.",
+      "prompt_estado_atual": "A woman, 35-45 years old, in her bedroom, holding a pair of tight jeans with a frustrated, disheartened expression on her face. Her shoulders are slightly slumped, conveying tiredness and the feeling that her body is not cooperating. Clothes are somewhat scattered around, suggesting failed attempts to get dressed. Realistic lighting, focus on emotion. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman from scene 1, now sitting comfortably on a sofa, looking intently at her smartphone. Her expression is thoughtful and focused, with a subtle hint of hope or determination, as if she's just discovered a solution. Soft, warm lighting in the room, reflecting a moment of clarity. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman from scene 1 and 2, now walking confidently and lightly in a bright, natural park. She is smiling genuinely, with an upright posture, wearing flowing, well-fitting clothes that complement her figure. She radiates confidence, joy, and renewed energy. Vibrant, clear colors, symbolizing freedom and well-being. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_generation_error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance em Feed (Brasil, 2024–2025): Visuals autênticos de mulheres empoderadas, leves, ativas e confiantes em cenários naturais/cotidianos, com foco em bem-estar e não em padrões irreais. Estética limpa e moderna. No copy: ganchos empáticos que validam a dor da persona ('Cansada de comer pouco e não emagrecer?'), linguagem direta e clara, quebras de parágrafo e emojis para legibilidade, posicionamento da solução médica como autoridade e um CTA claro e direto (Ex: 'Agende sua consulta'). Carrosséis são eficazes para explicar planos ou benefícios detalhadamente."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Metabolismo Lento? A solução é médica.",
+      "corpo": "Se dietas e treinos falharam, a resposta pode estar na ciência. Um metabolismo \"travado\" exige uma abordagem médica para ser reativado. Tratamentos modernos como Mounjaro ou Wegovy, com acompanhamento do Dr. Daniel, podem ser o caminho para seu emagrecimento duradouro. Descubra a solução.",
+      "cta_texto": "Saiba mais sobre o tratamento"
+    },
+    "visual": {
+      "descricao_imagem": "Cena 1: Uma mulher olha para o espelho com uma expressão de cansaço e resignação, sentindo-se presa em um corpo que não a representa. Cena 2: A mesma mulher em uma consulta, conversando com um médico (não focado), e seu rosto mostra alívio e compreensão. Cena 3: A mesma mulher agora se olha no espelho com um sorriso confiante, vestindo uma roupa que ama e se sentindo visivelmente energizada e feliz.",
+      "prompt_estado_atual": "A woman in her late 30s looks at her reflection in the mirror with a tired and resigned expression. She feels stuck and frustrated with her body. The lighting is dim, emphasizing a sense of hopelessness and fatigue. Her posture is slightly slumped. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman, now in a bright and calm medical office. She is listening intently to a doctor (seen from the back or out of focus). Her face shows a clear sense of relief and understanding, as if a heavy weight has been lifted. The atmosphere is hopeful and professional. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, vibrant and full of energy, looks at her reflection in the mirror with a confident, bright smile. She's wearing an outfit she loves and that fits her perfectly. She radiates self-assurance and happiness with her transformation. Natural, bright lighting. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_generation_error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance em Feed (Brasil, 2024–2025): Visuals autênticos de mulheres empoderadas, leves, ativas e confiantes em cenários naturais/cotidianos, com foco em bem-estar e não em padrões irreais. Estética limpa e moderna. No copy: ganchos empáticos que validam a dor da persona ('Cansada de comer pouco e não emagrecer?'), linguagem direta e clara, quebras de parágrafo e emojis para legibilidade, posicionamento da solução médica como autoridade e um CTA claro e direto (Ex: 'Agende sua consulta'). Carrosséis são eficazes para explicar planos ou benefícios detalhadamente."
+  },
+  {
+    "landing_page_url": "https://nutrologodivinopolis.com.br/feminino/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seu esforço não gera resultado? Não é justo.",
+      "corpo": "Você se dedica, come pouco e a balança não mexe. Isso é injusto. A verdade é que um metabolismo lento não é sua culpa, é um problema médico. Com o tratamento certo, como Mounjaro ou Wegovy (sob indicação), você pode reativar seu corpo. Chega de frustração, agende uma avaliação.",
+      "cta_texto": "Agendar Avaliação Metabólica"
+    },
+    "visual": {
+      "descricao_imagem": "Cena 1: Uma mulher empurra para o lado um prato com uma salada pequena, sua expressão é de frustração e fome. Cena 2: A mesma mulher, em casa, faz uma anotação em um caderno com o título 'Meu Plano', olhando para a tela de um tablet com determinação. Cena 3: A mesma mulher, radiante, desfruta de uma refeição saudável e saborosa em um café, rindo e conversando, mostrando liberdade e prazer em comer.",
+      "prompt_estado_atual": "A woman in her late 30s sits at a kitchen table, pushing away a plate with a small, unappetizing salad. Her expression is a mix of frustration and hunger, conveying the injustice of restrictive diets that don't work. The scene feels lonely and restrictive. Aspect ratio 4:5.",
+      "prompt_estado_intermediario": "The same woman, now with a look of determination, sits on her sofa. She's writing in a notebook titled 'My Health Plan' while looking at a tablet that displays health-related information. The atmosphere is proactive and empowered, she's taking control. Aspect ratio 4:5.",
+      "prompt_estado_aspiracional": "The same woman, looking radiant and happy, enjoys a delicious and healthy-looking meal at a bright, sunny café. She is laughing, completely at ease, demonstrating freedom from food-related guilt and the joy of a balanced lifestyle. The scene is social and vibrant. Aspect ratio 4:5.",
+      "aspect_ratio": "4:5",
+      "image_generation_error": "Falha na geração de imagem após 3 tentativas: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'Publisher Model `projects/instagram-ads-472021/locations/us-central1/publishers/google/models/gemini-2.5-flash-image-preview` was not found or your project does not have access to it. Please ensure you are using a valid model version. For more information, see: https://cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions', 'status': 'NOT_FOUND'}}"
+    },
+    "cta_instagram": "Enviar mensagem",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance em Feed (Brasil, 2024–2025): Visuals autênticos de mulheres empoderadas, leves, ativas e confiantes em cenários naturais/cotidianos, com foco em bem-estar e não em padrões irreais. Estética limpa e moderna. No copy: ganchos empáticos que validam a dor da persona ('Cansada de comer pouco e não emagrecer?'), linguagem direta e clara, quebras de parágrafo e emojis para legibilidade, posicionamento da solução médica como autoridade e um CTA claro e direto (Ex: 'Agende sua consulta'). Carrosséis são eficazes para explicar planos ou benefícios detalhadamente."
+  }
+]
