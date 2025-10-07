@@ -71,7 +71,7 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
    - Validates and normalizes user input before ADK processing
    - Selects fixed plans based on ad format (Reels/Stories/Feed)
    - Returns initial state with implementation plan
-   - Located in `app/server.py:93-166`
+   - Located in `app/server.py:162-410`
 
 2. **Landing Page Analysis**
    - Uses `web_fetch_tool` to extract HTML content
@@ -92,7 +92,7 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
 
 ### Critical Files
 
-- **Main agent**: `app/agent.py` - Complete pipeline definition (881 lines)
+- **Main agent**: `app/agent.py` - Complete pipeline definition (1972 lines)
 - **Server**: `app/server.py` - FastAPI endpoints including preflight
 - **LangExtract**: `app/tools/langextract_sb7.py` - StoryBrand analysis
 - **Fixed Plans**: `app/plan_models/fixed_plans.py` - Pre-defined execution plans
@@ -110,6 +110,8 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
 
 ## Input Format
 
+### Base Fields (Always Available)
+
 Required fields:
 - `landing_page_url`: Target page URL
 - `objetivo_final`: Campaign goal (e.g., agendamentos, leads)
@@ -118,6 +120,15 @@ Required fields:
 
 Optional field:
 - `foco`: Campaign theme or hook
+
+### Conditional Fields (When `ENABLE_NEW_INPUT_FIELDS=true`)
+
+Additional required fields for StoryBrand fallback pipeline:
+- `nome_empresa`: Company name as it should appear in creatives (required, no default)
+- `o_que_a_empresa_faz`: Value proposition/service summary (required, no default)
+- `sexo_cliente_alvo`: Target audience gender - must be exactly `"masculino"` or `"feminino"` (required, empty/"neutro" blocks fallback)
+
+**Note**: These fields are extracted in shadow mode when `PREFLIGHT_SHADOW_MODE=true` but only included in `initial_state` when `ENABLE_NEW_INPUT_FIELDS=true`. See [app/server.py:273-386](app/server.py#L273-L386) for extraction logic.
 
 ## Environment Variables
 
@@ -148,6 +159,7 @@ VERTEX_RETRY_MAX_BACKOFF=30.0
 - `STORYBRAND_GATE_DEBUG`: Force fallback path for testing (default: `false`)
 - `ENABLE_IMAGE_GENERATION`: Enable Gemini image generation (default: `true`)
 - `PREFLIGHT_SHADOW_MODE`: Extract new fields without including in initial_state (default: `true`)
+- `ENABLE_DETERMINISTIC_FINAL_VALIDATION`: Enable deterministic validation pipeline for final JSON output (default: `false`)
 
 ### Important Notes
 **Fallback Activation Logic**: The StoryBrand fallback pipeline only runs when:
@@ -187,10 +199,14 @@ The Makefile automatically kills processes on ports 8000 and 5173 before startin
 ## API Endpoints
 
 - `POST /run_preflight` - Validate input and get initial state
-- `POST /run` - Execute agent synchronously
-- `POST /run_sse` - Execute with Server-Sent Events streaming
-- `POST /apps/{app_name}/users/{user_id}/sessions/{session_id}` - Create session
+- `POST /run` - Execute agent synchronously (provided by ADK framework)
+- `POST /run_sse` - Execute with Server-Sent Events streaming (provided by ADK framework)
+- `POST /apps/{app_name}/users/{user_id}/sessions/{session_id}` - Create session (provided by ADK framework)
 - `POST /feedback` - Submit feedback
+- `GET /final/meta` - Get metadata for final delivery JSON
+- `GET /final/download` - Download final delivery JSON
+
+**Note**: Endpoints marked as "provided by ADK framework" are automatically registered by `get_fast_api_app()` and don't appear explicitly in `server.py`.
 
 ## Access Points
 
