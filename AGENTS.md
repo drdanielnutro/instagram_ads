@@ -44,10 +44,10 @@
 - Esse anexo define o fluxo fase a fase (checklist → plano → código) e os critérios de sucesso/erro para validar implementação, testes, documentação e efeitos colaterais.
 
 ## Checklist Primeiro, Código Depois
-- Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `checklist_plano_json_v3.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
-- Em seguida, consulte o plano `plano_validacao_json_v3.md` para entender o contexto completo das tarefas e subtarefas.
+- Antes de iniciar qualquer tarefa relacionada à validação determinística do JSON final de anúncios, abra o checklist `imagem_roupa_checklist.md` na raiz e identifique o próximo item `pending`. Se houver entrada `in progress`, valide se foi concluída; caso contrário, retome-a primeiro.
+- Em seguida, consulte o plano `imagem_roupa.md` para entender o contexto completo das tarefas e subtarefas.
 - Atualize o status do item no checklist para `in progress` antes de executar qualquer modificação.
-- Concluída a tarefa e respectivas validações, marque o item como `done` em `checklist_plano_json_v3.md` e registre o resultado na sua resposta/PR.
+- Concluída a tarefa e respectivas validações, marque o item como `done` em `imagem_roupa_checklist.md` e registre o resultado na sua resposta/PR.
 
 ## StoryBrand Fallback Pipeline
 - O agente `StoryBrandQualityGate` (arquivo `app/agents/storybrand_gate.py`) fica fixo no `complete_pipeline` e decide entre o caminho feliz (`PlanningOrRunSynth`) e o fallback (`fallback_storybrand_pipeline`).

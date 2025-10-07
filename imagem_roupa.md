@@ -29,17 +29,18 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 ## Fase 1 – Schemas e Cache de Referências
 
 ### Entregáveis
-- Criar `app/schemas/reference_assets.py` com:
-  - `ReferenceImageMetadata` (campos: `id`, `type`, `gcs_uri`, `signed_url`, `labels`, `safe_search_flags`, `user_description | None`, `uploaded_at`).
-  - Métodos `model_dump(mode="json")` e `to_state_dict()` para garantir serialização.
-- Criar `app/utils/reference_cache.py` com funções:
-  - `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None`.
-  - `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None`.
-  - `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None`.
-  - `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]`.
-  - Implementar cache em memória com TTL configurável (`config.reference_cache_ttl_seconds`) e ganchos para futura troca por Redis/Datastore.
-- Criar módulo `app/utils/vision.py` com helper assíncrono `analyze_reference_image(..., type: Literal["character", "product"]) -> ReferenceImageMetadata` encapsulando chamadas ao Vertex AI Vision (SafeSearch + labels).
-- Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) que utilizará `analyze_reference_image` (criado nesta fase) antes de devolver o ID ao cliente.
+- **1.1** Criar `app/schemas/reference_assets.py` com:
+  - **1.1.1** `ReferenceImageMetadata` (campos: `id`, `type`, `gcs_uri`, `signed_url`, `labels`, `safe_search_flags`, `user_description | None`, `uploaded_at`).
+  - **1.1.2** Métodos `model_dump(mode="json")` e `to_state_dict()` para garantir serialização.
+- **1.2** Criar `app/utils/reference_cache.py` com funções:
+  - **1.2.1** `cache_reference_metadata(metadata: ReferenceImageMetadata) -> None`.
+  - **1.2.2** `resolve_reference_metadata(reference_id: str | None) -> ReferenceImageMetadata | None`.
+  - **1.2.3** `merge_user_description(metadata: ReferenceImageMetadata | None, description: str | None) -> dict | None`.
+  - **1.2.4** `build_reference_summary(reference_images: dict[str, dict | None], payload: dict) -> dict[str, str | None]`.
+  - **1.2.5** Implementar cache em memória com TTL configurável (`config.reference_cache_ttl_seconds`) e ganchos para futura troca por Redis/Datastore.
+- **1.3** Criar módulo `app/utils/vision.py` com helper assíncrono `analyze_reference_image(..., type: Literal["character", "product"]) -> ReferenceImageMetadata` encapsulando chamadas ao Vertex AI Vision (SafeSearch + labels).
+- **1.4** Criar helper `upload_reference_image` em `app/utils/gcs.py` (novo) que utilizará `analyze_reference_image` (criado nesta fase) antes de devolver o ID ao cliente.
+- **1.5** Preparar testes unitários base (serão detalhados na Fase 6).
 
 ### Dependências existentes
 - `BaseModel` (Pydantic) importado no topo de `app/agent.py` (linhas 24-40).
@@ -62,17 +63,17 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 ## Fase 2 – Backend: Upload & Preflight
 
 ### Entregáveis
-- Implementar endpoint `POST /upload/reference-image` em `app/server.py`:
-  - Assinatura com `UploadFile`, `type: Literal["character", "product"]`, `user_id | None`, `session_id | None`.
-  - Passos: validar content-type/tamanho, enviar ao GCS (`upload_reference_image`), analisar via Vision (`analyze_reference_image`), aplicar SafeSearch e `cache_reference_metadata` (Fase 1), devolver `{ "id", "signed_url", "labels" }`.
-- Criar schema `RunPreflightRequest` (novo módulo `app/schemas/run_preflight.py`) substituindo parse manual atual.
-- Modificar `run_preflight` em `app/server.py:162-410`:
-  - Reutilizar `RunPreflightRequest`.
-  - Resolver metadados via `resolve_reference_metadata` (criada na Fase 1).
-  - Construir `initial_state["reference_images"]`, `reference_image_summary`, `reference_image_character_summary`, `reference_image_product_summary` e `reference_image_safe_search_notes` para diferenciar motivos de reprovação.
-  - Devolver `initial_state` enriquecido sem manipulações externas.
-  - Documentar explicitamente no plano que, com `ENABLE_REFERENCE_IMAGES=false`, o endpoint retorna o comportamento atual mesmo se `reference_images` estiverem presentes; quando a flag estiver ativada, os campos passam a ser obrigatórios sempre que IDs válidos forem enviados.
-- Registrar logs estruturados (`logger.log_struct`) para uploads e preflight.
+- **2.1** Implementar endpoint `POST /upload/reference-image` em `app/server.py`:
+  - **2.1.1** Assinatura com `UploadFile`, `type: Literal["character", "product"]`, `user_id | None`, `session_id | None`.
+  - **2.1.2** Validar content-type/tamanho, enviar ao GCS (`upload_reference_image`), analisar via Vision (`analyze_reference_image`), aplicar SafeSearch e `cache_reference_metadata` (Fase 1), devolver `{ "id", "signed_url", "labels" }`.
+- **2.2** Criar schema `RunPreflightRequest` (novo módulo `app/schemas/run_preflight.py`) substituindo parse manual atual.
+- **2.3** Modificar `run_preflight` em `app/server.py:162-410`:
+  - **2.3.1** Reutilizar `RunPreflightRequest`.
+  - **2.3.2** Resolver metadados via `resolve_reference_metadata` (criada na Fase 1).
+  - **2.3.3** Construir `initial_state["reference_images"]`, `reference_image_summary`, `reference_image_character_summary`, `reference_image_product_summary` e `reference_image_safe_search_notes`.
+  - **2.3.4** Garantir retorno enriquecido sem manipulações externas.
+  - **2.3.5** Documentar comportamento com `ENABLE_REFERENCE_IMAGES=false` versus true.
+- **2.4** Registrar logs estruturados (`logger.log_struct`) para uploads e preflight.
 
 ### Dependências existentes
 - Função `run_preflight` atual em `app/server.py:162-410` (retorna `initial_state`).
@@ -113,13 +114,13 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 ## Fase 3 – Frontend (React + Vite)
 
 ### Entregáveis
-- Criar componente `frontend/src/components/ReferenceUpload.tsx` com props `type="character" | "product"`, validações de extensão e tamanho (máx. 5 MB).
-- Criar hook/store `useReferenceImages` em `frontend/src/state/referenceImages.ts` para gerenciar IDs e descrições.
-- Atualizar `frontend/src/App.tsx` (linhas ~420-520):
-  - Submeter uploads imediatamente para `/upload/reference-image` (Fase 2) via `FormData`.
-  - No `handleSubmit`, incluir `reference_images` no payload com `{ id, user_description }` apenas quando houver upload.
-- Atualizar `frontend/src/components/InputForm.tsx` para usar o novo componente e capturar descrições.
-- Adicionar mensagens de feedback (sucesso/erro) relacionadas ao upload de referências.
+- **3.1** Criar componente `frontend/src/components/ReferenceUpload.tsx` com props `type="character" | "product"`, validações de extensão e tamanho (máx. 5 MB).
+- **3.2** Criar hook/store `useReferenceImages` em `frontend/src/state/referenceImages.ts` para gerenciar IDs e descrições.
+- **3.3** Atualizar `frontend/src/App.tsx` (linhas ~420-520):
+  - **3.3.1** Submeter uploads imediatamente para `/upload/reference-image` (Fase 2) via `FormData`.
+  - **3.3.2** No `handleSubmit`, incluir `reference_images` no payload com `{ id, user_description }` apenas quando houver upload.
+- **3.4** Atualizar `frontend/src/components/InputForm.tsx` para usar o novo componente e capturar descrições.
+- **3.5** Adicionar mensagens de feedback (sucesso/erro) relacionadas ao upload de referências.
 
 ### Dependências existentes
 - Função `handleSubmit` em `frontend/src/App.tsx:423-498`.
@@ -142,21 +143,21 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 Detalhar, na própria descrição do pipeline, como os agentes devem consumir dados de referências visuais e como os prompts se adaptam a cada cenário, mantendo compatibilidade com as instruções determinísticas já estabelecidas para `code_generator`, `code_reviewer` e `code_refiner`.
 
 #### 4.1 Placeholders e estrutura de dados
-- Atualizar prompts em `app/agent.py` para incluir placeholders condicionais derivados da Fase 2:
-  - **VISUAL_DRAFT** (`app/agent.py:1108-1120`): `{reference_image_character_summary}`, `{reference_image_product_summary}`, `{reference_image_safe_search_notes}`.
-  - **COPY_DRAFT** (`app/agent.py:1092-1100`): `{reference_image_product_summary}` e `{reference_image_character_summary}` quando relevantes para consistência narrativa.
-  - **final_assembler** (`app/agent.py:1576-1614`): injetar `reference_images.<type>.gcs_uri`, `.labels`, `.user_description` e preencher `visual.reference_assets` com metadados aprovados.
-- No `ImageAssetsAgent` (`app/agent.py:420-792`), reidratar `ReferenceImageMetadata` via `model_validate`, armazenar flags `character_reference_used` e `product_reference_used` e garantir que o summary exponha quando uma referência foi descartada por reprovação do SafeSearch.
-- Em `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-290`), aceitar novos parâmetros opcionais para personagem/produto e centralizar carregamento de ativos no helper `_load_reference_image`.
-- Atualizar templates em `app/config.py` para introduzir `image_current_prompt_template` e `image_aspirational_prompt_template_with_product`, ativando-os apenas quando as referências correspondentes estiverem aprovadas.
+- **4.1.1** Atualizar prompts em `app/agent.py` para incluir placeholders condicionais derivados da Fase 2:
+  - **4.1.1.1** `VISUAL_DRAFT` (`app/agent.py:1108-1120`): `{reference_image_character_summary}`, `{reference_image_product_summary}`, `{reference_image_safe_search_notes}`.
+  - **4.1.1.2** `COPY_DRAFT` (`app/agent.py:1092-1100`): `{reference_image_product_summary}` e `{reference_image_character_summary}` quando relevantes para consistência narrativa.
+  - **4.1.1.3** `final_assembler` (`app/agent.py:1576-1614`): injetar `reference_images.<type>.gcs_uri`, `.labels`, `.user_description` e preencher `visual.reference_assets` com metadados aprovados.
+- **4.1.2** Atualizar `ImageAssetsAgent` (`app/agent.py:420-792`) para reidratar `ReferenceImageMetadata` via `model_validate`, armazenar flags `character_reference_used` e `product_reference_used` e garantir que o summary exponha quando uma referência foi descartada por reprovação do SafeSearch.
+- **4.1.3** Atualizar `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-290`) aceitando novos parâmetros opcionais para personagem/produto e centralizando carregamento de ativos no helper `_load_reference_image`.
+- **4.1.4** Atualizar templates em `app/config.py` para introduzir `image_current_prompt_template` e `image_aspirational_prompt_template_with_product`, ativando-os apenas quando as referências correspondentes estiverem aprovadas.
 
 #### 4.2 Diretrizes de prompting para personagem
-- Instruir que sempre que `reference_images.character.status == "approved"`:
-  - Os prompts nomeiem ou descrevam o personagem com base no resumo aprovado.
-  - As características físicas (tom de pele, cabelo, traços faciais, vestimenta principal) sejam preservadas explicitamente em cada uma das três imagens sequenciais (`prompt_estado_atual`, `prompt_estado_intermediario`, `prompt_estado_aspiracional`).
-  - Seja adicionada instrução para permitir mudança de expressão facial conforme pedido pelo ADK: "render the same character now showing <emoção solicitada>".
-  - Logs do summary registrem qual emoção final foi aplicada em cada etapa.
-- Registrar no documento final uma lista de verificação em bloco de código Markdown (logo após esta subseção) com frases-modelo e condicionais, por exemplo:
+- **4.2.1** Instruir que sempre que `reference_images.character.status == "approved"`:
+  - **4.2.1.1** Os prompts nomeiem ou descrevam o personagem com base no resumo aprovado.
+  - **4.2.1.2** As características físicas (tom de pele, cabelo, traços faciais, vestimenta principal) sejam preservadas explicitamente em cada uma das três imagens sequenciais (`prompt_estado_atual`, `prompt_estado_intermediario`, `prompt_estado_aspiracional`).
+  - **4.2.1.3** Seja adicionada instrução para permitir mudança de expressão facial conforme pedido pelo ADK: "render the same character now showing <emoção solicitada>".
+  - **4.2.1.4** Logs do summary registrem qual emoção final foi aplicada em cada etapa.
+- **4.2.2** Registrar no documento final uma lista de verificação em bloco de código Markdown (logo após esta subseção) com frases-modelo e condicionais, por exemplo:
   ```markdown
   if reference_image_character_summary:
       prompt_visual = (
@@ -169,16 +170,16 @@ Detalhar, na própria descrição do pipeline, como os agentes devem consumir da
   ```
 
 #### 4.3 Diretrizes quando apenas produto estiver presente
-- Se apenas `reference_images.product` estiver aprovado:
-  - Remover qualquer menção a personagem dos prompts, reforçando atributos do produto (labels, materiais, uso principal).
-  - Adaptar `COPY_DRAFT` para destacar diferenciais do produto real, mantendo coerência com as imagens.
-  - Documentar fallback textual que reitera que a narrativa deve focar no produto sem inventar personagens ausentes.
+- **4.3.1** Se apenas `reference_images.product` estiver aprovado:
+  - **4.3.1.1** Remover qualquer menção a personagem dos prompts, reforçando atributos do produto (labels, materiais, uso principal).
+  - **4.3.1.2** Adaptar `COPY_DRAFT` para destacar diferenciais do produto real, mantendo coerência com as imagens.
+  - **4.3.1.3** Documentar fallback textual que reitera que a narrativa deve focar no produto sem inventar personagens ausentes.
 
 #### 4.4 Cenários combinados e compatibilidade com instruções fixas
-- Quando ambos os ativos existirem, combinar resumos mantendo coerência (`personagem interage com produto`) e distribuir responsabilidades entre copy e visual.
-- Reafirmar que os agentes continuam produzindo exatamente três prompts sequenciais; os novos placeholders complementam, mas não substituem, `prompt_estado_atual`, `prompt_estado_intermediario` e `prompt_estado_aspiracional`.
-- Inserir nota explícita de que as instruções endurecidas dos agentes (`instrucoes_fixas_agentes.md`) permanecem válidas; quaisquer mudanças devem ser incrementais e não podem afrouxar os critérios de falha estabelecidos.
-- Atualizar referências de linha no documento para refletir o código atual: `code_reviewer` (`app/agent.py:1142-1203`), `code_refiner` (`app/agent.py:1205-1221`) e `final_assembler_instruction` (`app/agent.py:1576-1597`).
+- **4.4.1** Quando ambos os ativos existirem, combinar resumos mantendo coerência (`personagem interage com produto`) e distribuir responsabilidades entre copy e visual.
+- **4.4.2** Reafirmar que os agentes continuam produzindo exatamente três prompts sequenciais; os novos placeholders complementam, mas não substituem, `prompt_estado_atual`, `prompt_estado_intermediario` e `prompt_estado_aspiracional`.
+- **4.4.3** Inserir nota explícita de que as instruções endurecidas dos agentes (`instrucoes_fixas_agentes.md`) permanecem válidas; quaisquer mudanças devem ser incrementais e não podem afrouxar os critérios de falha estabelecidos.
+- **4.4.4** Atualizar referências de linha no documento para refletir o código atual: `code_reviewer` (`app/agent.py:1142-1203`), `code_refiner` (`app/agent.py:1205-1221`) e `final_assembler_instruction` (`app/agent.py:1576-1597`).
 
 #### 4.5 Quadro comparativo de prompts por cenário
 
@@ -219,13 +220,13 @@ Depois (com personagem aprovado pedindo expressão triste):
 ## Fase 5 – Observabilidade, Persistência e Sanitização
 
 ### Entregáveis
-- Refatorar `persist_final_delivery(callback_context)` (`app/callbacks/persist_outputs.py:35-141`):
-  - Criar helper `sanitize_reference_images(state: dict[str, Any]) -> dict[str, Any]` removendo `signed_url`, tokens e payloads crus da Vision.
-  - Persistir metadados sanitizados em `meta["reference_images"]` e nos logs.
-  - Manter assinatura atual (usa `resolve_state(callback_context)`).
-- Adicionar logs estruturados (`logger.log_struct`) nos pontos-chave:
-  - Upload (Fase 2), preflight (Fase 2), pipeline de agentes (Fase 4) e persistência (esta fase).
-- Avaliar TTL curto para `signed_url` via `config.image_signed_url_ttl` e documentar política.
+- **5.1** Refatorar `persist_final_delivery(callback_context)` (`app/callbacks/persist_outputs.py:35-141`):
+  - **5.1.1** Criar helper `sanitize_reference_images(state: dict[str, Any]) -> dict[str, Any]` removendo `signed_url`, tokens e payloads crus da Vision.
+  - **5.1.2** Persistir metadados sanitizados em `meta["reference_images"]` e nos logs.
+  - **5.1.3** Manter assinatura atual (usa `resolve_state(callback_context)`).
+- **5.2** Adicionar logs estruturados (`logger.log_struct`) nos pontos-chave:
+  - **5.2.1** Upload (Fase 2), preflight (Fase 2), pipeline de agentes (Fase 4) e persistência (esta fase).
+- **5.3** Avaliar TTL curto para `signed_url` via `config.image_signed_url_ttl` e documentar política.
 
 ### Dependências existentes
 - `resolve_state` (`app/utils/session_state.py:10-32`).
@@ -248,48 +249,49 @@ Depois (com personagem aprovado pedindo expressão triste):
 
 ### Entregáveis
 - **Unit Tests**:
-  - `tests/unit/utils/test_reference_cache.py` (cache, TTL, merge com descrições).
-  - `tests/unit/utils/test_vision.py` (mocks do SafeSearch aprovando/reprovando e registrando notas utilizadas nos prompts).
-  - `tests/unit/tools/test_generate_transformation_images.py` (parâmetros com referências vs. fallback, verificando comandos de expressão facial por imagem sequencial).
-  - `tests/unit/agents/test_image_assets_agent.py` (reidratação de metadados, flags de summary e registro de emoções solicitadas).
-  - `tests/unit/callbacks/test_persist_outputs.py` (sanitização de `reference_images` e garantia de remoção de `signed_url`).
+  - **6.1.1** `tests/unit/utils/test_reference_cache.py` (cache, TTL, merge com descrições).
+  - **6.1.2** `tests/unit/utils/test_vision.py` (mocks do SafeSearch aprovando/reprovando e registrando notas utilizadas nos prompts).
+  - **6.1.3** `tests/unit/tools/test_generate_transformation_images.py` (parâmetros com referências vs. fallback, verificando comandos de expressão facial por imagem sequencial).
+  - **6.1.4** `tests/unit/agents/test_image_assets_agent.py` (reidratação de metadados, flags de summary e registro de emoções solicitadas).
+  - **6.1.5** `tests/unit/callbacks/test_persist_outputs.py` (sanitização de `reference_images` e garantia de remoção de `signed_url`).
 - **Integração**:
-  - `tests/integration/api/test_reference_upload.py`: upload → análise → cache → `/run_preflight` recuperando metadados no `initial_state`, cobrindo respostas aprovadas e reprovadas do SafeSearch.
-  - `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com referências, verificando JSON final, `reference_assets` e presença dos comandos de expressão gerados em cada prompt sequencial.
+  - **6.2.1** `tests/integration/api/test_reference_upload.py`: upload → análise → cache → `/run_preflight` recuperando metadados no `initial_state`, cobrindo respostas aprovadas e reprovadas do SafeSearch.
+  - **6.2.2** `tests/integration/agents/test_reference_pipeline.py`: pipeline parcial com referências, verificando JSON final, `reference_assets` e presença dos comandos de expressão gerados em cada prompt sequencial.
 - **Frontend**:
-  - RTL tests para `ReferenceUpload` e `handleSubmit` com/sem uploads, cobrindo feedback ao usuário quando SafeSearch reprovar arquivos.
-  - Cenários Cypress (se suite existir) para formulário completo com evidência de envio condicional.
-- **QA manual**: roteiro com quatro cenários (nenhuma referência, apenas personagem, apenas produto, ambos) para validar UX e resultados, incluindo captura de screenshots/logs dos prompts com mudança de expressão (ex.: alegre → triste) e checklist de uso obrigatório.
-- **Testes com flag desativada**: executar `make test` e fluxo manual com `ENABLE_REFERENCE_IMAGES=false` garantindo 3/3 variações entregues, prompts completos e `contexto_landing` presente.
-- **Evidências documentais**: criar pasta `artifacts/qa/reference-images` com exemplos antes/depois de prompts e imagens geradas, registrando emoção solicitada e resultado observado.
+  - **6.3.1** RTL tests para `ReferenceUpload` e `handleSubmit` com/sem uploads, cobrindo feedback ao usuário quando SafeSearch reprovar arquivos.
+  - **6.3.2** Cenários Cypress (se suite existir) para formulário completo com evidência de envio condicional.
+- **QA manual**:
+  - **6.4.1** Roteiro com quatro cenários (nenhuma referência, apenas personagem, apenas produto, ambos) validando UX e resultados, incluindo captura de screenshots/logs dos prompts com mudança de expressão.
+  - **6.4.2** Execução com `ENABLE_REFERENCE_IMAGES=false` garantindo 3/3 variações entregues, prompts completos e `contexto_landing` presente.
+  - **6.4.3** Criação da pasta `artifacts/qa/reference-images` com exemplos antes/depois de prompts e imagens geradas, registrando emoção solicitada e resultado observado.
 
 ### Critérios de aceitação
-- [ ] `make test` cobre novas suites sem regressões e verifica comandos de expressão facial nos prompts.
-- [ ] Testes de integração validam ciclo completo (incluindo sanitização e branchs SafeSearch aprovado/reprovado).
-- [ ] Roteiro manual documenta prints/logs de cada cenário, evidenciando mudança de expressão quando personagem estiver disponível.
-- [ ] Execuções com `ENABLE_REFERENCE_IMAGES=false` comprovam ausência de regressões (3/3 variações entregues, prompts completos, `contexto_landing` presente).
-- [ ] Pasta `artifacts/qa/reference-images` contém exemplos antes/depois aprovados pelo QA.
+- [ ] **6.5.1** `make test` cobre novas suites sem regressões e verifica comandos de expressão facial nos prompts.
+- [ ] **6.5.2** Testes de integração validam ciclo completo (incluindo sanitização e branchs SafeSearch aprovado/reprovado).
+- [ ] **6.5.3** Roteiro manual documenta prints/logs de cada cenário, evidenciando mudança de expressão quando personagem estiver disponível.
+- [ ] **6.5.4** Execuções com `ENABLE_REFERENCE_IMAGES=false` comprovam ausência de regressões (3/3 variações entregues, prompts completos, `contexto_landing` presente).
+- [ ] **6.5.5** Pasta `artifacts/qa/reference-images` contém exemplos antes/depois aprovados pelo QA.
 
 ---
 ## Fase 7 – Documentação & Rollout
 
 ### Entregáveis
-- Atualizar `README.md` (seção de geração de imagens) com fluxo de uploads, limitações (5 MB, formatos) e política de TTL.
-- Criar/atualizar playbooks internos (`docs/`) descrevendo auditoria (`state['image_generation_audit']`) e monitoramento.
-- Adicionar notas de migração (changelog) destacando schema `reference_images` no JSON final e novos endpoints.
-- Planejar estratégia de rollout (flag `ENABLE_REFERENCE_IMAGES` opcional em `app/config.py`) para ativar gradualmente.
+- **7.1** Atualizar `README.md` (seção de geração de imagens) com fluxo de uploads, limitações (5 MB, formatos) e política de TTL.
+- **7.2** Criar/atualizar playbooks internos (`docs/`) descrevendo auditoria (`state['image_generation_audit']`) e monitoramento.
+- **7.3** Adicionar notas de migração (changelog) destacando schema `reference_images` no JSON final e novos endpoints.
+- **7.4** Planejar estratégia de rollout (flag `ENABLE_REFERENCE_IMAGES` opcional em `app/config.py`) para ativar gradualmente.
 
 ### Critérios de aceitação
-- [ ] Documentação revisada pelo time.
-- [ ] Plano de rollback inclui desativar flag e limpar cache/GCS de uploads não usados.
+- [ ] **7.5.1** Documentação revisada pelo time.
+- [ ] **7.5.2** Plano de rollback inclui desativar flag e limpar cache/GCS de uploads não usados.
 
 ---
 ## Dependências Externas e Configuração
-- `google-cloud-vision>=3.4.0` — adicionar a `requirements.txt` (linha nova) e `uv.lock`.
-- `google-cloud-storage` já presente (`requirements.txt:15`) – reutilizado.
-- Configurações novas em `app/config.py`:
-  - `reference_cache_ttl_seconds` (int, default 3600).
-  - `enable_reference_images` (bool, default `False` para rollout).
+- **8.1** `google-cloud-vision>=3.4.0` — adicionar a `requirements.txt` (linha nova) e `uv.lock`.
+- **8.2** `google-cloud-storage` já presente (`requirements.txt:15`) – reutilizado.
+- **8.3** Configurações novas em `app/config.py`:
+  - **8.3.1** `reference_cache_ttl_seconds` (int, default 3600).
+  - **8.3.2** `enable_reference_images` (bool, default `False` para rollout).
 
 ## Riscos & Mitigações
 | Risco | Mitigação |
@@ -302,14 +304,14 @@ Depois (com personagem aprovado pedindo expressão triste):
 
 ---
 ## Checklist Final do Plano
-- [ ] Entregáveis usam verbos declarativos (Criar/Implementar/Modificar/Estender).
-- [ ] Dependências existentes possuem caminho e, quando relevante, intervalo de linhas.
-- [ ] Itens referenciados em fases posteriores indicam “(criado na Fase X)”.
-- [ ] Diffs ou resumos de modificações em arquivos existentes estão presentes.
-- [ ] Critérios de aceitação definidos para cada fase.
-- [ ] Dependências externas e flags documentadas.
-- [ ] Fluxo de testes cobre unitário, integração, frontend e QA manual.
-- [ ] Plano pode ser validado pelo `plan-code-validator` sem falsos P0.
+- [ ] **9.1** Entregáveis usam verbos declarativos (Criar/Implementar/Modificar/Estender).
+- [ ] **9.2** Dependências existentes possuem caminho e, quando relevante, intervalo de linhas.
+- [ ] **9.3** Itens referenciados em fases posteriores indicam “(criado na Fase X)”.
+- [ ] **9.4** Diffs ou resumos de modificações em arquivos existentes estão presentes.
+- [ ] **9.5** Critérios de aceitação definidos para cada fase.
+- [ ] **9.6** Dependências externas e flags documentadas.
+- [ ] **9.7** Fluxo de testes cobre unitário, integração, frontend e QA manual.
+- [ ] **9.8** Plano pode ser validado pelo `plan-code-validator` sem falsos P0.
 
 ---
 ## Resumo das Atualizações de Prompt
@@ -333,9 +335,9 @@ Sequenciar dessa forma evita dependências circulares (schemas e cache devem exi
 
 ---
 ## Checklist de Aprovação da Atualização
-- [ ] Confirmar presença e preenchimento da tabela "Lacunas de Detalhamento" logo após a Visão Geral.
-- [ ] Verificar que a seção 0 descreve os quatro cenários e a política de uso obrigatório pós-aprovação.
-- [ ] Revisar a Fase 4 para garantir que as diretrizes de expressão facial e preservação de aparência estão documentadas com exemplos.
-- [ ] Validar que os critérios de testes/QA (Fase 6) exigem evidências de mudança de expressão e cobrem reprovação do SafeSearch.
-- [ ] Checar que a seção "Resumo das Atualizações de Prompt" sintetiza os reforços e reitera compatibilidade com os agentes fixos.
-- [ ] Registrar aprovação das lideranças responsáveis antes de executar ajustes no código.
+- [ ] **10.1** Confirmar presença e preenchimento da tabela "Lacunas de Detalhamento" logo após a Visão Geral.
+- [ ] **10.2** Verificar que a seção 0 descreve os quatro cenários e a política de uso obrigatório pós-aprovação.
+- [ ] **10.3** Revisar a Fase 4 para garantir que as diretrizes de expressão facial e preservação de aparência estão documentadas com exemplos.
+- [ ] **10.4** Validar que os critérios de testes/QA (Fase 6) exigem evidências de mudança de expressão e cobrem reprovação do SafeSearch.
+- [ ] **10.5** Checar que a seção "Resumo das Atualizações de Prompt" sintetiza os reforços e reitera compatibilidade com os agentes fixos.
+- [ ] **10.6** Registrar aprovação das lideranças responsáveis antes de executar ajustes no código.
