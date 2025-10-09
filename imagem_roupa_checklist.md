@@ -20,17 +20,19 @@
 > **Notas Fase 1:** Cache configurável com backend em memória (TTL derivado de `config.reference_cache_ttl_seconds`), helper Vision com exceções específicas e upload para GCS realizando limpeza em caso de falhas/unsafe.
 
 ## Fase 2 – Backend: Upload & Preflight
-- [ ] **2.1** Implementar endpoint `POST /upload/reference-image`
-  - [ ] **2.1.1** Definir assinatura com `UploadFile`, tipo e identificadores opcionais.
-  - [ ] **2.1.2** Validar entrada, acionar upload/análise e retornar `{ id, signed_url, labels }`.
-- [ ] **2.2** Criar schema `RunPreflightRequest` (`app/schemas/run_preflight.py`).
-- [ ] **2.3** Atualizar `run_preflight` (`app/server.py:162-410`)
-  - [ ] **2.3.1** Reutilizar `RunPreflightRequest`.
-  - [ ] **2.3.2** Resolver metadados via `resolve_reference_metadata`.
-  - [ ] **2.3.3** Popular `initial_state["reference_images"]` e summaries.
-  - [ ] **2.3.4** Garantir resposta enriquecida sem manipulações externas.
-  - [ ] **2.3.5** Documentar comportamento com `ENABLE_REFERENCE_IMAGES` desligada/ligada.
-- [ ] **2.4** Registrar logs estruturados para upload e preflight.
+- [x] **2.1** Implementar endpoint `POST /upload/reference-image`
+  - [x] **2.1.1** Definir assinatura com `UploadFile`, tipo e identificadores opcionais.
+  - [x] **2.1.2** Validar entrada, acionar upload/análise e retornar `{ id, signed_url, labels }`.
+- [x] **2.2** Criar schema `RunPreflightRequest` (`app/schemas/run_preflight.py`).
+- [x] **2.3** Atualizar `run_preflight` (`app/server.py:162-410`)
+  - [x] **2.3.1** Reutilizar `RunPreflightRequest`.
+  - [x] **2.3.2** Resolver metadados via `resolve_reference_metadata`.
+  - [x] **2.3.3** Popular `initial_state["reference_images"]` e summaries.
+  - [x] **2.3.4** Garantir resposta enriquecida sem manipulações externas.
+  - [x] **2.3.5** Documentar comportamento com `ENABLE_REFERENCE_IMAGES` desligada/ligada.
+- [x] **2.4** Registrar logs estruturados para upload e preflight.
+
+> **Notas Fase 2:** Endpoint valida tipo e tamanho (5 MB), cacheia metadados aprovados, e `/run_preflight` enriquece `initial_state` apenas quando a flag `ENABLE_REFERENCE_IMAGES` estiver ativa (logando quando ignorado).
 
 ## Fase 3 – Frontend (React + Vite)
 - [ ] **3.1** Criar componente `ReferenceUpload.tsx` com validações.
