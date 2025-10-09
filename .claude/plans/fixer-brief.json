@@ -1,0 +1,9 @@
+{
+  "task_id": null,
+  "iteration": 1,
+  "review_report": ".claude/results/reviewer-output.json",
+  "priority_fixes": [],
+  "time_budget": "1h",
+  "focus": "critical_and_high_priority",
+  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline"
+}

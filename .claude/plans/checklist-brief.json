@@ -1,0 +1,10 @@
+{
+  "task_id": null,
+  "task_type": null,
+  "description": null,
+  "context": {
+    "project_info": "Instagram Ads - Python FastAPI + ADK pipeline",
+    "relevant_files": [],
+    "constraints": []
+  }
+}

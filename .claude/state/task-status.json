@@ -1,0 +1,21 @@
+{
+  "task_id": null,
+  "created_at": null,
+  "current_phase": null,
+  "iteration": 0,
+  "phases_completed": [],
+  "current_issues": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "quality_scores": {
+    "completeness": null,
+    "correctness": null,
+    "security": null,
+    "quality": null,
+    "overall": null
+  },
+  "next_action": null
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": null,
+  "iteration": 1,
+  "references": {
+    "checklist_analysis": ".claude/results/checklist-output.json",
+    "writer_output": ".claude/results/writer-output.json"
+  },
+  "review_focus": {
+    "priority_areas": ["completeness", "correctness", "security", "quality", "testing"],
+    "acceptance_criteria_reference": []
+  },
+  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline"
+}

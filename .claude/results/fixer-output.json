@@ -1,0 +1,25 @@
+{
+  "agent": "fixer-agent",
+  "task_id": null,
+  "iteration": null,
+  "status": null,
+  "fixes_applied": [],
+  "fixes_attempted_but_failed": [],
+  "fixes_skipped": [],
+  "overall_validation": {
+    "linter": null,
+    "type_checker": null,
+    "tests": null
+  },
+  "summary": {
+    "total_issues": null,
+    "fixed": null,
+    "failed": null,
+    "skipped": null
+  },
+  "remaining_issues": [],
+  "next_action": {
+    "recommendation": null,
+    "reason": null
+  }
+}

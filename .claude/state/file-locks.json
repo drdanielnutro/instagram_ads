@@ -1,0 +1,13 @@
+{
+  "_metadata": {
+    "description": "File locking mechanism for multi-agent coordination",
+    "version": "1.0.0",
+    "last_updated": null,
+    "rules": {
+      "lock_duration": "5min default, auto-release after",
+      "conflict_resolution": "wait 5min → retry → escalate if still blocked",
+      "cleanup": "locks older than 10min auto-expire"
+    }
+  },
+  "locks": {}
+}

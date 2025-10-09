@@ -1,0 +1,17 @@
+{
+  "agent": "checklist-agent",
+  "verdict": null,
+  "analysis": {
+    "clarity_score": null,
+    "completeness_score": null,
+    "feasibility_score": null,
+    "overall_score": null
+  },
+  "requirements": {
+    "explicit": [],
+    "implicit": [],
+    "acceptance_criteria": []
+  },
+  "gaps": [],
+  "next_action": null
+}

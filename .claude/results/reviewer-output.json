@@ -1,0 +1,24 @@
+{
+  "agent": "reviewer-agent",
+  "verdict": null,
+  "overall_assessment": {
+    "summary": null,
+    "completeness_score": null,
+    "correctness_score": null,
+    "security_score": null,
+    "quality_score": null,
+    "overall_score": null
+  },
+  "acceptance_criteria_review": [],
+  "issues": [],
+  "tests_review": {
+    "status": null,
+    "coverage": null,
+    "gaps": []
+  },
+  "next_action": {
+    "action": null,
+    "priority_fixes": [],
+    "estimated_effort": null
+  }
+}

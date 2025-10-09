@@ -1,0 +1,31 @@
+{
+  "agent": "writer-agent",
+  "status": null,
+  "implementation_summary": {
+    "description": null,
+    "approach": null,
+    "key_decisions": []
+  },
+  "files_changed": {
+    "created": [],
+    "modified": [],
+    "deleted": []
+  },
+  "tests_created": {
+    "files": [],
+    "coverage": null,
+    "tests_passed": null,
+    "tests_failed": null
+  },
+  "validation": {
+    "linter": null,
+    "type_checker": null,
+    "tests": null
+  },
+  "self_assessment": {
+    "confidence": null,
+    "quality_score": null,
+    "ready_for_review": null
+  },
+  "next_action": null
+}
