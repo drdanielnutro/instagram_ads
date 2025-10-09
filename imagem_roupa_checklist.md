@@ -4,18 +4,20 @@
 > Referência principal: `imagem_roupa.md`
 
 ## Fase 1 – Schemas e Cache de Referências
-- [ ] **1.1** Criar `app/schemas/reference_assets.py`
-  - [ ] **1.1.1** Definir `ReferenceImageMetadata` com campos obrigatórios.
-  - [ ] **1.1.2** Implementar métodos `model_dump(mode="json")` e `to_state_dict()`.
-- [ ] **1.2** Criar `app/utils/reference_cache.py`
-  - [ ] **1.2.1** Implementar `cache_reference_metadata`.
-  - [ ] **1.2.2** Implementar `resolve_reference_metadata`.
-  - [ ] **1.2.3** Implementar `merge_user_description`.
-  - [ ] **1.2.4** Implementar `build_reference_summary`.
-  - [ ] **1.2.5** Configurar cache em memória com TTL e pontos de extensão.
-- [ ] **1.3** Criar `app/utils/vision.py` com helper `analyze_reference_image`.
-- [ ] **1.4** Criar helper `upload_reference_image` em `app/utils/gcs.py`.
-- [ ] **1.5** Preparar testes unitários base (estrutura inicial).
+- [x] **1.1** Criar `app/schemas/reference_assets.py`
+  - [x] **1.1.1** Definir `ReferenceImageMetadata` com campos obrigatórios.
+  - [x] **1.1.2** Implementar métodos `model_dump(mode="json")` e `to_state_dict()`.
+- [x] **1.2** Criar `app/utils/reference_cache.py`
+  - [x] **1.2.1** Implementar `cache_reference_metadata`.
+  - [x] **1.2.2** Implementar `resolve_reference_metadata`.
+  - [x] **1.2.3** Implementar `merge_user_description`.
+  - [x] **1.2.4** Implementar `build_reference_summary`.
+  - [x] **1.2.5** Configurar cache em memória com TTL e pontos de extensão.
+- [x] **1.3** Criar `app/utils/vision.py` com helper `analyze_reference_image`.
+- [x] **1.4** Criar helper `upload_reference_image` em `app/utils/gcs.py`.
+- [x] **1.5** Preparar testes unitários base (estrutura inicial).
+
+> **Notas Fase 1:** Cache configurável com backend em memória (TTL derivado de `config.reference_cache_ttl_seconds`), helper Vision com exceções específicas e upload para GCS realizando limpeza em caso de falhas/unsafe.
 
 ## Fase 2 – Backend: Upload & Preflight
 - [ ] **2.1** Implementar endpoint `POST /upload/reference-image`
