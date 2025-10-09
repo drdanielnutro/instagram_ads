@@ -12,26 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import logging
-from typing import Any, Optional
+import os
+from typing import Any, Literal, Optional
 
 # Note: Environment variables are already loaded in app/__init__.py
 # This ensures .env is loaded before any imports happen
 
 import google.auth
-from fastapi import FastAPI, HTTPException
-from fastapi import Body
+from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile, status
 from google.adk.cli.fast_api import get_fast_api_app
 from google.cloud import logging as google_cloud_logging
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider, export
 
-from app.utils.tracing import CloudTraceLoggingSpanExporter
-from app.utils.typing import Feedback
+from app.schemas.run_preflight import RunPreflightRequest
 from app.plan_models.fixed_plans import get_plan_by_format
 from app.format_specifications import get_specs_by_format, get_specs_json_by_format
 from app.config import config
+from app.utils.gcs import upload_reference_image as upload_reference_image_to_gcs
+from app.utils.reference_cache import (
+    build_reference_summary,
+    cache_reference_metadata,
+    merge_user_description,
+    resolve_reference_metadata,
+)
+from app.utils.tracing import CloudTraceLoggingSpanExporter
+from app.utils.typing import Feedback
+from app.utils.vision import (
+    ReferenceImageAnalysisError,
+    ReferenceImageUnsafeError,
+)
 
 try:
     from helpers.user_extract_data import extract_user_input
@@ -44,6 +55,14 @@ logging_client = google_cloud_logging.Client()
 logger = logging_client.logger(__name__)
 py_logger = logging.getLogger("preflight")
 logging.basicConfig(level=logging.INFO)
+
+MAX_REFERENCE_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
+ALLOWED_REFERENCE_IMAGE_TYPES = {
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "image/webp",
+}
 allow_origins = (
     os.getenv("ALLOW_ORIGINS", "").split(",") if os.getenv("ALLOW_ORIGINS") else None
 )
@@ -159,8 +178,149 @@ def _coerce_bool(value: Any) -> Optional[bool]:
     return None
 
 
+@app.post("/upload/reference-image")
+async def upload_reference_image_endpoint(
+    file: UploadFile = File(...),
+    type: Literal["character", "product"] = Form(...),
+    user_id: str | None = Form(default=None),
+    session_id: str | None = Form(default=None),
+) -> dict[str, Any]:
+    """Upload a reference image, analyse it and cache its metadata."""
+
+    if not config.enable_reference_images:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Reference image uploads are disabled.",
+        )
+
+    content_type = (file.content_type or "").lower()
+    if content_type not in ALLOWED_REFERENCE_IMAGE_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail="Unsupported file type. Use PNG, JPEG or WebP images.",
+        )
+
+    file_bytes = await file.read()
+    await file.close()
+
+    if not file_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Uploaded file is empty.",
+        )
+
+    if len(file_bytes) > MAX_REFERENCE_IMAGE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Reference image must be 5MB or smaller.",
+        )
+
+    try:
+        logger.log_struct(
+            {
+                "event": "reference_image_upload_start",
+                "filename": file.filename,
+                "content_type": content_type,
+                "reference_type": type,
+                "size_bytes": len(file_bytes),
+                "user_id": user_id,
+                "session_id": session_id,
+            },
+            severity="INFO",
+        )
+    except Exception:
+        pass
+
+    try:
+        metadata = await upload_reference_image_to_gcs(
+            file_bytes=file_bytes,
+            filename=file.filename or "reference-image",
+            content_type=content_type,
+            reference_type=type,
+            user_id=user_id,
+            session_id=session_id,
+        )
+    except ReferenceImageUnsafeError as exc:
+        try:
+            logger.log_struct(
+                {
+                    "event": "reference_image_upload_rejected",
+                    "reason": "safe_search_blocked",
+                    "reference_type": type,
+                    "user_id": user_id,
+                    "session_id": session_id,
+                },
+                severity="WARNING",
+            )
+        except Exception:
+            pass
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    except ReferenceImageAnalysisError as exc:
+        try:
+            logger.log_struct(
+                {
+                    "event": "reference_image_upload_failed",
+                    "reason": "vision_analysis_error",
+                    "reference_type": type,
+                    "user_id": user_id,
+                    "session_id": session_id,
+                },
+                severity="ERROR",
+            )
+        except Exception:
+            pass
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Vision analysis failed for the uploaded image.",
+        ) from exc
+    except Exception as exc:  # pragma: no cover - defensive
+        try:
+            logger.log_struct(
+                {
+                    "event": "reference_image_upload_failed",
+                    "reason": "unexpected_error",
+                    "reference_type": type,
+                    "user_id": user_id,
+                    "session_id": session_id,
+                },
+                severity="ERROR",
+            )
+        except Exception:
+            pass
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process reference image.",
+        ) from exc
+
+    cache_reference_metadata(metadata)
+
+    try:
+        logger.log_struct(
+            {
+                "event": "reference_image_upload_success",
+                "reference_id": metadata.id,
+                "reference_type": metadata.type,
+                "labels_count": len(metadata.labels),
+                "user_id": user_id,
+                "session_id": session_id,
+            },
+            severity="INFO",
+        )
+    except Exception:
+        pass
+
+    return {
+        "id": metadata.id,
+        "signed_url": metadata.signed_url,
+        "labels": metadata.labels,
+    }
+
+
 @app.post("/run_preflight")
-def run_preflight(payload: dict = Body(...)) -> dict:
+def run_preflight(request: RunPreflightRequest = Body(...)) -> dict:
     """Preflight: valida/normaliza entrada do usuário e retorna estado inicial.
 
     Aceita:
@@ -168,35 +328,42 @@ def run_preflight(payload: dict = Body(...)) -> dict:
       - payload do /run com newMessage.parts[0].text
     Retorna 422 com campos faltantes/invalidos, ou 200 com initial_state pronto
     para criar a sessão ADK e executar o pipeline em modo plano fixo.
+
+    Quando `ENABLE_REFERENCE_IMAGES` estiver desativada, quaisquer referências
+    enviadas serão ignoradas e o comportamento permanecerá compatível com a
+    versão anterior do endpoint.
     """
     if extract_user_input is None:
         raise HTTPException(status_code=500, detail="Preflight helper not available.")
 
-    # Extrair texto do payload (compatível com /run e modo simples)
-    text = None
-    if isinstance(payload, dict):
-        text = payload.get("text")
-        if not text:
-            try:
-                parts = payload.get("newMessage", {}).get("parts", [])
-                if parts and isinstance(parts, list):
-                    text = parts[0].get("text")
-            except Exception:
-                text = None
+    text = request.resolve_text()
     if not text:
         raise HTTPException(status_code=400, detail="Payload must include 'text' or newMessage.parts[0].text")
+
+    raw_payload = request.raw_payload()
+    reference_images_payload = request.reference_images_payload()
+    reference_images_provided = any(
+        bool((reference_images_payload.get(key) or {}).get("id"))
+        for key in ("character", "product")
+    )
 
     # Log início do preflight
     try:
         logger.log_struct({
             "event": "preflight_start",
             "text_len": len(text or ""),
+            "reference_images_provided": reference_images_provided,
+            "reference_images_feature_enabled": config.enable_reference_images,
         }, severity="INFO")
     except Exception:
         pass
     # Mirror to console
     try:
-        py_logger.info("[preflight] start text_len=%s", len(text or ""))
+        py_logger.info(
+            "[preflight] start text_len=%s reference_images=%s",
+            len(text or ""),
+            reference_images_provided,
+        )
     except Exception:
         pass
 
@@ -346,9 +513,7 @@ def run_preflight(payload: dict = Body(...)) -> dict:
         "planning_mode": "fixed",
     }
 
-    force_flag_payload = None
-    if isinstance(payload, dict):
-        force_flag_payload = _coerce_bool(payload.get("force_storybrand_fallback"))
+    force_flag_payload = _coerce_bool(request.force_storybrand_fallback)
 
     force_flag_data = data.get("force_storybrand_fallback") if isinstance(data, dict) else None
     if not isinstance(force_flag_data, bool):
@@ -386,6 +551,60 @@ def run_preflight(payload: dict = Body(...)) -> dict:
         )
 
         initial_state["force_storybrand_fallback"] = bool(force_storybrand_fallback)
+
+    if config.enable_reference_images:
+        character_payload = reference_images_payload.get("character") or {}
+        product_payload = reference_images_payload.get("product") or {}
+
+        character_metadata = resolve_reference_metadata(character_payload.get("id"))
+        product_metadata = resolve_reference_metadata(product_payload.get("id"))
+
+        reference_images_state = {
+            "character": merge_user_description(
+                character_metadata, character_payload.get("user_description")
+            ),
+            "product": merge_user_description(
+                product_metadata, product_payload.get("user_description")
+            ),
+        }
+
+        initial_state["reference_images"] = reference_images_state
+
+        summary = build_reference_summary(reference_images_state, raw_payload)
+        initial_state["reference_image_summary"] = summary
+        initial_state["reference_image_character_summary"] = summary.get("character")
+        initial_state["reference_image_product_summary"] = summary.get("product")
+        initial_state["reference_image_safe_search_notes"] = summary.get(
+            "safe_search_notes"
+        )
+
+        try:
+            logger.log_struct(
+                {
+                    "event": "preflight_reference_images_resolved",
+                    "character_id": character_payload.get("id"),
+                    "product_id": product_payload.get("id"),
+                    "character_found": character_metadata is not None,
+                    "product_found": product_metadata is not None,
+                    "summary_character": summary.get("character"),
+                    "summary_product": summary.get("product"),
+                    "safe_search_notes": summary.get("safe_search_notes"),
+                },
+                severity="INFO",
+            )
+        except Exception:
+            pass
+    elif reference_images_provided:
+        try:
+            logger.log_struct(
+                {
+                    "event": "preflight_reference_images_ignored",
+                    "reason": "feature_flag_disabled",
+                },
+                severity="INFO",
+            )
+        except Exception:
+            pass
 
     response = {
         "success": True,
