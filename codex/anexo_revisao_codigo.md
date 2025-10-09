@@ -1,10 +1,10 @@
 # Anexo – Revisão de Código Implementado (Plano Validação Determinística)
 
-Estas instruções complementam `AGENTS.md` e são obrigatórias sempre que o Codex validar entregas concluídas do plano de Validação Determinística (`plano_validacao_json_v3.md`). Devem ser aplicadas após sincronizar o repositório com o trabalho executado pelo Codex Cloud ou qualquer outra fonte.
+Estas instruções complementam `AGENTS.md` e são obrigatórias sempre que o Codex validar entregas concluídas do plano de Validação Determinística (`imagem_roupa.md`). Devem ser aplicadas após sincronizar o repositório com o trabalho executado pelo Codex Cloud ou qualquer outra fonte.
 
 ## 1. Objetivo
 
-Garantir que cada fase concluída no checklist `checklist_plano_json_v3.md` foi implementada exatamente conforme o plano, observando:
+Garantir que cada fase concluída no checklist `imagem_roupa_checklist.md` foi implementada exatamente conforme o plano, observando:
 
 - Cobertura integral das subtarefas da fase.
 - Aderência ao design previsto e às diretrizes de `AGENTS.md`.
@@ -15,8 +15,8 @@ Garantir que cada fase concluída no checklist `checklist_plano_json_v3.md` foi 
 
 A auditoria deve ocorrer **fase a fase**. Para cada rodada:
 
-1. Identifique no `checklist_plano_json_v3.md` a fase/subtarefas marcadas como concluídas.
-2. Extraia do `plano_validacao_json_v3.md` o conteúdo correspondente à fase concluída.
+1. Identifique no `imagem_roupa_checklist.md` a fase/subtarefas marcadas como concluídas.
+2. Extraia do `imagem_roupa.md` o conteúdo correspondente à fase concluída.
 3. Audite o código-fonte real para validar a implementação contra o plano.
 4. Avalie testes, documentação, configurações e efeitos colaterais.
 5. Produza um relatório detalhado com achados e recomendações.
@@ -26,8 +26,8 @@ A auditoria deve ocorrer **fase a fase**. Para cada rodada:
 Antes de iniciar a revisão:
 
 - Leia `AGENTS.md` para contextualizar dependências, flags, testes e responsabilidades vigentes.
-- Abra `checklist_plano_json_v3.md` e identifique a última fase concluída.
-- Releia a seção correspondente em `plano_validacao_json_v3.md` (entregáveis, dependências, critérios, riscos).
+- Abra `imagem_roupa_checklist.md` e identifique a última fase concluída.
+- Releia a seção correspondente em `imagem_roupa.md` (entregáveis, dependências, critérios, riscos).
 - Sincronize o repositório (`git pull`) para trabalhar no commit mais recente após a entrega analisada.
 - Configure o ambiente de leitura (IDE, diff viewer, `rg`, etc.) para navegar pelos arquivos referenciados.
 
