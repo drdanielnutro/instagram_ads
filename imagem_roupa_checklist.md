@@ -35,13 +35,15 @@
 > **Notas Fase 2:** Endpoint valida tipo e tamanho (5 MB), cacheia metadados aprovados, e `/run_preflight` enriquece `initial_state` apenas quando a flag `ENABLE_REFERENCE_IMAGES` estiver ativa (logando quando ignorado).
 
 ## Fase 3 – Frontend (React + Vite)
-- [ ] **3.1** Criar componente `ReferenceUpload.tsx` com validações.
-- [ ] **3.2** Criar store/hook `useReferenceImages`.
-- [ ] **3.3** Atualizar `frontend/src/App.tsx`
-  - [ ] **3.3.1** Enviar uploads via `/upload/reference-image` usando `FormData`.
-  - [ ] **3.3.2** Incluir `reference_images` no payload de `handleSubmit` quando existir.
-- [ ] **3.4** Atualizar `frontend/src/components/InputForm.tsx` para usar o novo componente.
-- [ ] **3.5** Adicionar mensagens de feedback para uploads.
+- [x] **3.1** Criar componente `ReferenceUpload.tsx` com validações.
+- [x] **3.2** Criar store/hook `useReferenceImages`.
+- [x] **3.3** Atualizar `frontend/src/App.tsx`
+  - [x] **3.3.1** Enviar uploads via `/upload/reference-image` usando `FormData`.
+  - [x] **3.3.2** Incluir `reference_images` no payload de `handleSubmit` quando existir.
+- [x] **3.4** Atualizar `frontend/src/components/InputForm.tsx` para usar o novo componente.
+- [x] **3.5** Adicionar mensagens de feedback para uploads.
+
+> **Notas Fase 3:** Referências visuais agora contam com upload validado (tamanho/formato), armazenamento central via hook, payloads estendidos no `handleSubmit` e feedback de status direto no formulário (incluindo bloqueio enquanto o upload está em andamento).
 
 ## Fase 4 – Integração no Pipeline
 - [ ] **4.1.1** Atualizar prompts (`VISUAL_DRAFT`, `COPY_DRAFT`, `final_assembler`) com placeholders condicionais.

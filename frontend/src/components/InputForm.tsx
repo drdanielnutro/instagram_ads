@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowRight, FileText, LinkIcon, Target, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,18 +12,33 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Send } from "lucide-react";
+import { ReferenceUpload } from "@/components/ReferenceUpload";
+import type {
+  ReferenceImageType,
+  UseReferenceImagesReturn,
+} from "@/state/useReferenceImages";
 
 interface InputFormProps {
   onSubmit: (query: string) => void;
   isLoading: boolean;
   context?: "homepage" | "chat";
+  referenceImages?: UseReferenceImagesReturn;
+  userId?: string | null;
+  sessionId?: string | null;
 }
 
 const objetivoFinalOptions = ["agendamentos", "leads", "vendas", "contato"];
 
 const formatoAnuncioOptions = ["Feed", "Stories", "Reels"];
 
-export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFormProps) {
+export function InputForm({
+  onSubmit,
+  isLoading,
+  context = "homepage",
+  referenceImages,
+  userId,
+  sessionId,
+}: InputFormProps) {
   const [inputValue, setInputValue] = useState("");
   const [landingPageUrl, setLandingPageUrl] = useState("");
   const [perfilCliente, setPerfilCliente] = useState("");
@@ -33,6 +48,44 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
 
   const chatTextareaRef = useRef<HTMLTextAreaElement>(null);
   const landingPageRef = useRef<HTMLInputElement>(null);
+  const showReferenceUploads = context === "homepage" && Boolean(referenceImages);
+  const isSubmitDisabled = isLoading || Boolean(referenceImages?.isUploading);
+
+  const handleReferenceUpload = useCallback(
+    async (type: ReferenceImageType, file: File) => {
+      if (!referenceImages) {
+        return false;
+      }
+      return referenceImages.uploadReferenceImage({
+        type,
+        file,
+        userId,
+        sessionId,
+      });
+    },
+    [referenceImages, sessionId, userId],
+  );
+
+  const handleReferenceDescriptionChange = useCallback(
+    (type: ReferenceImageType, value: string) => {
+      referenceImages?.setUserDescription(type, value);
+    },
+    [referenceImages],
+  );
+
+  const handleReferenceRemoval = useCallback(
+    (type: ReferenceImageType) => {
+      referenceImages?.clearReferenceImage(type);
+    },
+    [referenceImages],
+  );
+
+  const handleReferenceValidationError = useCallback(
+    (type: ReferenceImageType, message: string | null) => {
+      referenceImages?.setError(type, message);
+    },
+    [referenceImages],
+  );
 
   useEffect(() => {
     if (context === "chat") {
@@ -60,7 +113,7 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
 
   const handleHomepageSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLoading) {
+    if (isSubmitDisabled) {
       return;
     }
 
@@ -270,15 +323,56 @@ export function InputForm({ onSubmit, isLoading, context = "homepage" }: InputFo
             />
           </div>
         </div>
+
+        {showReferenceUploads && referenceImages && (
+          <div className="rounded-xl border border-border/60 bg-gradient-to-br from-card/80 to-card/60 px-6 py-5 shadow-lg backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-xl">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-4">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold text-primary shadow-sm">
+                6
+              </span>
+              <div className="flex-1 space-y-1">
+                <h3 className="text-base font-semibold text-foreground/95">Passo 6 — Referências visuais (opcional)</h3>
+                <p className="text-sm text-muted-foreground">
+                  Faça upload de imagens aprovadas de personagem ou produto. Após o SafeSearch, usaremos as descrições para ajustar os prompts.
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-4">
+              <ReferenceUpload
+                type="character"
+                entry={referenceImages.character}
+                onUpload={file => handleReferenceUpload("character", file)}
+                onDescriptionChange={value => handleReferenceDescriptionChange("character", value)}
+                onRemove={() => handleReferenceRemoval("character")}
+                onValidationError={message => handleReferenceValidationError("character", message)}
+                disabled={isLoading}
+              />
+              <ReferenceUpload
+                type="product"
+                entry={referenceImages.product}
+                onUpload={file => handleReferenceUpload("product", file)}
+                onDescriptionChange={value => handleReferenceDescriptionChange("product", value)}
+                onRemove={() => handleReferenceRemoval("product")}
+                onValidationError={message => handleReferenceValidationError("product", message)}
+                disabled={isLoading}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mt-8 flex flex-col gap-4 rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 px-6 py-5 md:flex-row md:items-center md:justify-between shadow-sm">
         <p className="text-sm font-medium text-foreground/80">
           Campos deixados em branco serão completados pelo assistente com base nas melhores práticas do formato.
         </p>
+        {referenceImages?.isUploading && (
+          <p className="text-xs text-muted-foreground md:w-1/2">
+            Aguarde até que os uploads sejam concluídos para liberar a geração dos anúncios.
+          </p>
+        )}
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isSubmitDisabled}
           className="w-full gap-2 md:w-auto shadow-lg hover:shadow-xl transition-all min-w-[180px] group"
         >
           {isLoading ? (
