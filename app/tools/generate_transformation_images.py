@@ -12,12 +12,15 @@ from datetime import timedelta
 from io import BytesIO
 from typing import Any, Awaitable, Callable, Dict, Optional
 
+import requests
+
 from google import genai
 from google.genai import types
 from google.cloud import storage
 from PIL import Image
 
 from app.config import config
+from app.schemas.reference_assets import ReferenceImageMetadata
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +63,45 @@ ProgressCallback = Callable[[int, str], Awaitable[None] | None]
 class _UploadResult:
     gcs_uri: str
     signed_url: str
+
+
+def _load_reference_image(metadata: ReferenceImageMetadata) -> Image.Image:
+    """Load a reference image either from a signed URL or directly from GCS."""
+
+    if not metadata.gcs_uri:
+        raise ValueError("Reference metadata must include a GCS URI")
+
+    # Prefer signed URL when available to avoid requiring elevated permissions.
+    if metadata.signed_url:
+        try:
+            response = requests.get(metadata.signed_url, timeout=15)
+            response.raise_for_status()
+        except requests.RequestException as exc:  # pragma: no cover - depends on network
+            raise RuntimeError(
+                f"Failed to download reference image {metadata.id} via signed URL"
+            ) from exc
+        with BytesIO(response.content) as buffer:
+            image = Image.open(buffer)
+            return image.convert("RGB")
+
+    # Fallback to direct GCS access.
+    if not metadata.gcs_uri.startswith("gs://"):
+        raise RuntimeError(
+            f"Unsupported GCS URI for reference image {metadata.id}: {metadata.gcs_uri}"
+        )
+
+    bucket_path = metadata.gcs_uri[5:]
+    bucket_name, _, blob_name = bucket_path.partition("/")
+    if not bucket_name or not blob_name:
+        raise RuntimeError(
+            f"Invalid GCS URI for reference image {metadata.id}: {metadata.gcs_uri}"
+        )
+
+    blob = _storage_client.bucket(bucket_name).blob(blob_name)
+    data = blob.download_as_bytes()  # pragma: no cover - depends on GCS
+    with BytesIO(data) as buffer:
+        image = Image.open(buffer)
+        return image.convert("RGB")
 
 
 def _sanitize_segment(value: str, fallback: str) -> str:
@@ -214,6 +256,8 @@ async def generate_transformation_images(
     variation_idx: int,
     metadata: Dict[str, Any],
     progress_callback: Optional[ProgressCallback] = None,
+    reference_character: Optional[ReferenceImageMetadata] = None,
+    reference_product: Optional[ReferenceImageMetadata] = None,
 ) -> Dict[str, Dict[str, str]]:
     """Generate and upload the three transformation images for a single variation."""
 
@@ -230,8 +274,78 @@ async def generate_transformation_images(
 
     started_at = time.perf_counter()
 
+    character_image: Image.Image | None = None
+    product_image: Image.Image | None = None
+    character_load_error: str | None = None
+    product_load_error: str | None = None
+
+    if reference_character is not None:
+        try:
+            character_image = await asyncio.to_thread(
+                _load_reference_image, reference_character
+            )
+        except Exception as exc:  # pragma: no cover - network/GCS failures
+            character_load_error = str(exc)
+            logger.warning(
+                "Failed to load character reference %s: %s",
+                reference_character.id,
+                exc,
+                exc_info=True,
+            )
+
+    if reference_product is not None:
+        try:
+            product_image = await asyncio.to_thread(
+                _load_reference_image, reference_product
+            )
+        except Exception as exc:  # pragma: no cover - network/GCS failures
+            product_load_error = str(exc)
+            logger.warning(
+                "Failed to load product reference %s: %s",
+                reference_product.id,
+                exc,
+                exc_info=True,
+            )
+
+    character_labels = ""
+    character_summary = metadata.get("character_summary") if metadata else None
+    if reference_character is not None:
+        character_labels = ", ".join(reference_character.labels) or (
+            reference_character.user_description or reference_character.id
+        )
+        if not character_summary:
+            character_summary = reference_character.user_description or character_labels
+
+    product_labels = ""
+    product_summary = metadata.get("product_summary") if metadata else None
+    if reference_product is not None:
+        product_labels = ", ".join(reference_product.labels) or (
+            reference_product.user_description or reference_product.id
+        )
+        if not product_summary:
+            product_summary = reference_product.user_description or product_labels
+
     # Etapa 1 – estado atual
-    image_atual = await _call_model([prompt_atual])
+    prompt_estado_atual = prompt_atual
+    if reference_character is not None and character_image is not None:
+        prompt_estado_atual = config.image_current_prompt_template.format(
+            prompt_atual=prompt_atual,
+            character_labels=character_labels,
+            character_summary=character_summary or character_labels,
+        )
+    elif reference_product is not None and product_summary:
+        prompt_estado_atual = (
+            f"{prompt_atual} Highlight the approved product reference: {product_summary}."
+        )
+
+    stage_one_inputs: list[Any] = []
+    if character_image is not None:
+        stage_one_inputs.append(character_image)
+    if product_image is not None:
+        stage_one_inputs.append(product_image)
+    stage_one_inputs.append(prompt_estado_atual)
+
+    image_atual = await _call_model(stage_one_inputs)
     upload_atual = await _upload_image(
         image_atual,
         user_id=user_id,
@@ -246,7 +360,14 @@ async def generate_transformation_images(
     transform_prompt_inter = config.image_intermediate_prompt_template.format(
         prompt_intermediario=prompt_intermediario
     )
-    image_intermediario = await _call_model([image_atual, transform_prompt_inter])
+    stage_two_inputs: list[Any] = [image_atual]
+    if character_image is not None:
+        stage_two_inputs.append(character_image)
+    if product_image is not None:
+        stage_two_inputs.append(product_image)
+    stage_two_inputs.append(transform_prompt_inter)
+
+    image_intermediario = await _call_model(stage_two_inputs)
     upload_intermediario = await _upload_image(
         image_intermediario,
         user_id=user_id,
@@ -258,10 +379,27 @@ async def generate_transformation_images(
     await _notify(progress_callback, 2, "estado_intermediario")
 
     # Etapa 3 – aspiracional (usa imagem intermediária)
-    transform_prompt_asp = config.image_aspirational_prompt_template.format(
-        prompt_aspiracional=prompt_aspiracional
-    )
-    image_aspiracional = await _call_model([image_intermediario, transform_prompt_asp])
+    if reference_product is not None and product_image is not None:
+        transform_prompt_asp = (
+            config.image_aspirational_prompt_template_with_product.format(
+                prompt_aspiracional=prompt_aspiracional,
+                product_labels=product_labels,
+                product_summary=product_summary or product_labels,
+            )
+        )
+    else:
+        transform_prompt_asp = config.image_aspirational_prompt_template.format(
+            prompt_aspiracional=prompt_aspiracional
+        )
+
+    stage_three_inputs: list[Any] = [image_intermediario]
+    if product_image is not None:
+        stage_three_inputs.append(product_image)
+    if character_image is not None:
+        stage_three_inputs.append(character_image)
+    stage_three_inputs.append(transform_prompt_asp)
+
+    image_aspiracional = await _call_model(stage_three_inputs)
     upload_aspiracional = await _upload_image(
         image_aspiracional,
         user_id=user_id,
@@ -279,15 +417,37 @@ async def generate_transformation_images(
         elapsed,
     )
 
+    meta: Dict[str, Any] = {
+        "variation_idx": variation_idx,
+        "duration_seconds": elapsed,
+    }
+
+    if reference_character is not None:
+        meta.update(
+            {
+                "reference_character_id": reference_character.id,
+                "reference_character_used": character_image is not None,
+            }
+        )
+        if character_load_error:
+            meta["reference_character_error"] = character_load_error
+
+    if reference_product is not None:
+        meta.update(
+            {
+                "reference_product_id": reference_product.id,
+                "reference_product_used": product_image is not None,
+            }
+        )
+        if product_load_error:
+            meta["reference_product_error"] = product_load_error
+
     return {
         "estado_atual": upload_atual.__dict__,
         "estado_intermediario": upload_intermediario.__dict__,
         "estado_aspiracional": upload_aspiracional.__dict__,
-        "meta": {
-            "variation_idx": variation_idx,
-            "duration_seconds": elapsed,
-        },
+        "meta": meta,
     }
 
 
-__all__ = ["generate_transformation_images"]
+__all__ = ["generate_transformation_images", "_load_reference_image"]

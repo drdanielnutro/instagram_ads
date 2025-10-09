@@ -46,27 +46,29 @@
 > **Notas Fase 3:** Referências visuais agora contam com upload validado (tamanho/formato), armazenamento central via hook, payloads estendidos no `handleSubmit` e feedback de status direto no formulário (incluindo bloqueio enquanto o upload está em andamento).
 
 ## Fase 4 – Integração no Pipeline
-- [ ] **4.1.1** Atualizar prompts (`VISUAL_DRAFT`, `COPY_DRAFT`, `final_assembler`) com placeholders condicionais.
-  - [ ] **4.1.1.1** Ajustar `VISUAL_DRAFT`.
-  - [ ] **4.1.1.2** Ajustar `COPY_DRAFT`.
-  - [ ] **4.1.1.3** Ajustar `final_assembler`.
-- [ ] **4.1.2** Atualizar `ImageAssetsAgent` para reidratar metadados e registrar flags.
-- [ ] **4.1.3** Atualizar `generate_transformation_images` para aceitar referências opcionais e usar `_load_reference_image`.
-- [ ] **4.1.4** Introduzir novos templates em `app/config.py`.
-- [ ] **4.2.1** Garantir instruções de prompting quando personagem aprovado.
-  - [ ] **4.2.1.1** Preservar descrição do personagem.
-  - [ ] **4.2.1.2** Preservar características físicas nas três cenas.
-  - [ ] **4.2.1.3** Injetar mudança de expressão orientada.
-  - [ ] **4.2.1.4** Registrar emoção aplicada nos summaries.
-- [ ] **4.2.2** Adicionar bloco de verificação em Markdown (`if reference_image_character_summary`).
-- [ ] **4.3.1** Ajustar diretrizes quando apenas produto aprovado (prompts/copy/fallback).
-  - [ ] **4.3.1.1** Remover menções a personagem.
-  - [ ] **4.3.1.2** Adaptar `COPY_DRAFT`.
-  - [ ] **4.3.1.3** Documentar fallback textual.
-- [ ] **4.4.1** Configurar diretrizes para cenários com personagem + produto.
-- [ ] **4.4.2** Reforçar manutenção dos três prompts sequenciais.
-- [ ] **4.4.3** Confirmar aderência às instruções fixas.
-- [ ] **4.4.4** Atualizar referências de linha (`code_reviewer`, `code_refiner`, `final_assembler_instruction`).
+- [x] **4.1.1** Atualizar prompts (`VISUAL_DRAFT`, `COPY_DRAFT`, `final_assembler`) com placeholders condicionais.
+  - [x] **4.1.1.1** Ajustar `VISUAL_DRAFT`.
+  - [x] **4.1.1.2** Ajustar `COPY_DRAFT`.
+  - [x] **4.1.1.3** Ajustar `final_assembler`.
+- [x] **4.1.2** Atualizar `ImageAssetsAgent` para reidratar metadados e registrar flags.
+- [x] **4.1.3** Atualizar `generate_transformation_images` para aceitar referências opcionais e usar `_load_reference_image`.
+- [x] **4.1.4** Introduzir novos templates em `app/config.py`.
+- [x] **4.2.1** Garantir instruções de prompting quando personagem aprovado.
+  - [x] **4.2.1.1** Preservar descrição do personagem.
+  - [x] **4.2.1.2** Preservar características físicas nas três cenas.
+  - [x] **4.2.1.3** Injetar mudança de expressão orientada.
+  - [x] **4.2.1.4** Registrar emoção aplicada nos summaries.
+- [x] **4.2.2** Adicionar bloco de verificação em Markdown (`if reference_image_character_summary`).
+- [x] **4.3.1** Ajustar diretrizes quando apenas produto aprovado (prompts/copy/fallback).
+  - [x] **4.3.1.1** Remover menções a personagem.
+  - [x] **4.3.1.2** Adaptar `COPY_DRAFT`.
+  - [x] **4.3.1.3** Documentar fallback textual.
+- [x] **4.4.1** Configurar diretrizes para cenários com personagem + produto.
+- [x] **4.4.2** Reforçar manutenção dos três prompts sequenciais.
+- [x] **4.4.3** Confirmar aderência às instruções fixas.
+- [x] **4.4.4** Atualizar referências de linha (`code_reviewer`, `code_refiner`, `final_assembler_instruction`).
+
+> **Notas Fase 4:** Prompts passaram a registrar emoções explícitas (`Emotion:`) para auditoria, `ImageAssetsAgent` agrega flags `character_reference_used`/`product_reference_used` e expõe notas de SafeSearch nos summaries.
 
 ## Fase 5 – Observabilidade, Persistência e Sanitização
 - [ ] **5.1.1** Criar helper `sanitize_reference_images` em `persist_final_delivery`.

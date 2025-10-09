@@ -29,9 +29,10 @@ from google.adk.agents.invocation_context import InvocationContext
 from google.adk.events import Event, EventActions
 from google.adk.tools import google_search, FunctionTool
 from google.genai.types import Content, Part
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from .config import config
+from .schemas.reference_assets import ReferenceImageMetadata
 from .tools.generate_transformation_images import generate_transformation_images
 from .tools.web_fetch import web_fetch_tool
 from .utils.audit import append_delivery_audit_event
@@ -441,6 +442,45 @@ class ImageAssetsAgent(BaseAgent):
         state["image_assets_review"] = review
         state.pop("image_assets_review_failed", None)
 
+        reference_images_state = state.get("reference_images") or {}
+        character_metadata: ReferenceImageMetadata | None = None
+        product_metadata: ReferenceImageMetadata | None = None
+        reference_parse_errors: list[str] = []
+
+        if isinstance(reference_images_state, dict) and reference_images_state:
+            character_payload = reference_images_state.get("character") or None
+            if character_payload:
+                try:
+                    character_metadata = ReferenceImageMetadata.model_validate(
+                        character_payload
+                    )
+                except ValidationError as exc:
+                    reference_parse_errors.append(
+                        f"character reference invalid: {exc.errors()}"
+                    )
+            product_payload = reference_images_state.get("product") or None
+            if product_payload:
+                try:
+                    product_metadata = ReferenceImageMetadata.model_validate(
+                        product_payload
+                    )
+                except ValidationError as exc:
+                    reference_parse_errors.append(
+                        f"product reference invalid: {exc.errors()}"
+                    )
+
+        if reference_parse_errors:
+            review["issues"].extend(reference_parse_errors)
+            logger.warning(
+                "ImageAssetsAgent: invalid reference metadata detected: %s",
+                reference_parse_errors,
+            )
+
+        state["character_reference_used"] = False
+        state["product_reference_used"] = False
+
+        safe_search_notes = state.get("reference_image_safe_search_notes")
+
         raw_delivery = state.get("final_code_delivery")
 
         # Fallback: tentar ler do arquivo se não estiver no state
@@ -537,6 +577,14 @@ class ImageAssetsAgent(BaseAgent):
         summary: list[Dict[str, Any]] = []
         critical_errors: list[str] = []
         generated_any = False
+        character_reference_used_overall = False
+        product_reference_used_overall = False
+        emotion_pattern = re.compile(r"Emotion:\s*([A-Za-z ]+)", re.IGNORECASE)
+        emotion_fields = [
+            "prompt_estado_atual",
+            "prompt_estado_intermediario",
+            "prompt_estado_aspiracional",
+        ]
 
         for idx, variation in enumerate(variations):
             variation_number = idx + 1
@@ -558,6 +606,9 @@ class ImageAssetsAgent(BaseAgent):
                     "variation_index": idx,
                     "status": "skipped",
                     "missing_fields": missing_fields,
+                    "character_reference_used": False,
+                    "product_reference_used": False,
+                    "safe_search_notes": safe_search_notes,
                 })
                 review["issues"].append(
                     f"Variation {variation_number} skipped due to missing fields: {', '.join(missing_fields)}"
@@ -577,11 +628,36 @@ class ImageAssetsAgent(BaseAgent):
             async def progress_callback(stage_idx: int, stage_label: str) -> None:
                 await progress_queue.put((stage_idx, stage_label))
 
+            if character_metadata or product_metadata:
+                reference_assets: Dict[str, Any] = {}
+                if character_metadata:
+                    reference_assets["character"] = {
+                        "id": character_metadata.id,
+                        "gcs_uri": character_metadata.gcs_uri,
+                        "labels": character_metadata.labels,
+                        "user_description": character_metadata.user_description,
+                    }
+                if product_metadata:
+                    reference_assets["product"] = {
+                        "id": product_metadata.id,
+                        "gcs_uri": product_metadata.gcs_uri,
+                        "labels": product_metadata.labels,
+                        "user_description": product_metadata.user_description,
+                    }
+                if reference_assets:
+                    visual["reference_assets"] = reference_assets
+                else:
+                    visual.pop("reference_assets", None)
+            else:
+                visual.pop("reference_assets", None)
+
             metadata = {
                 "user_id": user_id,
                 "session_id": session_identifier,
                 "formato": variation.get("formato"),
                 "aspect_ratio": visual.get("aspect_ratio"),
+                "character_summary": state.get("reference_image_character_summary"),
+                "product_summary": state.get("reference_image_product_summary"),
             }
 
             task = asyncio.create_task(
@@ -592,6 +668,8 @@ class ImageAssetsAgent(BaseAgent):
                     variation_idx=idx,
                     metadata=metadata,
                     progress_callback=progress_callback,
+                    reference_character=character_metadata,
+                    reference_product=product_metadata,
                 )
             )
 
@@ -665,6 +743,9 @@ class ImageAssetsAgent(BaseAgent):
                     "variation_index": idx,
                     "status": "error",
                     "error": error_message,
+                    "character_reference_used": False,
+                    "product_reference_used": False,
+                    "safe_search_notes": safe_search_notes,
                 })
                 critical_errors.append(error_message)
                 review["issues"].append(
@@ -685,13 +766,50 @@ class ImageAssetsAgent(BaseAgent):
             visual["image_estado_intermediario_url"] = assets["estado_intermediario"].get("signed_url", "")
             visual["image_estado_aspiracional_gcs"] = assets["estado_aspiracional"]["gcs_uri"]
             visual["image_estado_aspiracional_url"] = assets["estado_aspiracional"].get("signed_url", "")
-            if "meta" in assets:
-                visual["image_generation_meta"] = assets["meta"]
+            assets_meta = assets.get("meta", {}) or {}
+            if assets_meta:
+                visual["image_generation_meta"] = assets_meta
+
+            character_used = bool(assets_meta.get("reference_character_used"))
+            product_used = bool(assets_meta.get("reference_product_used"))
+            character_reference_used_overall = (
+                character_reference_used_overall or character_used
+            )
+            product_reference_used_overall = (
+                product_reference_used_overall or product_used
+            )
+
+            reference_errors: Dict[str, Any] = {}
+            character_error = assets_meta.get("reference_character_error")
+            product_error = assets_meta.get("reference_product_error")
+            if character_error:
+                reference_errors["character"] = character_error
+                review["issues"].append(
+                    f"Falha ao carregar referência de personagem: {character_error}"
+                )
+            if product_error:
+                reference_errors["product"] = product_error
+                review["issues"].append(
+                    f"Falha ao carregar referência de produto: {product_error}"
+                )
+
+            emotions: Dict[str, str] = {}
+            for field in emotion_fields:
+                value = visual.get(field)
+                if isinstance(value, str):
+                    match = emotion_pattern.search(value)
+                    if match:
+                        emotions[field] = match.group(1).strip()
 
             summary.append({
                 "variation_index": idx,
                 "status": "ok",
                 "assets": assets,
+                "character_reference_used": character_used,
+                "product_reference_used": product_used,
+                "emotions": emotions,
+                "safe_search_notes": safe_search_notes,
+                "reference_errors": reference_errors or None,
             })
             generated_any = True
 
@@ -722,6 +840,8 @@ class ImageAssetsAgent(BaseAgent):
             )
             return
 
+        state["character_reference_used"] = character_reference_used_overall
+        state["product_reference_used"] = product_reference_used_overall
         state["image_assets"] = summary
 
         if critical_errors:
@@ -1098,6 +1218,13 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
     },
     "cta_instagram": "Saiba mais" | "Enviar mensagem" | "Ligar" | "Comprar agora" | "Cadastre-se"
   }
+  Referências aprovadas disponíveis:
+  - Personagem: {reference_image_character_summary}
+  - Produto/serviço: {reference_image_product_summary}
+  Diretrizes condicionais:
+  - Se houver personagem aprovado, alinhe a narrativa à descrição real e mantenha tom consistente com as imagens.
+  - Se somente o produto existir, destaque atributos reais e **não invente** personagens ou histórias não fornecidas.
+  - Quando ambos estiverem presentes, conecte persona e produto de forma coerente nas três variações.
 
 - COPY_QA:
   {
@@ -1108,14 +1235,29 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
 - VISUAL_DRAFT:
   {
     "visual": {
-      "descricao_imagem": "OBRIGATÓRIO: descreva em pt-BR uma sequência de três cenas numeradas (1, 2, 3) com a mesma persona vivenciando: 1) o estado atual com dor ou frustração específica, 2) o estado intermediário mostrando a decisão ou primeiro passo mantendo cenário/vestuário coerentes, 3) o estado aspiracional depois da transformação. Nunca mencione 'imagem única' nem omita cenas.",
-      "prompt_estado_atual": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 1 (estado atual), com emoção negativa clara, postura coerente e cenário alinhado ao problema, sempre com a mesma persona.",
-      "prompt_estado_intermediario": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 2 (estado intermediário), destacando o momento de ação ou decisão, mantendo persona, cenário e elementos visuais em transição positiva.",
-      "prompt_estado_aspiracional": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 3 (estado aspiracional), mostrando resultados visíveis, emoções positivas e ambiente coerente com o sucesso da mesma persona.",
+      "descricao_imagem": "OBRIGATÓRIO: descreva em pt-BR uma sequência de três cenas numeradas (1, 2, 3) com a mesma persona vivenciando: 1) o estado atual com dor ou frustração específica, 2) o estado intermediário mostrando a decisão ou primeiro passo mantendo cenário/vestuário coerentes, 3) o estado aspiracional depois da transformação. Nunca mencione 'imagem única' nem omita cenas. Inclua menções explícitas ao personagem/produto real quando `reference_images` estiverem disponíveis e registre notas do SafeSearch: {reference_image_safe_search_notes}.",
+      "prompt_estado_atual": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 1 (estado atual), com emoção negativa clara, postura coerente e cenário alinhado ao problema, sempre com a mesma persona. Se {reference_image_character_summary} existir, preserve traços físicos (tom de pele, cabelo, formato do rosto) e cite explicitamente que se trata da mesma pessoa. Termine com `Emotion: despair` para rastrear a expressão aplicada.",
+      "prompt_estado_intermediario": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 2 (estado intermediário), destacando o momento de ação ou decisão, mantendo persona, cenário e elementos visuais em transição positiva. Use `Emotion: determined` no final e, quando houver produto aprovado ({reference_image_product_summary}), destaque sua presença sem alterar identidade da persona.",
+      "prompt_estado_aspiracional": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 3 (estado aspiracional), mostrando resultados visíveis, emoções positivas e ambiente coerente com o sucesso da mesma persona. Se houver produto aprovado, instrua a cena a integrar o item real. Finalize com `Emotion: joyful` para permitir auditoria.",
       "aspect_ratio": "definido conforme especificação do formato"
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
   }
+
+  Referências visuais disponíveis:
+  - Personagem: {reference_image_character_summary}
+  - Produto: {reference_image_product_summary}
+  - SafeSearch: {reference_image_safe_search_notes}
+
+  ```markdown
+  if reference_image_character_summary:
+      prompt_visual = (
+          "Describe the same {reference_image_character_summary} person, preserve skin tone, hair texture, facial structure;"
+          " adapt expression to each stage (Emotion: despair → Emotion: determined → Emotion: joyful)."
+      )
+  else:
+      prompt_visual = original_visual_draft_instruction
+  ```
 
   Se qualquer campo do bloco "visual" ficar vazio, nulo ou repetir outra cena, regenere o fragmento antes de responder.
 
@@ -1578,11 +1720,24 @@ final_assembler_instruction = """
 
 Monte **3 variações** de anúncio combinando `approved_code_snippets`.
 
+Referências visuais aprovadas (aplicar somente quando disponíveis):
+- Personagem: {reference_image_character_summary} (GCS: {reference_images.character.gcs_uri}, Labels: {reference_images.character.labels}, Descrição: {reference_images.character.user_description})
+- Produto: {reference_image_product_summary} (GCS: {reference_images.product.gcs_uri}, Labels: {reference_images.product.labels}, Descrição: {reference_images.product.user_description})
+- SafeSearch: {reference_image_safe_search_notes}
+
 Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
 - "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
 - "formato": usar {formato_anuncio} especificado pelo usuário
 - "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
 - "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_intermediario", "prompt_estado_aspiracional", "aspect_ratio" } (sem duração - apenas imagens)
+  - Quando houver referências aprovadas, inclua `"reference_assets"` com:
+    ```json
+    {
+      "character": {"id": "...", "gcs_uri": "...", "labels": [...], "user_description": "..."},
+      "product": {"id": "...", "gcs_uri": "...", "labels": [...], "user_description": "..."}
+    }
+    ```
+    Remova entradas nulas para tipos não fornecidos e **nunca exponha `signed_url`**.
 - "cta_instagram": do COPY_DRAFT
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
@@ -1593,6 +1748,10 @@ Regras:
 - Se qualquer variação chegar sem descrição completa ou sem os três prompts de visual, gere o conteúdo faltante usando o contexto StoryBrand (mesma persona, cenas 1-3) antes de finalizar.
 - Não devolva prompts vazios; se não conseguir completar, pare e sinalize que o snippet VISUAL_DRAFT precisa ser refeito.
 - Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
+- Quando apenas o produto estiver aprovado, mantenha a narrativa centrada nele e evite criar personagens inexistentes.
+- Quando apenas o personagem estiver aprovado, preserve aparência física e cite a persona real nas descrições e prompts.
+- Quando ambos existirem, garanta interação coerente entre persona e produto em todas as variações.
+- Mantenha exatamente três prompts sequenciais (`estado_atual`, `estado_intermediario`, `estado_aspiracional`) alinhados às instruções fixas de `code_generator`, `code_reviewer` e `code_refiner`.
 - **Saída**: apenas JSON válido (sem markdown).
 """
 
