@@ -4,5 +4,6 @@ Contains Pydantic models for structured data validation.
 """
 
 from .storybrand import StoryBrandAnalysis
+from .reference_assets import ReferenceImageMetadata
 
-__all__ = ['StoryBrandAnalysis']
+__all__ = ["StoryBrandAnalysis", "ReferenceImageMetadata"]

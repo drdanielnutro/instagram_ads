@@ -86,6 +86,9 @@ class DevelopmentConfiguration:
     image_generation_max_retries: int = 3
     image_transformation_steps: int = 3
     image_signed_url_ttl: int = 60 * 60 * 24  # 24h
+    reference_cache_ttl_seconds: int = 60 * 60  # 1 hour
+    enable_reference_images: bool = False
+    reference_images_bucket: str | None = None
     image_intermediate_prompt_template: str = (
         "Transform this scene to show the immediate positive action: {prompt_intermediario}. "
         "Keep the same person, clothing, environment, framing and lighting. Show determination and focus."  # noqa: E501
@@ -174,3 +177,15 @@ if os.getenv("IMAGE_INTERMEDIATE_PROMPT_TEMPLATE"):
 
 if os.getenv("IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE"):
     config.image_aspirational_prompt_template = os.getenv("IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE")
+
+if os.getenv("REFERENCE_CACHE_TTL_SECONDS"):
+    try:
+        config.reference_cache_ttl_seconds = int(os.getenv("REFERENCE_CACHE_TTL_SECONDS"))
+    except ValueError:
+        pass
+
+if os.getenv("ENABLE_REFERENCE_IMAGES"):
+    config.enable_reference_images = os.getenv("ENABLE_REFERENCE_IMAGES").lower() == "true"
+
+if os.getenv("REFERENCE_IMAGES_BUCKET"):
+    config.reference_images_bucket = os.getenv("REFERENCE_IMAGES_BUCKET")
