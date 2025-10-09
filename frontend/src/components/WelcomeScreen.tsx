@@ -6,17 +6,24 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { InputForm } from "@/components/InputForm";
 import { WizardForm } from "@/components/WizardForm";
 import { isWizardEnabled } from "@/utils/featureFlags";
+import type { UseReferenceImagesReturn } from "@/state/useReferenceImages";
 
 interface WelcomeScreenProps {
   handleSubmit: (query: string) => void;
   isLoading: boolean;
   onCancel: () => void;
+  referenceImages: UseReferenceImagesReturn;
+  userId: string | null;
+  sessionId: string | null;
 }
 
 export function WelcomeScreen({
   handleSubmit,
   isLoading,
   onCancel,
+  referenceImages,
+  userId,
+  sessionId,
 }: WelcomeScreenProps) {
   const wizardEnabled = isWizardEnabled();
 
@@ -59,7 +66,14 @@ export function WelcomeScreen({
           }
           contentClassName="space-y-8 pb-8"
         >
-          <InputForm onSubmit={handleSubmit} isLoading={isLoading} context="homepage" />
+          <InputForm
+            onSubmit={handleSubmit}
+            isLoading={isLoading}
+            context="homepage"
+            referenceImages={referenceImages}
+            userId={userId}
+            sessionId={sessionId}
+          />
           {isLoading && (
             <div className="mt-6 flex justify-end">
               <Button

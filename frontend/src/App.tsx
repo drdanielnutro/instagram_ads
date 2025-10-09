@@ -5,6 +5,10 @@ import { AdsPreview } from "@/components/AdsPreview";
 import { Button } from "@/components/ui/button";
 import { ChatMessagesView } from "@/components/ChatMessagesView";
 import { isPreviewEnabled } from "@/utils/featureFlags";
+import {
+  useReferenceImages,
+  type ReferenceImagesRequestPayload,
+} from "@/state/useReferenceImages";
 
 type DisplayData = string | null;
 
@@ -133,6 +137,7 @@ export default function App() {
   const accumulatedTextRef = useRef("");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const previewEnabled = useMemo(() => isPreviewEnabled(), []);
+  const referenceImages = useReferenceImages();
   const handleClosePreview = useCallback(() => setShowPreview(false), []);
   const openPreview = useCallback(() => {
     if (!previewEnabled || !deliveryMeta?.ok || !userId || !sessionId) {
@@ -178,12 +183,19 @@ export default function App() {
     };
   }, []);
 
-  const runPreflight = useCallback(async (text: string): Promise<PreflightResult | null> => {
+  const runPreflight = useCallback(async (
+    text: string,
+    referenceImagesPayload: ReferenceImagesRequestPayload,
+  ): Promise<PreflightResult | null> => {
     try {
+      const payload: Record<string, unknown> = { text };
+      if (referenceImagesPayload) {
+        payload.reference_images = referenceImagesPayload;
+      }
       const resp = await fetch(`/api/run_preflight`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
+        body: JSON.stringify(payload)
       });
       if (resp.status === 422) {
         const detail = (await resp.json()) as { detail?: { message?: string; errors?: unknown } };
@@ -425,6 +437,7 @@ export default function App() {
 
     setIsLoading(true);
     try {
+      const referenceImagesPayload = referenceImages.getRequestPayload();
       // Create session if it doesn't exist
       let currentUserId = userId;
       let currentSessionId = sessionId;
@@ -435,7 +448,7 @@ export default function App() {
         // Tentar preflight para preparar estado inicial (plano fixo + specs por formato)
         let initialState: Record<string, unknown> = {};
         if (preflightEnabled) {
-          const preflight = await runPreflight(query);
+          const preflight = await runPreflight(query, referenceImagesPayload);
           if (preflight?.blocked) {
             setIsLoading(false);
             return; // Não segue para o ADK quando preflight inválido
@@ -471,21 +484,27 @@ export default function App() {
 
       // Send the message with retry logic
       const sendMessage = async () => {
+        const payload: Record<string, unknown> = {
+          appName: currentAppName,
+          userId: currentUserId,
+          sessionId: currentSessionId,
+          newMessage: {
+            parts: [{ text: query }],
+            role: "user"
+          },
+          streaming: false
+        };
+
+        if (referenceImagesPayload) {
+          payload.reference_images = referenceImagesPayload;
+        }
+
         const response = await fetch("/api/run_sse", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            appName: currentAppName,
-            userId: currentUserId,
-            sessionId: currentSessionId,
-            newMessage: {
-              parts: [{ text: query }],
-              role: "user"
-            },
-            streaming: false
-          }),
+          body: JSON.stringify(payload),
         });
 
         if (!response.ok) {
@@ -565,7 +584,16 @@ export default function App() {
       }]);
       setIsLoading(false);
     }
-  }, [appName, preflightEnabled, processSseEventData, runPreflight, sessionId, userId, createSession]);
+  }, [
+    appName,
+    preflightEnabled,
+    processSseEventData,
+    referenceImages,
+    runPreflight,
+    sessionId,
+    userId,
+    createSession,
+  ]);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -742,6 +770,9 @@ export default function App() {
               handleSubmit={handleSubmit}
               isLoading={isLoading}
               onCancel={handleCancel}
+              referenceImages={referenceImages}
+              userId={userId}
+              sessionId={sessionId}
             />
           ) : (
             <ChatMessagesView
