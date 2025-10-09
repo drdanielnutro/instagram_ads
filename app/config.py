@@ -86,9 +86,10 @@ class DevelopmentConfiguration:
     image_generation_max_retries: int = 3
     image_transformation_steps: int = 3
     image_signed_url_ttl: int = 60 * 60 * 24  # 24h
-    reference_cache_ttl_seconds: int = 60 * 60  # 1 hour
-    enable_reference_images: bool = False
-    reference_images_bucket: str | None = None
+    image_current_prompt_template: str = (
+        "Use the approved character reference to anchor identity (summary: {character_summary};"
+        " labels: {character_labels}). {prompt_atual}"
+    )
     image_intermediate_prompt_template: str = (
         "Transform this scene to show the immediate positive action: {prompt_intermediario}. "
         "Keep the same person, clothing, environment, framing and lighting. Show determination and focus."  # noqa: E501
@@ -97,6 +98,13 @@ class DevelopmentConfiguration:
         "Show the same person after some time has passed achieving the successful outcome: {prompt_aspiracional}. "
         "Preserve identity and core features while allowing improvements in environment, wardrobe and expression."  # noqa: E501
     )
+    image_aspirational_prompt_template_with_product: str = (
+        "Integrate the approved product reference ({product_summary}; labels: {product_labels}) into the success scene. "
+        "{prompt_aspiracional}"
+    )
+    reference_cache_ttl_seconds: int = 60 * 60  # 1 hour
+    enable_reference_images: bool = False
+    reference_images_bucket: str | None = None
 
 
 config = DevelopmentConfiguration()
@@ -172,11 +180,19 @@ if os.getenv("IMAGE_TRANSFORMATION_STEPS"):
 if os.getenv("IMAGE_SIGNED_URL_TTL"):
     config.image_signed_url_ttl = int(os.getenv("IMAGE_SIGNED_URL_TTL"))
 
+if os.getenv("IMAGE_CURRENT_PROMPT_TEMPLATE"):
+    config.image_current_prompt_template = os.getenv("IMAGE_CURRENT_PROMPT_TEMPLATE")
+
 if os.getenv("IMAGE_INTERMEDIATE_PROMPT_TEMPLATE"):
     config.image_intermediate_prompt_template = os.getenv("IMAGE_INTERMEDIATE_PROMPT_TEMPLATE")
 
 if os.getenv("IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE"):
     config.image_aspirational_prompt_template = os.getenv("IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE")
+
+if os.getenv("IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE_WITH_PRODUCT"):
+    config.image_aspirational_prompt_template_with_product = os.getenv(
+        "IMAGE_ASPIRATIONAL_PROMPT_TEMPLATE_WITH_PRODUCT"
+    )
 
 if os.getenv("REFERENCE_CACHE_TTL_SECONDS"):
     try:
