@@ -56,6 +56,20 @@ def test_persist_final_delivery_normalizes_and_updates_status(tmp_path, monkeypa
         ],
         "storybrand_gate_metrics": {"decision_path": "happy_path"},
         "storybrand_fallback_meta": {},
+        "reference_images": {
+            "character": {
+                "id": "ref-123",
+                "type": "character",
+                "gcs_uri": "gs://bucket/reference-images/ref-123",
+                "signed_url": "https://signed.example/ref-123",
+                "labels": ["model", "fashion"],
+                "safe_search_flags": {"adult": "VERY_UNLIKELY"},
+                "user_description": "Modelo com jaqueta vermelha",
+                "uploaded_at": "2025-03-01T12:00:00+00:00",
+                "raw_annotations": {"safe_search": {"adult": "VERY_UNLIKELY"}},
+                "access_token": "secret-token",
+            }
+        },
     }
 
     session = SimpleNamespace(id="sess-1", user_id="user-9", state=state)
@@ -84,4 +98,15 @@ def test_persist_final_delivery_normalizes_and_updates_status(tmp_path, monkeypa
     assert meta_path.exists()
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     assert meta["image_assets_review"]["grade"] == "skipped"
+    assert meta["reference_images_present"] is True
+    reference_meta = meta["reference_images"]["character"]
+    assert reference_meta["id"] == "ref-123"
+    assert "signed_url" not in reference_meta
+    assert "raw_annotations" not in reference_meta
+    assert "access_token" not in reference_meta
+    assert reference_meta["signed_url_ttl_seconds"] == 60 * 60 * 24
+    assert reference_meta["signed_url_expires_at"] == "2025-03-02T12:00:00+00:00"
+
+    status_reference = state["final_delivery_status"]["reference_images"]["character"]
+    assert status_reference == reference_meta
 
