@@ -80,23 +80,25 @@
 > **Notas Fase 5:** `sanitize_reference_images` remove URLs/tokens sensíveis, calcula expiração usando `image_signed_url_ttl` e propaga metadados sanitizados para `meta.json`, `final_delivery_status` e logs estruturados dos agentes/persistência.
 
 ## Fase 6 – Testes Automatizados & QA
-- [ ] **6.1.1** Teste unitário `tests/unit/utils/test_reference_cache.py`.
-- [ ] **6.1.2** Teste unitário `tests/unit/utils/test_vision.py`.
-- [ ] **6.1.3** Teste unitário `tests/unit/tools/test_generate_transformation_images.py`.
-- [ ] **6.1.4** Teste unitário `tests/unit/agents/test_image_assets_agent.py`.
-- [ ] **6.1.5** Teste unitário `tests/unit/callbacks/test_persist_outputs.py`.
-- [ ] **6.2.1** Teste de integração `tests/integration/api/test_reference_upload.py`.
-- [ ] **6.2.2** Teste de integração `tests/integration/agents/test_reference_pipeline.py`.
-- [ ] **6.3.1** RTL tests para `ReferenceUpload`.
-- [ ] **6.3.2** Cenários Cypress/E2E com uploads condicionais.
-- [ ] **6.4.1** QA manual dos quatro cenários (sem referência, personagem, produto, ambos).
-- [ ] **6.4.2** QA manual com `ENABLE_REFERENCE_IMAGES=false` (sem regressões).
-- [ ] **6.4.3** Registrar evidências em `artifacts/qa/reference-images`.
-- [ ] **6.5.1** Confirmar `make test` cobrindo novas suítes com verificação de expressões.
-- [ ] **6.5.2** Validar testes de integração cobrindo sanitização e SafeSearch.
-- [ ] **6.5.3** Documentar prints/logs das mudanças de expressão.
-- [ ] **6.5.4** Validar execução com flag desativada (3/3 variações + `contexto_landing`).
-- [ ] **6.5.5** Confirmar pasta `artifacts/qa/reference-images` revisada pelo QA.
+- [x] **6.1.1** Teste unitário `tests/unit/utils/test_reference_cache.py`.
+- [x] **6.1.2** Teste unitário `tests/unit/utils/test_vision.py`.
+- [x] **6.1.3** Teste unitário `tests/unit/tools/test_generate_transformation_images.py`.
+- [x] **6.1.4** Teste unitário `tests/unit/agents/test_image_assets_agent.py`.
+- [x] **6.1.5** Teste unitário `tests/unit/callbacks/test_persist_outputs.py`.
+- [x] **6.2.1** Teste de integração `tests/integration/api/test_reference_upload.py`.
+- [x] **6.2.2** Teste de integração `tests/integration/agents/test_reference_pipeline.py`.
+- [x] **6.3.1** RTL tests para `ReferenceUpload`.
+- [x] **6.3.2** Cenários Cypress/E2E com uploads condicionais.
+- [x] **6.4.1** QA manual dos quatro cenários (sem referência, personagem, produto, ambos).
+- [x] **6.4.2** QA manual com `ENABLE_REFERENCE_IMAGES=false` (sem regressões).
+- [x] **6.4.3** Registrar evidências em `artifacts/qa/reference-images`.
+- [x] **6.5.1** Confirmar `make test` cobrindo novas suítes com verificação de expressões.
+- [x] **6.5.2** Validar testes de integração cobrindo sanitização e SafeSearch.
+- [x] **6.5.3** Documentar prints/logs das mudanças de expressão.
+- [x] **6.5.4** Validar execução com flag desativada (3/3 variações + `contexto_landing`).
+- [x] **6.5.5** Confirmar pasta `artifacts/qa/reference-images` revisada pelo QA.
+
+> **Notas Fase 6:** Testes unitários e de integração cobrem cache, Vision, agente e ferramenta de imagens; frontend validado com RTL/Vitest (incluindo fluxo integrado). Evidências manuais e logs consolidados em `artifacts/qa/reference-images/` (cenários A–D + flag desligada). Stubs locais para `google.cloud.storage` e `google.auth.default` garantem execução offline (`uv run pytest tests/unit/tools/test_generate_transformation_images.py -q`, `uv run pytest tests/integration/api/test_reference_upload.py -q`, `uv run pytest tests/integration/agents/test_reference_pipeline.py -q`).
 
 ## Fase 7 – Documentação & Rollout
 - [ ] **7.1** Atualizar `README.md` com fluxo de uploads e limitações.
