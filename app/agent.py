@@ -682,6 +682,11 @@ class ImageAssetsAgent(BaseAgent):
                 "product_summary": state.get("reference_image_product_summary"),
             }
 
+            # Extract reference images from state (if present)
+            reference_images = state.get("reference_images", {})
+            reference_character = reference_images.get("character")
+            reference_product = reference_images.get("product")
+
             task = asyncio.create_task(
                 generate_transformation_images(
                     prompt_atual=visual["prompt_estado_atual"],

@@ -159,6 +159,28 @@ def persist_final_delivery(callback_context: Any) -> None:
             else:
                 data_obj = payload
 
+        # Include reference_assets in final delivery (if present)
+        reference_images = state.get("reference_images", {})
+        if reference_images and isinstance(data_obj, list):
+            # Sanitize reference metadata for JSON output
+            reference_assets = {}
+            for ref_type in ["character", "product"]:
+                ref_data = reference_images.get(ref_type)
+                if ref_data:
+                    # Only include safe metadata (exclude signed URLs with credentials)
+                    reference_assets[ref_type] = {
+                        "id": ref_data.get("id"),
+                        "gcs_uri": ref_data.get("gcs_uri"),
+                        "labels": ref_data.get("labels", []),
+                        "user_description": ref_data.get("user_description"),
+                    }
+
+            # Add reference_assets to each variation's visual section
+            if reference_assets:
+                for variation in data_obj:
+                    if isinstance(variation, dict) and "visual" in variation:
+                        variation["visual"]["reference_assets"] = reference_assets
+
         # Determine format for naming (best effort)
         fmt = state.get("formato_anuncio") or "unknown"
         if (fmt in ("", "unknown")) and isinstance(data_obj, list) and data_obj:

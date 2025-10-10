@@ -1,9 +1,16 @@
 {
-  "task_id": null,
-  "iteration": 1,
+  "task_id": "task_20251009_001",
+  "iteration": 2,
   "review_report": ".claude/results/reviewer-output.json",
-  "priority_fixes": [],
-  "time_budget": "1h",
+  "priority_fixes": [1, 2, 3, 4, 5],
+  "time_budget": "4-6h",
   "focus": "critical_and_high_priority",
-  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline"
+  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline. Backend core 100% mas 5 HIGH issues bloqueiam aprovação.",
+  "fix_summary": {
+    "issue_1": "google-cloud-vision não instalada → EXECUTAR 'uv sync'",
+    "issue_2": "Unit tests bloqueados por import errors → Fixar mocks e conftest",
+    "issue_3": "Frontend missing → CRIAR ReferenceUpload.tsx (~300 linhas)",
+    "issue_4": "Integration tests missing → CRIAR test_reference_upload.py, test_reference_pipeline.py (~400 linhas)",
+    "issue_5": "Prompts não usam references → INJETAR summaries em generate_transformation_images.py (~50 linhas)"
+  }
 }

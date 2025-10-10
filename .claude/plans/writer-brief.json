@@ -1,19 +1,90 @@
 {
-  "task_id": null,
-  "checklist_analysis": null,
+  "task_id": "task_20251009_001",
+  "checklist_analysis": ".claude/results/checklist-output.json",
   "requirements": {
-    "explicit": [],
-    "implicit": [],
-    "acceptance_criteria": []
+    "explicit": [
+      "Implementar sistema completo de referência de imagens (character/product)",
+      "Criar 5 módulos PHANTOM: app/schemas/reference_assets.py, app/utils/reference_cache.py, app/utils/vision.py, POST /upload/reference-image, upload_reference_image() em gcs.py",
+      "Adicionar google-cloud-vision>=3.4.0 ao pyproject.toml",
+      "Criar componente ReferenceUpload.tsx no frontend",
+      "Adicionar config properties: image_current_prompt_template, image_aspirational_prompt_template_with_product",
+      "Criar RunPreflightRequest Pydantic schema com campo reference_images opcional",
+      "Integrar referências no pipeline de geração (3 steps)",
+      "Implementar SafeSearch validation (rejeitar adult/violence >= LIKELY)",
+      "Cache thread-safe com TTL de 24h",
+      "Feature flag ENABLE_REFERENCE_IMAGES=false (default)",
+      "Corrigir 9 line number drifts",
+      "Campos opcionais para não quebrar API existente"
+    ],
+    "implicit": [
+      "Thread-safety no cache (asyncio.Lock ou threading.Lock)",
+      "Async/await para Vision API e GCS",
+      "Error handling robusto (timeouts, failures)",
+      "Logging estruturado",
+      "Sanitização de metadados antes de persistir",
+      "Validação de content-type (png/jpg/webp)",
+      "Limite de 10MB para uploads",
+      "Signed URLs com TTL de 24h",
+      "POST-processamento se LLM não retornar reference_assets",
+      "Graceful degradation quando feature flag desabilitada"
+    ],
+    "acceptance_criteria": [
+      "TODOS os 8 P0 issues RESOLVIDOS (PHANTOM modules criados e funcionais)",
+      "google-cloud-vision instalado e importável",
+      "POST /upload/reference-image aceita multipart/form-data e retorna JSON válido",
+      "SafeSearch rejeita uploads inapropriados (400 Bad Request)",
+      "Cache resolve referências corretamente (hit/miss)",
+      "run_preflight aceita reference_images e passa ao agent",
+      "generate_transformation_images usa referências nos prompts",
+      "final_delivery JSON inclui reference_assets",
+      "ReferenceUpload.tsx valida arquivos e mostra preview",
+      "Coverage ≥80% em módulos novos",
+      "Feature flag funciona (graceful degradation)",
+      "Testes unitários: test_vision.py, test_reference_cache.py, test_gcs.py",
+      "Testes integração: test_reference_upload.py, test_reference_pipeline.py",
+      "Linter e type checker passando",
+      "Documentação atualizada (CLAUDE.md, README.md)"
+    ]
   },
   "files_to_modify": {
-    "create": [],
-    "modify": [],
+    "create": [
+      "app/schemas/reference_assets.py",
+      "app/utils/reference_cache.py",
+      "app/utils/vision.py",
+      "frontend/src/components/ReferenceUpload.tsx",
+      "tests/unit/utils/test_vision.py",
+      "tests/unit/utils/test_reference_cache.py",
+      "tests/integration/api/test_reference_upload.py",
+      "tests/integration/agents/test_reference_pipeline.py"
+    ],
+    "modify": [
+      "pyproject.toml",
+      "app/config.py",
+      "app/server.py",
+      "app/agent.py",
+      "app/tools/generate_transformation_images.py",
+      "app/utils/gcs.py",
+      "app/callbacks/persist_outputs.py",
+      "frontend/src/App.tsx",
+      "CLAUDE.md",
+      "README.md"
+    ],
     "delete": []
   },
   "testing_requirements": {
     "coverage_target": 80,
-    "test_types": ["unit", "integration"]
+    "test_types": ["unit", "integration"],
+    "test_strategy": "Mockar Vision API com fixtures. Testes de integração podem usar 1 imagem real em modo skip-by-default.",
+    "performance_tests": "Vision API latency <2s p95, 100 concurrent uploads sem erros"
   },
-  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline"
+  "project_context": "Instagram Ads - Python FastAPI + ADK pipeline. Blast radius: ~700-900 linhas novas/modificadas em 15+ arquivos. Phase breakdown: 1) Foundation, 2) Backend Integration, 3) Frontend UI, 4) Testing, 5) Docs.",
+  "critical_notes": [
+    "google-cloud-vision DEVE ser instalado ANTES de qualquer implementação",
+    "Line number drift P1-002: run_preflight está em 162-260, NÃO 300-393",
+    "Use Grep/Read para verificar código atual, NÃO confie nos line numbers do plano",
+    "Cache DEVE ser thread-safe (asyncio.Lock recomendado)",
+    "SafeSearch threshold: rejeitar LIKELY ou VERY_LIKELY em adult/violence",
+    "Feature flag: usar ENABLE_REFERENCE_IMAGES (consistente com padrão existente)",
+    "Signed URL TTL (24h) deve igualar cache TTL"
+  ]
 }

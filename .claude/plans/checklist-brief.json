@@ -1,10 +1,45 @@
 {
-  "task_id": null,
-  "task_type": null,
-  "description": null,
+  "task_id": "task_20251009_001",
+  "task_type": "feature",
+  "description": "Implementar sistema completo de referência de imagens (character/product) para geração de ads no Instagram. Inclui: upload de imagens via frontend, análise com Vision AI (SafeSearch + Labels), armazenamento no GCS, cache em memória, integração no pipeline de geração de imagens (3 steps), e persistência de metadados. Corrigir 19 issues identificados no validation report (8 P0 críticos, 9 P1 high, 2 P2 low).",
   "context": {
     "project_info": "Instagram Ads - Python FastAPI + ADK pipeline",
-    "relevant_files": [],
-    "constraints": []
+    "relevant_files": [
+      "app/schemas/reference_assets.py",
+      "app/utils/reference_cache.py",
+      "app/utils/vision.py",
+      "app/utils/gcs.py",
+      "app/server.py",
+      "app/agent.py",
+      "app/config.py",
+      "app/tools/generate_transformation_images.py",
+      "app/callbacks/persist_outputs.py",
+      "frontend/src/components/ReferenceUpload.tsx",
+      "frontend/src/App.tsx",
+      "pyproject.toml"
+    ],
+    "constraints": [
+      "Não quebrar API existente (campos opcionais)",
+      "Manter coverage ≥80%",
+      "Seguir padrão de schemas/validators existentes",
+      "Criar TODOS os 5 módulos novos identificados como PHANTOM (P0)",
+      "Adicionar google-cloud-vision>=3.4.0 ao pyproject.toml",
+      "Implementar feature flag ENABLE_REFERENCE_IMAGES=false (default)",
+      "Thread-safe cache com TTL",
+      "Validar SafeSearch antes de aceitar uploads",
+      "Corrigir line number drifts (9 ocorrências P1)",
+      "Implementar graceful degradation (fallback to text-only)"
+    ],
+    "validation_report": "docs/backups/validation_report_imagem_roupa.md",
+    "critical_blockers": [
+      "P0-001: app/schemas/reference_assets.py (PHANTOM)",
+      "P0-002: app/utils/reference_cache.py (PHANTOM)",
+      "P0-003: app/utils/vision.py (PHANTOM)",
+      "P0-004: POST /upload/reference-image endpoint (PHANTOM)",
+      "P0-005: upload_reference_image() in gcs.py (PHANTOM)",
+      "P0-006: RunPreflightRequest schema (PHANTOM)",
+      "P0-007: Config properties (image_current_prompt_template, image_aspirational_prompt_template_with_product)",
+      "P0-008: ReferenceUpload.tsx component (PHANTOM)"
+    ]
   }
 }

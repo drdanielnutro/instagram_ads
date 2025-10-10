@@ -1,21 +1,36 @@
 {
-  "task_id": null,
-  "created_at": null,
-  "current_phase": null,
-  "iteration": 0,
-  "phases_completed": [],
-  "current_issues": {
-    "critical": 0,
-    "high": 0,
-    "medium": 0,
-    "low": 0
-  },
+  "task_id": "task_20251009_001",
+  "created_at": "2025-10-09T00:00:00Z",
+  "current_phase": "fixing",
+  "iteration": 2,
+  "phases_completed": [
+    {
+      "phase": "checklist",
+      "status": "incomplete",
+      "score": 0,
+      "note": "checklist-agent não gravou output completo, mas análise manual confirmou requisitos claros"
+    },
+    {
+      "phase": "implementation",
+      "status": "partial",
+      "self_score": 8,
+      "completion": "65%",
+      "note": "Backend core 100% (8 P0 resolvidos), frontend 0%, testes 40%, docs 0%"
+    },
+    {
+      "phase": "review",
+      "status": "needs_revision",
+      "score": 8.0,
+      "note": "5 HIGH issues: dependency não instalada, tests bloqueados, frontend missing, integration tests missing, prompts não consomem references"
+    }
+  ],
+  "current_issues": {"critical": 0, "high": 5, "medium": 7, "low": 0},
   "quality_scores": {
-    "completeness": null,
-    "correctness": null,
-    "security": null,
-    "quality": null,
-    "overall": null
+    "completeness": 7,
+    "correctness": 9,
+    "security": 9,
+    "quality": 9,
+    "overall": 8.0
   },
-  "next_action": null
+  "next_action": "fixing"
 }

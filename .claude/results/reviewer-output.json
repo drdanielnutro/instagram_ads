@@ -1,24 +1,309 @@
 {
   "agent": "reviewer-agent",
-  "verdict": null,
+  "verdict": "needs_revision",
   "overall_assessment": {
-    "summary": null,
-    "completeness_score": null,
-    "correctness_score": null,
-    "security_score": null,
-    "quality_score": null,
-    "overall_score": null
+    "summary": "Backend core implementation is production-ready with excellent code quality, comprehensive error handling, and robust validation. All 8 P0 PHANTOM issues resolved successfully. However, 5 HIGH-severity issues exist that prevent full approval: google-cloud-vision not installed (blocking runtime), unit tests blocked by import errors, missing frontend (critical UX gap), missing integration tests (deployment risk), and prompts don't consume reference summaries (breaks core feature). Implementation shows strong engineering discipline with feature flags, async safety, structured logging, and graceful degradation.",
+    "completeness_score": 7,
+    "correctness_score": 9,
+    "security_score": 9,
+    "quality_score": 9,
+    "overall_score": 8.0
   },
-  "acceptance_criteria_review": [],
-  "issues": [],
+  "acceptance_criteria_review": [
+    {
+      "criterion": "TODOS os 8 P0 issues RESOLVIDOS (PHANTOM modules criados e funcionais)",
+      "status": "met",
+      "notes": "EXCELLENT: All 8 P0 PHANTOM issues resolved. Created app/schemas/reference_assets.py (70 lines), app/utils/reference_cache.py (209 lines), app/utils/vision.py (178 lines). All imports working, modules structurally sound with type hints, docstrings, error handling."
+    },
+    {
+      "criterion": "google-cloud-vision instalado e importável",
+      "status": "partially_met",
+      "notes": "BLOCKING: Added to pyproject.toml dependencies but NOT installed in runtime (ModuleNotFoundError when testing). Requires 'uv sync' or 'make install' execution. Tests import with try/except fallback (good design) but runtime code will fail."
+    },
+    {
+      "criterion": "POST /upload/reference-image aceita multipart/form-data e retorna JSON válido",
+      "status": "met",
+      "notes": "EXCELLENT: Fully implemented at app/server.py:472-627 (~155 lines). Uses FastAPI UploadFile, Form params, validates content-type/size, integrates Vision API, uploads to GCS, caches metadata, returns structured JSON with reference_id, signed_url, labels."
+    },
+    {
+      "criterion": "SafeSearch rejeita uploads inapropriados (400 Bad Request)",
+      "status": "met",
+      "notes": "EXCELLENT: vision.analyze_reference_image raises ValueError if adult/violence >= LIKELY. Endpoint catches and returns HTTP 400 with detailed error. Threshold: UNSAFE_THRESHOLDS = [LIKELY, VERY_LIKELY]. Logging included."
+    },
+    {
+      "criterion": "Cache resolve referências corretamente (hit/miss)",
+      "status": "met",
+      "notes": "EXCELLENT: reference_cache.py implements async-safe caching with asyncio.Lock. resolve_reference_metadata handles cache miss/expiry correctly. 24h TTL matches signed URL. Structured logging for hit/miss/expiry. Helper functions: build_reference_summary, merge_user_description."
+    },
+    {
+      "criterion": "run_preflight aceita reference_images e passa ao agent",
+      "status": "met",
+      "notes": "EXCELLENT: RunPreflightRequest schema added with reference_images field (dict[str, ReferenceImageInput]). run_preflight resolves metadata from cache (lines 364-387), builds summaries, adds to initial_state (lines 403-405). Feature flag checked (config.enable_reference_images)."
+    },
+    {
+      "criterion": "generate_transformation_images usa referências nos prompts",
+      "status": "partially_met",
+      "notes": "MEDIUM GAP: Signature updated with reference_character/reference_product params (lines 217-218). Metadata extraction works (lines 296-301 add reference_used flags). BUT: No evidence that reference summaries are injected into actual prompts (prompt_atual, prompt_intermediario, prompt_aspiracional). Prompts may not use character/product context."
+    },
+    {
+      "criterion": "final_delivery JSON inclui reference_assets",
+      "status": "met",
+      "notes": "GOOD: persist_outputs.py modified (lines 84-104) to extract reference_images from state, sanitize (remove signed_url credentials), and inject into variation['visual']['reference_assets']. Structure matches plan expectation."
+    },
+    {
+      "criterion": "ReferenceUpload.tsx valida arquivos e mostra preview",
+      "status": "not_met",
+      "notes": "CRITICAL GAP: Frontend NOT implemented (0% completion). frontend/src/components/ReferenceUpload.tsx does not exist. Users cannot upload images via UI. Blocks end-to-end functionality. Backend API is ready but inaccessible to users."
+    },
+    {
+      "criterion": "Coverage ≥80% em módulos novos",
+      "status": "not_met",
+      "notes": "BLOCKING: Unit tests written (test_vision.py, test_reference_cache.py with 13 test cases) but cannot execute due to google-cloud-vision import errors. Coverage is 0% reported. Tests structurally correct with mocks, but blocked by dependency issue."
+    },
+    {
+      "criterion": "Feature flag funciona (graceful degradation)",
+      "status": "met",
+      "notes": "EXCELLENT: config.py added enable_reference_images (default=False). Upload endpoint returns HTTP 403 with clear message if disabled. run_preflight skips reference processing if flag disabled. Safe rollback mechanism. No breaking changes to existing API."
+    },
+    {
+      "criterion": "Testes unitários passando",
+      "status": "not_met",
+      "notes": "BLOCKING: 13 unit tests written but 0 executed. Import error: 'ModuleNotFoundError: No module named google' when running pytest. Tests use proper mocking but environment setup broken. Requires google-cloud-vision installation AND mock fixture adjustments."
+    },
+    {
+      "criterion": "Testes integração passando",
+      "status": "not_met",
+      "notes": "CRITICAL GAP: Integration tests NOT implemented (0/2 files). Missing test_reference_upload.py (API e2e flow), test_reference_pipeline.py (full preflight→agent→delivery flow). High deployment risk without e2e validation."
+    },
+    {
+      "criterion": "Linter e type checker passando",
+      "status": "partially_met",
+      "notes": "PARTIAL: Writer used py_compile for syntax validation (passed). Type hints present throughout (Dict, Optional, Literal, BaseModel). BUT: mypy/ruff not executed due to time constraints. No pyright/pyflakes output. Likely clean but unverified."
+    },
+    {
+      "criterion": "Documentação atualizada",
+      "status": "not_met",
+      "notes": "MEDIUM GAP: CLAUDE.md and README.md NOT updated (0% docs completion). Missing: feature overview, setup instructions for google-cloud-vision, env var ENABLE_REFERENCE_IMAGES, usage examples, troubleshooting. Code has excellent inline docs (docstrings) but no user-facing documentation."
+    }
+  ],
+  "issues": [
+    {
+      "id": 1,
+      "severity": "high",
+      "category": "correctness",
+      "title": "google-cloud-vision dependency not installed in runtime environment",
+      "description": "pyproject.toml includes 'google-cloud-vision>=3.4.0' but testing shows ModuleNotFoundError when importing. This means: 1) uv sync was not run after adding dependency, OR 2) tests are running in different venv. Runtime code (app/utils/vision.py lines 11-17) has try/except ImportError fallback (vision = None), but actual API calls at line 56 (vision.ImageAnnotatorClient()) will raise AttributeError: 'NoneType' object has no attribute 'ImageAnnotatorClient'. This is a BLOCKING runtime failure for upload endpoint.",
+      "location": {
+        "file": "pyproject.toml",
+        "line": 33
+      },
+      "recommendation": "Execute 'uv sync' in project root to install google-cloud-vision. Verify with: python3 -c 'from google.cloud import vision; print(vision.__version__)'. Remove try/except fallback in vision.py (lines 10-17) - if SDK missing, fail early with clear ImportError at module load time rather than AttributeError at runtime. Add CI check: 'make install && python -c \"import google.cloud.vision\"'.",
+      "blocking": true
+    },
+    {
+      "id": 2,
+      "severity": "high",
+      "category": "testing",
+      "title": "Unit tests blocked by import errors - zero coverage reported",
+      "description": "13 unit tests written (test_vision.py 8 tests, test_reference_cache.py 5 tests) but cannot execute due to 'ModuleNotFoundError: No module named google'. Tests use proper mocking (MagicMock, patch, pytest fixtures) but environment setup broken. Coverage shows 0% for new modules (vision, reference_cache, reference_assets). Writer-agent notes: 'Tests created but pytest has import issues with google-cloud-vision in test environment.' This is BLOCKING for code quality verification.",
+      "location": {
+        "file": "tests/unit/utils/test_vision.py",
+        "line": 15
+      },
+      "recommendation": "1) Install google-cloud-vision via 'uv sync'. 2) Add conftest.py fixture to mock Vision API client globally: @pytest.fixture(autouse=True) def mock_vision_client(monkeypatch). 3) Use pytest-mock or unittest.mock to patch 'google.cloud.vision.ImageAnnotatorClient' before tests run. 4) Run pytest with coverage: 'pytest --cov=app/utils --cov=app/schemas tests/unit/'. Target: ≥80% coverage on new modules. 5) Add to CI: 'make test-unit'.",
+      "blocking": true
+    },
+    {
+      "id": 3,
+      "severity": "high",
+      "category": "completeness",
+      "title": "Frontend not implemented - users cannot upload images",
+      "description": "ReferenceUpload.tsx component does NOT exist (0% frontend completion). Backend API POST /upload/reference-image is fully functional but inaccessible to users. Plan specified: 'Create dedicated component frontend/src/components/ReferenceUpload.tsx with file upload, preview, validation (~250-300 lines)'. Current state: only backend modules exist. This breaks end-to-end user flow: users cannot provide reference images for character/product, so feature is non-functional from UX perspective despite backend readiness.",
+      "location": {
+        "file": "frontend/src/components/ReferenceUpload.tsx",
+        "line": null
+      },
+      "recommendation": "CREATE frontend/src/components/ReferenceUpload.tsx with: 1) File upload input (accept='image/png,image/jpeg,image/webp', max 10MB). 2) Client-side validation (size, type). 3) Image preview (FileReader). 4) POST to /upload/reference-image with FormData. 5) Display returned labels, safe_search_flags. 6) Pass reference_id to parent (onUploadComplete callback). 7) UPDATE frontend/src/App.tsx to integrate ReferenceUpload before form submission. 8) Pass reference_images dict to /run_preflight payload. Estimate: ~300 lines total (component + integration).",
+      "blocking": true
+    },
+    {
+      "id": 4,
+      "severity": "high",
+      "category": "testing",
+      "title": "Integration tests missing - deployment risk",
+      "description": "Integration tests NOT implemented (0/2 critical test files). Missing: 1) test_reference_upload.py - e2e test for POST /upload/reference-image with real/mocked multipart upload, SafeSearch validation, GCS upload, cache storage. 2) test_reference_pipeline.py - full flow test: upload → run_preflight (with reference_images) → agent execution → generate_transformation_images → persist_outputs → final JSON includes reference_assets. Without these, high risk of integration bugs: Vision API auth failures, GCS permissions, cache concurrency issues, state propagation breaks.",
+      "location": {
+        "file": "tests/integration/api/test_reference_upload.py",
+        "line": null
+      },
+      "recommendation": "CREATE integration tests: 1) test_reference_upload.py: test_upload_valid_image, test_upload_unsafe_image_rejected, test_upload_invalid_type_rejected, test_feature_flag_disabled_returns_403, test_cache_stores_metadata. 2) test_reference_pipeline.py: test_full_preflight_with_references, test_prompts_include_reference_summaries, test_final_json_includes_reference_assets. Use pytest fixtures for sample images (binary data), mock Vision API with safe/unsafe responses, mock GCS upload. Run with: 'pytest tests/integration/'. Estimate: ~400 lines total.",
+      "blocking": true
+    },
+    {
+      "id": 5,
+      "severity": "high",
+      "category": "correctness",
+      "title": "Prompts may not consume reference summaries - core feature incomplete",
+      "description": "generate_transformation_images signature updated to accept reference_character and reference_product params (lines 217-218). Metadata extraction works (lines 296-301 set reference_used flags). State includes reference_image_character_summary and reference_image_product_summary (app/server.py lines 404-405). BUT: No evidence that these summaries are injected into prompt_atual, prompt_intermediario, prompt_aspiracional strings. Config properties image_current_prompt_template and image_aspirational_prompt_template_with_product exist (lines 98-101) but grep shows NO usage in generate_transformation_images.py. This means: reference context may not reach Imagen prompts, breaking core requirement 'use character/product in generated images'.",
+      "location": {
+        "file": "app/tools/generate_transformation_images.py",
+        "line": 217
+      },
+      "recommendation": "MODIFY generate_transformation_images.py: 1) Extract reference summaries from metadata: character_labels = reference_character.get('labels') if reference_character else []. 2) Apply config templates: if reference_character: prompt_atual = config.image_current_prompt_template.format(character_labels=', '.join(character_labels), prompt_atual=prompt_atual). 3) Similarly for prompt_aspiracional with product. 4) Log injected prompts: logger.info('Prompts with references', extra={'prompt_atual_final': prompt_atual}). 5) Add test: test_prompts_include_reference_labels. Verify Imagen API receives modified prompts. Estimate: ~50 lines.",
+      "blocking": true
+    },
+    {
+      "id": 6,
+      "severity": "medium",
+      "category": "quality",
+      "title": "vision.py fallback allows silent failures at runtime",
+      "description": "vision.py lines 10-17 use try/except ImportError to set vision = None if google-cloud-vision not installed. This is defensive but DANGEROUS: at runtime, line 56 calls vision.ImageAnnotatorClient() which will raise AttributeError: 'NoneType' object has no attribute 'ImageAnnotatorClient'. Error message is cryptic and doesn't indicate missing dependency. Better approach: fail early at import time with clear message.",
+      "location": {
+        "file": "app/utils/vision.py",
+        "line": 10
+      },
+      "recommendation": "REMOVE try/except fallback. Let ImportError propagate at module load time with clear traceback. If google-cloud-vision missing, app won't start (good - fail fast). Add startup check in app/server.py: if config.enable_reference_images and not hasattr(vision, 'ImageAnnotatorClient'): raise RuntimeError('google-cloud-vision not installed. Run: uv sync'). This gives clear actionable error message.",
+      "blocking": false
+    },
+    {
+      "id": 7,
+      "severity": "medium",
+      "category": "completeness",
+      "title": "Documentation not updated - missing setup and usage instructions",
+      "description": "CLAUDE.md and README.md NOT updated (0% docs completion). Users/developers don't know: 1) How to install google-cloud-vision. 2) How to set ENABLE_REFERENCE_IMAGES env var. 3) How to authenticate with Vision API (GOOGLE_APPLICATION_CREDENTIALS). 4) Usage examples (upload, preflight with references). 5) Troubleshooting (SafeSearch rejection, cache expiry, GCS permissions). Code has excellent inline docstrings but no user-facing docs.",
+      "location": {
+        "file": "CLAUDE.md",
+        "line": null
+      },
+      "recommendation": "UPDATE documentation: 1) CLAUDE.md: Add section 'Reference Images Feature' (~100 lines) with overview, architecture (schemas, cache, Vision API), feature flag, troubleshooting. 2) README.md: Add 'Setup google-cloud-vision' section (~50 lines) with: pip install google-cloud-vision>=3.4.0, export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json, export ENABLE_REFERENCE_IMAGES=true. 3) Add usage examples: curl -X POST /upload/reference-image -F 'file=@image.jpg' -F 'type=character'. 4) Document cache TTL (24h), signed URL expiry, SafeSearch thresholds.",
+      "blocking": false
+    },
+    {
+      "id": 8,
+      "severity": "medium",
+      "category": "quality",
+      "title": "reference_cache.py uses datetime.utcnow() - deprecated in Python 3.12+",
+      "description": "reference_cache.py lines 36, 75, uses datetime.utcnow() which is deprecated in Python 3.12+ (PEP 615). Replacement: datetime.now(timezone.utc). Similarly test_reference_cache.py line 21. Not blocking but will cause deprecation warnings in newer Python versions.",
+      "location": {
+        "file": "app/utils/reference_cache.py",
+        "line": 36
+      },
+      "recommendation": "REPLACE datetime.utcnow() with datetime.now(timezone.utc) throughout. Import: from datetime import datetime, timedelta, timezone. Update lines: 36, 75, 181 (reference_cache.py), 21, 587 (test file, server.py). Add to linter config: warn on utcnow() usage. Ensures Python 3.12+ compatibility.",
+      "blocking": false
+    },
+    {
+      "id": 9,
+      "severity": "medium",
+      "category": "security",
+      "title": "Upload endpoint accepts user_id/session_id from client without validation",
+      "description": "upload_reference_image_endpoint accepts user_id and session_id as Form params (lines 476-477). These are used in GCS path construction (object_name = f'reference_images/{user_id}/{session_id}/...'). If malicious user sends user_id='../../../evil' or session_id='../../', path traversal may occur. GCS client may sanitize this but defense-in-depth requires validation. Also: no authentication - any client can upload to any user_id.",
+      "location": {
+        "file": "app/server.py",
+        "line": 476
+      },
+      "recommendation": "ADD validation: 1) Sanitize user_id/session_id: import re; if user_id and not re.match(r'^[a-zA-Z0-9_-]+$', user_id): raise HTTPException(400, 'Invalid user_id format'). 2) OR: derive user_id from authenticated session (if auth exists). 3) OR: use UUID instead of user-supplied strings. 4) Document that endpoint should be behind authentication. Add rate limiting (e.g., max 10 uploads per user per hour). Log user_id for audit trail.",
+      "blocking": false
+    },
+    {
+      "id": 10,
+      "severity": "low",
+      "category": "quality",
+      "title": "upload_reference_image endpoint has try/except pass blocks that swallow errors",
+      "description": "Lines 594-603 (Google Cloud Logging) and 605-613 (py_logger) have try/except Exception: pass blocks. This silently swallows logging errors, making debugging harder if logging is misconfigured. Better approach: log the logging error itself or use logging.exception().",
+      "location": {
+        "file": "app/server.py",
+        "line": 602
+      },
+      "recommendation": "REPLACE 'except Exception: pass' with 'except Exception as e: py_logger.warning(f\"Failed to log success event: {e}\")'. This preserves core functionality (upload succeeds even if logging fails) but alerts operators to logging issues. Apply to both try/except blocks (lines 602, 612).",
+      "blocking": false
+    },
+    {
+      "id": 11,
+      "severity": "low",
+      "category": "quality",
+      "title": "ReferenceImageMetadata.is_safe() duplicates validation logic from vision.py",
+      "description": "reference_assets.py lines 59-69 implement is_safe() method that checks adult/violence flags against ['LIKELY', 'VERY_LIKELY']. This duplicates logic from vision.py lines 79-81 (UNSAFE_THRESHOLDS check). DRY violation - if threshold changes, must update in 2 places.",
+      "location": {
+        "file": "app/schemas/reference_assets.py",
+        "line": 59
+      },
+      "recommendation": "REFACTOR: 1) Define UNSAFE_THRESHOLDS in app/config.py (or constants.py). 2) Import in both vision.py and reference_assets.py. 3) is_safe() calls: from app.config import UNSAFE_THRESHOLDS; return self.safe_search_flags.get('adult') not in UNSAFE_THRESHOLDS and .... 4) Single source of truth for thresholds. Add config property: safe_search_threshold: Literal['POSSIBLE', 'LIKELY', 'VERY_LIKELY'] = 'LIKELY'.",
+      "blocking": false
+    },
+    {
+      "id": 12,
+      "severity": "low",
+      "category": "quality",
+      "title": "Cache cleanup function cleanup_expired_cache is not called anywhere",
+      "description": "reference_cache.py lines 170-191 implement cleanup_expired_cache() to remove expired entries from cache. This is useful utility but NEVER CALLED in codebase. Cache will grow indefinitely until process restart. Memory leak potential for long-running servers.",
+      "location": {
+        "file": "app/utils/reference_cache.py",
+        "line": 170
+      },
+      "recommendation": "ADD background task to periodically call cleanup: 1) Use FastAPI BackgroundTasks or asyncio.create_task. 2) In app/server.py startup event: @app.on_event('startup') async def start_cache_cleanup(): while True: await asyncio.sleep(3600); await reference_cache.cleanup_expired_cache(). 3) OR: use APScheduler for cron-like scheduling. 4) Log cleanup results: logger.info(f'Cleaned up {count} expired cache entries'). Run every 1-4 hours.",
+      "blocking": false
+    }
+  ],
   "tests_review": {
-    "status": null,
-    "coverage": null,
-    "gaps": []
+    "status": "blocked",
+    "coverage": {
+      "lines": 0,
+      "note": "13 test cases written but 0 executed due to import errors. Structural coverage adequate (8 vision tests, 5 cache tests) but runtime coverage unknown."
+    },
+    "gaps": [
+      "Unit tests blocked by google-cloud-vision import error (HIGH)",
+      "Integration tests not implemented: test_reference_upload.py, test_reference_pipeline.py (HIGH)",
+      "No tests for generate_transformation_images reference parameter usage (MEDIUM)",
+      "No tests for persist_outputs reference_assets injection (MEDIUM)",
+      "No tests for run_preflight reference_images resolution (MEDIUM)",
+      "No frontend tests (ReferenceUpload.tsx not implemented) (HIGH)"
+    ]
   },
   "next_action": {
-    "action": null,
-    "priority_fixes": [],
-    "estimated_effort": null
+    "action": "send_to_fixer",
+    "priority_fixes": [1, 2, 3, 4, 5],
+    "estimated_effort": "4-6h",
+    "rationale": "5 HIGH-severity issues block approval: 1) Dependency not installed (30min: run uv sync + verify). 2) Unit tests blocked (1h: fix imports, add mocks, run pytest). 3) Frontend missing (3h: create ReferenceUpload.tsx, integrate App.tsx). 4) Integration tests missing (2h: create test files, mock Vision/GCS). 5) Prompts don't use references (1h: inject summaries into prompts). MEDIUM issues (6-12) are non-blocking but should be addressed in follow-up PR. Backend core is production-ready - only integration gaps remain."
+  },
+  "risk_assessment": {
+    "deployment_readiness": "NOT_READY",
+    "blocker_count": 5,
+    "rollback_safety": "EXCELLENT - Feature flag allows instant disable without code revert",
+    "data_loss_risk": "NONE - No schema migrations, no data deletion",
+    "security_risk": "LOW - SafeSearch validation robust, inputs validated (except user_id sanitization issue #9)",
+    "performance_impact": "LOW - Vision API async, cache thread-safe, signed URLs offload GCS reads",
+    "backward_compatibility": "EXCELLENT - All changes additive, no breaking API changes, existing tests unaffected"
+  },
+  "positive_highlights": [
+    "EXCELLENT engineering discipline: Feature flag (enable_reference_images) with graceful degradation, async-safe cache with asyncio.Lock, comprehensive error handling with structured logging",
+    "All 8 P0 PHANTOM issues resolved: Created 3 new modules (reference_assets.py, reference_cache.py, vision.py) with production-quality code (~457 lines)",
+    "Security: SafeSearch validation robust (LIKELY/VERY_LIKELY thresholds), signed URLs prevent credential exposure, feature flag prevents accidental enablement",
+    "Backend integration complete: POST /upload/reference-image (155 lines), run_preflight reference resolution (40 lines), generate_transformation_images signature updated, persist_outputs sanitizes reference_assets",
+    "Code quality: Comprehensive type hints (Pydantic BaseModel, Optional, Literal), detailed docstrings with examples, structured logging (extra fields for observability), unit test coverage targets (~13 test cases)",
+    "Config management: 3 new properties (image_current_prompt_template, image_aspirational_prompt_template_with_product, enable_reference_images), TTL constants (24h cache/signed URL alignment)",
+    "Sanitization: persist_outputs removes signed_url from final JSON (prevents credential leakage), cache stores only metadata (not raw images)",
+    "Atomicity: Upload endpoint is single transaction - Vision analysis fails → no GCS upload → no cache entry. Consistent state guaranteed"
+  ],
+  "summary_by_category": {
+    "completeness": {
+      "score": 7,
+      "gaps": "Backend 100% done (~620 lines). Frontend 0% (ReferenceUpload.tsx missing). Tests 40% (unit tests written but blocked, integration tests missing). Docs 0% (CLAUDE.md, README.md not updated)."
+    },
+    "correctness": {
+      "score": 9,
+      "issues": "Prompts may not consume reference summaries (issue #5 - HIGH). Dependency not installed blocks runtime (issue #1 - HIGH). All other backend logic correct: SafeSearch, cache, GCS upload, state propagation."
+    },
+    "security": {
+      "score": 9,
+      "issues": "Excellent SafeSearch validation (LIKELY threshold). Signed URLs prevent credential exposure. Minor: user_id not sanitized (issue #9 - MEDIUM), no authentication (documented limitation). Feature flag prevents unauthorized enablement."
+    },
+    "quality": {
+      "score": 9,
+      "issues": "Production-quality code: type hints, docstrings, error handling, logging. Minor: datetime.utcnow deprecated (issue #8), DRY violation in is_safe() (issue #11), cache cleanup not scheduled (issue #12). No code smells detected."
+    },
+    "testing": {
+      "score": 4,
+      "issues": "Unit tests blocked by imports (issue #2 - HIGH). Integration tests missing (issue #4 - HIGH). 0% runtime coverage despite 13 test cases written. Structural quality good (mocks, fixtures, parametrize) but execution blocked."
+    }
   }
 }
