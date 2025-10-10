@@ -1762,8 +1762,8 @@ final_assembler_instruction = """
 Monte **3 variações** de anúncio combinando `approved_code_snippets`.
 
 Referências visuais aprovadas (aplicar somente quando disponíveis):
-- Personagem: {reference_image_character_summary} (GCS: {reference_images.character.gcs_uri}, Labels: {reference_images.character.labels}, Descrição: {reference_images.character.user_description})
-- Produto: {reference_image_product_summary} (GCS: {reference_images.product.gcs_uri}, Labels: {reference_images.product.labels}, Descrição: {reference_images.product.user_description})
+- Personagem: {reference_image_character_summary} (GCS: {reference_image_character_gcs_uri}, Labels: {reference_image_character_labels}, Descrição: {reference_image_character_user_description})
+- Produto: {reference_image_product_summary} (GCS: {reference_image_product_gcs_uri}, Labels: {reference_image_product_labels}, Descrição: {reference_image_product_user_description})
 - SafeSearch: {reference_image_safe_search_notes}
 
 Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
