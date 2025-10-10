@@ -44,9 +44,13 @@ from .agents.gating import RunIfPassed, ResetDeterministicValidationState
 from .agents.storybrand_fallback import fallback_storybrand_pipeline
 from .agents.storybrand_gate import StoryBrandQualityGate
 from .callbacks.landing_page_callbacks import process_and_extract_sb7, enrich_landing_context_with_storybrand
-from .callbacks.persist_outputs import persist_final_delivery
+from .callbacks.persist_outputs import (
+    persist_final_delivery,
+    sanitize_reference_images,
+)
 from .schemas.storybrand import StoryBrandAnalysis
 from .validators.final_delivery_validator import FinalDeliveryValidatorAgent
+from .utils.logging_helpers import log_struct_event
 
 
 # ────────────────────────────────────────────────────────────────────────────────
@@ -428,10 +432,11 @@ class ImageAssetsAgent(BaseAgent):
         state = ctx.session.state
 
         # Debug: verificar o que está no state
-        import logging
-        logger = logging.getLogger(__name__)
-        logger.info(f"ImageAssetsAgent: Keys in state: {list(state.keys())}")
-        logger.info(f"ImageAssetsAgent: final_code_delivery exists: {'final_code_delivery' in state}")
+        logger.info("ImageAssetsAgent: Keys in state: %s", list(state.keys()))
+        logger.info(
+            "ImageAssetsAgent: final_code_delivery exists: %s",
+            "final_code_delivery" in state,
+        )
 
         review = {
             "grade": "skipped",
@@ -572,6 +577,23 @@ class ImageAssetsAgent(BaseAgent):
             getattr(ctx.session, "id", "")
             or state.get("session_id")
             or "nosession"
+        )
+
+        sanitized_references = sanitize_reference_images(state)
+        log_struct_event(
+            logger,
+            {
+                "event": "image_assets_generation_start",
+                "session_id": session_identifier,
+                "user_id": user_id,
+                "total_variations": total_variations,
+                "character_reference_available": character_metadata is not None,
+                "product_reference_available": product_metadata is not None,
+                "reference_images_present": bool(sanitized_references),
+                "reference_images": sanitized_references or None,
+                "reference_parse_errors": reference_parse_errors or None,
+                "safe_search_notes": safe_search_notes,
+            },
         )
 
         summary: list[Dict[str, Any]] = []
@@ -865,6 +887,25 @@ class ImageAssetsAgent(BaseAgent):
             detail="Resumo da geração de imagens",
             summary=summary,
             issues=review["issues"],
+        )
+
+        log_struct_event(
+            logger,
+            {
+                "event": "image_assets_generation_complete",
+                "session_id": session_identifier,
+                "user_id": user_id,
+                "grade": review["grade"],
+                "generated_variations": total_variations,
+                "generated_any": generated_any,
+                "critical_errors": critical_errors or None,
+                "character_reference_used": character_reference_used_overall,
+                "product_reference_used": product_reference_used_overall,
+                "reference_images_present": bool(sanitized_references),
+                "reference_images": sanitized_references or None,
+                "reference_parse_errors": reference_parse_errors or None,
+                "safe_search_notes": safe_search_notes,
+            },
         )
 
         deterministic_flag = bool(getattr(config, "enable_deterministic_final_validation", False))

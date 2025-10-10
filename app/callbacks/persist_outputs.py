@@ -4,14 +4,18 @@ import json
 import logging
 import os
 import time
+from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from google.cloud import storage
 
+from app.config import config
 from app.utils.delivery_status import clear_failure_meta
 from app.utils.json_tools import try_parse_json_string
 from app.utils.session_state import resolve_state, safe_session_id, safe_user_id
+from app.utils.logging_helpers import log_struct_event
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +36,79 @@ def _upload_to_gcs(bucket_uri: str, dest_path: str, data: bytes) -> str:
     return f"gs://{bucket_name}/{dest_path}"
 
 
+def _parse_uploaded_at(value: Any) -> datetime | None:
+    if isinstance(value, datetime):
+        return value.astimezone(timezone.utc)
+    if isinstance(value, str):
+        candidate = value.strip()
+        if not candidate:
+            return None
+        if candidate.endswith("Z"):
+            candidate = candidate[:-1] + "+00:00"
+        try:
+            parsed = datetime.fromisoformat(candidate)
+        except ValueError:
+            return None
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
+    return None
+
+
+def sanitize_reference_images(state: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Return a sanitized copy of reference image metadata for persistence/logging."""
+
+    if not isinstance(state, Mapping):
+        return {}
+
+    reference_images = state.get("reference_images")
+    if not isinstance(reference_images, Mapping):
+        return {}
+
+    sensitive_exact = {"signed_url"}
+    sensitive_suffixes = ("_token", "_tokens")
+    sensitive_prefixes = ("raw_",)
+
+    sanitized: dict[str, Any] = {}
+    ttl_seconds = int(getattr(config, "image_signed_url_ttl", 0) or 0)
+
+    for ref_type, raw_entry in reference_images.items():
+        if not isinstance(ref_type, str) or not isinstance(raw_entry, Mapping):
+            continue
+
+        entry: dict[str, Any] = {}
+        for key, value in raw_entry.items():
+            if not isinstance(key, str):
+                continue
+            if key in sensitive_exact:
+                continue
+            if key.startswith(sensitive_prefixes):
+                continue
+            if key.endswith(sensitive_suffixes):
+                continue
+            entry[key] = deepcopy(value)
+
+        uploaded_at_value = entry.get("uploaded_at")
+        uploaded_at_dt = _parse_uploaded_at(uploaded_at_value)
+        if uploaded_at_dt is not None:
+            entry["uploaded_at"] = uploaded_at_dt.isoformat()
+            if ttl_seconds:
+                expires_at = uploaded_at_dt + timedelta(seconds=ttl_seconds)
+                entry["signed_url_expires_at"] = expires_at.isoformat()
+        elif uploaded_at_value is not None and not isinstance(
+            uploaded_at_value, (str, datetime)
+        ):
+            entry["uploaded_at"] = str(uploaded_at_value)
+
+        if ttl_seconds:
+            entry["signed_url_ttl_seconds"] = ttl_seconds
+
+        if entry:
+            sanitized[ref_type] = entry
+
+    return sanitized
+
+
 def persist_final_delivery(callback_context: Any) -> None:
     """After-agent callback to persist the final JSON delivery locally and optionally to GCS.
 
@@ -44,6 +121,7 @@ def persist_final_delivery(callback_context: Any) -> None:
         state = resolve_state(callback_context)
         payload = state.get("final_code_delivery")
         deterministic_result = state.get("deterministic_final_validation")
+        sanitized_reference_images = sanitize_reference_images(state)
         normalized_payload: dict[str, Any] | None = None
         if isinstance(deterministic_result, dict):
             candidate = deterministic_result.get("normalized_payload")
@@ -161,6 +239,9 @@ def persist_final_delivery(callback_context: Any) -> None:
             "delivery_audit_trail": delivery_audit,
         }
 
+        if sanitized_reference_images:
+            state["final_delivery_status"]["reference_images"] = sanitized_reference_images
+
         if stage_name == "deterministic_final_validation":
             # Evita sinalizadores legados quando a validação determinística foi concluída.
             state.pop("final_validation_result_failed", None)
@@ -187,6 +268,14 @@ def persist_final_delivery(callback_context: Any) -> None:
                 "storybrand_fallback_meta": storybrand_fallback,
                 "delivery_audit_trail": delivery_audit,
             }
+            if sanitized_reference_images:
+                meta["reference_images"] = sanitized_reference_images
+                meta["reference_images_present"] = True
+            else:
+                meta["reference_images_present"] = False
+            meta["image_signed_url_ttl_seconds"] = getattr(
+                config, "image_signed_url_ttl", 0
+            )
             meta_dir = base_dir / "meta"
             _ensure_dir(meta_dir)
             meta_local = meta_dir / f"{session_id}.json"
@@ -204,6 +293,25 @@ def persist_final_delivery(callback_context: Any) -> None:
                     logger.error("Failed to upload final delivery meta to GCS: %s", me)
         except Exception as e:
             logger.error("Failed to persist final delivery meta: %s", e)
+
+        log_struct_event(
+            logger,
+            {
+                "event": "final_delivery_persisted",
+                "session_id": session_id,
+                "user_id": user_id,
+                "stage": stage_name,
+                "grade": grade,
+                "local_path": str(local_path),
+                "gcs_uri": gcs_uri or None,
+                "reference_images_present": bool(sanitized_reference_images),
+                "reference_images": sanitized_reference_images or None,
+                "image_signed_url_ttl_seconds": getattr(
+                    config, "image_signed_url_ttl", 0
+                ),
+            },
+            severity="INFO",
+        )
 
         clear_failure_meta(session_id, state=state)
     except Exception as e:

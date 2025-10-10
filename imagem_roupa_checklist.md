@@ -71,11 +71,13 @@
 > **Notas Fase 4:** Prompts passaram a registrar emoções explícitas (`Emotion:`) para auditoria, `ImageAssetsAgent` agrega flags `character_reference_used`/`product_reference_used` e expõe notas de SafeSearch nos summaries.
 
 ## Fase 5 – Observabilidade, Persistência e Sanitização
-- [ ] **5.1.1** Criar helper `sanitize_reference_images` em `persist_final_delivery`.
-- [ ] **5.1.2** Persistir metadados sanitizados em `meta["reference_images"]` e logs.
-- [ ] **5.1.3** Manter assinatura/comportamento atual do callback.
-- [ ] **5.2.1** Adicionar logs estruturados para upload, preflight, pipeline e persistência.
-- [ ] **5.3** Revisar e documentar política de TTL (`config.image_signed_url_ttl`).
+- [x] **5.1.1** Criar helper `sanitize_reference_images` em `persist_final_delivery`.
+- [x] **5.1.2** Persistir metadados sanitizados em `meta["reference_images"]` e logs.
+- [x] **5.1.3** Manter assinatura/comportamento atual do callback.
+- [x] **5.2.1** Adicionar logs estruturados para upload, preflight, pipeline e persistência.
+- [x] **5.3** Revisar e documentar política de TTL (`config.image_signed_url_ttl`).
+
+> **Notas Fase 5:** `sanitize_reference_images` remove URLs/tokens sensíveis, calcula expiração usando `image_signed_url_ttl` e propaga metadados sanitizados para `meta.json`, `final_delivery_status` e logs estruturados dos agentes/persistência.
 
 ## Fase 6 – Testes Automatizados & QA
 - [ ] **6.1.1** Teste unitário `tests/unit/utils/test_reference_cache.py`.
