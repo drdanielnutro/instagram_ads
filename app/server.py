@@ -14,7 +14,7 @@
 
 import logging
 import os
-from typing import Any, Literal, Optional
+from typing import Any, Literal, Mapping, Optional
 
 # Note: Environment variables are already loaded in app/__init__.py
 # This ensures .env is loaded before any imports happen
@@ -552,6 +552,20 @@ def run_preflight(request: RunPreflightRequest = Body(...)) -> dict:
 
         initial_state["force_storybrand_fallback"] = bool(force_storybrand_fallback)
 
+    initial_state.update(
+        {
+            "reference_image_character_summary": None,
+            "reference_image_product_summary": None,
+            "reference_image_safe_search_notes": None,
+            "reference_image_character_gcs_uri": "",
+            "reference_image_character_labels": "",
+            "reference_image_character_user_description": "",
+            "reference_image_product_gcs_uri": "",
+            "reference_image_product_labels": "",
+            "reference_image_product_user_description": "",
+        }
+    )
+
     if config.enable_reference_images:
         character_payload = reference_images_payload.get("character") or {}
         product_payload = reference_images_payload.get("product") or {}
@@ -576,6 +590,40 @@ def run_preflight(request: RunPreflightRequest = Body(...)) -> dict:
         initial_state["reference_image_product_summary"] = summary.get("product")
         initial_state["reference_image_safe_search_notes"] = summary.get(
             "safe_search_notes"
+        )
+
+        character_state = reference_images_state.get("character") or {}
+        product_state = reference_images_state.get("product") or {}
+
+        def _format_reference_value(
+            data: Mapping[str, Any] | None, key: str
+        ) -> str:
+            if not data:
+                return ""
+            value = data.get(key)
+            if value in (None, ""):
+                return ""
+            if isinstance(value, list):
+                return ", ".join(str(item) for item in value)
+            return str(value)
+
+        initial_state["reference_image_character_gcs_uri"] = (
+            character_state.get("gcs_uri") or ""
+        )
+        initial_state["reference_image_character_labels"] = _format_reference_value(
+            character_state, "labels"
+        )
+        initial_state[
+            "reference_image_character_user_description"
+        ] = _format_reference_value(character_state, "user_description")
+        initial_state["reference_image_product_gcs_uri"] = (
+            product_state.get("gcs_uri") or ""
+        )
+        initial_state["reference_image_product_labels"] = _format_reference_value(
+            product_state, "labels"
+        )
+        initial_state["reference_image_product_user_description"] = (
+            _format_reference_value(product_state, "user_description")
         )
 
         try:
