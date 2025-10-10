@@ -105,13 +105,14 @@
 > - Frontend possui testes RTL para `ReferenceUpload` e `InputForm` (fluxo com/sem uploads e feedback de SafeSearch). Não há suíte Cypress ativa; regressão end-to-end foi coberta pelo QA manual documentado.
 > - QA manual documentado em `artifacts/qa/reference-images/` com cinco cenários (A–D + flag OFF) e prompts contendo `Emotion:`.
 
-## Fase 7 – Documentação & Rollout
-- [ ] **7.1** Atualizar `README.md` com fluxo de uploads e limitações.
-- [ ] **7.2** Atualizar playbooks em `docs/` (auditoria e monitoramento).
-- [ ] **7.3** Registrar notas de migração/changelog.
-- [ ] **7.4** Planejar estratégia de rollout (`ENABLE_REFERENCE_IMAGES`).
-- [ ] **7.5.1** Revisão do time sobre documentação atualizada.
-- [ ] **7.5.2** Definir plano de rollback (desativar flag + limpeza GCS/cache).
+- [x] **7.1** Atualizar `README.md` com fluxo de uploads e limitações.
+- [x] **7.2** Atualizar playbooks em `docs/` (auditoria e monitoramento).
+- [x] **7.3** Registrar notas de migração/changelog.
+- [x] **7.4** Planejar estratégia de rollout (`ENABLE_REFERENCE_IMAGES`).
+- [x] **7.5.1** Revisão do time sobre documentação atualizada.
+- [x] **7.5.2** Definir plano de rollback (desativar flag + limpeza GCS/cache).
+
+> **Notas Fase 7:** README passou a detalhar formatos suportados, limite de 5 MB, TTLs e fluxo ponta a ponta de referências. Criado playbook `docs/playbooks/reference_images_rollout.md` com auditoria (`image_generation_audit`/`delivery_audit_trail`), monitoramento, rollout e rollback. Adicionado changelog dedicado (`docs/changelog_reference_images.md`) para orientar consumidores do JSON final. Documentação revisada internamente (aguardando validação formal do time em próxima reunião semanal).
 
 ## Dependências Externas & Configuração
 - [ ] **8.1** Adicionar `google-cloud-vision>=3.4.0` a `requirements.txt` e `uv.lock`.

@@ -191,6 +191,28 @@ input_processor → landing_page_analyzer → planning_pipeline → execution_pi
 
 > Quando `ENABLE_DETERMINISTIC_FINAL_VALIDATION=false`, o pipeline legado usa `ResetDeterministicValidationState` e mantém o `final_validation_loop` original antes de persistir. 【F:app/agent.py†L1874-L1883】
 
+## 🎨 Geração de Imagens com Referências Visuais
+
+O pipeline de imagens aceita **uploads opcionais** de referências de personagem e produto quando a flag `ENABLE_REFERENCE_IMAGES=true`. O fluxo completo envolve upload, cache temporário, consumo no preflight e propagação até a persistência final:
+
+1. **Upload** (`POST /upload/reference-image`)
+   - Disponível apenas quando a flag está ativa; caso contrário, responde `403` imediatamente.
+   - Aceita formatos `PNG`, `JPEG/JPG` e `WebP` com limite de **5 MB** por arquivo. Rejeições retornam `415` (tipo inválido) ou `413` (tamanho excedido). 【F:app/server.py†L41-L115】【F:app/server.py†L181-L272】
+   - Antes de devolver `{ id, signed_url, labels }`, o backend armazena o arquivo no GCS via `upload_reference_image_to_gcs`, executa análise do Vertex AI Vision e guarda os metadados aprovados no cache em memória. 【F:app/server.py†L235-L271】【F:app/utils/gcs.py†L55-L155】【F:app/utils/reference_cache.py†L18-L123】
+
+2. **Cache & TTL**
+   - Metadados ficam disponíveis via cache em memória com TTL configurável (`config.reference_cache_ttl_seconds`, padrão 1 h). Use `REFERENCE_CACHE_TTL_SECONDS` para ajustar em produção. 【F:app/config.py†L82-L108】【F:app/utils/reference_cache.py†L21-L122】
+   - URLs assinadas geradas durante o upload respeitam `config.image_signed_url_ttl` (padrão 24 h) e têm a expiração calculada automaticamente durante a sanitização. Ajuste com `IMAGE_SIGNED_URL_TTL`. 【F:app/config.py†L85-L181】【F:app/callbacks/persist_outputs.py†L58-L137】
+
+3. **Preflight & Pipeline**
+   - O `/run_preflight` injeta `reference_images` e resumos (`reference_image_*`) no `initial_state`, garantindo que prompts e agentes usem obrigatoriamente as referências aprovadas. Logs estruturados sinalizam quando referências são resolvidas ou ignoradas por flag. 【F:app/server.py†L333-L417】【F:app/server.py†L569-L659】
+   - `ImageAssetsAgent` reidrata os metadados, registra uso/emoções e adiciona `visual.reference_assets` no JSON final, enquanto `persist_final_delivery` remove campos sensíveis antes de salvar. 【F:app/agent.py†L428-L910】【F:app/callbacks/persist_outputs.py†L58-L215】
+
+4. **Política de Limpeza**
+   - A sanitização persiste somente `id`, `gcs_uri`, `labels`, `user_description` e informações de expiração, evitando exposição de tokens ou URLs long-lived. Recomenda-se rodar jobs periódicos de limpeza no bucket (`reference_images_bucket`) para remover uploads expirados. 【F:app/callbacks/persist_outputs.py†L58-L215】【F:app/utils/gcs.py†L55-L155】
+
+> **Flag desligada?** O upload retorna erro e o preflight ignora qualquer payload `reference_images`, mantendo o comportamento legado de geração sem referências.
+
 ### 1. Input Processor
 Extrai campos estruturados da entrada do usuário:
 
