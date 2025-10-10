@@ -86,6 +86,14 @@ async def test_agent_consumes_preflight_reference_state(reference_client, monkey
     assert summary["character_reference_used"] is True
     assert summary["product_reference_used"] is False
     assert "medical=LIKELY" in (summary.get("safe_search_notes") or "")
+    assert summary["emotions"] == {
+        "prompt_estado_atual": "Calm",
+        "prompt_estado_intermediario": "Hopeful",
+        "prompt_estado_aspiracional": "Triumphant",
+    }
     visual_state = json.loads(state["final_code_delivery"])[0]["visual"]
     assert visual_state["reference_assets"]["character"]["user_description"] == "Cliente sorridente"
     assert visual_state["image_generation_meta"]["reference_character_used"] is True
+    assert visual_state["prompt_estado_atual"].startswith("Emotion: ")
+    assert "Emotion:" in visual_state["prompt_estado_intermediario"]
+    assert "Emotion:" in visual_state["prompt_estado_aspiracional"]

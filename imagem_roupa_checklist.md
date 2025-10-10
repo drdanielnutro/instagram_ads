@@ -98,7 +98,12 @@
 - [x] **6.5.4** Validar execução com flag desativada (3/3 variações + `contexto_landing`).
 - [x] **6.5.5** Confirmar pasta `artifacts/qa/reference-images` revisada pelo QA.
 
-> **Notas Fase 6:** Testes unitários e de integração cobrem cache, Vision, agente e ferramenta de imagens; frontend validado com RTL/Vitest (incluindo fluxo integrado). Evidências manuais e logs consolidados em `artifacts/qa/reference-images/` (cenários A–D + flag desligada). Stubs locais para `google.cloud.storage` e `google.auth.default` garantem execução offline (`uv run pytest tests/unit/tools/test_generate_transformation_images.py -q`, `uv run pytest tests/integration/api/test_reference_upload.py -q`, `uv run pytest tests/integration/agents/test_reference_pipeline.py -q`).
+> **Notas Fase 6:**
+> - `tests/unit/utils/test_reference_cache.py` valida TTL, merge de descrições e resumo de SafeSearch.
+> - `tests/unit/utils/test_vision.py` cobre aprovação/reprovação de SafeSearch, incluindo captura de labels.
+> - `tests/unit/agents/test_image_assets_agent.py` assegura reidratação, flags e extração de emoções.
+> - Frontend possui testes RTL para `ReferenceUpload` e `InputForm` (fluxo com/sem uploads e feedback de SafeSearch). Não há suíte Cypress ativa; regressão end-to-end foi coberta pelo QA manual documentado.
+> - QA manual documentado em `artifacts/qa/reference-images/` com cinco cenários (A–D + flag OFF) e prompts contendo `Emotion:`.
 
 ## Fase 7 – Documentação & Rollout
 - [ ] **7.1** Atualizar `README.md` com fluxo de uploads e limitações.
