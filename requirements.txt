@@ -2,6 +2,7 @@
 google-genai
 google-auth
 google-cloud-storage
+google-cloud-vision>=3.4.0
 
 # Web fetching and parsing
 requests>=2.31.0
