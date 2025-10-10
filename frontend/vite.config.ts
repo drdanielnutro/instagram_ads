@@ -12,6 +12,11 @@ export default defineConfig({
       "@": path.resolve(new URL(".", import.meta.url).pathname, "./src"),
     },
   },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./tests/setup.ts",
+  },
   server: {
     // Makes the server accessible on the local network (e.g., for mobile testing)
     host: true,
