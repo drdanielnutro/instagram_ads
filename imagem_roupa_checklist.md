@@ -115,10 +115,15 @@
 > **Notas Fase 7:** README passou a detalhar formatos suportados, limite de 5 MB, TTLs e fluxo ponta a ponta de referências. Criado playbook `docs/playbooks/reference_images_rollout.md` com auditoria (`image_generation_audit`/`delivery_audit_trail`), monitoramento, rollout e rollback. Adicionado changelog dedicado (`docs/changelog_reference_images.md`) para orientar consumidores do JSON final. Documentação revisada internamente (aguardando validação formal do time em próxima reunião semanal).
 
 ## Dependências Externas & Configuração
-- [ ] **8.1** Adicionar `google-cloud-vision>=3.4.0` a `requirements.txt` e `uv.lock`.
-- [ ] **8.2** Confirmar reutilização de `google-cloud-storage` existente.
-- [ ] **8.3.1** Configurar `reference_cache_ttl_seconds` em `app/config.py`.
-- [ ] **8.3.2** Configurar `enable_reference_images` com default `False` documentado.
+- [x] **8.1** Adicionar `google-cloud-vision>=3.4.0` a `requirements.txt` e `uv.lock`.
+- [x] **8.2** Confirmar reutilização de `google-cloud-storage` existente.
+- [x] **8.3.1** Configurar `reference_cache_ttl_seconds` em `app/config.py`.
+- [x] **8.3.2** Configurar `enable_reference_images` com default `False` documentado.
+
+> **Notas Fase 8:**
+> - `pyproject.toml` já listava `google-cloud-vision>=3.4.0` (fonte usada pelo `uv sync` no `Makefile`), e o `uv.lock` correspondente mantém o mesmo spec; o `requirements.txt` segue apenas como referência legada/documental.
+> - Reaproveitamento de `google-cloud-storage` confirmado nas dependências primárias (`pyproject.toml`) sem alterações adicionais.
+> - Defaults permanecem `reference_cache_ttl_seconds = 3600` e `enable_reference_images = False` em `app/config.py`, com overrides por variáveis de ambiente ativos.
 
 ## Checklist Final do Plano
 - [ ] **9.1** Garantir verbos declarativos nos entregáveis.
