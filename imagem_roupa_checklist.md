@@ -143,7 +143,8 @@
 - [x] **10.3** Revisar Fase 4 (expressão e aparência) com exemplos.
 - [x] **10.4** Garantir critérios da Fase 6 (mudança de expressão + SafeSearch).
 - [x] **10.5** Revisar “Resumo das Atualizações de Prompt”.
-- [x] **10.6** Registrar aprovação das lideranças antes da implementação.
+- [ ] **10.6** Registrar aprovação das lideranças antes da implementação.
 
 > **Notas Fase 10 (11/10/2025)**: Checklist auditado e evidências registradas na seção “Auditoria de Conformidade” (imagem_roupa.md). Tabela de aprovação criada para coleta de assinaturas; responsável por implementação deve atualizar status antes de iniciar desenvolvimento.
+> **Notas Fase 10 (12/10/2025)**: Item 10.6 mantido pendente até que responsáveis de Produto, Backend e QA registrem aprovação nominal e data na tabela "Registro de Aprovação das Lideranças".
 

@@ -396,6 +396,7 @@ Sequenciar dessa forma evita dependências circulares (schemas e cache devem exi
 | 10.3 | Fase 4 documenta tabela comparativa 4.1–4.4 e exemplo guiado 4.6 ilustrando preservação de aparência + mudança de expressão. | ✅ | gpt-5-codex | 2025-10-11 |
 | 10.4 | Fase 6 define critérios 6.5.1–6.5.5 cobrindo mudança de expressão, SafeSearch e evidências QA. | ✅ | gpt-5-codex | 2025-10-11 |
 | 10.5 | "Resumo das Atualizações de Prompt" destaca reforços e compatibilidade com agentes fixos. | ✅ | gpt-5-codex | 2025-10-11 |
+| 10.6 | "Registro de Aprovação das Lideranças" permanece com responsáveis pendentes; aguardando assinaturas formais. | ⏳ | — | — |
 
 #### Registro de Aprovação das Lideranças
 
@@ -406,3 +407,4 @@ Sequenciar dessa forma evita dependências circulares (schemas e cache devem exi
 | Qualidade / QA | _(preencher após reunião de sign-off)_ | ⏳ | — | Confirmar que roteiro QA (Seção 6.4) cobre evidências solicitadas. |
 
 > **Próximo passo:** coletar assinaturas formais (atas ou formulário interno) e atualizar a tabela acima antes de liberar a fase de implementação.
+> **Observação:** desenvolvimento segue bloqueado até que todas as lideranças preencham nome, status ✅ e data na tabela de aprovação.
