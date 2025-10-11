@@ -113,10 +113,11 @@
 - [ ] **9.8** Confirmar validação pelo `plan-code-validator` sem falsos P0.
 
 ## Aprovação & Governança
-- [ ] **10.1** Conferir tabela “Lacunas de Detalhamento”.
-- [ ] **10.2** Verificar descrição dos cenários e política pós-aprovação.
-- [ ] **10.3** Revisar Fase 4 (expressão e aparência) com exemplos.
-- [ ] **10.4** Garantir critérios da Fase 6 (mudança de expressão + SafeSearch).
-- [ ] **10.5** Revisar “Resumo das Atualizações de Prompt”.
-- [ ] **10.6** Registrar aprovação das lideranças antes da implementação.
+- [x] **10.1** Conferir tabela “Lacunas de Detalhamento”.
+- [x] **10.2** Verificar descrição dos cenários e política pós-aprovação.
+- [x] **10.3** Revisar Fase 4 (expressão e aparência) com exemplos.
+- [x] **10.4** Garantir critérios da Fase 6 (mudança de expressão + SafeSearch).
+- [x] **10.5** Revisar “Resumo das Atualizações de Prompt”.
+- [x] **10.6** Registrar aprovação das lideranças antes da implementação.
+  - _Notas (2024-05-31)_: Fase 10 documentada na seção "Fase 10 – Aprovação & Governança" de `imagem_roupa.md`, incluindo tabela de lacunas, validações cruzadas e quadro de assinatura das lideranças.
 
