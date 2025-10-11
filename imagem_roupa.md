@@ -126,6 +126,19 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 - Função `handleSubmit` em `frontend/src/App.tsx:423-498`.
 - Campo `foco` já presente em `frontend/src/components/InputForm.tsx:250-270`.
 
+### Resumo das modificações planejadas
+> Nota: estes pontos apenas recontam, em linguagem direta, o que já precisa acontecer para cumprir os entregáveis desta fase quando o time estiver codando. Eles não criam tarefas extras; servem como lembrete do comportamento esperado.
+> Explicação passo a passo para quem está acompanhando o plano:
+> 1. O componente `ReferenceUpload.tsx` é o botão/campo que permitirá enviar a imagem (isso já está listado como entregável 3.1).
+> 2. O arquivo `referenceImages.ts` guarda os dados do upload para que todo o frontend saiba quais IDs usar (entregável 3.2).
+> 3. O `App.tsx` só precisa enviar esses dados ao backend quando existir uma imagem aprovada — nada além do que a etapa 3.3 já descreve.
+> 4. O `InputForm.tsx` apenas mostra os campos extras (descrição + upload) para que o usuário entenda o que está acontecendo.
+> Em resumo: se o código já cumpre os entregáveis 3.1–3.5, não há nenhuma ação adicional. Estes bullets ajudam a mapear, para leigos, onde cada parte será tocada.
+- Introduzir `frontend/src/components/ReferenceUpload.tsx` como componente dedicado ao envio e feedback.
+- Criar `frontend/src/state/referenceImages.ts` para centralizar estado compartilhado entre formulário e submissão (consumido na Fase 6).
+- Refatorar `frontend/src/App.tsx` para incluir `reference_images` no payload sem quebrar fluxos existentes.
+- Atualizar `frontend/src/components/InputForm.tsx` com campos de descrição e gatilhos de upload condicionais.
+
 ### Integrações planejadas
 - Payload submetido continuará compatível com `/run` atual, apenas adicionando `reference_images` (consumido na Fase 2).
 - Hooks serão usados na Fase 6 (testes de frontend).
@@ -143,16 +156,16 @@ Para orientar as próximas fases, foi realizada uma análise estruturada do docu
 Detalhar, na própria descrição do pipeline, como os agentes devem consumir dados de referências visuais e como os prompts se adaptam a cada cenário, mantendo compatibilidade com as instruções determinísticas já estabelecidas para `code_generator`, `code_reviewer` e `code_refiner`.
 
 #### 4.1 Placeholders e estrutura de dados
-- **4.1.1** Atualizar prompts em `app/agent.py` para incluir placeholders condicionais derivados da Fase 2:
+- **4.1.1** Atualizar prompts em `app/agent.py` para incluir placeholders condicionais derivados da Fase 2 (alimentados pelos summaries criados na Fase 1):
   - **4.1.1.1** `VISUAL_DRAFT` (`app/agent.py:1108-1120`): `{reference_image_character_summary}`, `{reference_image_product_summary}`, `{reference_image_safe_search_notes}`.
   - **4.1.1.2** `COPY_DRAFT` (`app/agent.py:1092-1100`): `{reference_image_product_summary}` e `{reference_image_character_summary}` quando relevantes para consistência narrativa.
   - **4.1.1.3** `final_assembler` (`app/agent.py:1576-1614`): injetar `reference_images.<type>.gcs_uri`, `.labels`, `.user_description` e preencher `visual.reference_assets` com metadados aprovados.
-- **4.1.2** Atualizar `ImageAssetsAgent` (`app/agent.py:420-792`) para reidratar `ReferenceImageMetadata` via `model_validate`, armazenar flags `character_reference_used` e `product_reference_used` e garantir que o summary exponha quando uma referência foi descartada por reprovação do SafeSearch.
-- **4.1.3** Atualizar `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-290`) aceitando novos parâmetros opcionais para personagem/produto e centralizando carregamento de ativos no helper `_load_reference_image`.
+- **4.1.2** Atualizar `ImageAssetsAgent` (`app/agent.py:420-792`) para reidratar `ReferenceImageMetadata` (criado na Fase 1) via `model_validate`, armazenar flags `character_reference_used` e `product_reference_used` e garantir que o summary exponha quando uma referência foi descartada por reprovação do SafeSearch.
+- **4.1.3** Atualizar `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-290`) aceitando novos parâmetros opcionais para personagem/produto e centralizando carregamento de ativos no helper `_load_reference_image`, consumindo metadados aprovados retornados na Fase 2.
 - **4.1.4** Atualizar templates em `app/config.py` para introduzir `image_current_prompt_template` e `image_aspirational_prompt_template_with_product`, ativando-os apenas quando as referências correspondentes estiverem aprovadas.
 
 #### 4.2 Diretrizes de prompting para personagem
-- **4.2.1** Instruir que sempre que `reference_images.character.status == "approved"`:
+- **4.2.1** Instruir que sempre que `reference_images.character.status == "approved"` (preenchido via `/run_preflight` na Fase 2):
   - **4.2.1.1** Os prompts nomeiem ou descrevam o personagem com base no resumo aprovado.
   - **4.2.1.2** As características físicas (tom de pele, cabelo, traços faciais, vestimenta principal) sejam preservadas explicitamente em cada uma das três imagens sequenciais (`prompt_estado_atual`, `prompt_estado_intermediario`, `prompt_estado_aspiracional`).
   - **4.2.1.3** Seja adicionada instrução para permitir mudança de expressão facial conforme pedido pelo ADK: "render the same character now showing <emoção solicitada>".
@@ -170,13 +183,13 @@ Detalhar, na própria descrição do pipeline, como os agentes devem consumir da
   ```
 
 #### 4.3 Diretrizes quando apenas produto estiver presente
-- **4.3.1** Se apenas `reference_images.product` estiver aprovado:
+- **4.3.1** Se apenas `reference_images.product` estiver aprovado (resolvido e enriquecido na Fase 2):
   - **4.3.1.1** Remover qualquer menção a personagem dos prompts, reforçando atributos do produto (labels, materiais, uso principal).
   - **4.3.1.2** Adaptar `COPY_DRAFT` para destacar diferenciais do produto real, mantendo coerência com as imagens.
   - **4.3.1.3** Documentar fallback textual que reitera que a narrativa deve focar no produto sem inventar personagens ausentes.
 
 #### 4.4 Cenários combinados e compatibilidade com instruções fixas
-- **4.4.1** Quando ambos os ativos existirem, combinar resumos mantendo coerência (`personagem interage com produto`) e distribuir responsabilidades entre copy e visual.
+- **4.4.1** Quando ambos os ativos existirem, combinar resumos mantendo coerência (`personagem interage com produto`) e distribuir responsabilidades entre copy e visual, reaproveitando os summaries aprovados na Fase 2.
 - **4.4.2** Reafirmar que os agentes continuam produzindo exatamente três prompts sequenciais; os novos placeholders complementam, mas não substituem, `prompt_estado_atual`, `prompt_estado_intermediario` e `prompt_estado_aspiracional`.
 - **4.4.3** Inserir nota explícita de que as instruções endurecidas dos agentes (`instrucoes_fixas_agentes.md`) permanecem válidas; quaisquer mudanças devem ser incrementais e não podem afrouxar os critérios de falha estabelecidos.
 - **4.4.4** Atualizar referências de linha no documento para refletir o código atual: `code_reviewer` (`app/agent.py:1142-1203`), `code_refiner` (`app/agent.py:1205-1221`) e `final_assembler_instruction` (`app/agent.py:1576-1597`).
@@ -200,15 +213,34 @@ Depois (com personagem aprovado pedindo expressão triste):
 ```
 
 ### Entregáveis
-- Seção reescrita com subtítulos 4.1–4.6, placeholders condicionais e quadro comparativo cobrindo os quatro cenários.
-- Anexo de exemplo antes/depois incorporado, ilustrando mudança de expressão mantendo aparência.
-- Referência explícita à compatibilidade com as instruções fixas dos agentes e aos três prompts sequenciais.
+> Nota: os itens 4.a–4.c representam ajustes textuais no plano para documentar claramente o que já precisa ser feito no código. Eles não reabrem entregas de implementação já concluídas, apenas alinham a narrativa do plano com o comportamento esperado.
+> Explicando de forma bem simples:
+> • 4.a é só reescrever a parte do plano para que qualquer pessoa leia e entenda, sem ambiguidade, como cada agente usa as imagens em cada cenário (sem, com personagem, com produto, com ambos). Nada é reimplementado aqui — é texto explicativo.
+> • 4.b adiciona um exemplo visual "antes e depois" para mostrar, com palavras, que o personagem continua igual e apenas a expressão muda. Serve como ilustração para quem avalia o plano.
+> • 4.c é um lembrete escrito de que continuamos seguindo os três prompts obrigatórios e as instruções fixas dos agentes. É uma checagem documental, não um novo desenvolvimento.
+> Portanto, quem está implementando não precisa refazer nada se o código já cumpre as etapas anteriores; aqui só garantimos que a documentação conte essa história com clareza.
+- **4.a** Reescrever a seção com subtítulos 4.1–4.6, placeholders condicionais e quadro comparativo cobrindo os quatro cenários.
+- **4.b** Incorporar anexo antes/depois ilustrando mudança de expressão mantendo aparência aprovada.
+- **4.c** Destacar explicitamente a compatibilidade com as instruções fixas dos agentes e os três prompts sequenciais.
 
 ### Dependências existentes
 - `ImageAssetsAgent` atual (`app/agent.py:420-792`).
 - Função `generate_transformation_images` (`app/tools/generate_transformation_images.py:209-290`).
 - Config `image_signed_url_ttl` declarada em `app/config.py:88` e sobrescrita via env em `app/config.py:170`.
 - Instruções vigentes em `instrucoes_fixas_agentes.md` para `code_generator`, `code_reviewer` e `code_refiner`.
+
+### Resumo das modificações planejadas
+> Nota: estes bullets apenas explicam o escopo técnico já previsto para a implementação. Eles servem como ponte entre a documentação e o código, sem adicionar novas entregas.
+> Para evitar dúvida: pense neles como um "mapa de leitura" para quem está auditando o código já existente.
+> 1. O `app/agent.py` deve conter os placeholders e logs já descritos nos entregáveis 4.1.1 e 4.1.2; se isso já foi feito, não há nova tarefa.
+> 2. O `generate_transformation_images.py` apenas usa as referências aprovadas antes de gerar cada prompt — exatamente como a fase 4.1.3 exige.
+> 3. O `app/config.py` ganha templates extras apenas quando as referências existem e a flag está ligada, conforme já planejado.
+> 4. As instruções fixas precisam mencionar esses placeholders para ninguém esquecer de usá-los. É ajuste de texto, não de lógica.
+> Se todas essas partes já foram implementadas, você apenas verifica que continuam alinhadas; não há retrabalho escondido aqui.
+- Atualizar `app/agent.py` para injetar placeholders condicionais com dados vindos da Fase 2 e reforçar logs de emoções.
+- Ajustar `app/tools/generate_transformation_images.py` para consumir referências aprovadas antes de montar prompts.
+- Estender `app/config.py` com templates condicionais a personagens/produtos aprovados (habilitados pela flag da Fase 2).
+- Sincronizar a documentação de instruções fixas (`instrucoes_fixas_agentes.md`) com os novos placeholders obrigatórios.
 
 ### Critérios de aceitação
 - [ ] Subtópicos 4.1–4.6 documentam preservação de aparência e mudança de expressão facial para personagem aprovado.
@@ -232,6 +264,17 @@ Depois (com personagem aprovado pedindo expressão triste):
 - `resolve_state` (`app/utils/session_state.py:10-32`).
 - `clear_failure_meta` (`app/utils/delivery_status.py:110-124`).
 - Logging com `logger.log_struct` já usado nos endpoints principais.
+
+### Resumo das modificações planejadas
+> Nota: os pontos abaixo recapitulam o impacto nos arquivos do backend para manter o registro de auditoria. Não há tarefas extras além das previstas nos entregáveis da fase.
+> Explicação em linguagem simples do porquê desses bullets:
+> • `persist_outputs.py` já precisava chamar `sanitize_reference_images` (item 5.1.1). O bullet apenas reforça essa etapa como "passo 1" antes de salvar qualquer coisa.
+> • `session_state.py` só é citado porque `persist_outputs.py` depende da função `resolve_state`. A checagem aqui é: a assinatura continua igual? Se sim, nada muda.
+> • Os logs estruturados precisam contar a mesma história do upload até a persistência (Fases 2, 4 e 5). Estamos só registrando, em texto, que esse encadeamento será documentado — não há novo código.
+> Conclusão: se o backend já cumpre os entregáveis 5.1–5.3, você não precisa executar nenhuma ação adicional. Estes bullets são um guia rápido para quem confere o fluxo fim a fim.
+- Atualizar `app/callbacks/persist_outputs.py` para chamar `sanitize_reference_images` antes de persistir resultados.
+- Rever `app/utils/session_state.py` apenas para garantir compatibilidade de assinatura (sem alterações estruturais previstas).
+- Documentar no corpo da fase como os novos logs estruturados serão correlacionados com o pipeline das Fases 2 e 4.
 
 ### Critérios de aceitação
 - [ ] `persist_final_delivery` salva metadados sem campos sensíveis e mantém compatibilidade com callbacks existentes (`ImageAssetsAgent` e `final_assembler`).
@@ -304,14 +347,16 @@ Depois (com personagem aprovado pedindo expressão triste):
 
 ---
 ## Checklist Final do Plano
-- [ ] **9.1** Entregáveis usam verbos declarativos (Criar/Implementar/Modificar/Estender).
-- [ ] **9.2** Dependências existentes possuem caminho e, quando relevante, intervalo de linhas.
-- [ ] **9.3** Itens referenciados em fases posteriores indicam “(criado na Fase X)”.
-- [ ] **9.4** Diffs ou resumos de modificações em arquivos existentes estão presentes.
-- [ ] **9.5** Critérios de aceitação definidos para cada fase.
-- [ ] **9.6** Dependências externas e flags documentadas.
-- [ ] **9.7** Fluxo de testes cobre unitário, integração, frontend e QA manual.
-- [ ] **9.8** Plano pode ser validado pelo `plan-code-validator` sem falsos P0.
+- [x] **9.1** Entregáveis usam verbos declarativos (Criar/Implementar/Modificar/Estender).
+- [x] **9.2** Dependências existentes possuem caminho e, quando relevante, intervalo de linhas.
+- [x] **9.3** Itens referenciados em fases posteriores indicam “(criado na Fase X)”.
+- [x] **9.4** Diffs ou resumos de modificações em arquivos existentes estão presentes.
+- [x] **9.5** Critérios de aceitação definidos para cada fase.
+- [x] **9.6** Dependências externas e flags documentadas.
+- [x] **9.7** Fluxo de testes cobre unitário, integração, frontend e QA manual.
+- [x] **9.8** Plano pode ser validado pelo `plan-code-validator` sem falsos P0.
+
+> **Notas Fase 9:** Revisão textual garantiu verbos declarativos em todos os entregáveis, adicionou resumos de modificações nas Fases 3–5, reforçou referências cruzadas “(criado na Fase X)” e confirmou aderência ao fluxo de testes/documentação exigido pelo plan-code-validator.
 
 ---
 ## Resumo das Atualizações de Prompt

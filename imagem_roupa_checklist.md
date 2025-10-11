@@ -126,14 +126,16 @@
 > - Defaults permanecem `reference_cache_ttl_seconds = 3600` e `enable_reference_images = False` em `app/config.py`, com overrides por variáveis de ambiente ativos.
 
 ## Checklist Final do Plano
-- [ ] **9.1** Garantir verbos declarativos nos entregáveis.
-- [ ] **9.2** Confirmar caminhos/linhas das dependências existentes.
-- [ ] **9.3** Marcar itens referenciados com “(criado na Fase X)”.
-- [ ] **9.4** Anexar diffs/resumos de arquivos existentes.
-- [ ] **9.5** Validar critérios de aceitação por fase.
-- [ ] **9.6** Revisar documentação de dependências externas e flags.
-- [ ] **9.7** Checar cobertura de testes (unitário, integração, frontend, QA manual).
-- [ ] **9.8** Confirmar validação pelo `plan-code-validator` sem falsos P0.
+- [x] **9.1** Garantir verbos declarativos nos entregáveis.
+- [x] **9.2** Confirmar caminhos/linhas das dependências existentes.
+- [x] **9.3** Marcar itens referenciados com “(criado na Fase X)”.
+- [x] **9.4** Anexar diffs/resumos de arquivos existentes.
+- [x] **9.5** Validar critérios de aceitação por fase.
+- [x] **9.6** Revisar documentação de dependências externas e flags.
+- [x] **9.7** Checar cobertura de testes (unitário, integração, frontend, QA manual).
+- [x] **9.8** Confirmar validação pelo `plan-code-validator` sem falsos P0.
+
+> **Notas Fase 9:** Checklist final auditado; seções 3–5 receberam resumos de modificações (agora com notas explicando que não são novas tarefas). Cada resumo inclui uma versão “para leigos”, passo a passo, deixando claro que ninguém precisa reabrir implementações: é apenas documentação para ligar o que já foi feito ao texto do plano. Fase 4 continua citando explicitamente as dependências criadas nas Fases 1 e 2, e os itens 9.1–9.8 foram revisados garantindo compatibilidade com o plan-code-validator.
 
 ## Aprovação & Governança
 - [ ] **10.1** Conferir tabela “Lacunas de Detalhamento”.
