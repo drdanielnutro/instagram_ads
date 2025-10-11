@@ -1,0 +1,7 @@
+{
+  "task_id": "TASK-20251011-1925",
+  "created_at": "2025-10-11T19:25:00Z",
+  "description": "Adicionar recurso de imagem de referência: permitir upload de imagem/URL no input, extrair metadados via LangExtract, e integrar análise no contexto do planning_pipeline",
+  "requested_by": "user",
+  "initial_phase": "checklist"
+}
