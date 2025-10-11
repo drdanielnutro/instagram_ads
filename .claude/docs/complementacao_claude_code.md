@@ -352,11 +352,11 @@ Antes de editar arquivo:
 
 **Baseado em:**
 - Tutorial original (40+ fontes)
-- Doc 1: Investigação Técnica Claude.md
-- Doc 4/5: Hooks Guide e Reference
-- Doc 10: Slash Commands
-- Doc 9: CLI Reference (permissões)
-- Doc 8: Memory Management (hierarquia)
+- `.claude/docs/doc_oficial_claude_code/melhores_praticas.md` — "CLAUDE Code – Melhores Práticas e Engenharia do CLAUDE.md"
+- `.claude/docs/doc_oficial_claude_code/get_started_with_claude_code_hooks.md` e `.claude/docs/doc_oficial_claude_code/hooks_reference.md` — Guia e referência de hooks
+- `.claude/docs/doc_oficial_claude_code/slash_commands.md` — Slash commands
+- `.claude/docs/doc_oficial_claude_code/cli_reference.md` — CLI e permissões
+- `.claude/docs/doc_oficial_claude_code/manage_claudes_memory.md` — Hierarquia de memória (`CLAUDE.md`)
 
 ---
 
@@ -432,8 +432,8 @@ Retorna resumo compacto:
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.file_path' | while read file; do if [[ $file =~ \\.(ts|tsx|js|jsx)$ ]]; then npx prettier --write \"$file\" 2>/dev/null && echo \"✓ Formatted: $file\"; fi; done",
-            "timeout": 30
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/scripts/format-js-files.py",
+            "timeout": 60
           }
         ]
       }
@@ -451,11 +451,10 @@ Retorna resumo compacto:
     ],
     "Notification": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.message' | while read msg; do echo \"🔔 NOTIFICATION: $msg\"; if command -v terminal-notifier &> /dev/null; then terminal-notifier -title 'Claude Code' -message \"$msg\"; fi; done"
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/scripts/print-notification.py"
           }
         ]
       }
@@ -465,13 +464,116 @@ Retorna resumo compacto:
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"🚀 Multi-Agent System Initialized\"; echo \"📋 Use /help to see available slash commands\"; echo \"📊 Use /review-status to check task progress\""
+            "command": "echo \"[Claude Code] Multi-Agent System Initialized\"; echo \"Use /help para listar slash commands\"; echo \"Use /review-status para consultar o progresso da tarefa\""
           }
         ]
       }
     ]
   }
 }
+```
+
+**Pré-requisitos** (garanta antes de ativar os hooks):
+- `python3` disponível (Executa os scripts abaixo)
+- `node`, `npx` e `prettier` instalados globalmente ou no projeto (`npm install --save-dev prettier`)
+
+**Script de Notificação**: `.claude/scripts/print-notification.py`
+
+```python
+#!/usr/bin/env python3
+"""
+Imprime notificações no terminal e mantém compatibilidade ASCII.
+"""
+import json
+import sys
+
+def main() -> int:
+    try:
+        payload = json.load(sys.stdin)
+    except json.JSONDecodeError as exc:
+        print(f"[hooks] Notification inválida: {exc}", file=sys.stderr)
+        return 0
+
+    message = payload.get("message")
+    if message:
+        print(f"[Claude Code] NOTIFICATION: {message}")
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+**Script de Formatação**: `.claude/scripts/format-js-files.py`
+
+```python
+#!/usr/bin/env python3
+"""
+Formata arquivos JavaScript/TypeScript após operações de edição.
+Compatível com Write, Edit e MultiEdit (Claude Code Hooks Reference).
+"""
+import json
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from typing import Set
+
+FORMATTABLE_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx"}
+
+def resolve_paths(payload) -> Set[Path]:
+    paths: Set[Path] = set()
+    tool_response = payload.get("tool_response") or {}
+    edits = tool_response.get("edits") or []
+    for edit in edits:
+        file_path = edit.get("filePath")
+        if file_path:
+            paths.add(Path(file_path))
+
+    fallback = (
+        tool_response.get("filePath")
+        or payload.get("tool_input", {}).get("file_path")
+    )
+    if fallback:
+        paths.add(Path(fallback))
+    return paths
+
+def main() -> int:
+    try:
+        payload = json.load(sys.stdin)
+    except json.JSONDecodeError as exc:
+        print(f"[hooks] Invalid JSON payload: {exc}", file=sys.stderr)
+        return 0
+
+    prettier = shutil.which("npx")
+    if prettier is None:
+        print("[hooks] npx não encontrado; pulando formatação automática.", file=sys.stderr)
+        return 0
+
+    project_root = Path(payload.get("cwd") or ".").resolve()
+    exit_code = 0
+
+    for path in resolve_paths(payload):
+        candidate = (project_root / path).resolve() if not path.is_absolute() else path.resolve()
+        if candidate.suffix not in FORMATTABLE_EXTENSIONS:
+            continue
+
+        result = subprocess.run(
+            ["npx", "prettier", "--write", str(candidate)],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            exit_code = result.returncode
+            print(f"[hooks] Falha ao formatar {candidate}: {result.stderr}", file=sys.stderr)
+        else:
+            print(f"[hooks] Formatted: {candidate}", file=sys.stderr)
+
+    return exit_code
+
+if __name__ == "__main__":
+    sys.exit(main())
 ```
 
 **Script de Validação**: `.claude/scripts/validate-file-boundaries.py`:
@@ -484,24 +586,24 @@ Hook PreToolUse para sistema multi-agente.
 """
 import json
 import sys
-import os
+from pathlib import Path
 
-# Diretórios protegidos (nunca editar)
+# Diretórios protegidos (nunca editar) - ver Hooks Reference (File Boundaries)
 PROTECTED_DIRS = [
-    '.claude/state/',
-    '.claude/hooks/',
-    '.claude/agents/',
-    'node_modules/',
-    'dist/',
-    'build/',
-    '.git/'
+    ".claude/state",
+    ".claude/hooks",
+    ".claude/agents",
+    "node_modules",
+    "dist",
+    "build",
+    ".git",
 ]
 
 # Arquivos protegidos (nunca editar)
 PROTECTED_FILES = [
-    '.env',
-    'package-lock.json',
-    'yarn.lock'
+    ".env",
+    "package-lock.json",
+    "yarn.lock",
 ]
 
 try:
@@ -511,38 +613,60 @@ try:
     if not file_path:
         sys.exit(0)  # Sem file_path, skip validation
     
-    # Normalizar path
-    file_path = os.path.normpath(file_path)
-    
-    # Verificar diretórios protegidos
-    for protected_dir in PROTECTED_DIRS:
-        if file_path.startswith(protected_dir):
-            error_msg = f"⛔ FILE BOUNDARY VIOLATION\n"
-            error_msg += f"Tentativa de editar arquivo protegido: {file_path}\n"
-            error_msg += f"Diretório protegido: {protected_dir}\n"
-            error_msg += f"Consulte seção 'FILE BOUNDARIES' no CLAUDE.md"
-            print(error_msg, file=sys.stderr)
-            sys.exit(2)  # Exit code 2 bloqueia a ação
-    
-    # Verificar arquivos protegidos
-    filename = os.path.basename(file_path)
-    if filename in PROTECTED_FILES or file_path.endswith(tuple(PROTECTED_FILES)):
-        error_msg = f"⛔ FILE BOUNDARY VIOLATION\n"
-        error_msg += f"Tentativa de editar arquivo protegido: {file_path}\n"
-        error_msg += f"Consulte seção 'FILE BOUNDARIES' no CLAUDE.md"
+    project_root = Path(input_data.get("cwd") or ".").resolve()
+    raw_path = Path(file_path)
+    candidate = (project_root / raw_path).resolve() if not raw_path.is_absolute() else raw_path.resolve()
+
+    # Impede path traversal (.. escapando do repositório)
+    if project_root not in candidate.parents and candidate != project_root:
+        error_msg = (
+            "[hooks] FILE BOUNDARY VIOLATION\n"
+            f"Tentativa de acessar fora do repositório: {candidate}"
+        )
         print(error_msg, file=sys.stderr)
         sys.exit(2)
-    
+
+    def is_within(path: Path, directory: Path) -> bool:
+        try:
+            path.relative_to(directory)
+            return True
+        except ValueError:
+            return False
+
+    protected_dirs = [(project_root / d).resolve() for d in PROTECTED_DIRS]
+    for protected_dir in protected_dirs:
+        if is_within(candidate, protected_dir):
+            error_msg = (
+                "[hooks] FILE BOUNDARY VIOLATION\n"
+                f"Tentativa de editar diretório protegido: {candidate}\n"
+                f"Diretório protegido: {protected_dir}\n"
+                "Consulte seção 'FILE BOUNDARIES' no CLAUDE.md"
+            )
+            print(error_msg, file=sys.stderr)
+            sys.exit(2)
+
+    protected_files = {(project_root / f).resolve() for f in PROTECTED_FILES}
+    if candidate in protected_files:
+        error_msg = (
+            "[hooks] FILE BOUNDARY VIOLATION\n"
+            f"Tentativa de editar arquivo protegido: {candidate}\n"
+            "Consulte seção 'FILE BOUNDARIES' no CLAUDE.md"
+        )
+        print(error_msg, file=sys.stderr)
+        sys.exit(2)
+
     # Se chegou aqui, arquivo é permitido
     sys.exit(0)
-    
-except Exception as e:
-    print(f"❌ Error in file boundary validation: {e}", file=sys.stderr)
+
+except Exception as exc:
+    print(f"[hooks] Erro na validação de boundaries: {exc}", file=sys.stderr)
     sys.exit(1)  # Non-blocking error
 ```
 
 ```bash
 chmod +x .claude/scripts/validate-file-boundaries.py
+chmod +x .claude/scripts/format-js-files.py
+chmod +x .claude/scripts/print-notification.py
 ```
 
 ---
@@ -783,11 +907,7 @@ Você recebeu instrução para escalar uma decisão ao usuário.
     ],
     "disallowedTools": [
       "Bash(rm -rf:*)",
-      "Bash(sudo:*)",
-      "Write(.env*)",
-      "Edit(.env*)",
-      "Write(package-lock.json)",
-      "Edit(package-lock.json)"
+      "Bash(sudo:*)"
     ]
   },
   "tools": {
@@ -811,6 +931,8 @@ Você recebeu instrução para escalar uma decisão ao usuário.
   }
 }
 ```
+
+> **Nota**: a CLI atual não suporta filtros por arquivo para `Write`/`Edit`. A proteção de `.env`, lockfiles e diretórios sensíveis fica a cargo do hook `validate-file-boundaries.py` descrito acima. Ajuste a lista de diretórios/arquivos protegidos conforme a política da equipe.
 
 ---
 
