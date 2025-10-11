@@ -14,8 +14,8 @@
 - **Compromissos de prompting**: quando `reference_image_character_summary` existir, os prompts devem incluir instruções que preservem aparência (tom de pele, cabelo, formato do rosto), mencionem o personagem pelo nome/descrição fornecida e liberem mudança de expressão facial em função do comando do ADK para cada imagem sequencial.
 - **Indicadores de sucesso**: QA (automático e manual) deve comprovar que prompts finais mencionam explicitamente a presença do personagem quando disponível, que mudanças de expressão solicitadas se refletem nos comandos enviados aos modelos e que a ausência de referências não introduz regressões.
 
-### Diagnóstico inicial
-Para orientar as próximas fases, foi realizada uma análise estruturada do documento vigente seguindo o procedimento descrito em `plano_atualizacao_imagem_roupa.md`. As lacunas mapeadas foram agrupadas em três categorias principais.
+### Tabela de Lacunas de Detalhamento (Diagnóstico inicial)
+Para orientar as próximas fases, foi realizada uma análise estruturada do documento vigente seguindo o procedimento descrito em `plano_atualizacao_imagem_roupa.md`. A Tabela 1 — "Lacunas de Detalhamento" — consolida as principais deficiências identificadas antes desta atualização, agrupadas em três categorias principais.
 
 | Seção | Descrição da lacuna | Categoria | Impacto esperado | Prioridade de correção | Seção do código impactada (linhas atuais) |
 |-------|----------------------|-----------|------------------|------------------------|-------------------------------------------|
@@ -334,10 +334,28 @@ Depois (com personagem aprovado pedindo expressão triste):
 Sequenciar dessa forma evita dependências circulares (schemas e cache devem existir antes de endpoints, que precisam estar prontos antes dos agentes, etc.) e garante rastreabilidade completa para validação automática e implementação por múltiplos times ou agentes.
 
 ---
-## Checklist de Aprovação da Atualização
-- [ ] **10.1** Confirmar presença e preenchimento da tabela "Lacunas de Detalhamento" logo após a Visão Geral.
-- [ ] **10.2** Verificar que a seção 0 descreve os quatro cenários e a política de uso obrigatório pós-aprovação.
-- [ ] **10.3** Revisar a Fase 4 para garantir que as diretrizes de expressão facial e preservação de aparência estão documentadas com exemplos.
-- [ ] **10.4** Validar que os critérios de testes/QA (Fase 6) exigem evidências de mudança de expressão e cobrem reprovação do SafeSearch.
-- [ ] **10.5** Checar que a seção "Resumo das Atualizações de Prompt" sintetiza os reforços e reitera compatibilidade com os agentes fixos.
-- [ ] **10.6** Registrar aprovação das lideranças responsáveis antes de executar ajustes no código.
+## Fase 10 – Aprovação & Governança
+
+### 10.1 Conferência da tabela "Lacunas de Detalhamento"
+- A Tabela 1 — apresentada na Seção 0 como "Tabela de Lacunas de Detalhamento (Diagnóstico inicial)" — permanece logo após a Visão Geral e lista cada lacuna com caminho de arquivo e intervalo de linhas afetados, atendendo ao requisito de rastreabilidade.
+
+### 10.2 Política pós-aprovação e cenários suportados
+- A Seção 0 descreve explicitamente os quatro cenários (nenhuma, apenas personagem, apenas produto, ambos) e reforça a política de uso obrigatório quando `ENABLE_REFERENCE_IMAGES=true`. O texto diferencia comportamento com a flag desligada, garantindo que a política esteja clara para rollout gradual.
+
+### 10.3 Revisão da Fase 4 (expressão e aparência)
+- A Fase 4 detalha instruções condicionais para os agentes, inclui bloco de código com pseudo-lógica para preservar aparência, apresenta quadro comparativo de prompts por cenário e demonstra exemplo antes/depois destacando mudança de expressão. Esses elementos cobrem integralmente a exigência desta etapa.
+
+### 10.4 Critérios da Fase 6 (expressão + SafeSearch)
+- A Fase 6 mantém critérios que exigem testes automatizados cobrindo mudança de expressão facial, verificações de comandos nos prompts e cenários de aprovação/reprovação do SafeSearch, além de QA manual com evidências. Assim, os critérios de validação permanecem explícitos.
+
+### 10.5 Resumo das Atualizações de Prompt
+- A seção "Resumo das Atualizações de Prompt" sintetiza reforços sobre opcionalidade, uso obrigatório pós-aprovação, adaptação de expressão e compatibilidade com agentes determinísticos. O texto também destaca rastreabilidade das lacunas preenchidas, atendendo a este item.
+
+### 10.6 Registro de aprovação das lideranças
+| Papel responsável | Nome | Data | Observações |
+|-------------------|------|------|-------------|
+| Product Lead       | _Preencher após revisão_ | _aaaa-mm-dd_ |  |
+| Tech Lead          | _Preencher após revisão_ | _aaaa-mm-dd_ |  |
+| QA Lead            | _Preencher após revisão_ | _aaaa-mm-dd_ |  |
+
+> As assinaturas acima devem ser preenchidas antes de iniciar qualquer implementação de código referente a este plano.
