@@ -14,7 +14,7 @@
 - **Compromissos de prompting**: quando `reference_image_character_summary` existir, os prompts devem incluir instruções que preservem aparência (tom de pele, cabelo, formato do rosto), mencionem o personagem pelo nome/descrição fornecida e liberem mudança de expressão facial em função do comando do ADK para cada imagem sequencial.
 - **Indicadores de sucesso**: QA (automático e manual) deve comprovar que prompts finais mencionam explicitamente a presença do personagem quando disponível, que mudanças de expressão solicitadas se refletem nos comandos enviados aos modelos e que a ausência de referências não introduz regressões.
 
-### Diagnóstico inicial
+### Lacunas de Detalhamento (Diagnóstico Inicial)
 Para orientar as próximas fases, foi realizada uma análise estruturada do documento vigente seguindo o procedimento descrito em `plano_atualizacao_imagem_roupa.md`. As lacunas mapeadas foram agrupadas em três categorias principais.
 
 | Seção | Descrição da lacuna | Categoria | Impacto esperado | Prioridade de correção | Seção do código impactada (linhas atuais) |
@@ -386,3 +386,23 @@ Sequenciar dessa forma evita dependências circulares (schemas e cache devem exi
 - [ ] **10.4** Validar que os critérios de testes/QA (Fase 6) exigem evidências de mudança de expressão e cobrem reprovação do SafeSearch.
 - [ ] **10.5** Checar que a seção "Resumo das Atualizações de Prompt" sintetiza os reforços e reitera compatibilidade com os agentes fixos.
 - [ ] **10.6** Registrar aprovação das lideranças responsáveis antes de executar ajustes no código.
+
+### Auditoria de Conformidade – 11/10/2025
+
+| Item | Evidência no plano | Status | Verificado por | Data |
+|------|--------------------|--------|----------------|------|
+| 10.1 | "Lacunas de Detalhamento (Diagnóstico Inicial)" imediatamente após a Seção 0, com colunas preenchidas. | ✅ | gpt-5-codex | 2025-10-11 |
+| 10.2 | Seção 0 enumera Cenários A–D e descreve política de uso obrigatório pós-aprovação. | ✅ | gpt-5-codex | 2025-10-11 |
+| 10.3 | Fase 4 documenta tabela comparativa 4.1–4.4 e exemplo guiado 4.6 ilustrando preservação de aparência + mudança de expressão. | ✅ | gpt-5-codex | 2025-10-11 |
+| 10.4 | Fase 6 define critérios 6.5.1–6.5.5 cobrindo mudança de expressão, SafeSearch e evidências QA. | ✅ | gpt-5-codex | 2025-10-11 |
+| 10.5 | "Resumo das Atualizações de Prompt" destaca reforços e compatibilidade com agentes fixos. | ✅ | gpt-5-codex | 2025-10-11 |
+
+#### Registro de Aprovação das Lideranças
+
+| Papel | Responsável | Status | Data | Observações |
+|-------|-------------|--------|------|-------------|
+| Produto / Growth | _(preencher após reunião de sign-off)_ | ⏳ | — | Agendar alinhamento com Product Board para confirmar política de uso obrigatório. |
+| Engenharia Backend | _(preencher após reunião de sign-off)_ | ⏳ | — | Validar alinhamento com donos de `app/server.py` e `app/agent.py` antes do início do desenvolvimento. |
+| Qualidade / QA | _(preencher após reunião de sign-off)_ | ⏳ | — | Confirmar que roteiro QA (Seção 6.4) cobre evidências solicitadas. |
+
+> **Próximo passo:** coletar assinaturas formais (atas ou formulário interno) e atualizar a tabela acima antes de liberar a fase de implementação.
