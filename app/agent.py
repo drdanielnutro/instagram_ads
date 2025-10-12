@@ -1260,9 +1260,9 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
     "copy": {
       "headline": "...",
       "corpo": "...",
-      "cta_texto": "..."
+      "cta_texto": "OBRIGATÓRIO: escolha EXATAMENTE um destes valores: 'Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se'. NÃO crie frases customizadas, use APENAS um desses textos literais."
     },
-    "cta_instagram": "Saiba mais" | "Enviar mensagem" | "Ligar" | "Comprar agora" | "Cadastre-se"
+    "cta_instagram": "OBRIGATÓRIO: escolha EXATAMENTE um destes valores: 'Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se'. Para {objetivo_final}='agendamentos', prefira 'Enviar mensagem' ou 'Ligar'."
   }
   Referências aprovadas disponíveis:
   - Personagem: {reference_image_character_summary}
@@ -1285,7 +1285,7 @@ Formatação por categoria (retorne somente o fragmento daquela categoria):
       "prompt_estado_atual": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 1 (estado atual), com emoção negativa clara, postura coerente e cenário alinhado ao problema, sempre com a mesma persona. Se {reference_image_character_summary} existir, preserve traços físicos (tom de pele, cabelo, formato do rosto) e cite explicitamente que se trata da mesma pessoa. Termine com `Emotion: despair` para rastrear a expressão aplicada.",
       "prompt_estado_intermediario": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 2 (estado intermediário), destacando o momento de ação ou decisão, mantendo persona, cenário e elementos visuais em transição positiva. Use `Emotion: determined` no final e, quando houver produto aprovado ({reference_image_product_summary}), destaque sua presença sem alterar identidade da persona.",
       "prompt_estado_aspiracional": "OBRIGATÓRIO: prompt técnico em inglês descrevendo somente a cena 3 (estado aspiracional), mostrando resultados visíveis, emoções positivas e ambiente coerente com o sucesso da mesma persona. Se houver produto aprovado, instrua a cena a integrar o item real. Finalize com `Emotion: joyful` para permitir auditoria.",
-      "aspect_ratio": "definido conforme especificação do formato"
+      "aspect_ratio": "OBRIGATÓRIO: use o valor exato de {format_specs_json}.visual.aspect_ratio. Para Reels/Stories use '9:16', para Feed use '4:5'. Este campo DEVE ser uma string com o valor literal do aspect ratio, NÃO uma descrição."
     },
     "formato": "{formato_anuncio}"  # Usar o especificado pelo usuário
   }

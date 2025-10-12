@@ -151,7 +151,7 @@ const HumanMessageBubble: React.FC<HumanMessageBubbleProps> = ({
 }) => {
   return (
     <div className="max-w-full sm:max-w-[85%]">
-      <div className="rounded-3xl border border-border/70 bg-secondary/70 px-5 py-3 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_38px_-22px_rgba(10,16,28,0.55)]">
+      <div className="chat-bubble-scroll overflow-x-auto break-words rounded-3xl border border-border/70 bg-secondary/70 px-5 py-3 pb-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_38px_-22px_rgba(10,16,28,0.55)]">
         <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
           {message.content}
         </ReactMarkdown>
@@ -187,12 +187,12 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
 }) => {
   // Show ActivityTimeline if we have processedEvents (this will be the first AI message)
   const shouldShowTimeline = processedEvents.length > 0;
-  
+
   // Condition for DIRECT DISPLAY (interactive_planner_agent OR final report)
-  const shouldDisplayDirectly = 
-    agent === "interactive_planner_agent" || 
+  const shouldDisplayDirectly =
+    agent === "interactive_planner_agent" ||
     (agent === "report_composer_with_citations" && finalReportWithCitations);
-  
+
   if (shouldDisplayDirectly) {
     // Direct display - show content with copy button, and timeline if available
     return (
@@ -200,7 +200,7 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
         {/* Show timeline for interactive_planner_agent if available */}
         {shouldShowTimeline && agent === "interactive_planner_agent" && (
           <div className="w-full rounded-2xl border border-border/60 bg-muted/50 p-4">
-            <ActivityTimeline 
+            <ActivityTimeline
               processedEvents={processedEvents}
               isLoading={isLoading}
               websiteCount={websiteCount}
@@ -208,8 +208,8 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
           </div>
         )}
         <div className="flex items-start gap-3">
-          <div className="flex-1">
-            <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+          <div className="flex-1 min-w-0">
+            <div className="chat-bubble-scroll overflow-x-auto break-words rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 pb-5 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
               <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
                 {message.content}
               </ReactMarkdown>
@@ -233,7 +233,7 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
     return (
       <div className="relative flex w-full flex-col gap-3">
         <div className="w-full rounded-2xl border border-border/60 bg-muted/50 p-4">
-          <ActivityTimeline 
+          <ActivityTimeline
             processedEvents={processedEvents}
             isLoading={isLoading}
             websiteCount={websiteCount}
@@ -242,8 +242,8 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
         {/* Only show accumulated content if it's not empty and not from research agents */}
         {message.content && message.content.trim() && agent !== "interactive_planner_agent" && (
           <div className="mt-1 flex items-start gap-3">
-            <div className="flex-1">
-              <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+            <div className="flex-1 min-w-0">
+              <div className="chat-bubble-scroll overflow-x-auto break-words rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 pb-5 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
                 <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
                   {message.content}
                 </ReactMarkdown>
@@ -268,8 +268,8 @@ const AiMessageBubble: React.FC<AiMessageBubbleProps> = ({
     return (
       <div className="relative flex w-full flex-col">
         <div className="flex items-start gap-3">
-          <div className="flex-1">
-            <div className="rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
+          <div className="flex-1 min-w-0">
+            <div className="chat-bubble-scroll overflow-x-auto break-words rounded-3xl border border-border/60 bg-secondary/80 px-5 py-4 pb-5 text-sm leading-relaxed text-foreground/90 shadow-[0_18px_42px_-24px_rgba(10,16,28,0.65)]">
               <ReactMarkdown components={mdComponents} remarkPlugins={[remarkGfm]}>
                 {message.content}
               </ReactMarkdown>
@@ -385,8 +385,8 @@ export function ChatMessagesView({
         </div>
         <div className="flex-1">
           <ScrollArea ref={scrollAreaRef} className="h-full">
-            <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-4xl flex-col justify-center gap-4 px-6 py-8">
-            {displayMessages.map((message) => {
+            <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-screen-2xl flex-col justify-center gap-4 px-6 py-8">
+              {displayMessages.map((message) => {
                 const eventsForMessage = message.type === "ai" ? (messageEvents.get(message.id) || []) : [];
 
                 // Determine if the current AI message is the last one
@@ -421,22 +421,22 @@ export function ChatMessagesView({
                   </div>
                 );
               })}
-            {isLoading && !lastAiMessage && messages.some(m => m.type === 'human') && (
-              <div className="flex justify-start pl-2">
-                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                  <span>Gerando...</span>
+              {isLoading && !lastAiMessage && messages.some(m => m.type === 'human') && (
+                <div className="flex justify-start pl-2">
+                  <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                    <span>Gerando...</span>
+                  </div>
                 </div>
-              </div>
-            )}
-            {isLoading && lastMessage && lastMessage.type === 'human' && (
-              <div className="flex justify-start pl-10 pt-2">
-                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                  <span>Gerando...</span>
+              )}
+              {isLoading && lastMessage && lastMessage.type === 'human' && (
+                <div className="flex justify-start pl-10 pt-2">
+                  <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/50 px-3 py-1 text-sm text-muted-foreground">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                    <span>Gerando...</span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </ScrollArea>
         </div>

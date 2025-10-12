@@ -151,7 +151,7 @@ export function ActivityTimeline({
         </CardDescription>
       </CardHeader>
       {!isTimelineCollapsed && (
-        <ScrollArea className="max-h-80 overflow-y-auto">
+        <ScrollArea className="max-h-80 overflow-y-auto overflow-x-auto">
           <CardContent>
             {isLoading && processedEvents.length === 0 && (
               <div className="relative pl-8 pb-4">
