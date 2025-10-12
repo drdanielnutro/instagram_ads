@@ -6,6 +6,12 @@
 
 ---
 
+## ⚡ TL;DR Próxima Iteração
+
+- **Estado atual:** Fallback já gera `artifacts/storybrand/<session>.json` e, com `DELIVERIES_BUCKET`, envia `storybrand_sections.json` para GCS e referencia o URI no `meta.json`.
+- **Para habilitar acesso on-line:** Criar endpoint protegido que valide `user_id/session_id`, gere Signed URL com TTL curto e audite o acesso, além de aplicar lifecycle policy no bucket.
+- **Pré-requisitos de negócio:** Definir quem consome as seções, frequência/SLA e se haverá multiusuário para confirmar se Signed URL basta ou se precisaremos de autenticação mais robusta.
+
 ## 📋 Plano Original
 
 ### 1. Auditoria Atual
@@ -80,6 +86,8 @@ Atualizar README/AGENTS/playbook com fluxo de acesso futuro; registrar uso de `s
 
 **Impacto:** Sem essas respostas, não é possível escolher entre IAM vs. Signed URLs de forma fundamentada.
 
+**Dependência:** Produto definir caso de uso, público e SLA antes do kickoff técnico.
+
 ---
 
 ### 2. Decisão de Autorização em Aberto
@@ -93,17 +101,15 @@ O sistema atual não possui autenticação (requests são tratadas com `user_id=
 O plano assume `user_id` mas não verifica:
 
 #### Checklist de Validação
-- [ ] Sistema atual rastreia usuários?
-  - Verificar `app/models/` e schemas Pydantic
-  - Buscar por `user_id` em `app/`
-- [ ] Há relação `user → session` persistida?
-  - Verificar `meta.json` atual em `app/callbacks/persist_outputs.py:48-68`
-  - Confirmar se `session_id` é único globalmente ou por usuário
-- [ ] Frontend envia `user_id` nas requisições?
-  - Verificar `frontend/src/services/` e chamadas API
-  - Confirmar se há estado de autenticação no React
 
-**Investigação Preliminar:**
+| Tarefa                                                                                       | Owner sugerido | Dependência         | Status   | Notas                                                                                     |
+| -------------------------------------------------------------------------------------------- | -------------- | ------------------- | -------- | ----------------------------------------------------------------------------------------- |
+| Mapear onde `user_id` é persistido no backend (`app/models`, buscas por `user_id`)           | Backend        | Engenharia          | Pendente | Garantir que o estado carregado por `safe_user_id` não retorna sempre `anonymous`.        |
+| Confirmar relação `user_id → session_id` no `meta.json` (`app/callbacks/persist_outputs.py`) | Backend        | Engenharia          | Pendente | Verificar unicidade do `session_id` e se múltiplas sessões por usuário são suportadas.    |
+| Validar envio de `userId` pelo frontend (serviços React e criação de sessão)                 | Frontend       | Engenharia          | Pendente | Revisar `frontend/src/App.tsx` e serviços auxiliares.                                     |
+| Avaliar necessidade de autenticação adicional (JWT/OAuth) antes de expor o endpoint          | Backend/Infra  | Produto & Segurança | Pendente | Dependemos da decisão de Produto sobre multiusuário/parceiros para dimensionar o esforço. |
+
+**Referência rápida de comandos:**
 ```bash
 # Verificar rastreamento de usuários
 grep -r "user_id" app/ --include="*.py"
@@ -588,20 +594,20 @@ grep "PERSIST_STORYBRAND_SECTIONS" app/.env
 - [FastAPI Security](https://fastapi.tiangolo.com/tutorial/security/)
 
 ### Decisões Pendentes
-| Decisão | Status | Owner | Deadline |
-|---------|--------|-------|----------|
-| IAM vs. Signed URLs | ✅ Signed URLs (provisório) | Tech Lead | - |
-| TTL de 180 dias | 🟡 Proposto | DevOps | - |
-| Caso de uso primário | 🔴 Pendente | Product | - |
-| User management | 🟡 Em investigação | Backend | - |
+| Decisão              | Status                     | Owner     | Deadline |
+| -------------------- | -------------------------- | --------- | -------- |
+| IAM vs. Signed URLs  | ✅ Signed URLs (provisório) | Tech Lead | -        |
+| TTL de 180 dias      | 🟡 Proposto                 | DevOps    | -        |
+| Caso de uso primário | 🔴 Pendente                 | Product   | -        |
+| User management      | 🟡 Em investigação          | Backend   | -        |
 
 ---
 
 ## 🔄 Changelog
 
-| Data | Versão | Mudança |
-|------|--------|---------|
-| 2025-10-12 | 1.0 | Plano inicial + análise de gaps |
+| Data       | Versão | Mudança                         |
+| ---------- | ------ | ------------------------------- |
+| 2025-10-12 | 1.0    | Plano inicial + análise de gaps |
 
 ---
 

@@ -106,6 +106,10 @@ O arquivo `meta.json` (gerado junto com o JSON final) contém referências às s
 
 **Uso**: Auditorias, reconstrução de narrativa completa, análise detalhada por seção.
 
+**Retenção atual**: como `PERSIST_STORYBRAND_SECTIONS=true` no `.env`, o artefato é gravado localmente e, quando `DELIVERIES_BUCKET` está configurado, também em `gs://<DELIVERIES_BUCKET>/deliveries/<user_id>/<session_id>/storybrand_sections.json`. Nenhuma política de lifecycle é aplicada ainda, então os arquivos ficam armazenados por tempo indeterminado.
+
+**Próximos passos**: quando surgirem consumidores reais dessas seções, precisamos implementar o plano descrito em `storybrand_gcs.md` (exposição segura via endpoint + Signed URL com TTL controlado). Isso garante acesso on-line controlado, logging das consultas e evita manter artefatos indefinidamente sem governança de custos.
+
 ### Endpoints de Recuperação
 
 - `GET /final/meta` - Metadados do JSON final (inclui referências StoryBrand)
