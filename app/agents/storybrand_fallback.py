@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 import logging
+import os
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,7 +19,10 @@ from pydantic import BaseModel, Field
 
 from app.config import config
 from app.utils.json_tools import try_parse_json_string
+from app.callbacks.persist_outputs import _upload_to_gcs
+from app.utils.logging_helpers import log_struct_event
 from app.utils.prompt_loader import PromptLoader
+from app.utils.session_state import safe_session_id, safe_user_id
 
 from .fallback_compiler import FallbackStorybrandCompiler
 from .storybrand_sections import StoryBrandSectionConfig, build_storybrand_section_configs
@@ -38,6 +43,10 @@ PROMPT_LOADER = PromptLoader(PROMPT_DIR, required_prompts=REQUIRED_PROMPTS)
 FALLBACK_MODEL = getattr(config, "fallback_storybrand_model", None) or getattr(config, "worker_model", "gemini-2.5-flash")
 MAX_ITERATIONS = getattr(config, "fallback_storybrand_max_iterations", 3)
 REQUIRED_INPUT_KEYS = ("nome_empresa", "o_que_a_empresa_faz", "sexo_cliente_alvo")
+
+
+def _ensure_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
 
 
 class FallbackReviewResult(BaseModel):
@@ -118,6 +127,42 @@ def _collect_text_fragments(value: object) -> List[str]:
         for val in value.values():
             fragments.extend(_collect_text_fragments(val))
     return fragments
+
+
+_SENSITIVE_REDACTIONS = (
+    re.compile(r"(?i)(token=)([^&\s]+)"),
+    re.compile(r"(?i)(signature=)([^&\s]+)"),
+    re.compile(r"(?i)(sig=)([^&\s]+)"),
+    re.compile(r"(?i)(authorization\s*[:=]\s*)(bearer\s+[^\s]+)"),
+)
+
+
+def _sanitize_section_text(value: object) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        sanitized = value
+    else:
+        try:
+            sanitized = str(value)
+        except Exception:
+            sanitized = ""
+    for pattern in _SENSITIVE_REDACTIONS:
+        sanitized = pattern.sub(lambda match: match.group(1) + "[REDACTED]", sanitized)
+    return sanitized
+
+
+def _safe_jsonable(value: object) -> object:
+    try:
+        return json.loads(json.dumps(value, ensure_ascii=False, default=str))
+    except (TypeError, ValueError):
+        if value is None or isinstance(value, (str, int, float, bool)):
+            return value
+        if isinstance(value, dict):
+            return {str(key): _safe_jsonable(val) for key, val in value.items()}
+        if isinstance(value, list):
+            return [_safe_jsonable(item) for item in value]
+        return str(value)
 
 
 FEMININE_MARKERS = {
@@ -720,6 +765,101 @@ class FallbackQualityReporter(BaseAgent):
         yield Event(author=self.name)
 
 
+class PersistStorybrandSectionsAgent(BaseAgent):
+    """Persist StoryBrand sections generated during fallback execution."""
+
+    def __init__(self) -> None:
+        super().__init__(name="persist_storybrand_sections")
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:  # type: ignore[override]
+        state = ctx.session.state
+        session_id = safe_session_id(ctx)
+        user_id = safe_user_id(ctx)
+        enabled = bool(getattr(config, "persist_storybrand_sections", False))
+
+        if not enabled:
+            log_struct_event(
+                logger,
+                {
+                    "event": "storybrand_sections_persisted",
+                    "storybrand_sections_persisted": "skipped",
+                    "session_id": session_id,
+                    "user_id": user_id,
+                    "has_gcs_upload": False,
+                    "sections_count": 0,
+                    "reason": "feature_flag_disabled",
+                },
+            )
+            yield Event(author=self.name)
+            return
+
+        sections_payload: Dict[str, str] = {}
+        for cfg in SECTION_CONFIGS:
+            sections_payload[cfg.state_key] = _sanitize_section_text(state.get(cfg.state_key)) or ""
+
+        audit = state.get("storybrand_audit_trail")
+        if not isinstance(audit, list):
+            audit = [] if audit is None else [audit]
+        enriched_inputs = state.get("storybrand_enriched_inputs")
+        if not isinstance(enriched_inputs, dict):
+            enriched_inputs = {}
+
+        timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        payload = {
+            "sections": sections_payload,
+            "audit": _safe_jsonable(audit),
+            "enriched_inputs": _safe_jsonable(enriched_inputs),
+            "timestamp_utc": timestamp,
+        }
+
+        base_dir = Path("artifacts/storybrand")
+        _ensure_dir(base_dir)
+        local_path = base_dir / f"{session_id}.json"
+        with local_path.open("w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2, default=str)
+
+        state["storybrand_sections_saved_path"] = str(local_path)
+
+        gcs_uri = ""
+        deliveries_bucket_uri = os.getenv("DELIVERIES_BUCKET", "").strip()
+        if deliveries_bucket_uri.startswith("gs://"):
+            try:
+                prefix = f"deliveries/{user_id}/{session_id}"
+                gcs_dest = f"{prefix}/storybrand_sections.json"
+                gcs_uri = _upload_to_gcs(
+                    deliveries_bucket_uri,
+                    gcs_dest,
+                    json.dumps(payload, ensure_ascii=False, default=str).encode("utf-8"),
+                )
+            except Exception as exc:  # pragma: no cover - defensive logging
+                logger.error("Failed to upload StoryBrand sections to GCS: %s", exc)
+        else:
+            if os.getenv("K_SERVICE") or os.getenv("CLOUD_RUN_JOB"):
+                logger.warning(
+                    "DELIVERIES_BUCKET is not configured; skipping StoryBrand sections "
+                    "GCS upload in production."
+                )
+
+        if gcs_uri:
+            state["storybrand_sections_gcs_uri"] = gcs_uri
+
+        log_struct_event(
+            logger,
+            {
+                "event": "storybrand_sections_persisted",
+                "storybrand_sections_persisted": "persisted",
+                "session_id": session_id,
+                "user_id": user_id,
+                "local_path": str(local_path),
+                "gcs_uri": gcs_uri,
+                "has_gcs_upload": bool(gcs_uri),
+                "sections_count": len(sections_payload),
+            },
+        )
+
+        yield Event(author=self.name)
+
+
 fallback_storybrand_pipeline = SequentialAgent(
     name="fallback_storybrand_pipeline",
     description="Reconstrói a narrativa StoryBrand completa com loops de revisão.",
@@ -727,6 +867,7 @@ fallback_storybrand_pipeline = SequentialAgent(
         FallbackInputInitializer(),
         fallback_input_collector,
         StoryBrandSectionRunner(SECTION_CONFIGS),
+        PersistStorybrandSectionsAgent(),
         FallbackStorybrandCompiler(),
         FallbackQualityReporter(),
     ],
@@ -737,5 +878,6 @@ __all__ = [
     "fallback_storybrand_pipeline",
     "FallbackInputInitializer",
     "StoryBrandSectionRunner",
+    "PersistStorybrandSectionsAgent",
     "FallbackQualityReporter",
 ]

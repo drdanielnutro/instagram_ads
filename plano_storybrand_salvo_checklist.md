@@ -1,15 +1,17 @@
 # Checklist – Persistir StoryBrand Completo (16 seções) no fallback
 
 ## 1. Criar agente de persistência das seções (`app/agents/storybrand_fallback.py`)
-- [ ] Inserir classe `PersistStorybrandSectionsAgent(BaseAgent)` logo após `FallbackQualityReporter`.
-- [ ] Implementar checagem da flag de configuração antes de executar e registrar log `storybrand_sections_persisted="skipped"` quando desativada.
-- [ ] Construir `sections_payload` iterando `SECTION_CONFIGS`, garantindo strings (usar `state.get(cfg.state_key) or ""`).
-- [ ] Anexar metadados: `audit`, `enriched_inputs`, `timestamp_utc`.
-- [ ] Sanitizar valores não string/remover dados sensíveis antes de persistir.
-- [ ] Garantir criação de `artifacts/storybrand/` (_ensure_dir_) e salvar `{session_id}.json`.
-- [ ] Gravar caminho local em `state["storybrand_sections_saved_path"]`.
-- [ ] Se `DELIVERIES_BUCKET` estiver setado, enviar cópia para GCS (`deliveries/{user_id}/{session_id}/storybrand_sections.json`) e guardar URI em `state["storybrand_sections_gcs_uri"]`.
-- [ ] Registrar log estruturado `storybrand_sections_persisted` com `session_id`, `local_path`, `gcs_uri`.
+- [x] Inserir classe `PersistStorybrandSectionsAgent(BaseAgent)` logo após `FallbackQualityReporter`.
+- [x] Implementar checagem da flag de configuração antes de executar e registrar log `storybrand_sections_persisted="skipped"` quando desativada.
+- [x] Construir `sections_payload` iterando `SECTION_CONFIGS`, garantindo strings (usar `state.get(cfg.state_key) or ""`).
+- [x] Anexar metadados: `audit`, `enriched_inputs`, `timestamp_utc`.
+- [x] Sanitizar valores não string/remover dados sensíveis antes de persistir.
+- [x] Garantir criação de `artifacts/storybrand/` (_ensure_dir_) e salvar `{session_id}.json`.
+- [x] Gravar caminho local em `state["storybrand_sections_saved_path"]`.
+- [x] Se `DELIVERIES_BUCKET` estiver setado, enviar cópia para GCS (`deliveries/{user_id}/{session_id}/storybrand_sections.json`) e guardar URI em `state["storybrand_sections_gcs_uri"]`.
+- [x] Registrar log estruturado `storybrand_sections_persisted` com `session_id`, `local_path`, `gcs_uri`.
+
+> Notas Fase 1: agente implementado com sanitização básica de tokens, persistência local/GCS condicional e logs estruturados diferenciando `skipped` vs `persisted`. Ajustado uso de `log_struct_event` para enviar payload estruturado e evitar `TypeError` na fase de persistência.
 
 ## 2. Ajustar pipeline sequencial do fallback
 - [ ] Adicionar `PersistStorybrandSectionsAgent()` após `StoryBrandSectionRunner(SECTION_CONFIGS)` e antes de `FallbackStorybrandCompiler()` em `fallback_storybrand_pipeline`.
