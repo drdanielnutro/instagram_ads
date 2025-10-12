@@ -1,0 +1,20 @@
+{
+  "status": "failed",
+  "reason": "deterministic_final_validation_failed",
+  "message": "Variação 0: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Agendar Avaliação', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error; Variação 1: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Saiba Mais', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error; Variação 2: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Fale Conosco', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error",
+  "user_id": "anonymous",
+  "session_id": "5d995b9a-fc60-4f34-beba-e5accb7b79ef",
+  "timestamp": "2025-10-12T15:46:07Z",
+  "stage": "deterministic_final_validation",
+  "deterministic_final_validation": {
+    "grade": "fail",
+    "issues": [
+      "Variação 0: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Agendar Avaliação', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error",
+      "Variação 1: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Saiba Mais', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error",
+      "Variação 2: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Fale Conosco', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error"
+    ],
+    "source": "validator",
+    "failed": true,
+    "failure_reason": "Variação 0: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Agendar Avaliação', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error; Variação 1: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Saiba Mais', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error; Variação 2: 1 validation error for StrictAdItem\ncopy.cta_texto\n  Value error, cta_texto must be one of ('Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se') [type=value_error, input_value='Fale Conosco', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/value_error"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "task_id": "<TASK_ID>",
+  "task_id": "TASK-20251012-0000",
   "iteration": 1,
   "references": {
     "checklist_analysis": ".claude/results/checklist-output.json",
@@ -7,8 +7,115 @@
     "previous_reviewer_output": null
   },
   "review_focus": {
-    "priority_areas": [],
-    "acceptance_criteria_reference": [],
-    "testing_expectations": []
+    "priority_areas": [
+      "Validar normalização de CTAs em app/agents/fallback_compiler.py",
+      "Verificar integração com validação determinística",
+      "Confirmar backward compatibility (código existente não quebrado)",
+      "Avaliar qualidade dos logs (info vs warning)",
+      "Verificar propagação de CTAs normalizados via ActionElement",
+      "Validar enriquecimento do estado inicial em app/server.py",
+      "Confirmar atualização de prompts TASK-003",
+      "Avaliar cobertura e qualidade dos testes unitários"
+    ],
+    "acceptance_criteria_reference": [
+      "CTAs gerados pelo fallback ∈ CTA_INSTAGRAM_CHOICES",
+      "deterministic_final_validation.grade == 'pass'",
+      "persist_final_delivery executado (não pulado)",
+      "Testes unitários validam mapeamento de sinônimos",
+      "Logs mostram 'CTA normalizado: X → Y'",
+      "Fallback contextual usa objetivo",
+      "Default 'Saiba mais' quando sem mapeamento",
+      "Prompts mencionam CTAs válidos",
+      "Estado inicial contém cta_instagram_choices e recommended_cta",
+      "14/14 testes passando (7 existentes + 7 novos)",
+      "Cobertura ≥80% para código novo"
+    ],
+    "testing_expectations": [
+      "Todos os testes em tests/unit/agents/test_storybrand_fallback.py devem passar",
+      "Testes específicos de normalização devem cobrir: exact match, case-insensitive, sinônimos, fallback por objetivo, default, None/empty",
+      "Teste de integração _extract_ctas deve validar normalização completa",
+      "Sem regressões nos 7 testes existentes"
+    ]
+  },
+  "critical_validations": {
+    "security": [
+      "Sem injeção de código via CTAs malformados",
+      "Logs não expõem dados sensíveis",
+      "Imports de app.config são seguros (sem dependências circulares)"
+    ],
+    "correctness": [
+      "Função _normalize_cta segue ordem exata de fallbacks (8 níveis)",
+      "Mapeamento de sinônimos case-insensitive funciona corretamente",
+      "CTA_BY_OBJECTIVE usado corretamente no fallback contextual",
+      "Tratamento de None/empty string não gera logs de erro desnecessários",
+      "_extract_ctas recebe e propaga objetivo corretamente",
+      "Chamada em _run_async_impl passa state.get('objetivo_final', '')"
+    ],
+    "quality": [
+      "Código segue padrões do projeto (type hints, docstrings)",
+      "Logs usam severidade apropriada (info para normalização esperada, warning para fallbacks)",
+      "Testes são isolados e determinísticos",
+      "Sem código duplicado ou complexidade desnecessária",
+      "Prompts TASK-003 mantêm tom e estrutura existentes",
+      "Estado inicial enriquecido sem poluir com dados irrelevantes"
+    ],
+    "integration": [
+      "CTAs normalizados passam por StrictAdItem.cta_texto validation",
+      "CTAs normalizados passam por FinalDeliveryValidatorAgent",
+      "deterministic_final_validation não deve mais reprovar por CTAs inválidos",
+      "persist_final_delivery não deve mais ser pulado por grade != 'pass'",
+      "Serialização de storybrand_analysis não quebrada",
+      "ActionElement.primary/secondary recebem CTAs válidos"
+    ]
+  },
+  "regression_checks": [
+    "Testes existentes (7 originais) continuam passando",
+    "Código que não consome fallback não é afetado",
+    "Pipeline principal continua funcionando quando ENABLE_STORYBRAND_FALLBACK=false",
+    "Validação determinística funciona independente do fallback",
+    "Logs não inundam console em operação normal"
+  ],
+  "quality_gates": {
+    "min_test_coverage": 80,
+    "min_quality_score": 8,
+    "max_issues_critical": 0,
+    "max_issues_high": 2,
+    "max_issues_medium": 5
+  },
+  "expected_verdict": {
+    "approved": "Se todos os critérios de aceitação atendidos, testes passando, sem issues CRITICAL, quality ≥8/10",
+    "needs_revision": "Se issues HIGH/MEDIUM corrigíveis, ou cobertura <80%, ou qualidade 6-7/10",
+    "failed": "Se issues CRITICAL, ou breaking changes, ou testes falhando, ou qualidade <6/10"
+  },
+  "context_from_checklist": {
+    "completeness_score": 9,
+    "feasibility_score": 9,
+    "gaps_identified": [
+      "Ordem de preferência para fallback contextual (RESOLVIDO: usa CTA_BY_OBJECTIVE.get(objetivo)[0])",
+      "Prompts podem incluir exemplos de sinônimos (RESOLVIDO: P1 implementado)",
+      "Clarificar restrições por objetivo no fallback (RESOLVIDO: fallback respeita CTA_INSTAGRAM_CHOICES)",
+      "P2 opcional (NÃO IMPLEMENTADO: tarefa futura)"
+    ]
+  },
+  "context_from_writer": {
+    "files_modified": [
+      "app/agents/fallback_compiler.py",
+      "app/plan_models/fixed_plans.py",
+      "app/server.py",
+      "tests/unit/agents/test_storybrand_fallback.py"
+    ],
+    "test_results": {
+      "total": 14,
+      "passed": 14,
+      "failed": 0,
+      "coverage_estimated": ">80%"
+    },
+    "implementation_highlights": [
+      "8 níveis de fallback na função _normalize_cta",
+      "Mapeamento de sinônimos case-insensitive",
+      "Logs apropriados (info para normalização, warning para fallback)",
+      "Prompts TASK-003 atualizados em 3 formatos",
+      "Estado inicial enriquecido com CTAs e recomendações"
+    ]
   }
 }

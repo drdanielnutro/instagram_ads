@@ -29,10 +29,86 @@ from app.schemas.storybrand import (
     SuccessElement,
     StoryBrandMetadata,
 )
+from app.config import CTA_INSTAGRAM_CHOICES, CTA_BY_OBJECTIVE
 from .storybrand_sections import build_storybrand_section_configs
 
 
 logger = logging.getLogger(__name__)
+
+
+def _normalize_cta(cta: str | None, objetivo: str = "") -> str:
+    """Normaliza CTA para garantir que pertença a CTA_INSTAGRAM_CHOICES.
+
+    Lógica de normalização (ordem de prioridade):
+    1. Se cta is None ou empty: retorna "Saiba mais" (sem log)
+    2. Limpar: cta.strip()
+    3. Buscar exact match case-sensitive em CTA_INSTAGRAM_CHOICES: retorna direto
+    4. Buscar case-insensitive: retorna versão oficial (Title Case)
+    5. Buscar em synonym_map: retorna valor mapeado + log info
+    6. Fallback contextual: usa CTA_BY_OBJECTIVE.get(objetivo)[0] + log warning
+    7. Default: "Saiba mais" + log warning
+
+    Args:
+        cta: CTA a ser normalizado (pode ser None ou string)
+        objetivo: Objetivo final para fallback contextual
+
+    Returns:
+        CTA válido pertencente a CTA_INSTAGRAM_CHOICES
+    """
+    # Synonym map - mapeamento de variações comuns para CTAs oficiais
+    synonym_map = {
+        "agendar": "Enviar mensagem",
+        "agendar avaliação": "Enviar mensagem",
+        "fale conosco": "Enviar mensagem",
+        "entre em contato": "Enviar mensagem",
+        "Saiba Mais": "Saiba mais",
+        "saiba mais": "Saiba mais",
+        "compre agora": "Comprar agora",
+        "cadastre-se": "Cadastre-se",
+        "inscreva-se": "Cadastre-se",
+    }
+
+    # 1. Tratar None ou empty sem log (comportamento esperado)
+    if cta is None or cta == "":
+        return "Saiba mais"
+
+    # 2. Limpar
+    cta = cta.strip()
+
+    # 3. Buscar exact match case-sensitive
+    if cta in CTA_INSTAGRAM_CHOICES:
+        return cta
+
+    # 4. Buscar case-insensitive (normalizar para Title Case)
+    for valid_cta in CTA_INSTAGRAM_CHOICES:
+        if cta.lower() == valid_cta.lower():
+            return valid_cta
+
+    # 5. Buscar em synonym_map
+    if cta in synonym_map:
+        mapped = synonym_map[cta]
+        logger.info(f"CTA normalizado: '{cta}' → '{mapped}'")
+        return mapped
+
+    # Tentar synonym_map case-insensitive
+    for synonym, mapped in synonym_map.items():
+        if cta.lower() == synonym.lower():
+            logger.info(f"CTA normalizado: '{cta}' → '{mapped}'")
+            return mapped
+
+    # 6. Fallback contextual usando objetivo
+    if objetivo:
+        contextual_ctas = CTA_BY_OBJECTIVE.get(objetivo)
+        if contextual_ctas and len(contextual_ctas) > 0:
+            result = contextual_ctas[0]
+            logger.warning(
+                f"CTA inválido '{cta}' para objetivo '{objetivo}', usando fallback contextual: '{result}'"
+            )
+            return result
+
+    # 7. Default final
+    logger.warning(f"CTA inválido '{cta}', usando default: 'Saiba mais'")
+    return "Saiba mais"
 
 
 def _get_str(state: Dict[str, Any], key: str) -> str:
@@ -68,16 +144,37 @@ def _split_steps(plan_text: str) -> List[str]:
     return [p.strip() for p in parts if p.strip()][:6]
 
 
-def _extract_ctas(action_text: str) -> tuple[str, str]:
+def _extract_ctas(action_text: str, objetivo: str) -> tuple[str, str]:
+    """Extrai e normaliza CTAs do texto de ação.
+
+    Args:
+        action_text: Texto contendo os CTAs (linhas separadas)
+        objetivo: Objetivo final para fallback contextual
+
+    Returns:
+        Tupla (cta_principal, cta_backup) normalizados
+    """
     if not action_text:
-        return "", ""
+        cta_principal = _normalize_cta("", objetivo)
+        cta_backup = _normalize_cta("", objetivo)
+        return cta_principal, cta_backup
+
     lines = [l.strip(" -•\t") for l in action_text.replace("\r", "").split("\n")]
     lines = [l for l in lines if l]
+
     if not lines:
-        return action_text.strip(), ""
+        cta_principal = _normalize_cta(action_text.strip(), objetivo)
+        cta_backup = _normalize_cta("", objetivo)
+        return cta_principal, cta_backup
+
     if len(lines) == 1:
-        return lines[0], ""
-    return lines[0], lines[1]
+        cta_principal = _normalize_cta(lines[0], objetivo)
+        cta_backup = _normalize_cta("", objetivo)
+        return cta_principal, cta_backup
+
+    cta_principal = _normalize_cta(lines[0], objetivo)
+    cta_backup = _normalize_cta(lines[1], objetivo)
+    return cta_principal, cta_backup
 
 
 class FallbackStorybrandCompiler(BaseAgent):
@@ -194,7 +291,8 @@ class FallbackStorybrandCompiler(BaseAgent):
             confidence=0.85 if (plan_text or steps) else 0.0,
         )
 
-        cta_primary, cta_secondary = _extract_ctas(action_text)
+        objetivo_final = state.get("objetivo_final", "")
+        cta_primary, cta_secondary = _extract_ctas(action_text, objetivo_final)
         action = ActionElement(
             primary=cta_primary,
             secondary=cta_secondary,

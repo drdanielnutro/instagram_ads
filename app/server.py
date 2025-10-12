@@ -29,7 +29,7 @@ from opentelemetry.sdk.trace import TracerProvider, export
 from app.schemas.run_preflight import RunPreflightRequest
 from app.plan_models.fixed_plans import get_plan_by_format
 from app.format_specifications import get_specs_by_format, get_specs_json_by_format
-from app.config import config
+from app.config import config, CTA_INSTAGRAM_CHOICES, CTA_BY_OBJECTIVE
 from app.utils.gcs import upload_reference_image as upload_reference_image_to_gcs
 from app.utils.reference_cache import (
     build_reference_summary,
@@ -653,6 +653,21 @@ def run_preflight(request: RunPreflightRequest = Body(...)) -> dict:
             )
         except Exception:
             pass
+
+    # P1: Enriquecer estado inicial com CTAs e recomendações
+    initial_state["cta_instagram_choices"] = list(CTA_INSTAGRAM_CHOICES)
+    initial_state["cta_by_objective"] = CTA_BY_OBJECTIVE
+
+    objetivo = initial_state.get("objetivo_final", "")
+    recommended_cta = CTA_BY_OBJECTIVE.get(objetivo, ("Saiba mais",))[0]
+    initial_state["recommended_cta"] = recommended_cta
+
+    try:
+        py_logger.debug(
+            f"Estado inicial enriquecido: objetivo={objetivo}, recommended_cta={recommended_cta}"
+        )
+    except Exception:
+        pass
 
     response = {
         "success": True,

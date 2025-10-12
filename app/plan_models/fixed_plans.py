@@ -51,7 +51,13 @@ def _tasks_reels() -> List[Dict[str, Any]]:
             "title": "Copy (gancho curto + CTA)",
             "description": (
                 "Gerar copy: headline curta (≤40 caracteres) com gancho específico; corpo conciso; cta_texto coerente "
-                "com o objetivo_final. Evitar promessas médicas indevidas; pt‑BR."
+                "com o objetivo_final. Evitar promessas médicas indevidas; pt‑BR.\n\n"
+                "cta_texto OBRIGATÓRIO: escolha EXATAMENTE um valor de ['Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se'].\n\n"
+                "Preferências por objetivo:\n"
+                "- agendamentos: 'Enviar mensagem' ou 'Ligar'\n"
+                "- leads: 'Cadastre-se' ou 'Saiba mais'\n"
+                "- vendas: 'Comprar agora' ou 'Saiba mais'\n"
+                "- engajamento: 'Saiba mais'"
             ),
             "file_path": f"{base_dir}/TASK-003.json",
             "action": "CREATE",
@@ -157,7 +163,13 @@ def _tasks_stories() -> List[Dict[str, Any]]:
             "title": "Copy curta (Stories)",
             "description": (
                 "Gerar copy com headline curta (≤40), corpo direto e cta_texto claro; sem legenda tradicional; "
-                "pt‑BR; evitar exageros."
+                "pt‑BR; evitar exageros.\n\n"
+                "cta_texto OBRIGATÓRIO: escolha EXATAMENTE um valor de ['Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se'].\n\n"
+                "Preferências por objetivo:\n"
+                "- agendamentos: 'Enviar mensagem' ou 'Ligar'\n"
+                "- leads: 'Cadastre-se' ou 'Saiba mais'\n"
+                "- vendas: 'Comprar agora' ou 'Saiba mais'\n"
+                "- engajamento: 'Saiba mais'"
             ),
             "file_path": f"{base_dir}/TASK-003.json",
             "action": "CREATE",
@@ -258,7 +270,13 @@ def _tasks_feed() -> List[Dict[str, Any]]:
             "category": "COPY_DRAFT",
             "title": "Copy informativa (Feed)",
             "description": (
-                "Gerar copy: headline clara (≤60), corpo informativo e cta_texto coerente com o objetivo_final; pt‑BR."
+                "Gerar copy: headline clara (≤60), corpo informativo e cta_texto coerente com o objetivo_final; pt‑BR.\n\n"
+                "cta_texto OBRIGATÓRIO: escolha EXATAMENTE um valor de ['Saiba mais', 'Enviar mensagem', 'Ligar', 'Comprar agora', 'Cadastre-se'].\n\n"
+                "Preferências por objetivo:\n"
+                "- agendamentos: 'Enviar mensagem' ou 'Ligar'\n"
+                "- leads: 'Cadastre-se' ou 'Saiba mais'\n"
+                "- vendas: 'Comprar agora' ou 'Saiba mais'\n"
+                "- engajamento: 'Saiba mais'"
             ),
             "file_path": f"{base_dir}/TASK-003.json",
             "action": "CREATE",

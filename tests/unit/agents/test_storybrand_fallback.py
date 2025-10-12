@@ -10,6 +10,7 @@ from app.agents.storybrand_fallback import (
     _normalize_gender,
     fallback_input_collector_callback,
 )
+from app.agents.fallback_compiler import _normalize_cta, _extract_ctas
 from app.agents.storybrand_sections import build_storybrand_section_configs
 
 SECTION_CONFIGS = build_storybrand_section_configs()
@@ -230,3 +231,98 @@ async def test_persist_storybrand_sections_gcs_upload(tmp_path, monkeypatch):
     # Validate uploaded data contains sections
     uploaded_json = json.loads(upload["data"].decode("utf-8"))
     assert len(uploaded_json["sections"]) == len(SECTION_CONFIGS)
+
+
+# ============================================================================
+# TESTES P0: Normalização de CTAs
+# ============================================================================
+
+
+def test_normalize_cta_exact_match():
+    """CTA válido exato deve retornar inalterado."""
+    assert _normalize_cta("Saiba mais") == "Saiba mais"
+    assert _normalize_cta("Enviar mensagem") == "Enviar mensagem"
+    assert _normalize_cta("Ligar") == "Ligar"
+    assert _normalize_cta("Comprar agora") == "Comprar agora"
+    assert _normalize_cta("Cadastre-se") == "Cadastre-se"
+
+
+def test_normalize_cta_case_insensitive():
+    """CTA válido com case diferente deve normalizar para Title Case oficial."""
+    assert _normalize_cta("SAIBA MAIS") == "Saiba mais"
+    assert _normalize_cta("saiba mais") == "Saiba mais"
+    assert _normalize_cta("enviar mensagem") == "Enviar mensagem"
+    assert _normalize_cta("ENVIAR MENSAGEM") == "Enviar mensagem"
+    assert _normalize_cta("ligar") == "Ligar"
+    assert _normalize_cta("COMPRAR AGORA") == "Comprar agora"
+    assert _normalize_cta("cadastre-se") == "Cadastre-se"
+
+
+def test_normalize_cta_synonyms():
+    """Sinônimos conhecidos devem mapear para CTA oficial."""
+    assert _normalize_cta("agendar") == "Enviar mensagem"
+    assert _normalize_cta("agendar avaliação") == "Enviar mensagem"
+    assert _normalize_cta("fale conosco") == "Enviar mensagem"
+    assert _normalize_cta("entre em contato") == "Enviar mensagem"
+    assert _normalize_cta("compre agora") == "Comprar agora"
+    assert _normalize_cta("inscreva-se") == "Cadastre-se"
+    # Case insensitive synonym matching
+    assert _normalize_cta("AGENDAR") == "Enviar mensagem"
+    assert _normalize_cta("Fale Conosco") == "Enviar mensagem"
+
+
+def test_normalize_cta_fallback_by_objective():
+    """CTA inválido com objetivo válido deve usar CTA do objetivo."""
+    assert _normalize_cta("clique aqui", "agendamentos") == "Enviar mensagem"
+    assert _normalize_cta("xyz123", "leads") == "Cadastre-se"
+    assert _normalize_cta("invalid", "vendas") == "Comprar agora"
+    assert _normalize_cta("???", "contato") == "Enviar mensagem"
+    assert _normalize_cta("foobar", "awareness") == "Saiba mais"
+
+
+def test_normalize_cta_default():
+    """CTA inválido sem objetivo válido deve usar 'Saiba mais'."""
+    assert _normalize_cta("invalid cta") == "Saiba mais"
+    assert _normalize_cta("xyz123") == "Saiba mais"
+    assert _normalize_cta("???") == "Saiba mais"
+    # CTA inválido com objetivo inválido também usa default
+    assert _normalize_cta("invalid", "objetivo_inexistente") == "Saiba mais"
+
+
+def test_normalize_cta_empty():
+    """None e strings vazias devem retornar 'Saiba mais' sem log."""
+    assert _normalize_cta(None) == "Saiba mais"
+    assert _normalize_cta("") == "Saiba mais"
+    assert _normalize_cta("   ") == "Saiba mais"  # whitespace só também vira empty após strip
+
+
+def test_extract_ctas_with_normalization():
+    """Integração: _extract_ctas deve normalizar ambos os CTAs."""
+    # Caso normal: dois CTAs válidos
+    action_text = "Enviar mensagem\nSaiba mais"
+    primary, secondary = _extract_ctas(action_text, "agendamentos")
+    assert primary == "Enviar mensagem"
+    assert secondary == "Saiba mais"
+
+    # Caso com sinônimos
+    action_text = "agendar\ncompre agora"
+    primary, secondary = _extract_ctas(action_text, "vendas")
+    assert primary == "Enviar mensagem"  # agendar → Enviar mensagem
+    assert secondary == "Comprar agora"  # compre agora → Comprar agora
+
+    # Caso com CTA inválido (usa fallback contextual)
+    action_text = "invalid_cta\nSaiba mais"
+    primary, secondary = _extract_ctas(action_text, "leads")
+    assert primary == "Cadastre-se"  # fallback para objetivo "leads"
+    assert secondary == "Saiba mais"
+
+    # Caso vazio
+    primary, secondary = _extract_ctas("", "agendamentos")
+    assert primary == "Saiba mais"
+    assert secondary == "Saiba mais"
+
+    # Caso com apenas um CTA
+    action_text = "Ligar"
+    primary, secondary = _extract_ctas(action_text, "contato")
+    assert primary == "Ligar"
+    assert secondary == "Saiba mais"  # default para backup vazio

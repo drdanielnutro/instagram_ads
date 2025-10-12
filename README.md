@@ -1,302 +1,319 @@
-## Project Overview
+# Instagram Ads - Sistema de Geração Automatizada
 
-This is an Instagram Ads generation system based on Google ADK (Agent Development Kit) that automates the creation of ad content (text and images) in JSON format for Instagram campaigns.
+Sistema de geração automatizada de anúncios para Instagram baseado em Google ADK (Agent Development Kit), que cria conteúdo de anúncios (texto e imagens) em formato JSON para campanhas.
 
-## Common Development Commands
+## 🚀 Início Rápido
 
-### Starting Development Environment
 ```bash
-# Main development command - auto-kills ports and starts all services
+# Iniciar ambiente de desenvolvimento completo
 make dev
 
-# Alternative: Start with quieter logging
+# Executar testes
+pytest tests/ -v
+
+# Verificar qualidade de código
+make lint
+```
+
+**Acesso**:
+- Frontend: http://localhost:5173/app/
+- Backend API: http://localhost:8000/docs
+
+## 📋 Visão Geral
+
+### Arquitetura Multi-Agente
+
+O sistema utiliza agentes ADK sequenciais organizados em pipeline:
+
+```
+input_processor → landing_page_analyzer → planning_pipeline →
+execution_pipeline → final_assembly → validation
+```
+
+### Componentes Principais
+
+1. **Sistema Preflight** (`/run_preflight`)
+   - Valida e normaliza entrada do usuário
+   - Seleciona planos fixos baseados no formato (Reels/Stories/Feed)
+   - Retorna estado inicial com plano de implementação
+
+2. **Análise de Landing Page**
+   - Extrai conteúdo HTML via `web_fetch_tool`
+   - Análise StoryBrand via LangExtract/Vertex AI
+   - Extrai 7 elementos StoryBrand para contexto do anúncio
+
+3. **Execução de Planos**
+   - Planos fixos por formato em `app/plan_models/fixed_plans.py`
+   - 8 categorias de tarefas: STRATEGY, RESEARCH, COPY_DRAFT, VISUAL_DRAFT, etc.
+   - Cada tarefa gera fragmentos JSON que são montados
+
+4. **Persistência**
+   - **Local**: `artifacts/ads_final/<timestamp>_<session>_<formato>.json`
+   - **GCS**: Upload opcional para `gs://<bucket>/ads/final/`
+   - **StoryBrand Sections**: `artifacts/storybrand/<session_id>.json` (quando fallback ativo)
+
+## 📁 Persistência de Dados
+
+### JSON Final de Entrega
+
+O sistema persiste o resultado final em formato JSON contendo:
+- Conteúdo dos anúncios (texto, imagens, formato)
+- Metadados da sessão
+- Análise StoryBrand
+- Plano de execução utilizado
+
+**Localização**:
+- Local: `artifacts/ads_final/<timestamp>_<session_id>_<formato>.json`
+- GCS (opcional): `gs://<DELIVERIES_BUCKET>/deliveries/<user_id>/<session_id>/final_code_delivery.json`
+
+### Persistência de Seções StoryBrand (Fallback)
+
+Quando o **fallback StoryBrand** é ativado, o sistema salva as **16 seções completas** da narrativa antes da consolidação:
+
+**Arquivo gerado**: `artifacts/storybrand/<session_id>.json`
+
+**Estrutura**:
+```json
+{
+  "sections": {
+    "storybrand_hero": "Texto da seção...",
+    "storybrand_problema_externo": "Texto da seção...",
+    "storybrand_problema_interno": "Texto da seção...",
+    // ... 16 seções completas (ver SECTION_CONFIGS)
+  },
+  "audit": [...],
+  "enriched_inputs": {...},
+  "timestamp_utc": "2025-10-12T15:00:00Z"
+}
+```
+
+**Referência no meta.json**:
+O arquivo `meta.json` (gerado junto com o JSON final) contém referências às seções:
+```json
+{
+  "storybrand_sections_saved_path": "artifacts/storybrand/<session_id>.json",
+  "storybrand_sections_gcs_uri": "gs://bucket/deliveries/<user>/<session>/storybrand_sections.json",
+  "storybrand_sections_present": true
+}
+```
+
+**Quando é gerado**:
+- Flag `PERSIST_STORYBRAND_SECTIONS=true` habilitada
+- Flag `ENABLE_STORYBRAND_FALLBACK=true` habilitada
+- Fallback StoryBrand ativado (score < threshold ou erro)
+
+**Implementação**: `app/agents/storybrand_fallback.py:69-161` (`PersistStorybrandSectionsAgent`)
+
+**Uso**: Auditorias, reconstrução de narrativa completa, análise detalhada por seção.
+
+### Endpoints de Recuperação
+
+- `GET /final/meta` - Metadados do JSON final (inclui referências StoryBrand)
+- `GET /final/download` - Download do JSON final de entrega
+
+## 🔧 Comandos de Desenvolvimento
+
+### Ambiente de Desenvolvimento
+
+```bash
+# Iniciar todos os serviços (mata portas automaticamente)
+make dev
+
+# Iniciar com logging reduzido
 make dev-quiet
 
-# Start backend only (includes /run_preflight endpoint)
+# Apenas backend (inclui /run_preflight)
 make dev-backend-all
 
-# Start frontend only
+# Apenas frontend
 make dev-frontend
 ```
 
-### Running Tests
+### Testes
+
 ```bash
-# Run all tests
+# Executar todos os testes
 pytest tests/ -v
 
-# With coverage report
+# Com relatório de cobertura
 pytest tests/ --cov=app --cov-report=html
 
-# Run specific test categories
+# Categorias específicas
 pytest tests/unit
 pytest tests/integration
 ```
 
-### Code Quality
+### Qualidade de Código
+
 ```bash
-# Run all linters
+# Executar todos os linters
 make lint
 
-# Individual linting commands
+# Comandos individuais
 uv run ruff check . --diff
 uv run ruff format . --check --diff
 uv run mypy .
 uv run codespell
 ```
 
-### Deployment
+### Deploy
+
 ```bash
-# Deploy to Google Cloud Run
+# Deploy para Google Cloud Run
 make backend
 
-# Setup development environment in GCP
+# Configurar ambiente de desenvolvimento no GCP
 make setup-dev-env
 ```
 
-## High-Level Architecture
+## 📥 Formato de Entrada
 
-### Multi-Agent Pipeline
-The system uses sequential ADK agents organized in a pipeline:
-```
-input_processor → landing_page_analyzer → planning_pipeline → execution_pipeline → final_assembly → validation
-```
+### Campos Base (Sempre Disponíveis)
 
-### Key Components
+**Obrigatórios**:
+- `landing_page_url`: URL da página de destino
+- `objetivo_final`: Objetivo da campanha (ex: agendamentos, leads)
+- `perfil_cliente`: Persona do público-alvo
+- `formato_anuncio`: "Reels", "Stories" ou "Feed"
 
-1. **Preflight System** (`/run_preflight` endpoint)
-   - Validates and normalizes user input before ADK processing
-   - Selects fixed plans based on ad format (Reels/Stories/Feed)
-   - Returns initial state with implementation plan
-   - Located in `app/server.py:162-410`
+**Opcional**:
+- `foco`: Tema ou gancho da campanha
 
-2. **Landing Page Analysis**
-   - Uses `web_fetch_tool` to extract HTML content
-   - Performs StoryBrand analysis via LangExtract/Vertex AI
-   - Extracts 7 StoryBrand elements for ad context
-   - Implementation in `app/callbacks/landing_page_callbacks.py`
+### Campos Condicionais (Quando `ENABLE_NEW_INPUT_FIELDS=true`)
 
-3. **Plan Execution**
-   - Fixed plans per format stored in `app/plan_models/fixed_plans.py`
-   - Format specifications in `app/format_specifications.py`
-   - 8 task categories: STRATEGY, RESEARCH, COPY_DRAFT, VISUAL_DRAFT, etc.
-   - Each task generates JSON fragments that are assembled
+Campos adicionais obrigatórios para pipeline de fallback StoryBrand:
+- `nome_empresa`: Nome da empresa como deve aparecer nos criativos
+- `o_que_a_empresa_faz`: Proposta de valor/resumo do serviço
+- `sexo_cliente_alvo`: Gênero do público-alvo - deve ser exatamente `"masculino"` ou `"feminino"`
 
-4. **Persistence**
-   - Local: `artifacts/ads_final/<timestamp>_<session>_<formato>.json`
-   - GCS: Optional upload to `gs://<bucket>/ads/final/`
-   - Handled by `app/callbacks/persist_outputs.py`
+**Nota**: Estes campos são extraídos em modo shadow quando `PREFLIGHT_SHADOW_MODE=true` mas só incluídos em `initial_state` quando `ENABLE_NEW_INPUT_FIELDS=true`.
 
-### Critical Files
+## 🎛️ Feature Flags
 
-- **Main agent**: `app/agent.py` - Complete pipeline definition (1972 lines)
-- **Server**: `app/server.py` - FastAPI endpoints including preflight
-- **LangExtract**: `app/tools/langextract_sb7.py` - StoryBrand analysis
-- **Fixed Plans**: `app/plan_models/fixed_plans.py` - Pre-defined execution plans
-- **Format Specs**: `app/format_specifications.py` - Instagram format rules
+### Flags Disponíveis
 
-### Frontend Architecture
+- `ENABLE_STORYBRAND_FALLBACK`: Pipeline de fallback quando análise StoryBrand é fraca ou falha (padrão: `false`)
+- `ENABLE_NEW_INPUT_FIELDS`: Campos experimentais de entrada (padrão: `false`)
+- `PERSIST_STORYBRAND_SECTIONS`: Salvar 16 seções StoryBrand em artefato separado (padrão: `false`)
+- `STORYBRAND_GATE_DEBUG`: Forçar caminho de fallback para testes (padrão: `false`)
+- `ENABLE_IMAGE_GENERATION`: Geração de imagens com Gemini (padrão: `true`)
+- `PREFLIGHT_SHADOW_MODE`: Extrair novos campos sem incluir em initial_state (padrão: `true`)
+- `ENABLE_DETERMINISTIC_FINAL_VALIDATION`: Pipeline de validação determinística para JSON final (padrão: `false`)
 
-- React + TypeScript + Vite
-- Located in `frontend/` directory
-- Main components:
-  - `App.tsx` - Main application component
-  - `InputForm.tsx` - User input handling
-  - `ChatMessagesView.tsx` - Message display
-  - UI components in `components/ui/`
+### Lógica de Ativação do Fallback
 
-## Input Format
+O pipeline de fallback StoryBrand só executa quando:
+1. `ENABLE_STORYBRAND_FALLBACK=true` **E** `ENABLE_NEW_INPUT_FIELDS=true` (ambos obrigatórios)
+2. **E** um dos seguintes:
+   - `STORYBRAND_GATE_DEBUG=true` (força fallback)
+   - `force_storybrand_fallback=true` no state (definido por error handlers)
+   - Score StoryBrand < `min_storybrand_completeness` (padrão 0.6)
 
-### Base Fields (Always Available)
+Ver `app/agents/storybrand_gate.py:47-75` para lógica do gate.
 
-Required fields:
-- `landing_page_url`: Target page URL
-- `objetivo_final`: Campaign goal (e.g., agendamentos, leads)
-- `perfil_cliente`: Target audience persona
-- `formato_anuncio`: "Reels", "Stories", or "Feed"
+### Configurando Flags Localmente
 
-Optional field:
-- `foco`: Campaign theme or hook
+Flags são carregadas de `app/.env` via Makefile:
+1. Editar `app/.env`
+2. Reiniciar com `make dev` (exporta variáveis automaticamente)
+3. Verificar logs de startup para "Feature flags loaded on startup"
+4. Procurar entrada de log `storybrand_gate_decision` com `fallback_enabled=True`
 
-### Conditional Fields (When `ENABLE_NEW_INPUT_FIELDS=true`)
+### Troubleshooting
 
-Additional required fields for StoryBrand fallback pipeline:
-- `nome_empresa`: Company name as it should appear in creatives (required, no default)
-- `o_que_a_empresa_faz`: Value proposition/service summary (required, no default)
-- `sexo_cliente_alvo`: Target audience gender - must be exactly `"masculino"` or `"feminino"` (required, empty/"neutro" blocks fallback)
+Se flags não estão sendo carregadas:
+- Verificar que `app/.env` existe e contém as flags
+- Reiniciar backend completamente (`make check-and-kill-ports`)
+- Verificar logs de startup imediatamente após `make dev`
+- Testar: `uv run python -c "import os; from app.config import config; print(config.enable_storybrand_fallback)"`
 
-**Note**: These fields are extracted in shadow mode when `PREFLIGHT_SHADOW_MODE=true` but only included in `initial_state` when `ENABLE_NEW_INPUT_FIELDS=true`. See [app/server.py:273-386](app/server.py#L273-L386) for extraction logic.
+## 🌐 Variáveis de Ambiente
 
-## Environment Variables
+Configurações principais em `app/.env`:
 
-Key configurations in `app/.env`:
 ```bash
 GOOGLE_CLOUD_PROJECT=instagram-ads-472021
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/credentials.json
-ARTIFACTS_BUCKET=gs://project-facilitador-logs-data  # Optional
-LANGEXTRACT_API_KEY=your-gemini-key  # Optional
+ARTIFACTS_BUCKET=gs://project-facilitador-logs-data  # Opcional
+LANGEXTRACT_API_KEY=your-gemini-key  # Opcional
+DELIVERIES_BUCKET=gs://bucket-name  # Para upload GCS
 
-# Performance tuning for StoryBrand analysis
+# Tunning de performance StoryBrand
 STORYBRAND_HARD_CHAR_LIMIT=20000
 STORYBRAND_SOFT_CHAR_LIMIT=12000
 STORYBRAND_TAIL_RATIO=0.2
 
-# Vertex AI retry settings
+# Configurações de retry Vertex AI
 VERTEX_CONCURRENCY_LIMIT=3
 VERTEX_RETRY_MAX_ATTEMPTS=5
 VERTEX_RETRY_INITIAL_BACKOFF=1.0
 VERTEX_RETRY_MAX_BACKOFF=30.0
 ```
 
-## Feature Flags
+## 🏗️ Arquivos Críticos
 
-### Available Flags
-- `ENABLE_STORYBRAND_FALLBACK`: Enable fallback pipeline when StoryBrand analysis is weak or fails (default: `false`)
-- `ENABLE_NEW_INPUT_FIELDS`: Enable experimental input fields (default: `false`)
-- `STORYBRAND_GATE_DEBUG`: Force fallback path for testing (default: `false`)
-- `ENABLE_IMAGE_GENERATION`: Enable Gemini image generation (default: `true`)
-- `PREFLIGHT_SHADOW_MODE`: Extract new fields without including in initial_state (default: `true`)
-- `ENABLE_DETERMINISTIC_FINAL_VALIDATION`: Enable deterministic validation pipeline for final JSON output (default: `false`)
+- **Agente principal**: `app/agent.py` - Definição completa do pipeline
+- **Servidor**: `app/server.py` - Endpoints FastAPI incluindo preflight
+- **LangExtract**: `app/tools/langextract_sb7.py` - Análise StoryBrand
+- **Planos Fixos**: `app/plan_models/fixed_plans.py` - Planos pré-definidos
+- **Especificações de Formato**: `app/format_specifications.py` - Regras de formato Instagram
+- **Persistência**: `app/callbacks/persist_outputs.py` - Salvamento de outputs e metadados
 
-### Important Notes
-**Fallback Activation Logic**: The StoryBrand fallback pipeline only runs when:
-1. `ENABLE_STORYBRAND_FALLBACK=true` **AND** `ENABLE_NEW_INPUT_FIELDS=true` (both required)
-2. AND one of:
-   - `STORYBRAND_GATE_DEBUG=true` (forces fallback)
-   - `force_storybrand_fallback=true` in state (set by error handlers)
-   - StoryBrand score < `min_storybrand_completeness` (default 0.6)
+## 📡 Endpoints da API
 
-See [app/agents/storybrand_gate.py:47-75](app/agents/storybrand_gate.py#L47-L75) for gate logic.
+- `POST /run_preflight` - Validar entrada e obter estado inicial
+- `POST /run` - Executar agente sincronamente (provido pelo ADK)
+- `POST /run_sse` - Executar com Server-Sent Events streaming (provido pelo ADK)
+- `POST /apps/{app_name}/users/{user_id}/sessions/{session_id}` - Criar sessão (provido pelo ADK)
+- `POST /feedback` - Enviar feedback
+- `GET /final/meta` - Obter metadados do JSON final
+- `GET /final/download` - Download do JSON final
 
-### Setting Flags Locally
-Flags are loaded from `app/.env` via Makefile export. To modify:
-1. Edit `app/.env`
-2. Restart with `make dev` (automatically sources and exports vars)
-3. Check startup logs for "Feature flags loaded on startup" to confirm values
-4. Look for `storybrand_gate_decision` log entry with `fallback_enabled=True`
+**Nota**: Endpoints marcados como "provido pelo ADK" são registrados automaticamente por `get_fast_api_app()`.
 
-### Troubleshooting
-If flags aren't being loaded:
-- Verify `app/.env` exists and contains the flags
-- Restart backend completely (kill ports with `make check-and-kill-ports`)
-- Check startup logs immediately after `make dev`
-- Test with: `uv run python -c "import os; from app.config import config; print(config.enable_storybrand_fallback)"`
+## 🎨 Arquitetura Frontend
 
-## Current Issues & Solutions
+- React + TypeScript + Vite
+- Localização: `frontend/`
+- Componentes principais:
+  - `App.tsx` - Componente principal da aplicação
+  - `InputForm.tsx` - Manipulação de entrada do usuário
+  - `ChatMessagesView.tsx` - Exibição de mensagens
+  - Componentes UI em `components/ui/`
 
-### StoryBrand Analysis Performance
-If experiencing latency with landing page analysis:
-1. Adjust environment variables (see above)
-2. Check logs: `make logs-storybrand`
-3. Monitor timing metrics in logs
+## 🤖 Modelos Utilizados
 
-### Port Conflicts
-The Makefile automatically kills processes on ports 8000 and 5173 before starting.
-
-## API Endpoints
-
-- `POST /run_preflight` - Validate input and get initial state
-- `POST /run` - Execute agent synchronously (provided by ADK framework)
-- `POST /run_sse` - Execute with Server-Sent Events streaming (provided by ADK framework)
-- `POST /apps/{app_name}/users/{user_id}/sessions/{session_id}` - Create session (provided by ADK framework)
-- `POST /feedback` - Submit feedback
-- `GET /final/meta` - Get metadata for final delivery JSON
-- `GET /final/download` - Download final delivery JSON
-
-**Note**: Endpoints marked as "provided by ADK framework" are automatically registered by `get_fast_api_app()` and don't appear explicitly in `server.py`.
-
-## Access Points
-
-- Frontend: http://localhost:5173/app/
-- Backend API: http://localhost:8000/docs
-
-## Models Used
-
-- Worker agents: `gemini-2.5-flash`
-- Critic agents: `gemini-2.5-pro`
+- Agentes worker: `gemini-2.5-flash`
+- Agentes critic: `gemini-2.5-pro`
 - LangExtract: `gemini-2.5-flash` (via Vertex AI)
 
-## Subagent Usage Policy
+## 📚 Documentação Adicional
 
-This section defines **deterministic triggers** for mandatory use of specialized subagents from [.claude/agents/](.claude/agents/). These rules override general tool usage policies when conditions are met.
+Para instruções detalhadas sobre desenvolvimento com Claude Code, consulte:
+- [README_BACKUP.md](README_BACKUP.md) - Instruções completas do Claude Code
+- [.claude/CLAUDE.md](.claude/CLAUDE.md) - Configurações do sistema multi-agente
 
-### Priority Rules
+Para playbooks operacionais e procedimentos:
+- [docs/playbooks/](docs/playbooks/) - Procedimentos de rollout, validação e troubleshooting
+- [docs/changelog_reference_images.md](docs/changelog_reference_images.md) - Histórico de mudanças
 
-When processing user requests, apply this hierarchy:
-1. **Deterministic subagent triggers** (defined below) - HIGHEST priority
-2. **Specialized subagents** (when task matches agent description)
-3. **General-purpose agents** (for complex multi-step tasks)
+## 🐛 Problemas Conhecidos & Soluções
 
-### Mandatory Subagent Triggers
+### Performance da Análise StoryBrand
 
-#### 1. Plan Validation & Drift Detection
-**Subagent**: [plan-code-validator](.claude/agents/plan-code-validator.md)
+Se experimentar latência na análise de landing page:
+1. Ajustar variáveis de ambiente (ver acima)
+2. Verificar logs: `make logs-storybrand`
+3. Monitorar métricas de timing nos logs
 
-**MUST USE** when user request contains ANY of these terms:
-- Portuguese: "revisar plano", "validar plano", "buscar inconsistências", "identificar inconsistências", "checar plano", "analisar drift", "verificar plano"
-- English: "review plan", "validate plan", "find inconsistencies", "identify inconsistencies", "check plan", "analyze drift", "verify plan"
+### Conflitos de Porta
 
-**Required Conditions**:
-- Target file MUST have `.md` extension
-- File should contain implementation plan (tasks, phases, dependencies, deliverables)
+O Makefile mata automaticamente processos nas portas 8000 e 5173 antes de iniciar.
 
-**Invocation**:
-```python
-Task tool with parameters:
-- subagent_type: "plan-code-validator"
-- prompt: "Validate the implementation plan in <file_path> against the codebase in <repo_root>"
-```
+## 📄 Licença
 
-**Examples**:
-```markdown
-✅ MUST use plan-code-validator:
-user: "Revise o plano em docs/refactoring_plan.md"
-user: "Validate the plan in docs/api_migration.md for inconsistencies"
-user: "Buscar inconsistências no plano docs/feature_implementation.md"
+[Especificar licença do projeto]
 
-❌ Do NOT use (wrong file type):
-user: "Review the code in src/validators.py"
-user: "Check the JSON in config/settings.json"
-```
+## 🤝 Contribuindo
 
-**Validation Scope**:
-- Dependencies claimed to exist but not found in codebase (P0 blockers)
-- Signature mismatches between plan and actual code (P1-P2)
-- Missing libraries in requirements.txt (P3-Extended)
-- State machine divergences, business rule conflicts
-
----
-
-### Template for Additional Subagents
-
-To add new deterministic triggers for other subagents in [.claude/agents/](.claude/agents/):
-
-```markdown
-#### N. [Subagent Purpose]
-**Subagent**: [subagent-name](.claude/agents/subagent-name.md)
-
-**MUST USE** when: [trigger keywords/patterns]
-
-**Required Conditions**:
-- [File type requirements]
-- [Context requirements]
-
-**Invocation**:
-```python
-Task tool with parameters:
-- subagent_type: "subagent-name"
-- prompt: "[specific instruction format]"
-```
-
-**Examples**: [concrete use cases]
-```
-
-### Available Specialized Subagents
-
-Other subagents available for specialized tasks (add deterministic triggers as needed):
-
-- [contextual-software-engineer](.claude/agents/contextual-software-engineer.md) - Project-specific solutions using context.md
-- [solution-validator-expert](.claude/agents/solution-validator-expert.md) - Cross-validate AI solutions against codebase
-- [ui-ux-auditor-typescript](.claude/agents/ui-ux-auditor-typescript.md) - Frontend UI/UX improvements
-- [implementation-consistency-auditor](.claude/agents/implementation-consistency-auditor.md) - Compare deliverables vs plans
-- [mobile-feature-mapper](.claude/agents/mobile-feature-mapper.md) - Mobile feature analysis
-- [plan-drift-corrector](.claude/agents/plan-drift-corrector.md) - Apply validated corrections to plans
+[Especificar processo de contribuição]

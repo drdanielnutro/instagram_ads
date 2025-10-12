@@ -1,7 +1,15 @@
 {
-  "task_id": "<TASK_ID>",
-  "created_at": "<ISO_TIMESTAMP>",
-  "description": "<USER_REQUEST_SUMMARY>",
+  "task_id": "TASK-20251012-0000",
+  "created_at": "2025-10-12T00:00:00Z",
+  "description": "Implementar correção completa da validação determinística de CTAs conforme plano_correcao_validacao.md: P0 (normalização no fallback via _normalize_cta), P1 (reforço de prompts e estado inicial), P2 (documentação em format_specifications.py). Objetivo: garantir que todas as variações (inclusive fallback StoryBrand) respeitem CTA_INSTAGRAM_CHOICES sem quebrar a pipeline.",
   "requested_by": "user",
-  "initial_phase": "checklist"
+  "initial_phase": "checklist",
+  "priority_levels": ["P0-OBRIGATORIO", "P1-RECOMENDADO", "P2-OPCIONAL"],
+  "key_files": [
+    "app/agents/fallback_compiler.py",
+    "app/plan_models/fixed_plans.py",
+    "app/server.py",
+    "app/config/format_specifications.py",
+    "tests/unit/agents/test_storybrand_fallback.py"
+  ]
 }

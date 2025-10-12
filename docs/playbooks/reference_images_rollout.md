@@ -62,3 +62,114 @@
 - [ ] Painéis configurados para eventos `reference_image_*` e `image_assets_generation_*`.
 - [ ] Processo de limpeza periódica acordado com Data/SRE.
 - [ ] Canal de comunicação pronto para avisar stakeholders durante rollout/rollback.
+
+## 7. Persistência de Seções StoryBrand no Fallback
+
+### 7.1. Visão Geral do Agente
+- **Nome**: `PersistStorybrandSectionsAgent`
+- **Localização**: `app/agents/storybrand_fallback.py:69-161` 【F:app/agents/storybrand_fallback.py†L69-L161】
+- **Função**: Salvar as 16 seções completas da narrativa StoryBrand antes da consolidação pelo `FallbackStorybrandCompiler`
+- **Quando executa**: Entre `StoryBrandSectionRunner` e `FallbackStorybrandCompiler` no pipeline (linha 181)
+
+### 7.2. Artefatos Gerados
+- **Local**: `artifacts/storybrand/<session_id>.json`
+- **GCS** (quando `DELIVERIES_BUCKET` configurado): `gs://bucket/deliveries/<user_id>/<session_id>/storybrand_sections.json`
+- **Estrutura JSON**:
+  ```json
+  {
+    "sections": { /* 16 seções: storybrand_hero, storybrand_problema_externo, etc. */ },
+    "audit": [...],
+    "enriched_inputs": {...},
+    "timestamp_utc": "ISO8601"
+  }
+  ```
+
+### 7.3. Campos no meta.json
+- `storybrand_sections_saved_path`: Caminho local do artefato
+- `storybrand_sections_gcs_uri`: URI do GCS (se upload foi feito)
+- `storybrand_sections_present`: Boolean indicando presença das seções
+
+### 7.4. Flags e Condições
+- **Flag principal**: `PERSIST_STORYBRAND_SECTIONS` (padrão: `false`)
+- **Relação com fallback**: Só executa quando:
+  - `PERSIST_STORYBRAND_SECTIONS=true` **E**
+  - `ENABLE_STORYBRAND_FALLBACK=true` **E**
+  - `ENABLE_NEW_INPUT_FIELDS=true` **E**
+  - Fallback ativado (score < threshold ou debug mode)
+
+### 7.5. Passos de Auditoria e Monitoramento
+
+**Verificar artefato local**:
+```bash
+# Listar artefatos gerados
+ls -lh artifacts/storybrand/
+
+# Inspecionar JSON de uma sessão específica
+cat artifacts/storybrand/<session_id>.json | jq '.sections | keys'
+```
+
+**Verificar meta.json**:
+```bash
+# Verificar se sessão tem seções StoryBrand persistidas
+cat artifacts/ads_final/<file>_meta.json | jq '{
+  storybrand_sections_present,
+  storybrand_sections_saved_path,
+  storybrand_sections_gcs_uri
+}'
+```
+
+**Monitorar logs estruturados**:
+```python
+# Procurar evento de persistência nos logs
+event = "storybrand_sections_persisted"
+# Campos: session_id, local_path, gcs_uri, has_gcs_upload, sections_count
+```
+
+**Dashboards**:
+- Taxa de sessões com `storybrand_sections_present=true`
+- Latência do `PersistStorybrandSectionsAgent`
+- Falhas de upload GCS (diferença entre `saved_path` presente e `gcs_uri` ausente)
+
+### 7.6. Indicadores para Rollout/Rollback
+
+**Rollout Gradual da Flag `PERSIST_STORYBRAND_SECTIONS`**:
+1. **Fase 1**: Habilitar em ambiente de desenvolvimento (validar artefatos manualmente)
+2. **Fase 2**: Habilitar em staging por 7 dias (monitorar latência e storage)
+3. **Fase 3**: Habilitar em produção com whitelist de usuários (10%)
+4. **Fase 4**: Rollout completo (100%)
+
+**Métricas de Sucesso**:
+- ✅ Artefatos `artifacts/storybrand/<session_id>.json` criados em 100% das sessões com fallback ativo
+- ✅ Upload GCS bem-sucedido quando `DELIVERIES_BUCKET` configurado (>95%)
+- ✅ Latência adicional < 200ms
+- ✅ Zero erros de sanitização ou serialização JSON
+
+**Gatilhos para Rollback**:
+- ❌ Falhas de upload GCS > 10% (verificar credenciais/permissões)
+- ❌ Latência adicional > 500ms (investigar tamanho das seções ou I/O)
+- ❌ Erros de serialização JSON > 1% (verificar sanitização)
+- ❌ Storage crescendo > 5GB/dia (avaliar retenção/cleanup)
+
+**Plano de Rollback**:
+1. Desabilitar flag `PERSIST_STORYBRAND_SECTIONS=false`
+2. Artefatos existentes em `artifacts/storybrand/` permanecem acessíveis
+3. Novas sessões não gerarão artefatos
+4. `meta.json` terá `storybrand_sections_present=false`
+
+### 7.7. Integração com Pipeline
+
+**Ordem de execução no fallback_storybrand_pipeline**:
+```python
+StoryBrandSectionRunner(SECTION_CONFIGS)  # Gera 16 seções
+  ↓
+PersistStorybrandSectionsAgent()  # Persiste seções completas (NOVO)
+  ↓
+FallbackStorybrandCompiler()  # Consolida em StoryBrandAnalysis
+  ↓
+FallbackQualityReporter()  # Relatório de recuperação
+```
+
+**Não afeta**:
+- Validação determinística (`ENABLE_DETERMINISTIC_FINAL_VALIDATION`)
+- Geração de imagens (`ENABLE_IMAGE_GENERATION`)
+- Pipeline principal (quando fallback não ativo)
