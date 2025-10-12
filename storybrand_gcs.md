@@ -12,7 +12,7 @@
 Revisar `PersistStorybrandSectionsAgent` (`app/agents/storybrand_fallback.py`) para mapear o fluxo local+GCS e o payload registrado em `meta.json`. Confirmar que apenas URI é salvo (`storybrand_sections_gcs_uri`).
 
 ### 2. Autorização
-Decidir estratégia de controle (IAM por usuário com prefixos por `user_id` + multi-session) vs. geração de signed URLs on demand; mapear requisito "mesmo usuário" → exigir association user/session no meta e validate.
+Decidir estratégia de controle privilegiando **Signed URLs on demand** (cenário atual sem auth robusta). Mapear requisito "mesmo usuário" → exigir `user_id/session_id` no meta e validar antes de gerar a URL; registrar que IAM direto fica para uma fase posterior quando houver autenticação formal.
 
 ### 3. Persistência Garantida
 Definir TTL zero (sem expiração) até criar lifecycle controlada; documentar que GCS mantém arquivo indefinidamente.
@@ -84,32 +84,7 @@ Atualizar README/AGENTS/playbook com fluxo de acesso futuro; registrar uso de `s
 
 ### 2. Decisão de Autorização em Aberto
 
-O plano menciona **"IAM vs. signed URLs"** mas não define critérios de escolha.
-
-#### Critérios de Decisão Sugeridos
-
-```python
-# Usar Signed URLs SE:
-CRITERIOS_SIGNED_URLS = {
-    "acesso_esporadico": True,        # Ex: revisão manual ocasional
-    "usuarios_externos": True,         # Ex: clientes sem acesso GCP
-    "sem_autenticacao_robusta": True,  # FastAPI ainda não tem auth
-    "simplicidade_implementacao": True # Menos infraestrutura
-}
-
-# Usar IAM SE:
-CRITERIOS_IAM = {
-    "acesso_frequente": True,          # Ex: dashboard lista todas as sessões
-    "usuarios_internos": True,         # Time com contas GCP
-    "autenticacao_existente": True,    # FastAPI já tem JWT/OAuth
-    "auditoria_granular": True         # Precisa rastrear cada acesso no GCP
-}
-```
-
-**Ação Requerida:**
-1. Verificar se `app/server.py` já tem middleware de autenticação (JWT, OAuth2, API keys)
-2. Decidir com stakeholder qual critério prevalece
-3. Documentar decisão e rationale
+O sistema atual não possui autenticação (requests são tratadas com `user_id="anonymous"` quando o cliente não envia). Para evoluir rapidamente e permitir uso por sessão, adotar **Signed URLs** com TTL curto, geradas sob demanda após validar `user_id`. Registrar que, quando houver auth formal (JWT/OAuth), podemos migrar para IAM.
 
 ---
 
@@ -615,7 +590,7 @@ grep "PERSIST_STORYBRAND_SECTIONS" app/.env
 ### Decisões Pendentes
 | Decisão | Status | Owner | Deadline |
 |---------|--------|-------|----------|
-| IAM vs. Signed URLs | 🔴 Pendente | Tech Lead | - |
+| IAM vs. Signed URLs | ✅ Signed URLs (provisório) | Tech Lead | - |
 | TTL de 180 dias | 🟡 Proposto | DevOps | - |
 | Caso de uso primário | 🔴 Pendente | Product | - |
 | User management | 🟡 Em investigação | Backend | - |
