@@ -8,14 +8,22 @@
 - **✨ NOVO: Slash commands otimizam workflows repetitivos**
 
 ---
+## 📘 Contexto de Projeto e Referências
+
+- @README.md — resumo completo do produto, arquitetura ADK e comandos essenciais. Sempre consulte este arquivo antes de responder a dúvidas sobre o projeto.
+- @AGENTS.md — diretrizes operacionais, convenções de código e procedimentos especiais. Use-o como checklist de fluxo de trabalho depois de revisar o README.
+
 
 ## 🔒 FILE BOUNDARIES (CRÍTICO)
 
 ### ✅ PODE EDITAR LIVREMENTE
-- `src/` - Código fonte principal
+- `app/` - Código fonte do backend
+- `frontend/` - Código fonte do frontend
 - `tests/` - Testes unitários e integração
 - `.claude/plans/` - Planos de tarefas
 - `.claude/results/` - Outputs de agentes
+- `tests/` - Código fonte do backend
+
 
 ### ⛔ NUNCA TOCAR (PROTEGIDO)
 - `.claude/state/` - Estado do sistema (gerenciado por orquestrador)
@@ -24,6 +32,9 @@
 - `node_modules/`, `dist/`, `build/` - Artefatos gerados
 - `.env`, `.env.*` - Secrets e configurações sensíveis
 - `package-lock.json`, `yarn.lock` - Lockfiles de dependências
+- `frontend/.env.local` - Configuração de chaves e flags do frontend
+- `app/.env` - Configuração de chaves e flags do backend
+
 
 **⚠️ REGRA DE OURO:** Antes de editar qualquer arquivo, verifique se está na lista de "PODE EDITAR". Se não estiver, PARE e pergunte ao usuário.
 
