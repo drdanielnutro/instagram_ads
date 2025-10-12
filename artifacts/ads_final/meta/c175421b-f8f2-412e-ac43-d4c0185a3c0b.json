@@ -1,0 +1,1541 @@
+{
+  "filename": "20251012-160324_c175421b-f8f2-412e-ac43-d4c0185a3c0b_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-12T19:03:26Z",
+  "size_bytes": 54323,
+  "final_delivery_local_path": "artifacts/ads_final/20251012-160324_c175421b-f8f2-412e-ac43-d4c0185a3c0b_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/c175421b-f8f2-412e-ac43-d4c0185a3c0b/20251012-160324_c175421b-f8f2-412e-ac43-d4c0185a3c0b_Feed.json",
+  "user_id": "u_999",
+  "session_id": "c175421b-f8f2-412e-ac43-d4c0185a3c0b",
+  "stage": "deterministic_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": {
+    "grade": "pass",
+    "issues": [],
+    "normalized_payload": {
+      "variations": [
+        {
+          "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Vigor de Volta: Emagreça Sem Parar Sua Vida de Sucesso.",
+            "corpo": "Sua vida é corrida, cheia de compromissos. Você sabe que precisa emagrecer e recuperar o vigor, mas as soluções tradicionais não cabem na sua agenda. A frustração de ver a energia em baixa e as roupas apertadas é um dilema que muitos homens realizadores enfrentam.\n\nNo consultório do Dr. Daniel, entendemos sua realidade. Oferecemos um plano médico personalizado, com o tratamento com Mounjaro, que otimiza seu metabolismo e te ajuda a emagrecer de forma inteligente. Sem dietas mirabolantes ou horas de academia. Recupere a performance, a clareza mental e a disposição para continuar conquistando seus objetivos, mantendo sua vida de sucesso intacta. Seu tempo é valioso e será respeitado.\n\nAgende sua Consulta Estratégica e descubra o caminho para retomar o controle do seu corpo e de sua vida.",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "1. Um homem, na faixa dos 40-50 anos, profissionalmente vestido, olha-se no espelho do banheiro com uma expressão de preocupação e frustração. Ele toca a barriga, onde a camisa social parece apertada, e o ambiente é um pouco sombrio, refletindo seu desânimo.\n2. O mesmo homem, agora em seu escritório moderno, sentado à mesa. Ele observa a tela de um tablet ou laptop com uma expressão pensativa, mas focada e determinada. A tela pode exibir um plano ou um calendário, indicando que ele está tomando uma decisão importante sobre sua saúde de forma estratégica, sem pausar sua rotina.\n3. O mesmo homem, visivelmente mais leve e com uma postura confiante e enérgica. Ele está em uma reunião de negócios, liderando uma discussão com um sorriso vibrante e clareza, ou desfrutando de um momento ativo com a família/hobby. Suas roupas vestem perfeitamente, e o ambiente é luminoso, transmitindo vitalidade, sucesso e bem-estar.",
+            "prompt_estado_atual": "A man, mid-40s to early 50s, with short, slightly graying hair and a professional appearance (suit or business shirt), looks at himself in a bathroom mirror with a concerned and frustrated expression. He gently touches his abdominal area, where his shirt appears slightly tight. The elegant bathroom is lit with cool, desaturated tones to emphasize his feeling of dismay and self-consciousness. Emotion: despair.",
+            "prompt_estado_intermediario": "The same man, mid-40s to early 50s, with short, slightly graying hair and a professional appearance. He is now seated at his modern office desk, intently looking at a tablet or laptop screen with a thoughtful yet determined expression. The screen might display a calendar or a health plan schematic, subtly indicating a strategic health decision. His posture is more upright, indicating purpose and the beginning of a proactive decision-making process for his health, amidst his busy schedule. Emotion: determined.",
+            "prompt_estado_aspiracional": "The same man, mid-40s to early 50s, with short, slightly graying hair. He is visibly leaner and exudes confidence. He is either leading a business meeting with an energetic and confident smile, or engaging in a high-quality leisure activity like playing tennis or walking in a vibrant park with his family, radiating vitality and well-being. His clothes (a well-fitted suit or elegant sportswear) fit perfectly. The environment is bright and dynamic, conveying success and an excellent quality of life. Emotion: joyful.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190131Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=6835309e441c9d3f6bba76157fbc469c6de2fa61849e470283e288796624887eb2e4ca1368db364ba40f172393808015085bbb02a7127316054d066876bc605a295f7328418ce1a36da21252612347f1816245bb361e8e10f0f6766656f38689c68257b2a8af43bf8fd8014fe785b26f3451c86e4cbab6fac98513d4104eb9bf8da1b4e01f9e1c7733ee20f6a68a52c784f0f6485058b23cb2257553afc0503de162ebc67fde56a7196c0ea26b6d893d23b11e98c66f8eac62438e78d07ac643b79823658e5ed811393cc6f6713fe9f0b7f534dfe175dbd241c577b62797757e77b0a1824776f243abba46f3bc03dda3914a755d7fa7072de10c06c203411a64",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190144Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=99117bcda8007faa1d5c06bc36b9060fe5ca8a0856835818df89dc35163a207411ce729a0d1c2891ca44dd145ed818cbb8ff7e5d097ab12ac731baf9e076b25fbb30cc9245a1293f01c5101b185f413f2c79f39f3a015f9925a711e148991168cbd3a66862341950e9cdc75a54c2b694da73591eae7bf8c704f52ca1686e134d435445b3a1bb7314ffc7b7e77361ce23728685b597978b04b5961373aa586c0c28fc4617f70a20be0704c2436191815e4273c81a454a19a67182a03db20a60c83a6607bc02232b689091fe03999575fe1be63d3d01272acdfa6e698cc7a60a49730b7c05b0d5dbd399d2c70627c7a7adf08440fd1c91de65991ee02151cc2e8f",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190157Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=438bb10ec49f2ac7320f35f13c676038584c45c8fb85989f6cdfaab4215470a7ee90608bddaa23ce94c3a1148ad11fbb4bd51c14d353ba5fba2220e966bbcf8f6ada8f1c7fe9d9fc9422b186690a4cecfdc94d066c96be3df95d8f5e735041add3ad3f9679315d7f8205ae969c2867dbc55d35e66b6fd23c6bf01eb81d2ba731b069d4fe7a92a50abd64f9f117de853df5e6b9ed17e0d20b15893018a7f9ef40574c6d54b04d1f976ccec4116641a7f7fc36c6369646670418a2f140dbed263c10a89f1a4a7abbbf94567dbd0d452c606e61d9b75b1be7ccbd4318bf61b1b152424f97973ed5d970bfe322f936b67b8a33b94e416bb90da38c13a242f12a93a8",
+            "image_generation_meta": {
+              "variation_idx": 0,
+              "duration_seconds": 39.68171527499726
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance (Brasil, 2024-2025) focam em: 1) Storytelling de transformação (dor -> solução -> sucesso) com visuais autênticos, sem 'antes e depois' explícitos. 2) Cópia empática que valida as dores do público (especialmente falta de tempo e frustração) e posiciona a solução médica como inteligente e adaptada à rotina. 3) CTA claro e direto, priorizando benefícios como recuperação de vigor e tempo.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é um homem que se desdobra em mil. Sua vida é corrida, cheia de reuniões, compromissos familiares, responsabilidades que exigem o seu melhor. Você construiu uma carreira, uma vida, e o tempo é seu recurso mais valioso. Mas, de repente, você olha no espelho e não reconhece mais aquele vigor de antes. A energia está em baixa, as roupas não caem bem e a balança se tornou uma fonte de frustração. Você sabe que precisa emagrecer e recuperar sua saúde, mas a ideia de dietas complicadas e horas na academia parece uma utopia impossível de encaixar na sua agenda apertada. Você não quer mais promessas vazias ou soluções que te obrigam a virar sua rotina de cabeça para baixo. O que você realmente busca é um caminho inteligente, eficaz e que respeite seu tempo, para voltar a sentir o controle do seu corpo, ter a disposição para aproveitar cada momento e o vigor para continuar conquistando seus objetivos.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro e visível: o excesso de peso que se instalou, trazendo consigo um impacto direto na sua saúde, na sua energia e até mesmo na sua performance. A barriga proeminente, as roupas apertadas, o cansaço que chega mais cedo e os exames alterados são provas tangíveis disso. Você precisa, urgentemente, emagrecer e recuperar o vigor de antes. Mas o verdadeiro nó da questão é que os caminhos tradicionais – dietas extremamente restritivas e rotinas exaustivas de exercícios – são simplesmente inviáveis para sua vida intensa e sua agenda sem folgas. O problema não é apenas o peso, mas a impossibilidade de combatê-lo eficazmente sem comprometer a vida que você construiu.",
+              "Por trás da fachada de sucesso e controle, a verdadeira batalha é interna. Não é apenas o peso na balança que te incomoda, mas a sensação de que está perdendo o controle do seu próprio corpo, da sua energia, do seu vigor. Você se sente frustrado, talvez até um pouco traído por si mesmo, por não conseguir conciliar o cuidado com a sua saúde com a vida de conquistas que construiu e que tanto valoriza. A angústia de saber que precisa mudar, mas a percepção de que as \"soluções\" que conhece exigem um sacrifício de tempo e dedicação que você simplesmente não tem, te deixa em uma encruzilhada. Essa impotência diante do espelho, a mente afiada lutando contra um corpo que não responde, e o temor silencioso do que o futuro reserva para sua saúde e longevidade, corroem sua autoconfiança. Você deseja, mais do que tudo, um caminho que não te force a escolher entre sua vida e sua saúde, um método inteligente que respeite seu tempo e sua história, para que possa reconquistar o homem vibrante e determinado que você sempre foi, sem ter que parar o mundo para isso."
+            ],
+            "storybrand_proposta": "Para você que busca resultados concretos sem ter que sacrificar sua vida corrida, nosso processo é a resposta inteligente. Começamos com uma avaliação médica aprofundada, onde o Dr. Daniel compreende sua história, sua rotina e seus desafios de forma individualizada. A partir desse diagnóstico preciso, elaboramos um plano de emagrecimento que vai muito além das dietas genéricas e das horas exaustivas na academia. O cerne dessa estratégia é o tratamento médico com Mounjaro, uma abordagem cientificamente validada que atua nos mecanismos de controle de peso, otimizando seu metabolismo e proporcionando uma perda de peso eficaz e segura, sem exigir que você vire sua rotina de cabeça para baixo. Além disso, você receberá orientações nutricionais personalizadas e práticas, focadas em escolhas alimentares inteligentes que se encaixam perfeitamente na sua agenda, e um plano de atividade física mínima, mas altamente eficiente. Tudo isso é meticulosamente orquestrado para que você emagreça de forma sustentável, recupere sua energia e o vigor que tanto valoriza, sinta-se novamente no controle do seu corpo e da sua mente, e tenha a disposição para continuar conquistando seus objetivos, sem que sua saúde seja um obstáculo para o seu sucesso.; Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_autoridade": "Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_beneficios": [
+              "Imagine-se agora: as calças que te apertavam voltam a vestir com folga, o espelho reflete o homem que você reconhece, com a energia e o vigor de sobra. Seus exames estão sob controle, o colesterol diminuiu, a pressão normalizou. Aquele cansaço crônico e a falta de fôlego são coisa do passado, substituídos por uma vitalidade que impulsiona seus dias. Você recuperou a agilidade mental, a clareza para tomar decisões importantes e a performance inabalável que sempre te definiram no trabalho e na vida. E o melhor de tudo? Você conseguiu essa transformação completa – emagreceu, recuperou sua saúde e seu vigor – sem sacrificar sua agenda, sem dietas mirabolantes que te tirassem do jogo, e sem horas exaustivas na academia. O tempo, seu recurso mais valioso, foi respeitado. Você está no controle do seu corpo, com a confiança renovada e a disposição de sobra para aproveitar cada momento com a família, dedicar-se aos seus hobbies e continuar conquistando novos objetivos. É a vida que você construiu, agora com a saúde e o vigor para desfrutá-la plenamente, vivendo anos mais produtivos e com total qualidade."
+            ],
+            "storybrand_transformacao": "Você não é mais o homem frustrado que se via preso entre a ambição e o declínio da saúde. Agora, você é o homem no controle total da sua vida, da sua energia e do seu destino. Você é a personificação da resiliência e da inteligência, tendo provado que é possível emagrecer e recuperar o vigor sem comprometer a agenda que você construiu. Sua identidade agora é a de alguém que abraçou um caminho estratégico e médico, que respeitou seu tempo e devolveu sua vitalidade. Você é o empresário, o líder, o pai, o marido que tem a agilidade mental e a disposição física para enfrentar qualquer desafio, para desfrutar da família com plenitude e para seguir construindo um legado ainda mais sólido. Você é a prova viva de que a saúde e o sucesso caminham lado a lado, e que o tempo, seu recurso mais valioso, foi investido sabiamente para garantir anos de produtividade, alegria e bem-estar. Você não apenas recuperou seu corpo; você reafirmou sua autonomia, sua capacidade de decidir e de prosperar em todas as áreas da vida.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "Mas e se você não agir? O caminho à frente, sem a orientação médica adequada para a sua realidade, é desolador e perigoso. Aqueles sinais de alerta – o colesterol alto, a pré-diabetes, a pressão em ascensão – não vão desaparecer sozinhos; eles vão se agravar. O que hoje é uma preocupação pode se transformar em doenças crônicas que exigirão ainda mais do seu tempo, da sua energia e da sua capacidade de tomada de decisão, drenando o vigor que você tanto preza. Você continuará sentindo o peso do cansaço, a falta de fôlego e a queda na sua agilidade mental, impactando não só suas reuniões e decisões estratégicas, mas também a sua paciência e presença com a família e nos momentos de lazer. O homem vibrante e líder que você sempre foi, que constrói um legado, se verá cada vez mais refém de um corpo que falha, perdendo o controle e a disposição para aproveitar as conquistas que tanto suou para ter. A frustração vai se aprofundar ao tentar (e falhar) com dietas que não se encaixam e exercícios impossíveis de manter, reforçando a sensação de impotência e minando sua autoconfiança. Você não só perderá o vigor, mas arriscará a própria longevidade e a qualidade dos seus anos mais produtivos, condenado a uma vida de limitações, arrependimentos e dependência. Sua saúde não será mais apenas um obstáculo, mas um impedimento para viver plenamente, para continuar conquistando e para desfrutar da vida com aqueles que você ama. Não permita que o tempo, que é seu recurso mais valioso, seja roubado por doenças e pela perda progressiva da sua vitalidade. A inação é o caminho para o arrependimento, para um futuro onde o sucesso profissional é ofuscado por um corpo que não responde e uma mente que se esvai com a energia."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Agenda Cheia? Emagreça com um Método Inteligente.",
+            "corpo": "Você construiu uma carreira de sucesso, mas a conta chegou para o seu corpo. Energia baixa, performance em queda, frustração com o espelho. Dietas e academias parecem impossíveis na sua rotina.\n\nEsqueça os caminhos tradicionais. Com a abordagem médica do Dr. Daniel e o tratamento com Mounjaro, você tem um plano que se adapta à sua vida. É uma estratégia para homens que valorizam o tempo e buscam resultados eficazes para emagrecer e recuperar o vigor, sem sacrificar a produtividade.\n\nReassuma o controle. Agende sua consulta e descubra o método que respeita sua inteligência e sua agenda.",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "1. Um homem de negócios, 40-50 anos, dentro de um carro, preso no trânsito, com uma expressão de cansaço e estresse, refletindo a sobrecarga e a falta de tempo. 2. O mesmo homem em seu escritório em casa, durante uma videochamada, olha discretamente para um segundo monitor que exibe um gráfico de saúde ou um plano de tratamento, sua expressão é séria e decidida, indicando que está tomando uma atitude. 3. O mesmo homem, agora visivelmente mais em forma e com energia, fazendo uma trilha em uma montanha num fim de semana, sorrindo e aproveitando o momento ao ar livre.",
+            "prompt_estado_atual": "A professional man, mid-40s, with short dark hair, sitting in the driver's seat of a premium car, stuck in traffic. His face shows exhaustion and stress, his tie is slightly loosened. The city lights blur outside, creating a sense of pressure and being overwhelmed. Emotion: drained.",
+            "prompt_estado_intermediario": "The same man, mid-40s, in his well-lit home office during a video call on his laptop. He discreetly glances at a second monitor showing a subtle health data graph. His expression is serious, focused, and resolute, capturing the moment of making a strategic, private decision about his health. Emotion: resolved.",
+            "prompt_estado_aspiracional": "The same man, mid-40s, now looking leaner and energized, wearing high-quality outdoor gear. He's smiling confidently while hiking on a mountain trail on a bright, sunny day. The background is a beautiful natural landscape, conveying a sense of freedom, vitality, and work-life balance. Emotion: triumphant.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190208Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=21190cf556900dca8e05fdcb37b0a9f8f8aa71dc8c71f0fc0e3192baf182ac5cfe6d249fdcc9b08c7df026dee58b6cc7ce2d2a9bee55460c1cd10b5f95b3d0df26407b4f9832225f20bdabc62550a53d5a243ebd939d56ecd0bfe82b006ed9d1cebe8c03134d6df76193cedb4b34eaa547882b7080d5551a0b6fd0fc395fd0268f33941fa8ce4791edd561ddff1ed6a9bae4c2e8ea9eeb6d5e06275e3cff20b5326e14b267ec1eea7f37575e81b63c2c1231d71f06d39a641d881394a303e601dc8cd1dc027f5bb6be4578b3412107628a40cabe5f0d734e9b6c2f63c8494102aeed8e186d2f986a473ecad9197ed9af55cc658c118ded68d464d2cfe7870b76",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190221Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=253d7a190d6ef95f33ffb4524e9feda7ded998fe7c6a5d68ecf9bf03f61302703cccf0490622411b83b77911218a0d30d8685e175924b0e1aedbb982b7bb9503f431c74582a62fec79bd180e74c43a626c5173aef461395aed0f5079388d8def96c07243b96e39049b21894d7aecf6cefd10351250eba554870ecbb82770e6afbe8165ee3d61babdcc08c60ca57e3592d16c4b3ce4146a4631ded3065ad898451cc83113846a2174683f041089e4429019d2cdf0c4860c560a6669e8a7d529bf46bdf5b09f73569e0f623f5aa99705a0f29de001a433dae4978543a44110473d47b29a088e24a95f5e7099dd9d656d715f698ded70c31ffe3cb382208fc59021",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190235Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b13f35fe65f0d177cf8e3a353284e1cfcec0e72621a1ee8018e32921614bcf689757794e6963288a0a98c0102894c1347eb20eb8d47561bbf2f2bee95a2b2f122b6d7c6641ac24dc0bcf412486bee319b0aa8006f2c5b89696da246d97bb1f9148444fa9b41191145698e1a73a74354c84b90e339ec13468b7734603db9385acbd950f257952533f69ce54e4dd2751998c8c5cee0cd80020763bc14acdad59fb9fdc5beb7cdef0d9eff50f445e08f64e6854e251122f17a58b1a55ee5e86ea5d8876032c526e30d0b2ea1972b934a32bf2b5e015277ea2923a33002753677545c30f8671de69b6ab69a7810290f961adda3f3ed96c9349e288e4ff2a631690ed",
+            "image_generation_meta": {
+              "variation_idx": 1,
+              "duration_seconds": 38.27596797600199
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance (Brasil, 2024-2025) focam em: 1) Storytelling de transformação (dor -> solução -> sucesso) com visuais autênticos, sem 'antes e depois' explícitos. 2) Cópia empática que valida as dores do público (especialmente falta de tempo e frustração) e posiciona a solução médica como inteligente e adaptada à rotina. 3) CTA claro e direto, priorizando benefícios como recuperação de vigor e tempo.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é um homem que se desdobra em mil. Sua vida é corrida, cheia de reuniões, compromissos familiares, responsabilidades que exigem o seu melhor. Você construiu uma carreira, uma vida, e o tempo é seu recurso mais valioso. Mas, de repente, você olha no espelho e não reconhece mais aquele vigor de antes. A energia está em baixa, as roupas não caem bem e a balança se tornou uma fonte de frustração. Você sabe que precisa emagrecer e recuperar sua saúde, mas a ideia de dietas complicadas e horas na academia parece uma utopia impossível de encaixar na sua agenda apertada. Você não quer mais promessas vazias ou soluções que te obrigam a virar sua rotina de cabeça para baixo. O que você realmente busca é um caminho inteligente, eficaz e que respeite seu tempo, para voltar a sentir o controle do seu corpo, ter a disposição para aproveitar cada momento e o vigor para continuar conquistando seus objetivos.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro e visível: o excesso de peso que se instalou, trazendo consigo um impacto direto na sua saúde, na sua energia e até mesmo na sua performance. A barriga proeminente, as roupas apertadas, o cansaço que chega mais cedo e os exames alterados são provas tangíveis disso. Você precisa, urgentemente, emagrecer e recuperar o vigor de antes. Mas o verdadeiro nó da questão é que os caminhos tradicionais – dietas extremamente restritivas e rotinas exaustivas de exercícios – são simplesmente inviáveis para sua vida intensa e sua agenda sem folgas. O problema não é apenas o peso, mas a impossibilidade de combatê-lo eficazmente sem comprometer a vida que você construiu.",
+              "Por trás da fachada de sucesso e controle, a verdadeira batalha é interna. Não é apenas o peso na balança que te incomoda, mas a sensação de que está perdendo o controle do seu próprio corpo, da sua energia, do seu vigor. Você se sente frustrado, talvez até um pouco traído por si mesmo, por não conseguir conciliar o cuidado com a sua saúde com a vida de conquistas que construiu e que tanto valoriza. A angústia de saber que precisa mudar, mas a percepção de que as \"soluções\" que conhece exigem um sacrifício de tempo e dedicação que você simplesmente não tem, te deixa em uma encruzilhada. Essa impotência diante do espelho, a mente afiada lutando contra um corpo que não responde, e o temor silencioso do que o futuro reserva para sua saúde e longevidade, corroem sua autoconfiança. Você deseja, mais do que tudo, um caminho que não te force a escolher entre sua vida e sua saúde, um método inteligente que respeite seu tempo e sua história, para que possa reconquistar o homem vibrante e determinado que você sempre foi, sem ter que parar o mundo para isso."
+            ],
+            "storybrand_proposta": "Para você que busca resultados concretos sem ter que sacrificar sua vida corrida, nosso processo é a resposta inteligente. Começamos com uma avaliação médica aprofundada, onde o Dr. Daniel compreende sua história, sua rotina e seus desafios de forma individualizada. A partir desse diagnóstico preciso, elaboramos um plano de emagrecimento que vai muito além das dietas genéricas e das horas exaustivas na academia. O cerne dessa estratégia é o tratamento médico com Mounjaro, uma abordagem cientificamente validada que atua nos mecanismos de controle de peso, otimizando seu metabolismo e proporcionando uma perda de peso eficaz e segura, sem exigir que você vire sua rotina de cabeça para baixo. Além disso, você receberá orientações nutricionais personalizadas e práticas, focadas em escolhas alimentares inteligentes que se encaixam perfeitamente na sua agenda, e um plano de atividade física mínima, mas altamente eficiente. Tudo isso é meticulosamente orquestrado para que você emagreça de forma sustentável, recupere sua energia e o vigor que tanto valoriza, sinta-se novamente no controle do seu corpo e da sua mente, e tenha a disposição para continuar conquistando seus objetivos, sem que sua saúde seja um obstáculo para o seu sucesso.; Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_autoridade": "Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_beneficios": [
+              "Imagine-se agora: as calças que te apertavam voltam a vestir com folga, o espelho reflete o homem que você reconhece, com a energia e o vigor de sobra. Seus exames estão sob controle, o colesterol diminuiu, a pressão normalizou. Aquele cansaço crônico e a falta de fôlego são coisa do passado, substituídos por uma vitalidade que impulsiona seus dias. Você recuperou a agilidade mental, a clareza para tomar decisões importantes e a performance inabalável que sempre te definiram no trabalho e na vida. E o melhor de tudo? Você conseguiu essa transformação completa – emagreceu, recuperou sua saúde e seu vigor – sem sacrificar sua agenda, sem dietas mirabolantes que te tirassem do jogo, e sem horas exaustivas na academia. O tempo, seu recurso mais valioso, foi respeitado. Você está no controle do seu corpo, com a confiança renovada e a disposição de sobra para aproveitar cada momento com a família, dedicar-se aos seus hobbies e continuar conquistando novos objetivos. É a vida que você construiu, agora com a saúde e o vigor para desfrutá-la plenamente, vivendo anos mais produtivos e com total qualidade."
+            ],
+            "storybrand_transformacao": "Você não é mais o homem frustrado que se via preso entre a ambição e o declínio da saúde. Agora, você é o homem no controle total da sua vida, da sua energia e do seu destino. Você é a personificação da resiliência e da inteligência, tendo provado que é possível emagrecer e recuperar o vigor sem comprometer a agenda que você construiu. Sua identidade agora é a de alguém que abraçou um caminho estratégico e médico, que respeitou seu tempo e devolveu sua vitalidade. Você é o empresário, o líder, o pai, o marido que tem a agilidade mental e a disposição física para enfrentar qualquer desafio, para desfrutar da família com plenitude e para seguir construindo um legado ainda mais sólido. Você é a prova viva de que a saúde e o sucesso caminham lado a lado, e que o tempo, seu recurso mais valioso, foi investido sabiamente para garantir anos de produtividade, alegria e bem-estar. Você não apenas recuperou seu corpo; você reafirmou sua autonomia, sua capacidade de decidir e de prosperar em todas as áreas da vida.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "Mas e se você não agir? O caminho à frente, sem a orientação médica adequada para a sua realidade, é desolador e perigoso. Aqueles sinais de alerta – o colesterol alto, a pré-diabetes, a pressão em ascensão – não vão desaparecer sozinhos; eles vão se agravar. O que hoje é uma preocupação pode se transformar em doenças crônicas que exigirão ainda mais do seu tempo, da sua energia e da sua capacidade de tomada de decisão, drenando o vigor que você tanto preza. Você continuará sentindo o peso do cansaço, a falta de fôlego e a queda na sua agilidade mental, impactando não só suas reuniões e decisões estratégicas, mas também a sua paciência e presença com a família e nos momentos de lazer. O homem vibrante e líder que você sempre foi, que constrói um legado, se verá cada vez mais refém de um corpo que falha, perdendo o controle e a disposição para aproveitar as conquistas que tanto suou para ter. A frustração vai se aprofundar ao tentar (e falhar) com dietas que não se encaixam e exercícios impossíveis de manter, reforçando a sensação de impotência e minando sua autoconfiança. Você não só perderá o vigor, mas arriscará a própria longevidade e a qualidade dos seus anos mais produtivos, condenado a uma vida de limitações, arrependimentos e dependência. Sua saúde não será mais apenas um obstáculo, mas um impedimento para viver plenamente, para continuar conquistando e para desfrutar da vida com aqueles que você ama. Não permita que o tempo, que é seu recurso mais valioso, seja roubado por doenças e pela perda progressiva da sua vitalidade. A inação é o caminho para o arrependimento, para um futuro onde o sucesso profissional é ofuscado por um corpo que não responde e uma mente que se esvai com a energia."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://nutrologodivinopolis.com.br/masculino/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Sua Performance Caiu? Pode ser seu corpo pedindo ajuda.",
+            "corpo": "A mente continua afiada, mas o corpo não responde como antes. O cansaço, a falta de foco e o peso extra estão minando a performance que sempre te definiu. Não é justo que sua saúde comprometa o legado que você está construindo.\n\nPara homens que não podem parar, a solução precisa ser estratégica. O plano médico do Dr. Daniel, utilizando a ciência do tratamento com Mounjaro, é desenhado para otimizar sua saúde sem interromper sua vida. Recupere o vigor, a disposição e a confiança para liderar no auge da sua capacidade.\n\nChega de adiar. Clique para agendar uma consulta e alinhar seu corpo à sua mente de sucesso.",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "1. Um homem, 40-50 anos, em seu escritório sofisticado, tarde da noite. Ele esfrega os olhos, visivelmente exausto, com uma xícara de café ao lado de pilhas de trabalho, mostrando o esgotamento físico e mental. 2. O mesmo homem, em um ambiente clínico moderno e acolhedor, conversando com um médico (visto de costas ou em perfil). A expressão do homem é de atenção e esperança, mostrando que ele buscou ajuda profissional. 3. O mesmo homem, em um jantar elegante com a família ou amigos, levantando uma taça para um brinde. Ele está sorridente, relaxado, com uma aparência saudável e cheia de vida, vestindo um blazer que lhe cai perfeitamente.",
+            "prompt_estado_atual": "A professionally dressed man in his late 40s, sitting at a large executive desk in a dimly lit, luxurious office late at night. He's rubbing his tired eyes, with a stack of documents and an empty coffee cup nearby. His posture is slumped, conveying deep fatigue and burnout. Emotion: exhausted.",
+            "prompt_estado_intermediario": "The same man, now in a bright, modern, and welcoming medical office. He is sitting across from a doctor (seen from the back or in profile to keep focus on the patient). The man's expression is attentive and hopeful as he listens, indicating he has taken a decisive step to seek professional guidance. Emotion: hopeful.",
+            "prompt_estado_aspiracional": "The same man, looking healthy, vibrant, and visibly fitter, standing at a beautifully set dinner table with family or friends. He is raising a wine glass for a toast, a warm and genuine smile on his face. He wears a well-fitted blazer, looking confident and completely at ease, enjoying a moment of connection and celebration. Emotion: content.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190259Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=53271a40838bf871b49f1d98d8f6ad535435f42d7570b16d786536c0f53a7fa24d9f4c2bacc2f42b6347fb6213057f1605d6349541c7d2eaf232b80a3b206d89bdfe4cd08f41df01931ebc613d7a53bd845e7d02402564b3929a40d59916926e18b7e578954e6c223b381f30043aa687c0b76a7f2fad146d18b574b1261344383b87431a3ad3e7024f04ff9cac2c04c1d8c97302e363ca082c5fee6fda95be1320fe15d99ef8e968586908a43110432c2e85f12101fed363a74114ebe38a3d16c46438a4da6c8970592bc8eb9210d2abb97dc0bb854d86465a164335d576bf976857e37f7e440447660b94670eccf7fae525d9275dcb254634b45eafa709ffb0",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190312Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a891641047cfd89c31d7a64c5f6844993a5e4ea855ad17ceaa369a3df33ba0d38e47184c7474c777f02cea69e466a4a9ae04405fd8d263aa8dd9e83aa23fbb5bc77b3086b6ca0098b371f61cf23aed5fbbbc9cdb50afc7fcf3f7173e9380f614b38421519d71cdd6a05125767dd2662b647271d274a57317e8356cbfa6a6b77396459fda0cda6038b36457a18ec449822fa98fecf42fcedf8f5c400051b2c9b2d60af8053509c31e55244ca8000c83105b2b6c433c2f34c83453707eb069ce7aa0be26bfbd435a6b5ad1ab395f7945c8177a124c5b71ad3986a798e5a3d1f7acfca443b62eedd7fed0d9759a09602b2185e279b426881366192a7a914be5002a",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190324Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=04bedf0fe7f20bcef237c70dba2df2e78289eff102b3c06375f4e78e5131c2024d071b3a439b5dc4698020191fc369a692b714fd3e108fa137b9c8d1f69b08ad0da340205ab874ebf5a72b66338929a7d7c577afda7ccfcea245b2c07f1ad2eacc11209154beef39bf9a20a33fc8ba9134fe60ad9f52bca566c026f2319a17722edc76d5e538a1589654b021af45bc120c057e6201c256edb67bfc9a0e49074654a48efdda6e8120894b810bac14313214e32a3a396a4ef4269d6da2b4fddeb8dd90e22b311ba54e3f1b14266795898f67273b2c5061adb6b8e847d1672c9588a7b0912e9c4666a17c35cc42b9f4154cd8bc83545ce831b2fe4481905f5955e8",
+            "image_generation_meta": {
+              "variation_idx": 2,
+              "duration_seconds": 49.07025964499917
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed (4:5) com boa performance (Brasil, 2024-2025) focam em: 1) Storytelling de transformação (dor -> solução -> sucesso) com visuais autênticos, sem 'antes e depois' explícitos. 2) Cópia empática que valida as dores do público (especialmente falta de tempo e frustração) e posiciona a solução médica como inteligente e adaptada à rotina. 3) CTA claro e direto, priorizando benefícios como recuperação de vigor e tempo.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é um homem que se desdobra em mil. Sua vida é corrida, cheia de reuniões, compromissos familiares, responsabilidades que exigem o seu melhor. Você construiu uma carreira, uma vida, e o tempo é seu recurso mais valioso. Mas, de repente, você olha no espelho e não reconhece mais aquele vigor de antes. A energia está em baixa, as roupas não caem bem e a balança se tornou uma fonte de frustração. Você sabe que precisa emagrecer e recuperar sua saúde, mas a ideia de dietas complicadas e horas na academia parece uma utopia impossível de encaixar na sua agenda apertada. Você não quer mais promessas vazias ou soluções que te obrigam a virar sua rotina de cabeça para baixo. O que você realmente busca é um caminho inteligente, eficaz e que respeite seu tempo, para voltar a sentir o controle do seu corpo, ter a disposição para aproveitar cada momento e o vigor para continuar conquistando seus objetivos.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro e visível: o excesso de peso que se instalou, trazendo consigo um impacto direto na sua saúde, na sua energia e até mesmo na sua performance. A barriga proeminente, as roupas apertadas, o cansaço que chega mais cedo e os exames alterados são provas tangíveis disso. Você precisa, urgentemente, emagrecer e recuperar o vigor de antes. Mas o verdadeiro nó da questão é que os caminhos tradicionais – dietas extremamente restritivas e rotinas exaustivas de exercícios – são simplesmente inviáveis para sua vida intensa e sua agenda sem folgas. O problema não é apenas o peso, mas a impossibilidade de combatê-lo eficazmente sem comprometer a vida que você construiu.",
+              "Por trás da fachada de sucesso e controle, a verdadeira batalha é interna. Não é apenas o peso na balança que te incomoda, mas a sensação de que está perdendo o controle do seu próprio corpo, da sua energia, do seu vigor. Você se sente frustrado, talvez até um pouco traído por si mesmo, por não conseguir conciliar o cuidado com a sua saúde com a vida de conquistas que construiu e que tanto valoriza. A angústia de saber que precisa mudar, mas a percepção de que as \"soluções\" que conhece exigem um sacrifício de tempo e dedicação que você simplesmente não tem, te deixa em uma encruzilhada. Essa impotência diante do espelho, a mente afiada lutando contra um corpo que não responde, e o temor silencioso do que o futuro reserva para sua saúde e longevidade, corroem sua autoconfiança. Você deseja, mais do que tudo, um caminho que não te force a escolher entre sua vida e sua saúde, um método inteligente que respeite seu tempo e sua história, para que possa reconquistar o homem vibrante e determinado que você sempre foi, sem ter que parar o mundo para isso."
+            ],
+            "storybrand_proposta": "Para você que busca resultados concretos sem ter que sacrificar sua vida corrida, nosso processo é a resposta inteligente. Começamos com uma avaliação médica aprofundada, onde o Dr. Daniel compreende sua história, sua rotina e seus desafios de forma individualizada. A partir desse diagnóstico preciso, elaboramos um plano de emagrecimento que vai muito além das dietas genéricas e das horas exaustivas na academia. O cerne dessa estratégia é o tratamento médico com Mounjaro, uma abordagem cientificamente validada que atua nos mecanismos de controle de peso, otimizando seu metabolismo e proporcionando uma perda de peso eficaz e segura, sem exigir que você vire sua rotina de cabeça para baixo. Além disso, você receberá orientações nutricionais personalizadas e práticas, focadas em escolhas alimentares inteligentes que se encaixam perfeitamente na sua agenda, e um plano de atividade física mínima, mas altamente eficiente. Tudo isso é meticulosamente orquestrado para que você emagreça de forma sustentável, recupere sua energia e o vigor que tanto valoriza, sinta-se novamente no controle do seu corpo e da sua mente, e tenha a disposição para continuar conquistando seus objetivos, sem que sua saúde seja um obstáculo para o seu sucesso.; Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_autoridade": "Você está certo. Não é justo que a sua dedicação em construir uma vida de sucesso e tantas responsabilidades te custe a sua própria saúde e vitalidade. E não é justo que as soluções de emagrecimento disponíveis pareçam ignorar completamente a sua agenda apertada. Nós, do Dr. Daniel – Médico Nutrólogo, entendemos perfeitamente esse dilema do homem moderno, líder e realizador. É por isso que Dr. Daniel não oferece dietas genéricas ou rotinas de exercícios que simplesmente não se encaixam na sua realidade. Nossa abordagem é profundamente médica, personalizada e pensada especificamente para homens como você, que buscam resultados reais e duradouros sem comprometer o seu tempo. Com uma expertise em Nutrologia e o domínio de estratégias avançadas e seguras, como o tratamento médico com Mounjaro, combinamos a ciência mais recente com um plano que se adapta à sua vida. Estamos aqui para ser o seu guia confiável, oferecendo o suporte médico e a inteligência estratégica que vão te permitir emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor que você sempre teve e que merece manter, tudo isso enquanto você continua a construir seu legado e a viver a vida que valoriza.",
+            "storybrand_beneficios": [
+              "Imagine-se agora: as calças que te apertavam voltam a vestir com folga, o espelho reflete o homem que você reconhece, com a energia e o vigor de sobra. Seus exames estão sob controle, o colesterol diminuiu, a pressão normalizou. Aquele cansaço crônico e a falta de fôlego são coisa do passado, substituídos por uma vitalidade que impulsiona seus dias. Você recuperou a agilidade mental, a clareza para tomar decisões importantes e a performance inabalável que sempre te definiram no trabalho e na vida. E o melhor de tudo? Você conseguiu essa transformação completa – emagreceu, recuperou sua saúde e seu vigor – sem sacrificar sua agenda, sem dietas mirabolantes que te tirassem do jogo, e sem horas exaustivas na academia. O tempo, seu recurso mais valioso, foi respeitado. Você está no controle do seu corpo, com a confiança renovada e a disposição de sobra para aproveitar cada momento com a família, dedicar-se aos seus hobbies e continuar conquistando novos objetivos. É a vida que você construiu, agora com a saúde e o vigor para desfrutá-la plenamente, vivendo anos mais produtivos e com total qualidade."
+            ],
+            "storybrand_transformacao": "Você não é mais o homem frustrado que se via preso entre a ambição e o declínio da saúde. Agora, você é o homem no controle total da sua vida, da sua energia e do seu destino. Você é a personificação da resiliência e da inteligência, tendo provado que é possível emagrecer e recuperar o vigor sem comprometer a agenda que você construiu. Sua identidade agora é a de alguém que abraçou um caminho estratégico e médico, que respeitou seu tempo e devolveu sua vitalidade. Você é o empresário, o líder, o pai, o marido que tem a agilidade mental e a disposição física para enfrentar qualquer desafio, para desfrutar da família com plenitude e para seguir construindo um legado ainda mais sólido. Você é a prova viva de que a saúde e o sucesso caminham lado a lado, e que o tempo, seu recurso mais valioso, foi investido sabiamente para garantir anos de produtividade, alegria e bem-estar. Você não apenas recuperou seu corpo; você reafirmou sua autonomia, sua capacidade de decidir e de prosperar em todas as áreas da vida.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "Mas e se você não agir? O caminho à frente, sem a orientação médica adequada para a sua realidade, é desolador e perigoso. Aqueles sinais de alerta – o colesterol alto, a pré-diabetes, a pressão em ascensão – não vão desaparecer sozinhos; eles vão se agravar. O que hoje é uma preocupação pode se transformar em doenças crônicas que exigirão ainda mais do seu tempo, da sua energia e da sua capacidade de tomada de decisão, drenando o vigor que você tanto preza. Você continuará sentindo o peso do cansaço, a falta de fôlego e a queda na sua agilidade mental, impactando não só suas reuniões e decisões estratégicas, mas também a sua paciência e presença com a família e nos momentos de lazer. O homem vibrante e líder que você sempre foi, que constrói um legado, se verá cada vez mais refém de um corpo que falha, perdendo o controle e a disposição para aproveitar as conquistas que tanto suou para ter. A frustração vai se aprofundar ao tentar (e falhar) com dietas que não se encaixam e exercícios impossíveis de manter, reforçando a sensação de impotência e minando sua autoconfiança. Você não só perderá o vigor, mas arriscará a própria longevidade e a qualidade dos seus anos mais produtivos, condenado a uma vida de limitações, arrependimentos e dependência. Sua saúde não será mais apenas um obstáculo, mas um impedimento para viver plenamente, para continuar conquistando e para desfrutar da vida com aqueles que você ama. Não permita que o tempo, que é seu recurso mais valioso, seja roubado por doenças e pela perda progressiva da sua vitalidade. A inação é o caminho para o arrependimento, para um futuro onde o sucesso profissional é ofuscado por um corpo que não responde e uma mente que se esvai com a energia."
+            ]
+          }
+        }
+      ]
+    },
+    "source": "validator"
+  },
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "A análise semântica de todas as variações foi concluída com sucesso. Cada variação demonstra uma consistência narrativa excepcional entre a copy e o visual, alinhando-se perfeitamente ao objetivo de 'agendamentos' e ao foco no 'Tratamento médico com mounjaro'. A fidelidade ao conteúdo da landing page e ao framework StoryBrand é exemplar, com cada anúncio refletindo com precisão a persona, as dores e a transformação proposta. Os prompts visuais são coerentes, detalhados e adequados para o formato 'Feed'. Não foram identificadas promessas indevidas ou discrepâncias, com todas as variações mantendo uma abordagem responsável e em conformidade com as políticas de publicidade."
+  },
+  "image_assets_review": {
+    "grade": "pass",
+    "issues": [],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190131Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=6835309e441c9d3f6bba76157fbc469c6de2fa61849e470283e288796624887eb2e4ca1368db364ba40f172393808015085bbb02a7127316054d066876bc605a295f7328418ce1a36da21252612347f1816245bb361e8e10f0f6766656f38689c68257b2a8af43bf8fd8014fe785b26f3451c86e4cbab6fac98513d4104eb9bf8da1b4e01f9e1c7733ee20f6a68a52c784f0f6485058b23cb2257553afc0503de162ebc67fde56a7196c0ea26b6d893d23b11e98c66f8eac62438e78d07ac643b79823658e5ed811393cc6f6713fe9f0b7f534dfe175dbd241c577b62797757e77b0a1824776f243abba46f3bc03dda3914a755d7fa7072de10c06c203411a64"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190144Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=99117bcda8007faa1d5c06bc36b9060fe5ca8a0856835818df89dc35163a207411ce729a0d1c2891ca44dd145ed818cbb8ff7e5d097ab12ac731baf9e076b25fbb30cc9245a1293f01c5101b185f413f2c79f39f3a015f9925a711e148991168cbd3a66862341950e9cdc75a54c2b694da73591eae7bf8c704f52ca1686e134d435445b3a1bb7314ffc7b7e77361ce23728685b597978b04b5961373aa586c0c28fc4617f70a20be0704c2436191815e4273c81a454a19a67182a03db20a60c83a6607bc02232b689091fe03999575fe1be63d3d01272acdfa6e698cc7a60a49730b7c05b0d5dbd399d2c70627c7a7adf08440fd1c91de65991ee02151cc2e8f"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190157Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=438bb10ec49f2ac7320f35f13c676038584c45c8fb85989f6cdfaab4215470a7ee90608bddaa23ce94c3a1148ad11fbb4bd51c14d353ba5fba2220e966bbcf8f6ada8f1c7fe9d9fc9422b186690a4cecfdc94d066c96be3df95d8f5e735041add3ad3f9679315d7f8205ae969c2867dbc55d35e66b6fd23c6bf01eb81d2ba731b069d4fe7a92a50abd64f9f117de853df5e6b9ed17e0d20b15893018a7f9ef40574c6d54b04d1f976ccec4116641a7f7fc36c6369646670418a2f140dbed263c10a89f1a4a7abbbf94567dbd0d452c606e61d9b75b1be7ccbd4318bf61b1b152424f97973ed5d970bfe322f936b67b8a33b94e416bb90da38c13a242f12a93a8"
+          },
+          "meta": {
+            "variation_idx": 0,
+            "duration_seconds": 39.68171527499726
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "despair",
+          "prompt_estado_intermediario": "determined",
+          "prompt_estado_aspiracional": "joyful"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 1,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190208Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=21190cf556900dca8e05fdcb37b0a9f8f8aa71dc8c71f0fc0e3192baf182ac5cfe6d249fdcc9b08c7df026dee58b6cc7ce2d2a9bee55460c1cd10b5f95b3d0df26407b4f9832225f20bdabc62550a53d5a243ebd939d56ecd0bfe82b006ed9d1cebe8c03134d6df76193cedb4b34eaa547882b7080d5551a0b6fd0fc395fd0268f33941fa8ce4791edd561ddff1ed6a9bae4c2e8ea9eeb6d5e06275e3cff20b5326e14b267ec1eea7f37575e81b63c2c1231d71f06d39a641d881394a303e601dc8cd1dc027f5bb6be4578b3412107628a40cabe5f0d734e9b6c2f63c8494102aeed8e186d2f986a473ecad9197ed9af55cc658c118ded68d464d2cfe7870b76"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190221Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=253d7a190d6ef95f33ffb4524e9feda7ded998fe7c6a5d68ecf9bf03f61302703cccf0490622411b83b77911218a0d30d8685e175924b0e1aedbb982b7bb9503f431c74582a62fec79bd180e74c43a626c5173aef461395aed0f5079388d8def96c07243b96e39049b21894d7aecf6cefd10351250eba554870ecbb82770e6afbe8165ee3d61babdcc08c60ca57e3592d16c4b3ce4146a4631ded3065ad898451cc83113846a2174683f041089e4429019d2cdf0c4860c560a6669e8a7d529bf46bdf5b09f73569e0f623f5aa99705a0f29de001a433dae4978543a44110473d47b29a088e24a95f5e7099dd9d656d715f698ded70c31ffe3cb382208fc59021"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190235Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b13f35fe65f0d177cf8e3a353284e1cfcec0e72621a1ee8018e32921614bcf689757794e6963288a0a98c0102894c1347eb20eb8d47561bbf2f2bee95a2b2f122b6d7c6641ac24dc0bcf412486bee319b0aa8006f2c5b89696da246d97bb1f9148444fa9b41191145698e1a73a74354c84b90e339ec13468b7734603db9385acbd950f257952533f69ce54e4dd2751998c8c5cee0cd80020763bc14acdad59fb9fdc5beb7cdef0d9eff50f445e08f64e6854e251122f17a58b1a55ee5e86ea5d8876032c526e30d0b2ea1972b934a32bf2b5e015277ea2923a33002753677545c30f8671de69b6ab69a7810290f961adda3f3ed96c9349e288e4ff2a631690ed"
+          },
+          "meta": {
+            "variation_idx": 1,
+            "duration_seconds": 38.27596797600199
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "drained",
+          "prompt_estado_intermediario": "resolved",
+          "prompt_estado_aspiracional": "triumphant"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 2,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190259Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=53271a40838bf871b49f1d98d8f6ad535435f42d7570b16d786536c0f53a7fa24d9f4c2bacc2f42b6347fb6213057f1605d6349541c7d2eaf232b80a3b206d89bdfe4cd08f41df01931ebc613d7a53bd845e7d02402564b3929a40d59916926e18b7e578954e6c223b381f30043aa687c0b76a7f2fad146d18b574b1261344383b87431a3ad3e7024f04ff9cac2c04c1d8c97302e363ca082c5fee6fda95be1320fe15d99ef8e968586908a43110432c2e85f12101fed363a74114ebe38a3d16c46438a4da6c8970592bc8eb9210d2abb97dc0bb854d86465a164335d576bf976857e37f7e440447660b94670eccf7fae525d9275dcb254634b45eafa709ffb0"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190312Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a891641047cfd89c31d7a64c5f6844993a5e4ea855ad17ceaa369a3df33ba0d38e47184c7474c777f02cea69e466a4a9ae04405fd8d263aa8dd9e83aa23fbb5bc77b3086b6ca0098b371f61cf23aed5fbbbc9cdb50afc7fcf3f7173e9380f614b38421519d71cdd6a05125767dd2662b647271d274a57317e8356cbfa6a6b77396459fda0cda6038b36457a18ec449822fa98fecf42fcedf8f5c400051b2c9b2d60af8053509c31e55244ca8000c83105b2b6c433c2f34c83453707eb069ce7aa0be26bfbd435a6b5ad1ab395f7945c8177a124c5b71ad3986a798e5a3d1f7acfca443b62eedd7fed0d9759a09602b2185e279b426881366192a7a914be5002a"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190324Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=04bedf0fe7f20bcef237c70dba2df2e78289eff102b3c06375f4e78e5131c2024d071b3a439b5dc4698020191fc369a692b714fd3e108fa137b9c8d1f69b08ad0da340205ab874ebf5a72b66338929a7d7c577afda7ccfcea245b2c07f1ad2eacc11209154beef39bf9a20a33fc8ba9134fe60ad9f52bca566c026f2319a17722edc76d5e538a1589654b021af45bc120c057e6201c256edb67bfc9a0e49074654a48efdda6e8120894b810bac14313214e32a3a396a4ef4269d6da2b4fddeb8dd90e22b311ba54e3f1b14266795898f67273b2c5061adb6b8e847d1672c9588a7b0912e9c4666a17c35cc42b9f4154cd8bc83545ce831b2fe4481905f5955e8"
+          },
+          "meta": {
+            "variation_idx": 2,
+            "duration_seconds": 49.07025964499917
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "exhausted",
+          "prompt_estado_intermediario": "hopeful",
+          "prompt_estado_aspiracional": "content"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "Dr. Daniel – Médico Nutrólogo",
+          "o_que_a_empresa_faz": "Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.",
+          "sexo_cliente_alvo": "masculino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-12T18:45:06Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-12T18:45:06Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-12T18:45:06Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 910
+      },
+      "timestamp_utc": "2025-10-12T18:45:15Z",
+      "duration_ms": 9010
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:45:15Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas dores e aspirações de forma respeitosa e específica. Conecta explicitamente a necessidade de emagrecer e recuperar vigor com a falta de tempo, alinhando-se perfeitamente à promessa da empresa. Evita clichês, focando nas particularidades desse perfil (carreira, tempo valioso, busca por controle e disposição). A linguagem é clara, empática e prepara o terreno para a solução de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:45:21Z",
+      "duration_ms": 6074
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas dores e aspirações de forma respeitosa e específica. Conecta explicitamente a necessidade de emagrecer e recuperar vigor com a falta de tempo, alinhando-se perfeitamente à promessa da empresa. Evita clichês, focando nas particularidades desse perfil (carreira, tempo valioso, busca por controle e disposição). A linguagem é clara, empática e prepara o terreno para a solução de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:45:21Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:45:21Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-12T18:45:21Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 854
+      },
+      "timestamp_utc": "2025-10-12T18:45:32Z",
+      "duration_ms": 11183
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:45:32Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma muito eficaz e respeitosa com o público masculino, abordando as dores e frustrações de homens que buscam emagrecer, mas são limitados pela falta de tempo. Conecta perfeitamente com a proposta da empresa de ajudar homens a perder peso e recuperar a saúde e o vigor, mesmo com uma agenda apertada. A linguagem é específica, empática e direcionada, evitando generalizações e preparando o terreno para a solução de forma poderosa.",
+      "timestamp_utc": "2025-10-12T18:45:38Z",
+      "duration_ms": 6028
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma muito eficaz e respeitosa com o público masculino, abordando as dores e frustrações de homens que buscam emagrecer, mas são limitados pela falta de tempo. Conecta perfeitamente com a proposta da empresa de ajudar homens a perder peso e recuperar a saúde e o vigor, mesmo com uma agenda apertada. A linguagem é específica, empática e direcionada, evitando generalizações e preparando o terreno para a solução de forma poderosa.",
+      "timestamp_utc": "2025-10-12T18:45:38Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:45:38Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-12T18:45:38Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 599
+      },
+      "timestamp_utc": "2025-10-12T18:45:47Z",
+      "duration_ms": 8646
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:45:47Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele aborda diretamente a dor do homem com uma agenda cheia, conectando a perda de \"saúde e vigor\" com o diagnóstico médico e a correria do dia a dia. A linguagem é específica, empática e orientada à ação, preparando o terreno para a solução da empresa. Não utiliza clichês genéricos, sendo muito eficaz para o público-alvo.",
+      "timestamp_utc": "2025-10-12T18:45:53Z",
+      "duration_ms": 5769
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele aborda diretamente a dor do homem com uma agenda cheia, conectando a perda de \"saúde e vigor\" com o diagnóstico médico e a correria do dia a dia. A linguagem é específica, empática e orientada à ação, preparando o terreno para a solução da empresa. Não utiliza clichês genéricos, sendo muito eficaz para o público-alvo.",
+      "timestamp_utc": "2025-10-12T18:45:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:45:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-12T18:45:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 1162
+      },
+      "timestamp_utc": "2025-10-12T18:46:02Z",
+      "duration_ms": 8740
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:46:02Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, abordando dores muito específicas e relacionáveis (calça apertada, fôlego, impacto na clareza mental e paciência com a família). A conexão com a promessa da empresa é explícita, mostrando que o cliente precisa emagrecer e recuperar o vigor, mas sem abrir mão do seu tempo e da vida que construiu. Evita clichês genéricos e mantém uma linguagem clara, empática e que prepara o leitor para a solução, validando sua frustração com dietas e exercícios inviáveis.",
+      "timestamp_utc": "2025-10-12T18:46:08Z",
+      "duration_ms": 5866
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, abordando dores muito específicas e relacionáveis (calça apertada, fôlego, impacto na clareza mental e paciência com a família). A conexão com a promessa da empresa é explícita, mostrando que o cliente precisa emagrecer e recuperar o vigor, mas sem abrir mão do seu tempo e da vida que construiu. Evita clichês genéricos e mantém uma linguagem clara, empática e que prepara o leitor para a solução, validando sua frustração com dietas e exercícios inviáveis.",
+      "timestamp_utc": "2025-10-12T18:46:08Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:46:08Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-12T18:46:08Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 603
+      },
+      "timestamp_utc": "2025-10-12T18:46:22Z",
+      "duration_ms": 14711
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:46:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um empresário ou profissional de alto nível, ao focar nos impactos na performance, agilidade mental e energia em um ambiente profissional (apresentação crucial). Conecta explicitamente a perda de vigor e a mente brilhante com a necessidade de recuperar a saúde e o vigor prometidos pela empresa. Evita clichês genéricos, sendo muito específico para o perfil. A linguagem é clara, empática e orientada a ação, pois o incidente é um claro gatilho para a busca por uma solução.",
+      "timestamp_utc": "2025-10-12T18:46:28Z",
+      "duration_ms": 5764
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um empresário ou profissional de alto nível, ao focar nos impactos na performance, agilidade mental e energia em um ambiente profissional (apresentação crucial). Conecta explicitamente a perda de vigor e a mente brilhante com a necessidade de recuperar a saúde e o vigor prometidos pela empresa. Evita clichês genéricos, sendo muito específico para o perfil. A linguagem é clara, empática e orientada a ação, pois o incidente é um claro gatilho para a busca por uma solução.",
+      "timestamp_utc": "2025-10-12T18:46:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:46:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-12T18:46:28Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 957
+      },
+      "timestamp_utc": "2025-10-12T18:46:39Z",
+      "duration_ms": 10634
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:46:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas dores e aspirações de forma respeitosa e específica (como a dificuldade em manter o nível de performance, a importância da liderança e a agenda implacável). Conecta explicitamente a necessidade de emagrecer e recuperar a saúde e o vigor à promessa da empresa, enfatizando a busca por um caminho eficaz que respeite o tempo e ofereça suporte médico. Evita clichês genéricos, focando nas particularidades desse perfil (tempo valioso, controle do corpo, agilidade mental, vigor para conquistar). A linguagem é clara, empática e orientada à solução, preparando o terreno de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:46:45Z",
+      "duration_ms": 6003
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas dores e aspirações de forma respeitosa e específica (como a dificuldade em manter o nível de performance, a importância da liderança e a agenda implacável). Conecta explicitamente a necessidade de emagrecer e recuperar a saúde e o vigor à promessa da empresa, enfatizando a busca por um caminho eficaz que respeite o tempo e ofereça suporte médico. Evita clichês genéricos, focando nas particularidades desse perfil (tempo valioso, controle do corpo, agilidade mental, vigor para conquistar). A linguagem é clara, empática e orientada à solução, preparando o terreno de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:46:45Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:46:45Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-12T18:46:45Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 708
+      },
+      "timestamp_utc": "2025-10-12T18:46:55Z",
+      "duration_ms": 10128
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:46:55Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, abordando dores específicas como o impacto na saúde, energia e performance, e a dificuldade de encaixar soluções tradicionais em uma \"vida intensa e agenda sem folgas\". A conexão com a promessa da empresa (\"emagrecer e recuperar o vigor\") é explícita e a linguagem é clara, empática e orientada à ação, sem recorrer a clichês genéricos. A frase \"o problema não é apenas o peso, mas a impossibilidade de combatê-lo eficazmente sem comprometer a vida que você construiu\" é particularmente forte e ressoa com o perfil de cliente estabelecido.",
+      "timestamp_utc": "2025-10-12T18:47:01Z",
+      "duration_ms": 5726
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, abordando dores específicas como o impacto na saúde, energia e performance, e a dificuldade de encaixar soluções tradicionais em uma \"vida intensa e agenda sem folgas\". A conexão com a promessa da empresa (\"emagrecer e recuperar o vigor\") é explícita e a linguagem é clara, empática e orientada à ação, sem recorrer a clichês genéricos. A frase \"o problema não é apenas o peso, mas a impossibilidade de combatê-lo eficazmente sem comprometer a vida que você construiu\" é particularmente forte e ressoa com o perfil de cliente estabelecido.",
+      "timestamp_utc": "2025-10-12T18:47:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:47:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-12T18:47:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 1063
+      },
+      "timestamp_utc": "2025-10-12T18:47:11Z",
+      "duration_ms": 10611
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:47:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem com carreira e responsabilidades, validando suas dores internas de forma respeitosa e específica (como a \"fachada de sucesso e controle\", a \"vida de conquistas que construiu\" e a \"mente afiada lutando contra um corpo que não responde\"). Conecta explicitamente a perda de controle do corpo, energia e vigor com a falta de tempo para conciliar saúde e vida profissional. A busca por um \"método inteligente que respeite seu tempo e sua história\" alinha-se perfeitamente à promessa da empresa. Evita clichês genéricos, sendo muito específico para o perfil. A linguagem é clara, empática e orientada à ação, culminando no desejo de \"reconquistar o homem vibrante e determinado que você sempre foi, sem ter que parar o mundo para isso\".",
+      "timestamp_utc": "2025-10-12T18:47:17Z",
+      "duration_ms": 6170
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem com carreira e responsabilidades, validando suas dores internas de forma respeitosa e específica (como a \"fachada de sucesso e controle\", a \"vida de conquistas que construiu\" e a \"mente afiada lutando contra um corpo que não responde\"). Conecta explicitamente a perda de controle do corpo, energia e vigor com a falta de tempo para conciliar saúde e vida profissional. A busca por um \"método inteligente que respeite seu tempo e sua história\" alinha-se perfeitamente à promessa da empresa. Evita clichês genéricos, sendo muito específico para o perfil. A linguagem é clara, empática e orientada à ação, culminando no desejo de \"reconquistar o homem vibrante e determinado que você sempre foi, sem ter que parar o mundo para isso\".",
+      "timestamp_utc": "2025-10-12T18:47:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:47:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-12T18:47:17Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 993
+      },
+      "timestamp_utc": "2025-10-12T18:47:24Z",
+      "duration_ms": 6722
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:47:24Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando a injustiça de ter que escolher entre saúde e sucesso devido à falta de tempo. Conecta explicitamente a necessidade de \"emagrecer e recuperar seu vigor\" com a busca por um \"método inteligente que respeite sua agenda\", alinhando-se perfeitamente à promessa da empresa. Evita clichês genéricos ao focar nas responsabilidades e conquistas do homem de sucesso. A linguagem é clara, empática (\"Não é justo que...\", \"Você merece...\") e orientada à ação, preparando o terreno para a solução de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:47:29Z",
+      "duration_ms": 5450
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando a injustiça de ter que escolher entre saúde e sucesso devido à falta de tempo. Conecta explicitamente a necessidade de \"emagrecer e recuperar seu vigor\" com a busca por um \"método inteligente que respeite sua agenda\", alinhando-se perfeitamente à promessa da empresa. Evita clichês genéricos ao focar nas responsabilidades e conquistas do homem de sucesso. A linguagem é clara, empática (\"Não é justo que...\", \"Você merece...\") e orientada à ação, preparando o terreno para a solução de forma muito eficaz.",
+      "timestamp_utc": "2025-10-12T18:47:29Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:47:29Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-12T18:47:29Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 1197
+      },
+      "timestamp_utc": "2025-10-12T18:47:40Z",
+      "duration_ms": 10079
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:47:40Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um \"homem moderno, líder e realizador\", validando suas dores e frustrações de forma respeitosa e específica (\"vida de sucesso\", \"agenda apertada\", \"construir seu legado\"). A conexão com a promessa da empresa (\"Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.\") é explícita e contínua, garantindo que a solução proposta se encaixe na realidade do cliente (abordagem médica, personalizada, sem comprometer o tempo, com o uso de Mounjaro). O texto evita clichês genéricos, sendo muito específico para o perfil, e mantém uma linguagem clara, empática e orientada à ação, culminando na promessa de \"emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor... enquanto você continua a construir seu legado e a viver a vida que valoriza\".",
+      "timestamp_utc": "2025-10-12T18:47:47Z",
+      "duration_ms": 7101
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um \"homem moderno, líder e realizador\", validando suas dores e frustrações de forma respeitosa e específica (\"vida de sucesso\", \"agenda apertada\", \"construir seu legado\"). A conexão com a promessa da empresa (\"Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.\") é explícita e contínua, garantindo que a solução proposta se encaixe na realidade do cliente (abordagem médica, personalizada, sem comprometer o tempo, com o uso de Mounjaro). O texto evita clichês genéricos, sendo muito específico para o perfil, e mantém uma linguagem clara, empática e orientada à ação, culminando na promessa de \"emagrecer, retomar o controle do seu corpo, e recuperar a saúde e o vigor... enquanto você continua a construir seu legado e a viver a vida que valoriza\".",
+      "timestamp_utc": "2025-10-12T18:47:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:47:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-12T18:47:47Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 1246
+      },
+      "timestamp_utc": "2025-10-12T18:47:55Z",
+      "duration_ms": 8325
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:47:55Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem com uma vida corrida e objetivos ambiciosos, usando uma voz respeitosa e específica ao abordar sua rotina e desafios. Conecta explicitamente a transformação prometida (\"emagrecer\", \"recuperar a saúde e o vigor\") com a realidade de quem \"não tem tempo para fazer dieta e exercícios\", através de uma abordagem que \"não exige que você vire sua rotina de cabeça para baixo\" e inclui \"atividade física mínima, mas altamente eficiente\". Evita clichês genéricos ao detalhar o processo médico, a personalização e o uso de Mounjaro. A linguagem é clara, empática e orientada à ação, focando nos resultados tangíveis para a vida do cliente (controle do corpo, disposição para conquistar objetivos, sem que a saúde seja um obstáculo para o sucesso).",
+      "timestamp_utc": "2025-10-12T18:48:01Z",
+      "duration_ms": 6354
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem com uma vida corrida e objetivos ambiciosos, usando uma voz respeitosa e específica ao abordar sua rotina e desafios. Conecta explicitamente a transformação prometida (\"emagrecer\", \"recuperar a saúde e o vigor\") com a realidade de quem \"não tem tempo para fazer dieta e exercícios\", através de uma abordagem que \"não exige que você vire sua rotina de cabeça para baixo\" e inclui \"atividade física mínima, mas altamente eficiente\". Evita clichês genéricos ao detalhar o processo médico, a personalização e o uso de Mounjaro. A linguagem é clara, empática e orientada à ação, focando nos resultados tangíveis para a vida do cliente (controle do corpo, disposição para conquistar objetivos, sem que a saúde seja um obstáculo para o sucesso).",
+      "timestamp_utc": "2025-10-12T18:48:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:48:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-12T18:48:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1726
+      },
+      "timestamp_utc": "2025-10-12T18:48:09Z",
+      "duration_ms": 7844
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:48:09Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando sua \"rotina intensa\" e \"agenda corrida\", e a necessidade de \"recuperar seu vigor\" e \"controle do seu corpo\". Conecta explicitamente a transformação prometida (\"emagrecer e recuperar sua saúde e vigor\") com a realidade de quem \"não tem tempo para fazer dieta e exercícios\", através de soluções como \"plano de emagrecimento inteligente, com Mounjaro\", \"orientações nutricionais práticas\" e \"atividade física mínima, porém eficiente\", sem que precise \"virar sua vida de cabeça para baixo\". Evita clichês genéricos, sendo muito específico para o perfil e para a solução (Mounjaro). A linguagem é clara, empática e orientada à ação, apresentando um plano estruturado e focado em resultados duradouros e na manutenção do sucesso do cliente.",
+      "timestamp_utc": "2025-10-12T18:48:15Z",
+      "duration_ms": 5767
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando sua \"rotina intensa\" e \"agenda corrida\", e a necessidade de \"recuperar seu vigor\" e \"controle do seu corpo\". Conecta explicitamente a transformação prometida (\"emagrecer e recuperar sua saúde e vigor\") com a realidade de quem \"não tem tempo para fazer dieta e exercícios\", através de soluções como \"plano de emagrecimento inteligente, com Mounjaro\", \"orientações nutricionais práticas\" e \"atividade física mínima, porém eficiente\", sem que precise \"virar sua vida de cabeça para baixo\". Evita clichês genéricos, sendo muito específico para o perfil e para a solução (Mounjaro). A linguagem é clara, empática e orientada à ação, apresentando um plano estruturado e focado em resultados duradouros e na manutenção do sucesso do cliente.",
+      "timestamp_utc": "2025-10-12T18:48:15Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:48:15Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-12T18:48:15Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 1100
+      },
+      "timestamp_utc": "2025-10-12T18:48:24Z",
+      "duration_ms": 8949
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:48:24Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando sua realidade de homem ocupado e bem-sucedido (\"sacrificar sua agenda e a vida que você construiu\", \"reconquistar o homem vibrante e ativo... para continuar conquistando seus objetivos\"). Conecta explicitamente a transformação prometida (\"emagrecer, recuperar sua energia e vigor, e retomar o controle do seu corpo\") à promessa da empresa (\"Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.\"), enfatizando que a solução respeita seu tempo. Evita clichês genéricos, sendo muito específico para o perfil e para a solução (Dr. Daniel, Mounjaro, método médico personalizado). A linguagem é clara, empática e as chamadas para ação são diretas e relevantes.",
+      "timestamp_utc": "2025-10-12T18:48:30Z",
+      "duration_ms": 5786
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando sua realidade de homem ocupado e bem-sucedido (\"sacrificar sua agenda e a vida que você construiu\", \"reconquistar o homem vibrante e ativo... para continuar conquistando seus objetivos\"). Conecta explicitamente a transformação prometida (\"emagrecer, recuperar sua energia e vigor, e retomar o controle do seu corpo\") à promessa da empresa (\"Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.\"), enfatizando que a solução respeita seu tempo. Evita clichês genéricos, sendo muito específico para o perfil e para a solução (Dr. Daniel, Mounjaro, método médico personalizado). A linguagem é clara, empática e as chamadas para ação são diretas e relevantes.",
+      "timestamp_utc": "2025-10-12T18:48:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:48:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-12T18:48:30Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1725
+      },
+      "timestamp_utc": "2025-10-12T18:48:38Z",
+      "duration_ms": 7957
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:48:38Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem de sucesso com responsabilidades profissionais e familiares, abordando as consequências de forma respeitosa e específica (\"reuniões e decisões estratégicas\", \"paciência e presença com a família\", \"homem vibrante e líder que constrói um legado\", \"sucesso profissional é ofuscado\"). Conecta explicitamente a perda do \"vigor\", \"saúde\" e a frustração com \"dietas que não se encaixam e exercícios impossíveis de manter\" à proposta da empresa de ajudar homens a emagrecer e recuperar a saúde e o vigor, mesmo sem tempo. Evita clichês genéricos ao focar nas dores e medos específicos desse perfil. A linguagem é clara, empática e orientada a ação, mostrando o caminho do arrependimento da inação, o que indiretamente impulsiona a busca pela solução.",
+      "timestamp_utc": "2025-10-12T18:48:44Z",
+      "duration_ms": 6131
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem de sucesso com responsabilidades profissionais e familiares, abordando as consequências de forma respeitosa e específica (\"reuniões e decisões estratégicas\", \"paciência e presença com a família\", \"homem vibrante e líder que constrói um legado\", \"sucesso profissional é ofuscado\"). Conecta explicitamente a perda do \"vigor\", \"saúde\" e a frustração com \"dietas que não se encaixam e exercícios impossíveis de manter\" à proposta da empresa de ajudar homens a emagrecer e recuperar a saúde e o vigor, mesmo sem tempo. Evita clichês genéricos ao focar nas dores e medos específicos desse perfil. A linguagem é clara, empática e orientada a ação, mostrando o caminho do arrependimento da inação, o que indiretamente impulsiona a busca pela solução.",
+      "timestamp_utc": "2025-10-12T18:48:44Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:48:44Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-12T18:48:44Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 1112
+      },
+      "timestamp_utc": "2025-10-12T18:48:50Z",
+      "duration_ms": 6182
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:48:50Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas aspirações e dores de forma respeitosa e específica (como a recuperação da 'agilidade mental', 'clareza para tomar decisões importantes' e 'performance inabalável no trabalho e na vida', além da valorização do 'tempo, seu recurso mais valioso'). Conecta explicitamente a transformação prometida ('emagreceu, recuperou sua saúde e seu vigor') à promessa da empresa ('Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.'), destacando que isso ocorre 'sem sacrificar sua agenda, sem dietas mirabolantes... e sem horas exaustivas na academia'. Evita clichês genéricos, focando nas particularidades desse perfil. A linguagem é clara, empática e orientada a ação, pintando um cenário de sucesso muito atraente e relevante para o público-alvo.",
+      "timestamp_utc": "2025-10-12T18:48:57Z",
+      "duration_ms": 6864
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, validando suas aspirações e dores de forma respeitosa e específica (como a recuperação da 'agilidade mental', 'clareza para tomar decisões importantes' e 'performance inabalável no trabalho e na vida', além da valorização do 'tempo, seu recurso mais valioso'). Conecta explicitamente a transformação prometida ('emagreceu, recuperou sua saúde e seu vigor') à promessa da empresa ('Ajudamos homens que precisam emagrecer mas que não têm tempo para fazer dieta e exercícios a perderem peso e recuperarem a saúde e o vigor.'), destacando que isso ocorre 'sem sacrificar sua agenda, sem dietas mirabolantes... e sem horas exaustivas na academia'. Evita clichês genéricos, focando nas particularidades desse perfil. A linguagem é clara, empática e orientada a ação, pintando um cenário de sucesso muito atraente e relevante para o público-alvo.",
+      "timestamp_utc": "2025-10-12T18:48:57Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:48:57Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-12T18:48:57Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 1019
+      },
+      "timestamp_utc": "2025-10-12T18:49:05Z",
+      "duration_ms": 8108
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-12T18:49:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem de negócios com responsabilidades familiares, ao projetar uma identidade de controle, resiliência e inteligência, que recuperou o vigor e a saúde sem comprometer sua agenda. Conecta explicitamente a transformação prometida (\"emagrecer e recuperar o vigor sem comprometer a agenda\") com a proposta da empresa. Evita clichês genéricos, sendo muito específico para o perfil (\"empresário, o líder, o pai, o marido\", \"agilidade mental e a disposição física\", \"construindo um legado\", \"tempo, seu recurso mais valioso\"). A linguagem é clara, empática e orientada à ação, inspirando o cliente a alcançar essa nova identidade.",
+      "timestamp_utc": "2025-10-12T18:49:10Z",
+      "duration_ms": 4534
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, um homem de negócios com responsabilidades familiares, ao projetar uma identidade de controle, resiliência e inteligência, que recuperou o vigor e a saúde sem comprometer sua agenda. Conecta explicitamente a transformação prometida (\"emagrecer e recuperar o vigor sem comprometer a agenda\") com a proposta da empresa. Evita clichês genéricos, sendo muito específico para o perfil (\"empresário, o líder, o pai, o marido\", \"agilidade mental e a disposição física\", \"construindo um legado\", \"tempo, seu recurso mais valioso\"). A linguagem é clara, empática e orientada à ação, inspirando o cliente a alcançar essa nova identidade.",
+      "timestamp_utc": "2025-10-12T18:49:10Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "compiler",
+      "status": "started",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success",
+          "storybrand_identity"
+        ]
+      },
+      "timestamp_utc": "2025-10-12T18:49:10Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "compiler",
+      "status": "completed",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "text_length": 16974
+      },
+      "timestamp_utc": "2025-10-12T18:49:10Z",
+      "duration_ms": 0
+    }
+  ],
+  "storybrand_gate_metrics": {
+    "score_obtained": null,
+    "score_threshold": 0.6,
+    "decision_path": "fallback",
+    "timestamp_utc": "2025-10-12T18:45:03Z",
+    "is_forced_fallback": true,
+    "debug_flag_active": true
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": true,
+    "decision_path": "fallback",
+    "trigger_reason": "forced",
+    "timestamp_utc": "2025-10-12T18:45:03Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "final_assembly_guard_pre",
+      "status": "passed",
+      "timestamp_utc": "2025-10-12T18:57:00.416671+00:00",
+      "detail": "1 VISUAL_DRAFT aprovados."
+    },
+    {
+      "stage": "final_assembly_normalizer",
+      "status": "pending",
+      "timestamp_utc": "2025-10-12T18:58:40.054133+00:00",
+      "detail": "Payload normalizado; aguardando validador determinístico."
+    },
+    {
+      "stage": "deterministic_final_validation",
+      "status": "pass",
+      "timestamp_utc": "2025-10-12T18:58:40.064002+00:00",
+      "issue_count": 0
+    },
+    {
+      "stage": "image_assets_agent",
+      "status": "pass",
+      "timestamp_utc": "2025-10-12T19:03:24.999068+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190131Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=6835309e441c9d3f6bba76157fbc469c6de2fa61849e470283e288796624887eb2e4ca1368db364ba40f172393808015085bbb02a7127316054d066876bc605a295f7328418ce1a36da21252612347f1816245bb361e8e10f0f6766656f38689c68257b2a8af43bf8fd8014fe785b26f3451c86e4cbab6fac98513d4104eb9bf8da1b4e01f9e1c7733ee20f6a68a52c784f0f6485058b23cb2257553afc0503de162ebc67fde56a7196c0ea26b6d893d23b11e98c66f8eac62438e78d07ac643b79823658e5ed811393cc6f6713fe9f0b7f534dfe175dbd241c577b62797757e77b0a1824776f243abba46f3bc03dda3914a755d7fa7072de10c06c203411a64"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190144Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=99117bcda8007faa1d5c06bc36b9060fe5ca8a0856835818df89dc35163a207411ce729a0d1c2891ca44dd145ed818cbb8ff7e5d097ab12ac731baf9e076b25fbb30cc9245a1293f01c5101b185f413f2c79f39f3a015f9925a711e148991168cbd3a66862341950e9cdc75a54c2b694da73591eae7bf8c704f52ca1686e134d435445b3a1bb7314ffc7b7e77361ce23728685b597978b04b5961373aa586c0c28fc4617f70a20be0704c2436191815e4273c81a454a19a67182a03db20a60c83a6607bc02232b689091fe03999575fe1be63d3d01272acdfa6e698cc7a60a49730b7c05b0d5dbd399d2c70627c7a7adf08440fd1c91de65991ee02151cc2e8f"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190157Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=438bb10ec49f2ac7320f35f13c676038584c45c8fb85989f6cdfaab4215470a7ee90608bddaa23ce94c3a1148ad11fbb4bd51c14d353ba5fba2220e966bbcf8f6ada8f1c7fe9d9fc9422b186690a4cecfdc94d066c96be3df95d8f5e735041add3ad3f9679315d7f8205ae969c2867dbc55d35e66b6fd23c6bf01eb81d2ba731b069d4fe7a92a50abd64f9f117de853df5e6b9ed17e0d20b15893018a7f9ef40574c6d54b04d1f976ccec4116641a7f7fc36c6369646670418a2f140dbed263c10a89f1a4a7abbbf94567dbd0d452c606e61d9b75b1be7ccbd4318bf61b1b152424f97973ed5d970bfe322f936b67b8a33b94e416bb90da38c13a242f12a93a8"
+            },
+            "meta": {
+              "variation_idx": 0,
+              "duration_seconds": 39.68171527499726
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "despair",
+            "prompt_estado_intermediario": "determined",
+            "prompt_estado_aspiracional": "joyful"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 1,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190208Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=21190cf556900dca8e05fdcb37b0a9f8f8aa71dc8c71f0fc0e3192baf182ac5cfe6d249fdcc9b08c7df026dee58b6cc7ce2d2a9bee55460c1cd10b5f95b3d0df26407b4f9832225f20bdabc62550a53d5a243ebd939d56ecd0bfe82b006ed9d1cebe8c03134d6df76193cedb4b34eaa547882b7080d5551a0b6fd0fc395fd0268f33941fa8ce4791edd561ddff1ed6a9bae4c2e8ea9eeb6d5e06275e3cff20b5326e14b267ec1eea7f37575e81b63c2c1231d71f06d39a641d881394a303e601dc8cd1dc027f5bb6be4578b3412107628a40cabe5f0d734e9b6c2f63c8494102aeed8e186d2f986a473ecad9197ed9af55cc658c118ded68d464d2cfe7870b76"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190221Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=253d7a190d6ef95f33ffb4524e9feda7ded998fe7c6a5d68ecf9bf03f61302703cccf0490622411b83b77911218a0d30d8685e175924b0e1aedbb982b7bb9503f431c74582a62fec79bd180e74c43a626c5173aef461395aed0f5079388d8def96c07243b96e39049b21894d7aecf6cefd10351250eba554870ecbb82770e6afbe8165ee3d61babdcc08c60ca57e3592d16c4b3ce4146a4631ded3065ad898451cc83113846a2174683f041089e4429019d2cdf0c4860c560a6669e8a7d529bf46bdf5b09f73569e0f623f5aa99705a0f29de001a433dae4978543a44110473d47b29a088e24a95f5e7099dd9d656d715f698ded70c31ffe3cb382208fc59021"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190235Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=b13f35fe65f0d177cf8e3a353284e1cfcec0e72621a1ee8018e32921614bcf689757794e6963288a0a98c0102894c1347eb20eb8d47561bbf2f2bee95a2b2f122b6d7c6641ac24dc0bcf412486bee319b0aa8006f2c5b89696da246d97bb1f9148444fa9b41191145698e1a73a74354c84b90e339ec13468b7734603db9385acbd950f257952533f69ce54e4dd2751998c8c5cee0cd80020763bc14acdad59fb9fdc5beb7cdef0d9eff50f445e08f64e6854e251122f17a58b1a55ee5e86ea5d8876032c526e30d0b2ea1972b934a32bf2b5e015277ea2923a33002753677545c30f8671de69b6ab69a7810290f961adda3f3ed96c9349e288e4ff2a631690ed"
+            },
+            "meta": {
+              "variation_idx": 1,
+              "duration_seconds": 38.27596797600199
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "drained",
+            "prompt_estado_intermediario": "resolved",
+            "prompt_estado_aspiracional": "triumphant"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 2,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190259Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=53271a40838bf871b49f1d98d8f6ad535435f42d7570b16d786536c0f53a7fa24d9f4c2bacc2f42b6347fb6213057f1605d6349541c7d2eaf232b80a3b206d89bdfe4cd08f41df01931ebc613d7a53bd845e7d02402564b3929a40d59916926e18b7e578954e6c223b381f30043aa687c0b76a7f2fad146d18b574b1261344383b87431a3ad3e7024f04ff9cac2c04c1d8c97302e363ca082c5fee6fda95be1320fe15d99ef8e968586908a43110432c2e85f12101fed363a74114ebe38a3d16c46438a4da6c8970592bc8eb9210d2abb97dc0bb854d86465a164335d576bf976857e37f7e440447660b94670eccf7fae525d9275dcb254634b45eafa709ffb0"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190312Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a891641047cfd89c31d7a64c5f6844993a5e4ea855ad17ceaa369a3df33ba0d38e47184c7474c777f02cea69e466a4a9ae04405fd8d263aa8dd9e83aa23fbb5bc77b3086b6ca0098b371f61cf23aed5fbbbc9cdb50afc7fcf3f7173e9380f614b38421519d71cdd6a05125767dd2662b647271d274a57317e8356cbfa6a6b77396459fda0cda6038b36457a18ec449822fa98fecf42fcedf8f5c400051b2c9b2d60af8053509c31e55244ca8000c83105b2b6c433c2f34c83453707eb069ce7aa0be26bfbd435a6b5ad1ab395f7945c8177a124c5b71ad3986a798e5a3d1f7acfca443b62eedd7fed0d9759a09602b2185e279b426881366192a7a914be5002a"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/c175421b-f8f2-412e-ac43-d4c0185a3c0b/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251012%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251012T190324Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=04bedf0fe7f20bcef237c70dba2df2e78289eff102b3c06375f4e78e5131c2024d071b3a439b5dc4698020191fc369a692b714fd3e108fa137b9c8d1f69b08ad0da340205ab874ebf5a72b66338929a7d7c577afda7ccfcea245b2c07f1ad2eacc11209154beef39bf9a20a33fc8ba9134fe60ad9f52bca566c026f2319a17722edc76d5e538a1589654b021af45bc120c057e6201c256edb67bfc9a0e49074654a48efdda6e8120894b810bac14313214e32a3a396a4ef4269d6da2b4fddeb8dd90e22b311ba54e3f1b14266795898f67273b2c5061adb6b8e847d1672c9588a7b0912e9c4666a17c35cc42b9f4154cd8bc83545ce831b2fe4481905f5955e8"
+            },
+            "meta": {
+              "variation_idx": 2,
+              "duration_seconds": 49.07025964499917
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "exhausted",
+            "prompt_estado_intermediario": "hopeful",
+            "prompt_estado_aspiracional": "content"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "reference_images_present": false,
+  "storybrand_sections_present": false,
+  "image_signed_url_ttl_seconds": 86400
+}

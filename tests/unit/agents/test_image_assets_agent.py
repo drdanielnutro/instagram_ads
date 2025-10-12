@@ -118,5 +118,92 @@ async def test_image_assets_agent_rehydrates_references_and_tracks_emotions(
     assert visual["reference_assets"]["product"]["labels"] == ["serum"]
     assert visual["image_generation_meta"]["reference_character_used"] is True
 
+    # FIX VALIDATION: Verificar se URLs de imagens foram adicionadas
+    assert visual["image_estado_atual_url"] == "https://cdn/one"
+    assert visual["image_estado_intermediario_url"] == "https://cdn/two"
+    assert visual["image_estado_aspiracional_url"] == "https://cdn/three"
+    assert visual["image_estado_atual_gcs"] == "gs://generated/one"
+    assert visual["image_estado_intermediario_gcs"] == "gs://generated/two"
+    assert visual["image_estado_aspiracional_gcs"] == "gs://generated/three"
+
     # `persist_final_delivery` is skipped because deterministic validation is enabled.
     assert persist_calls == []
+
+
+@pytest.mark.asyncio
+async def test_image_assets_agent_updates_normalized_payload(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test that ImageAssetsAgent updates deterministic_final_validation.normalized_payload with image URLs."""
+
+    variations = [
+        {
+            "formato": "Feed",
+            "visual": {
+                "aspect_ratio": "4:5",
+                "prompt_estado_atual": "Test | Emotion: sad",
+                "prompt_estado_intermediario": "Test | Emotion: hopeful",
+                "prompt_estado_aspiracional": "Test | Emotion: happy",
+            },
+        }
+    ]
+
+    # Simula que o validador determinístico já rodou e criou normalized_payload
+    normalized_payload = {
+        "variations": [
+            {
+                "formato": "Feed",
+                "visual": {
+                    "aspect_ratio": "4:5",
+                    "prompt_estado_atual": "Test | Emotion: sad",
+                    "prompt_estado_intermediario": "Test | Emotion: hopeful",
+                    "prompt_estado_aspiracional": "Test | Emotion: happy",
+                },
+            }
+        ]
+    }
+
+    state: dict[str, Any] = {
+        "final_code_delivery": json.dumps(variations, ensure_ascii=False),
+        "deterministic_final_validation": {
+            "grade": "pass",
+            "normalized_payload": normalized_payload,
+        },
+        "user_id": "test-user",
+    }
+
+    async def fake_generate(**kwargs: Any) -> dict[str, Any]:
+        await asyncio.sleep(0)
+        return {
+            "estado_atual": {"gcs_uri": "gs://test/1", "signed_url": "https://test/1"},
+            "estado_intermediario": {"gcs_uri": "gs://test/2", "signed_url": "https://test/2"},
+            "estado_aspiracional": {"gcs_uri": "gs://test/3", "signed_url": "https://test/3"},
+            "meta": {"variation_idx": kwargs["variation_idx"]},
+        }
+
+    monkeypatch.setattr("app.agent.generate_transformation_images", fake_generate)
+    monkeypatch.setattr("app.agent.persist_final_delivery", lambda ctx: None)
+    monkeypatch.setattr("app.agent.config.enable_deterministic_final_validation", True, raising=False)
+
+    session = SimpleNamespace(id="test-session", state=state)
+    ctx = SimpleNamespace(session=session)
+
+    agent = ImageAssetsAgent()
+    async for _ in agent._run_async_impl(ctx):
+        pass
+
+    # CRITICAL: Verifica que normalized_payload foi atualizado com URLs
+    updated_normalized = state["deterministic_final_validation"]["normalized_payload"]
+    assert isinstance(updated_normalized, dict)
+    assert isinstance(updated_normalized["variations"], list)
+
+    updated_visual = updated_normalized["variations"][0]["visual"]
+    assert updated_visual["image_estado_atual_url"] == "https://test/1"
+    assert updated_visual["image_estado_intermediario_url"] == "https://test/2"
+    assert updated_visual["image_estado_aspiracional_url"] == "https://test/3"
+    assert updated_visual["image_estado_atual_gcs"] == "gs://test/1"
+    assert updated_visual["image_estado_intermediario_gcs"] == "gs://test/2"
+    assert updated_visual["image_estado_aspiracional_gcs"] == "gs://test/3"
+
+    # Verifica que final_code_delivery_parsed também foi atualizado
+    assert state["final_code_delivery_parsed"] == updated_normalized["variations"]

@@ -113,7 +113,7 @@ const descricaoEmpresaStep: WizardStep = {
   id: 'o_que_a_empresa_faz',
   title: 'O que a empresa oferece?',
   description:
-    'Descreva a proposta de valor ou principais serviços de forma objetiva (obrigatório).',
+    'Explique a transformação que sua empresa entrega (quem + como + resultado esperado).',
   icon: Briefcase,
   validationRules: [
     {
@@ -121,10 +121,10 @@ const descricaoEmpresaStep: WizardStep = {
       validate: value => {
         const trimmed = value.trim();
         if (!trimmed) {
-          return 'Descreva o que a empresa faz.';
+          return 'Descreva a transformação completa que você oferece.';
         }
-        if (trimmed.length < 10) {
-          return 'Use pelo menos 10 caracteres para descrever a empresa.';
+        if (trimmed.length < 20 || trimmed.split(/\s+/).length < 6) {
+          return 'Explique quem você ajuda, como ajuda e qual resultado entrega. Ex.: "Ajudamos mães executivas a organizar a rotina familiar em 30 dias".';
         }
         if (trimmed.length > 200) {
           return 'Resuma a descrição em até 200 caracteres.';

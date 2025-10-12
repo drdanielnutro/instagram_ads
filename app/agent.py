@@ -849,6 +849,22 @@ class ImageAssetsAgent(BaseAgent):
 
         try:
             state["final_code_delivery"] = json.dumps(variations, ensure_ascii=False)
+
+            # FIX: Atualizar normalized_payload com URLs de imagens
+            # O validador determinístico roda ANTES das imagens serem geradas,
+            # então normalized_payload não contém as URLs. Atualizamos aqui.
+            state["final_code_delivery_parsed"] = variations
+
+            det_result = state.get("deterministic_final_validation")
+            if isinstance(det_result, dict):
+                normalized = det_result.get("normalized_payload")
+                if isinstance(normalized, dict) and isinstance(normalized.get("variations"), list):
+                    # Atualiza a cópia normalizada com as URLs geradas
+                    normalized["variations"] = variations
+                    logger.info(
+                        "ImageAssetsAgent: URLs de imagens adicionadas ao normalized_payload (%d variações)",
+                        len(variations)
+                    )
         except Exception as exc:  # pragma: no cover
             review["grade"] = "fail"
             review["issues"].append(str(exc))

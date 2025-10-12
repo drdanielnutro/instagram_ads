@@ -35,10 +35,11 @@ const fieldConfig: Record<CompanyField, {
   o_que_a_empresa_faz: {
     label: 'Como você descreve a empresa?',
     description:
-      'Resuma o que a empresa faz para que o fallback tenha contexto de alta qualidade.',
-    placeholder: 'Ex.: Clínica de nutrição especializada em emagrecimento saudável (obrigatório)',
+      'Descreva a transformação: quem você ajuda + como + qual resultado a pessoa alcança.',
+    placeholder:
+      "Ex.: Ajudamos executivos com pouco tempo a emagrecer com acompanhamento médico personalizado (obrigatório)",
     Icon: Briefcase,
-    hint: 'Dica: mencione diferenciais, público atendido ou resultados que reforcem a autoridade da empresa.',
+    hint: 'Dica: use a estrutura “Ajudamos [persona] a [como] para [resultado]”. Isso evita erro na validação.',
     multiline: true,
     required: true,
   },
