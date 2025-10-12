@@ -1,25 +1,50 @@
 {
-  "task_id": "<TASK_ID>",
+  "task_id": "storybrand-persist-sections-final",
   "requirements": {
     "checklist_analysis_file": ".claude/results/checklist-output.json",
-    "explicit_requirements": [],
-    "implicit_requirements": [],
-    "acceptance_criteria": []
+    "explicit_requirements": [
+      "TAREFA 3: Atualizar persist_outputs.py para incluir storybrand_sections_saved_path, storybrand_sections_gcs_uri e storybrand_sections_present no meta dict",
+      "TAREFA 5: Criar testes unitários para PersistStorybrandSectionsAgent em tests/unit/agents/test_storybrand_fallback.py"
+    ],
+    "implicit_requirements": [
+      "Seguir padrões existentes de persist_outputs.py (linhas 293-297 como referência para reference_images_present)",
+      "Usar padrão de testes existente em test_persist_final_delivery.py (tmp_path, monkeypatch, SimpleNamespace)",
+      "Validar que PersistStorybrandSectionsAgent já existe em storybrand_fallback.py:79-172",
+      "Garantir que testes cubram flag enabled/disabled e upload GCS"
+    ],
+    "acceptance_criteria": [
+      "meta dict em persist_outputs.py contém storybrand_sections_saved_path, storybrand_sections_gcs_uri e storybrand_sections_present",
+      "Testes unitários cobrem cenários: flag enabled, flag disabled, upload GCS quando configurado",
+      "Testes passam com pytest tests/unit/agents/test_storybrand_fallback.py -v",
+      "Cobertura ≥80% para código modificado/novo"
+    ]
   },
   "expected_outputs": {
     "files_to_create": [],
-    "files_to_modify": [],
+    "files_to_modify": [
+      "app/callbacks/persist_outputs.py - adicionar 3 chaves ao meta dict após linha 291",
+      "tests/unit/agents/test_storybrand_fallback.py - adicionar test_persist_storybrand_sections_enabled, test_persist_storybrand_sections_disabled, test_persist_storybrand_sections_gcs_upload"
+    ],
     "files_to_delete": [],
-    "tests_to_create": []
+    "tests_to_create": [
+      "test_persist_storybrand_sections_enabled - valida flag=True cria arquivo e registra state",
+      "test_persist_storybrand_sections_disabled - valida flag=False registra log skip",
+      "test_persist_storybrand_sections_gcs_upload - valida upload quando DELIVERIES_BUCKET configurado"
+    ]
   },
   "testing_requirements": {
     "coverage_target": 80,
     "test_types": [
-      "unit",
-      "integration"
+      "unit"
     ],
-    "test_strategy": "<TEST_APPROACH_NOTES>"
+    "test_strategy": "Usar tmp_path fixture para isolar filesystem, monkeypatch para env vars e chdir, SimpleNamespace para mock de callback_context, validar state mutations e Path.exists()"
   },
-  "project_context": "<RELEVANT_BACKGROUND>",
-  "critical_notes": []
+  "project_context": "Sistema multi-agente StoryBrand com fallback. PersistStorybrandSectionsAgent (já implementado) salva 16 seções em artifacts/storybrand/{session_id}.json. Meta.json precisa referenciar esses caminhos para endpoints /delivery/final/meta possam encontrar artefato. Testes garantem que implementação não regride.",
+  "critical_notes": [
+    "ACHADO DO CHECKLIST: 5 das 7 tarefas do plano original JÁ FORAM IMPLEMENTADAS. Apenas tarefas 3 (meta.json) e 5 (testes) faltam.",
+    "NÃO REIMPLEMENTAR código existente - PersistStorybrandSectionsAgent já existe e funciona",
+    "Seguir padrão de reference_images_present como template (persist_outputs.py:293-297)",
+    "Usar test_persist_final_delivery.py como template de teste",
+    "Validar que testes rodam com pytest antes de finalizar"
+  ]
 }

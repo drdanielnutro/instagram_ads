@@ -110,3 +110,134 @@ def test_persist_final_delivery_normalizes_and_updates_status(tmp_path, monkeypa
     status_reference = state["final_delivery_status"]["reference_images"]["character"]
     assert status_reference == reference_meta
 
+
+@pytest.mark.usefixtures("tmp_path")
+def test_persist_final_delivery_includes_storybrand_sections_metadata(tmp_path, monkeypatch):
+    """Test that StoryBrand sections metadata is included in meta.json."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("DELIVERIES_BUCKET", "")
+
+    normalized_payload = {
+        "variations": [
+            {
+                "landing_page_url": "https://example.com",
+                "formato": "Feed",
+                "cta_instagram": "Saiba mais",
+                "fluxo": "Instagram → Landing Page",
+                "referencia_padroes": "StoryBrand",
+                "contexto_landing": {"hero": "Consultas"},
+                "copy": {
+                    "headline": "Agende sua consulta",
+                    "corpo": "Use nosso app para reservar em minutos.",
+                    "cta_texto": "Saiba mais",
+                },
+                "visual": {
+                    "descricao_imagem": "Pessoa usando smartphone",
+                    "prompt_estado_atual": "cliente procurando opções",
+                    "prompt_estado_intermediario": "cliente comparando planos",
+                    "prompt_estado_aspiracional": "cliente satisfeito",
+                    "aspect_ratio": "4:5",
+                },
+            }
+        ]
+    }
+
+    state = {
+        "final_code_delivery": json.dumps(normalized_payload["variations"], ensure_ascii=False),
+        "deterministic_final_validation": {
+            "grade": "pass",
+            "normalized_payload": normalized_payload,
+        },
+        "semantic_visual_review": {"grade": "pass"},
+        "image_assets_review": {"grade": "skipped"},
+        "delivery_audit_trail": [],
+        "storybrand_audit_trail": [],
+        "storybrand_gate_metrics": {},
+        "storybrand_fallback_meta": {},
+        # StoryBrand sections persistence metadata
+        "storybrand_sections_saved_path": "artifacts/storybrand/sess-sb-test.json",
+        "storybrand_sections_gcs_uri": "gs://test-bucket/deliveries/user-sb/sess-sb-test/storybrand_sections.json",
+    }
+
+    session = SimpleNamespace(id="sess-sb-test", user_id="user-sb", state=state)
+    callback_context = SimpleNamespace(session=session, state=state)
+
+    persist_final_delivery(callback_context)
+
+    # Validate meta.json includes StoryBrand sections metadata
+    meta_path = Path("artifacts/ads_final/meta/sess-sb-test.json")
+    assert meta_path.exists()
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+
+    # Verify StoryBrand sections keys are present
+    assert "storybrand_sections_present" in meta
+    assert meta["storybrand_sections_present"] is True
+    assert "storybrand_sections_saved_path" in meta
+    assert meta["storybrand_sections_saved_path"] == "artifacts/storybrand/sess-sb-test.json"
+    assert "storybrand_sections_gcs_uri" in meta
+    assert meta["storybrand_sections_gcs_uri"] == "gs://test-bucket/deliveries/user-sb/sess-sb-test/storybrand_sections.json"
+
+
+@pytest.mark.usefixtures("tmp_path")
+def test_persist_final_delivery_storybrand_sections_absent(tmp_path, monkeypatch):
+    """Test that storybrand_sections_present is False when no sections are saved."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("DELIVERIES_BUCKET", "")
+
+    normalized_payload = {
+        "variations": [
+            {
+                "landing_page_url": "https://example.com",
+                "formato": "Feed",
+                "cta_instagram": "Saiba mais",
+                "fluxo": "Instagram → Landing Page",
+                "referencia_padroes": "StoryBrand",
+                "contexto_landing": {"hero": "Consultas"},
+                "copy": {
+                    "headline": "Agende sua consulta",
+                    "corpo": "Use nosso app para reservar em minutos.",
+                    "cta_texto": "Saiba mais",
+                },
+                "visual": {
+                    "descricao_imagem": "Pessoa usando smartphone",
+                    "prompt_estado_atual": "cliente procurando opções",
+                    "prompt_estado_intermediario": "cliente comparando planos",
+                    "prompt_estado_aspiracional": "cliente satisfeito",
+                    "aspect_ratio": "4:5",
+                },
+            }
+        ]
+    }
+
+    state = {
+        "final_code_delivery": json.dumps(normalized_payload["variations"], ensure_ascii=False),
+        "deterministic_final_validation": {
+            "grade": "pass",
+            "normalized_payload": normalized_payload,
+        },
+        "semantic_visual_review": {"grade": "pass"},
+        "image_assets_review": {"grade": "skipped"},
+        "delivery_audit_trail": [],
+        "storybrand_audit_trail": [],
+        "storybrand_gate_metrics": {},
+        "storybrand_fallback_meta": {},
+        # No StoryBrand sections metadata
+    }
+
+    session = SimpleNamespace(id="sess-no-sb", user_id="user-no-sb", state=state)
+    callback_context = SimpleNamespace(session=session, state=state)
+
+    persist_final_delivery(callback_context)
+
+    # Validate meta.json shows storybrand_sections_present as False
+    meta_path = Path("artifacts/ads_final/meta/sess-no-sb.json")
+    assert meta_path.exists()
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+
+    # Verify storybrand_sections_present is False
+    assert "storybrand_sections_present" in meta
+    assert meta["storybrand_sections_present"] is False
+    # Optional keys should not be present
+    assert "storybrand_sections_saved_path" not in meta
+    assert "storybrand_sections_gcs_uri" not in meta
+

@@ -58,6 +58,7 @@ class DevelopmentConfiguration:
     enable_deterministic_final_validation: bool = False
     fallback_storybrand_max_iterations: int = 3
     fallback_storybrand_model: str | None = None
+    persist_storybrand_sections: bool = False  # Save StoryBrand sections to artifacts/storybrand/
     preflight_shadow_mode: bool = True
 
     # Preferences
@@ -154,6 +155,11 @@ if os.getenv("FALLBACK_STORYBRAND_MODEL"):
     value = os.getenv("FALLBACK_STORYBRAND_MODEL")
     if value:
         config.fallback_storybrand_model = value
+
+if os.getenv("PERSIST_STORYBRAND_SECTIONS"):
+    config.persist_storybrand_sections = (
+        os.getenv("PERSIST_STORYBRAND_SECTIONS").lower() == "true"
+    )
 
 if os.getenv("STORYBRAND_MIN_COMPLETENESS"):
     try:

@@ -295,6 +295,16 @@ def persist_final_delivery(callback_context: Any) -> None:
                 meta["reference_images_present"] = True
             else:
                 meta["reference_images_present"] = False
+
+            # StoryBrand sections metadata
+            storybrand_sections_saved_path = state.get("storybrand_sections_saved_path")
+            storybrand_sections_gcs_uri = state.get("storybrand_sections_gcs_uri")
+            storybrand_sections_present = bool(storybrand_sections_saved_path)
+            if storybrand_sections_saved_path:
+                meta["storybrand_sections_saved_path"] = storybrand_sections_saved_path
+            if storybrand_sections_gcs_uri:
+                meta["storybrand_sections_gcs_uri"] = storybrand_sections_gcs_uri
+            meta["storybrand_sections_present"] = storybrand_sections_present
             meta["image_signed_url_ttl_seconds"] = getattr(
                 config, "image_signed_url_ttl", 0
             )
