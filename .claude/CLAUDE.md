@@ -20,15 +20,17 @@
 - `app/` - Código fonte do backend
 - `frontend/` - Código fonte do frontend
 - `tests/` - Testes unitários e integração
-- `.claude/plans/` - Planos de tarefas
-- `.claude/results/` - Outputs de agentes
-- `tests/` - Código fonte do backend
+- `.claude/plans/` - Briefs operacionais (copiados dos templates)
+- `.claude/results/` - Outputs operacionais (copiados dos templates)
 
+**Regra de escopo:** edite arquivos somente quando o plano/tarefa vigente citar explicitamente o caminho. Se o arquivo não estiver listado, confirme com o usuário antes de prosseguir.
 
 ### ⛔ NUNCA TOCAR (PROTEGIDO)
 - `.claude/state/` - Estado do sistema (gerenciado por orquestrador)
 - `.claude/hooks/` - Configuração de hooks
 - `.claude/agents/` - Definições de agentes
+- `.claude/plans/templates/` - Modelos de briefs (somente leitura)
+- `.claude/results/templates/` - Modelos de outputs (somente leitura)
 - `node_modules/`, `dist/`, `build/` - Artefatos gerados
 - `.env`, `.env.*` - Secrets e configurações sensíveis
 - `package-lock.json`, `yarn.lock` - Lockfiles de dependências
@@ -59,7 +61,11 @@
 ## 🎭 REGRAS PARA ORQUESTRADOR
 
 ### Identidade
-Você é o **Coordenador Central**. NUNCA implementa código diretamente.
+Você é o **Coordenador Central**.
+
+- **Análise/Consulta:** sempre faça pessoalmente (Read, Grep, Glob, raciocínio). Revise planos, código existente e outputs sem delegar.
+- **Implementação pesada:** delegue a subagentes sempre que envolver escrita/edição de código-fonte, múltiplos arquivos ou fluxos multi-fase (Checklist → Writer → Reviewer → Fixer).
+- **Exceções permitidas:** correções triviais em arquivos de documentação/configuração, manutenção de arquivos de planejamento (`.claude/plans/`), execução de comandos git ou scripts utilitários sob orientação do usuário. Documente qualquer exceção na resposta final.
 
 ### Modelo
 Claude Sonnet 4.5 (ou Opus 4.1 para extrema complexidade)
@@ -170,6 +176,16 @@ Voltar para FASE 3
 **NÃO use para:**
 - Operações triviais (ler arquivo, atualizar status)
 - Usar slash commands (já são otimizados)
+
+---
+
+## 🗂️ FLUXO DE TEMPLATES
+
+1. **Fonte única:** mantenha os modelos em `.claude/plans/templates/` e `.claude/results/templates/`. Não edite esses arquivos manualmente.
+2. **Cópia para trabalho:** antes de iniciar uma nova tarefa, copie os templates para `.claude/plans/` e `.claude/results/` (ex.: `python3 .claude/scripts/reset_claude_templates.py` quando disponível).
+3. **Preenchimento:** atualize somente os arquivos operacionais nas pastas sem `templates`.
+4. **Limpeza entre tarefas:** execute o script de reset para restaurar os modelos limpos e evitar carregar dados antigos.
+5. **Auditoria:** mantenha `.claude/state/` intacto; use `/review-status` para acompanhar o progresso em vez de sobrescrever históricos.
 
 ---
 

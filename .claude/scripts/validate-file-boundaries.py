@@ -12,6 +12,8 @@ PROTECTED_DIRS = [
     ".claude/state",
     ".claude/hooks",
     ".claude/agents",
+    ".claude/plans/templates",
+    ".claude/results/templates",
     "node_modules",
     "dist",
     "build",
@@ -23,6 +25,8 @@ PROTECTED_FILES = [
     ".env",
     "package-lock.json",
     "yarn.lock",
+    "app/.env",
+    "frontend/.env.local",
 ]
 
 try:
