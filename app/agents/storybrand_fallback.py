@@ -780,13 +780,15 @@ class PersistStorybrandSectionsAgent(BaseAgent):
         if not enabled:
             log_struct_event(
                 logger,
-                event="storybrand_sections_persisted",
-                storybrand_sections_persisted="skipped",
-                session_id=session_id,
-                user_id=user_id,
-                has_gcs_upload=False,
-                sections_count=0,
-                reason="feature_flag_disabled",
+                {
+                    "event": "storybrand_sections_persisted",
+                    "storybrand_sections_persisted": "skipped",
+                    "session_id": session_id,
+                    "user_id": user_id,
+                    "has_gcs_upload": False,
+                    "sections_count": 0,
+                    "reason": "feature_flag_disabled",
+                },
             )
             yield Event(author=self.name)
             return
@@ -843,14 +845,16 @@ class PersistStorybrandSectionsAgent(BaseAgent):
 
         log_struct_event(
             logger,
-            event="storybrand_sections_persisted",
-            storybrand_sections_persisted="persisted",
-            session_id=session_id,
-            user_id=user_id,
-            local_path=str(local_path),
-            gcs_uri=gcs_uri,
-            has_gcs_upload=bool(gcs_uri),
-            sections_count=len(sections_payload),
+            {
+                "event": "storybrand_sections_persisted",
+                "storybrand_sections_persisted": "persisted",
+                "session_id": session_id,
+                "user_id": user_id,
+                "local_path": str(local_path),
+                "gcs_uri": gcs_uri,
+                "has_gcs_upload": bool(gcs_uri),
+                "sections_count": len(sections_payload),
+            },
         )
 
         yield Event(author=self.name)
