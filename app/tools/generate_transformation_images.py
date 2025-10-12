@@ -49,7 +49,7 @@ SYSTEM_INSTRUCTIONS = (
 
 def _get_generation_config() -> types.GenerateContentConfig:
     return types.GenerateContentConfig(
-        response_modalities=["TEXT", "IMAGE"],
+        response_modalities=["IMAGE"],  # somete imagem, evita respostas em texto
         temperature=0.9,
         top_p=0.95,
         max_output_tokens=32768,
