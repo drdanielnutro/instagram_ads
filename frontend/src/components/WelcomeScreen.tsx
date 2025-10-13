@@ -29,7 +29,14 @@ export function WelcomeScreen({
 
   if (wizardEnabled) {
     return (
-      <WizardForm onSubmit={handleSubmit} isLoading={isLoading} onCancel={onCancel} />
+      <WizardForm
+        onSubmit={handleSubmit}
+        isLoading={isLoading}
+        onCancel={onCancel}
+        referenceImages={referenceImages}
+        userId={userId}
+        sessionId={sessionId}
+      />
     );
   }
 

@@ -15,6 +15,10 @@ export function validateStepField(
   value: string,
   formState: WizardFormState,
 ): string | null {
+  if (step.kind === 'upload') {
+    return null;
+  }
+
   if (!step.validationRules || step.validationRules.length === 0) {
     return null;
   }
@@ -39,6 +43,11 @@ export function getCompletedSteps(
 
   WIZARD_STEPS.forEach((step, index) => {
     if (index >= currentStep) {
+      return;
+    }
+
+    if (step.kind === 'upload') {
+      completed.push(index);
       return;
     }
 
@@ -71,8 +80,14 @@ export function canProceed(
     return Object.values(errors).every(error => !error);
   }
 
+  const errorKey = step.id as keyof WizardValidationErrors;
+
+  if (step.kind === 'upload') {
+    return !errors[errorKey];
+  }
+
   const fieldValue = formState[step.id];
-  if (errors[step.id]) {
+  if (errors[errorKey]) {
     return false;
   }
 
@@ -94,10 +109,14 @@ export function validateForm(
       return;
     }
 
+    if (step.kind === 'upload') {
+      return;
+    }
+
     const value = formState[step.id];
     const error = validateStepField(step, value, formState);
     if (error) {
-      validationErrors[step.id] = error;
+      validationErrors[step.id as keyof WizardValidationErrors] = error;
     }
   });
 
@@ -107,6 +126,10 @@ export function validateForm(
 export function formatSubmitPayload(formState: WizardFormState): string {
   const lines = WIZARD_STEPS.flatMap(step => {
     if (step.id === 'review') {
+      return [];
+    }
+
+    if (step.kind === 'upload') {
       return [];
     }
 

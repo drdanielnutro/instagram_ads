@@ -4,8 +4,10 @@ import {
   CheckCircle,
   Layout,
   LinkIcon,
+  Package,
   Sparkles,
   Target,
+  UserCircle2,
   Users,
   Venus,
 } from 'lucide-react';
@@ -21,6 +23,8 @@ export const WIZARD_INITIAL_STATE: WizardFormState = {
   nome_empresa: '',
   o_que_a_empresa_faz: '',
   sexo_cliente_alvo: '',
+  reference_image_character: '',
+  reference_image_product: '',
 };
 
 export const OBJETIVO_OPTIONS = [
@@ -248,6 +252,26 @@ const focoStep: WizardStep = {
   ],
 };
 
+const referenceCharacterStep: WizardStep = {
+  id: 'reference_image_character',
+  title: 'Referência de personagem',
+  description:
+    'Faça upload de um personagem aprovado para manter aparência, traços e estilo nas variações visuais.',
+  icon: UserCircle2,
+  isOptional: true,
+  kind: 'upload',
+};
+
+const referenceProductStep: WizardStep = {
+  id: 'reference_image_product',
+  title: 'Referência de produto ou serviço',
+  description:
+    'Envie uma foto oficial ou mock do produto/serviço para reforçar atributos reais nas imagens.',
+  icon: Package,
+  isOptional: true,
+  kind: 'upload',
+};
+
 const reviewStep: WizardStep = {
   id: 'review',
   title: 'Revise antes de gerar',
@@ -264,6 +288,8 @@ const orderedSteps: WizardStep[] = [
   perfilStep,
   ...(enableNewFields ? [sexoClienteStep] : []),
   focoStep,
+  referenceCharacterStep,
+  referenceProductStep,
   reviewStep,
 ];
 

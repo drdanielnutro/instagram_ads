@@ -1,14 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { WIZARD_STEPS } from '@/constants/wizard.constants';
-import type { WizardFormState } from '@/types/wizard.types';
+import type { WizardFormState, WizardStepId } from '@/types/wizard.types';
+import type { UseReferenceImagesReturn } from '@/state/useReferenceImages';
 
 interface ReviewStepProps {
   formState: WizardFormState;
-  onEdit: (field: keyof WizardFormState) => void;
+  referenceImages: UseReferenceImagesReturn;
+  onEdit: (field: WizardStepId) => void;
 }
 
-export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
+export function ReviewStep({ formState, referenceImages, onEdit }: ReviewStepProps) {
   const fields = WIZARD_STEPS.filter(step => step.id !== 'review');
 
   return (
@@ -19,10 +21,44 @@ export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
 
       <div className="space-y-3">
         {fields.map(step => {
-          const fieldId = step.id as keyof WizardFormState;
-          const value = formState[fieldId].trim();
-          const isEmpty = value.length === 0;
-          const displayValue = isEmpty ? 'Não preenchido' : value;
+          const isUploadStep = step.kind === 'upload';
+          let displayValue = '';
+          let isEmpty = false;
+
+          if (isUploadStep) {
+            const entry =
+              step.id === 'reference_image_character'
+                ? referenceImages.character
+                : referenceImages.product;
+
+            const lines: string[] = [];
+            if (entry.id) {
+              lines.push(entry.fileName ? `Arquivo: ${entry.fileName}` : 'Arquivo enviado.');
+            }
+            if (entry.userDescription.trim()) {
+              lines.push(`Descrição: ${entry.userDescription.trim()}`);
+            }
+            if (entry.labels.length > 0) {
+              lines.push(`Labels detectados: ${entry.labels.join(', ')}`);
+            }
+            if (entry.error) {
+              lines.push(`Erro: ${entry.error}`);
+            }
+
+            if (lines.length === 0) {
+              lines.push('Nenhuma referência enviada.');
+              isEmpty = true;
+            } else {
+              isEmpty = false;
+            }
+
+            displayValue = lines.join('\n');
+          } else {
+            const fieldId = step.id as keyof WizardFormState;
+            const value = formState[fieldId].trim();
+            isEmpty = value.length === 0;
+            displayValue = isEmpty ? 'Não preenchido' : value;
+          }
 
           return (
             <div
@@ -54,7 +90,7 @@ export function ReviewStep({ formState, onEdit }: ReviewStepProps) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => onEdit(fieldId)}
+                  onClick={() => onEdit(step.id)}
                   className="self-end"
                 >
                   Editar

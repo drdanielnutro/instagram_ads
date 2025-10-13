@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import type {
   WizardFormState,
   WizardValidationErrors,
+  WizardStepId,
 } from '@/types/wizard.types';
 import {
   WIZARD_INITIAL_STATE,
@@ -15,6 +16,12 @@ import {
   validateForm,
   validateStepField,
 } from '@/utils/wizard.utils';
+
+import { ReferenceUpload } from '@/components/ReferenceUpload';
+import type {
+  ReferenceImageType,
+  UseReferenceImagesReturn,
+} from '@/state/useReferenceImages';
 
 import { ProgressHeader } from './ProgressHeader';
 import { StepsList } from './StepsList';
@@ -49,9 +56,24 @@ interface WizardFormProps {
   onSubmit: (payload: string) => void;
   isLoading: boolean;
   onCancel: () => void;
+  referenceImages: UseReferenceImagesReturn;
+  userId: string | null;
+  sessionId: string | null;
 }
 
-export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
+const REFERENCE_FIELD_MAP: Record<ReferenceImageType, 'reference_image_character' | 'reference_image_product'> = {
+  character: 'reference_image_character',
+  product: 'reference_image_product',
+};
+
+export function WizardForm({
+  onSubmit,
+  isLoading,
+  onCancel,
+  referenceImages,
+  userId,
+  sessionId,
+}: WizardFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formState, setFormState] =
     useState<WizardFormState>(WIZARD_INITIAL_STATE);
@@ -113,6 +135,73 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
     [markFieldTouched, updateFieldError],
   );
 
+  const handleReferenceUpload = useCallback(
+    async (type: ReferenceImageType, file: File) => {
+      const success = await referenceImages.uploadReferenceImage({
+        type,
+        file,
+        userId,
+        sessionId,
+      });
+
+      if (success) {
+        const field = REFERENCE_FIELD_MAP[type];
+        setFormState(prev => ({ ...prev, [field]: file.name }));
+        markFieldTouched(field);
+      }
+
+      return success;
+    },
+    [markFieldTouched, referenceImages, sessionId, userId],
+  );
+
+  const handleReferenceDescriptionChange = useCallback(
+    (type: ReferenceImageType, value: string) => {
+      referenceImages.setUserDescription(type, value);
+      const field = REFERENCE_FIELD_MAP[type];
+      setFormState(prev => ({ ...prev, [field]: value }));
+      markFieldTouched(field);
+    },
+    [markFieldTouched, referenceImages],
+  );
+
+  const handleReferenceRemoval = useCallback(
+    (type: ReferenceImageType) => {
+      referenceImages.clearReferenceImage(type);
+      const field = REFERENCE_FIELD_MAP[type];
+      setFormState(prev => ({ ...prev, [field]: '' }));
+      setErrors(prevErrors => {
+        if (!(field in prevErrors)) {
+          return prevErrors;
+        }
+        const { [field]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    },
+    [referenceImages],
+  );
+
+  const handleReferenceValidationError = useCallback(
+    (type: ReferenceImageType, message: string | null) => {
+      referenceImages.setError(type, message);
+      const field = REFERENCE_FIELD_MAP[type];
+
+      if (!message) {
+        setErrors(prevErrors => {
+          if (!(field in prevErrors)) {
+            return prevErrors;
+          }
+          const { [field]: _, ...rest } = prevErrors;
+          return rest;
+        });
+        return;
+      }
+
+      setErrors(prevErrors => ({ ...prevErrors, [field]: message }));
+    },
+    [referenceImages],
+  );
+
   const goToStep = useCallback((stepIndex: number) => {
     setCurrentStep(() => {
       if (stepIndex < 0) {
@@ -126,12 +215,25 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
   }, []);
 
   const handleNext = useCallback(() => {
+    if (referenceImages.isUploading) {
+      return;
+    }
+
     const step = WIZARD_STEPS[currentStep];
     if (!step || step.id === 'review') {
       return;
     }
 
-    const field = step.id;
+    const field = step.id as WizardField;
+
+    if (step.kind === 'upload') {
+      if (errors[field]) {
+        return;
+      }
+      goToStep(currentStep + 1);
+      return;
+    }
+
     const value = formState[field];
     markFieldTouched(field);
     updateFieldError(field, value, formState);
@@ -143,17 +245,31 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
     }
 
     goToStep(currentStep + 1);
-  }, [currentStep, formState, goToStep, markFieldTouched, updateFieldError]);
+  }, [currentStep, errors, formState, goToStep, markFieldTouched, referenceImages, updateFieldError]);
 
   const handleBack = useCallback(() => {
+    if (referenceImages.isUploading) {
+      return;
+    }
     goToStep(currentStep - 1);
-  }, [currentStep, goToStep]);
+  }, [currentStep, goToStep, referenceImages]);
 
   const handleSubmit = useCallback(() => {
-    const validationErrors = validateForm(formState);
-    setErrors(validationErrors);
+    if (referenceImages.isUploading) {
+      return;
+    }
 
-    const errorFields = Object.keys(validationErrors) as WizardField[];
+    const validationErrors = validateForm(formState);
+    const mergedErrors: WizardValidationErrors = { ...validationErrors };
+    (['reference_image_character', 'reference_image_product'] as WizardField[]).forEach(field => {
+      if (errors[field]) {
+        mergedErrors[field] = errors[field];
+      }
+    });
+
+    setErrors(mergedErrors);
+
+    const errorFields = Object.keys(mergedErrors) as WizardField[];
     if (errorFields.length > 0) {
       setTouched(prevTouched => {
         const updated = new Set(prevTouched);
@@ -162,7 +278,7 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
       });
 
       const firstErrorStep = WIZARD_STEPS.findIndex(
-        step => step.id !== 'review' && validationErrors[step.id as WizardField],
+        step => step.id !== 'review' && mergedErrors[step.id as WizardField],
       );
 
       if (firstErrorStep >= 0) {
@@ -173,10 +289,10 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
 
     const payload = formatSubmitPayload(formState);
     onSubmit(payload);
-  }, [formState, goToStep, onSubmit]);
+  }, [errors, formState, goToStep, onSubmit, referenceImages]);
 
   const handleEditStep = useCallback(
-    (field: WizardField) => {
+    (field: WizardStepId) => {
       const stepIndex = WIZARD_STEPS.findIndex(step => step.id === field);
       if (stepIndex >= 0) {
         goToStep(stepIndex);
@@ -253,6 +369,38 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             error={touched.has('foco') ? errors.foco : undefined}
           />
         );
+      case 'reference_image_character':
+        return (
+          <ReferenceUpload
+            type="character"
+            entry={referenceImages.character}
+            onUpload={file => handleReferenceUpload('character', file)}
+            onDescriptionChange={value =>
+              handleReferenceDescriptionChange('character', value)
+            }
+            onRemove={() => handleReferenceRemoval('character')}
+            onValidationError={message =>
+              handleReferenceValidationError('character', message)
+            }
+            disabled={isLoading || referenceImages.isUploading}
+          />
+        );
+      case 'reference_image_product':
+        return (
+          <ReferenceUpload
+            type="product"
+            entry={referenceImages.product}
+            onUpload={file => handleReferenceUpload('product', file)}
+            onDescriptionChange={value =>
+              handleReferenceDescriptionChange('product', value)
+            }
+            onRemove={() => handleReferenceRemoval('product')}
+            onValidationError={message =>
+              handleReferenceValidationError('product', message)
+            }
+            disabled={isLoading || referenceImages.isUploading}
+          />
+        );
       case 'sexo_cliente_alvo':
         return (
           <GenderTargetStep
@@ -264,11 +412,31 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
           />
         );
       case 'review':
-        return <ReviewStep formState={formState} onEdit={handleEditStep} />;
+        return (
+          <ReviewStep
+            formState={formState}
+            onEdit={handleEditStep}
+            referenceImages={referenceImages}
+          />
+        );
       default:
         return null;
     }
-  }, [currentWizardStep, errors, formState, handleEditStep, handleFieldChange, markFieldTouched, touched]);
+  }, [
+    currentWizardStep,
+    errors,
+    formState,
+    handleEditStep,
+    handleFieldChange,
+    handleReferenceDescriptionChange,
+    handleReferenceRemoval,
+    handleReferenceUpload,
+    handleReferenceValidationError,
+    isLoading,
+    markFieldTouched,
+    referenceImages,
+    touched,
+  ]);
 
   return (
     <div className="fixed inset-0 flex flex-col bg-background">
@@ -323,7 +491,9 @@ export function WizardForm({ onSubmit, isLoading, onCancel }: WizardFormProps) {
             onBack={handleBack}
             onSubmit={handleSubmit}
             onCancel={onCancel}
-            canProceed={canProceed(currentStep, formState, errors)}
+            canProceed={
+              canProceed(currentStep, formState, errors) && !referenceImages.isUploading
+            }
             isLoading={isLoading}
             isOptional={Boolean(currentWizardStep?.isOptional)}
           />
