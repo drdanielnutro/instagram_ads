@@ -9,8 +9,8 @@ Diagnosticar autenticação GCP → Verificar/criar bucket de referências → C
 
 ### 1.1 Verificar arquivo de credenciais
 ```bash
-# Verificar se sa-key.json existe
-ls -lh /home/deniellmed/instagram_ads/sa-key.json
+# Verificar se sa-key.json existe na raiz do projeto
+ls -lh ./sa-key.json
 
 # Se não existir: criar nova service account key via Console GCP
 ```
@@ -127,7 +127,8 @@ gsutil rm gs://instagram-ads-472021-reference-images/test.txt
 
 ### 4.2 Reiniciar backend com configurações atualizadas
 ```bash
-cd /home/deniellmed/instagram_ads
+# Ajuste o caminho para a raiz local do repositório, se necessário
+cd /path/to/instagram_ads
 
 # Parar processos existentes
 pkill -f uvicorn
@@ -149,7 +150,7 @@ curl -X POST http://localhost:8000/upload/reference-image \
   -F "session_id=test_session"
 ```
 
-**Resposta esperada:** JSON com `gcs_uri`, `signed_url` e `labels`
+**Resposta esperada:** JSON com `id`, `signed_url` e `labels`
 
 ---
 
