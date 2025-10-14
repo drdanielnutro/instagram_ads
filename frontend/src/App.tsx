@@ -651,7 +651,7 @@ export default function App() {
 
         <div className="text-center space-y-6">
           <h1 className="text-4xl font-bold text-white flex items-center justify-center gap-3">
-            ✨ Gemini FullStack - ADK 🚀
+            ✨ Instagram Ads Multi-Agent Studio 🚀
           </h1>
 
           <div className="flex flex-col items-center space-y-4">
@@ -663,10 +663,10 @@ export default function App() {
 
             <div className="space-y-2">
               <p className="text-xl text-neutral-300">
-                Waiting for backend to be ready...
+                Bootstrapping the Instagram ads backend...
               </p>
               <p className="text-sm text-neutral-400">
-                This may take a moment on first startup
+                This may take a moment while all agents come online
               </p>
             </div>
 

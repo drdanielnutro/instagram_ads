@@ -79,9 +79,19 @@ async def upload_reference_image(
     if not file_bytes:
         raise ValueError("file_bytes cannot be empty")
 
-    bucket_name = config.reference_images_bucket or os.getenv("REFERENCE_IMAGES_BUCKET")
-    if not bucket_name:
+    bucket_setting = config.reference_images_bucket or os.getenv("REFERENCE_IMAGES_BUCKET")
+    if not bucket_setting:
         raise RuntimeError("REFERENCE_IMAGES_BUCKET is not configured")
+
+    bucket_uri = bucket_setting.strip()
+    if bucket_uri.startswith("gs://"):
+        bucket_name = bucket_uri[5:]
+    else:
+        bucket_name = bucket_uri
+
+    bucket_name = bucket_name.strip().split("/", 1)[0].rstrip("/")
+    if not bucket_name:
+        raise RuntimeError("REFERENCE_IMAGES_BUCKET is invalid")
 
     client = storage_client or storage.Client(project=os.getenv("GOOGLE_CLOUD_PROJECT"))
     bucket = client.bucket(bucket_name)
