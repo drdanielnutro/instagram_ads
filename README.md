@@ -254,6 +254,14 @@ VERTEX_RETRY_INITIAL_BACKOFF=1.0
 VERTEX_RETRY_MAX_BACKOFF=30.0
 ```
 
+### Cloud Vision para Uploads de Referência
+
+- O pipeline de uploads (`POST /upload/reference-image`) usa **Google Cloud Vision API (ImageAnnotatorClient)** para SafeSearch e rotulagem antes de liberar o arquivo.
+- Garanta que o serviço esteja habilitado no projeto: `gcloud services enable vision.googleapis.com --project=instagram-ads-472021`.
+- A mesma service account usada em `GOOGLE_APPLICATION_CREDENTIALS` precisa ter permissão para chamar a API. Durante o rollout usamos `roles/editor` por simplicidade; em produção, substitua por um papel dedicado que inclua ao menos `vision.images.annotate` e `storage.objects.*`.
+- Se a flag `REFERENCE_IMAGES_BUCKET` estiver configurada com `gs://…`, o backend normaliza automaticamente o nome do bucket; valores sem o prefixo também são aceitos após o ajuste em `app/utils/gcs.py`.
+- Logs úteis: `reference_image_upload_start`, `reference_image_upload_failed`, `reference_image_upload_rejected` e mensagens em `app.utils.vision`.
+
 ## 🏗️ Arquivos Críticos
 
 - **Agente principal**: `app/agent.py` - Definição completa do pipeline
