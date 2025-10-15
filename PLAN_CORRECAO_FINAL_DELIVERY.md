@@ -18,11 +18,11 @@
   - `landing_page_url: constr(min_length=1)`  
   - `formato: Literal["Feed","Reels","Stories"]` (derivado de `FORMAT_SPECS`)  
   - `copy: StrictAdCopy` (`headline`, `corpo`, `cta_texto` com `Literal` de CTAs permitidos)  
-  - `visual: StrictAdVisual` (`descricao_imagem`, prompts com `constr(min_length=1)`, `aspect_ratio` como `Literal` dependente do formato, `reference_assets: Optional[ReferenceAssetsPublic]`)  
+  - `visual: StrictAdVisual` (`descricao_imagem`, prompts com `constr(min_length=1)`, `aspect_ratio` como `Literal` dependente do formato, `reference_assets: dict[str, ReferenceAssetPublic] | None`)  
   - `cta_instagram: Literal[...]`  
   - `fluxo`, `referencia_padroes`: `constr(min_length=1)`  
   - `contexto_landing: Union[str, dict[str, Any]]` (normalizado posteriormente)  
-- Declarar `ReferenceAssetsPublic` em `app/schemas/reference_assets.py` com `character`/`product` opcionais contendo `id`, `gcs_uri`, `labels`, `user_description`; garantir reuso por fallback e pipeline principal.  
+- Declarar `ReferenceAssetPublic` em `app/schemas/reference_assets.py` com campos `id`, `type`, `gcs_uri`, `labels`, `user_description`; garantir reuso por fallback e pipeline principal, convertendo a partir de `ReferenceImageMetadata`.  
 - Aplicar `Field(..., min_length=1)`/`constr` nos campos livres para impedir strings vazias e documentar a justificativa no módulo.
 
 ### 2.2 Refatorar o `final_assembler_llm`
@@ -76,7 +76,7 @@
 
 ## 4. Testes e Rollout
 - Sequência recomendada:  
-  1. Testes unitários de schema (`AdVariationsPayload`, `ReferenceAssetsPublic`).  
+  1. Testes unitários de schema (`AdVariationsPayload`, `ReferenceAssetPublic`).  
   2. Teste unitário/integrado do assembler com `output_schema` (simular CTA inválido → garantir bloqueio).  
   3. Atualizar testes existentes que esperavam JSON string (`final_code_delivery`).  
   4. Testes de integração (`tests/integration/pipeline/test_deterministic_flow.py`, `tests/unit/validators/test_final_delivery_validator.py`).  
@@ -91,6 +91,7 @@
 - Atualizar `CTA_INSTAGRAM_CHOICES` e `CTA_BY_OBJECTIVE` conforme a lista homologada, refletindo no schema Pydantic (`Literal`/`Enum`).  
 - Revisar prompts (`code_generator`, `final_assembler_llm`) para mencionar o conjunto expandido assim que estiver aprovado.  
 - Garantir que frontend/API que expõem CTAs estejam alinhados antes de liberar a nova enumeração; programar rollout coordenado com UX/wizard.  
+- **Nota de localização:** os rótulos listados abaixo vêm do material oficial da Meta em PT-PT; antes de codificar, converter para PT-BR (ex.: “Contactar-nos” → “Fale conosco”, “Registar” → “Cadastrar”, “Transferir” → “Baixar”) e padronizar capitalização conforme guidelines do produto.  
 - Base de referência inicial (extraída de `cta_permitidos_instagram_ads.md`, sujeita à validação e alinhada às categorias atualmente usadas no código):  
   - `awareness`: `Saber Mais`, `Ver Mais`, `Ouvir Agora`, `Visitar Perfil do Instagram`.  
   - `agendamentos`: `Enviar Mensagem`, `Enviar Mensagem do WhatsApp`, `Ligar Agora`, `Pedir Horário`, `Contactar-nos`.  
