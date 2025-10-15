@@ -24,7 +24,13 @@ logger = logging.getLogger(__name__)
 
 
 class FinalDeliveryValidatorAgent(BaseAgent):
-    """Validate and normalize the final delivery JSON stored in the session state."""
+    """Validate and normalize the final delivery JSON stored in the session state.
+
+    Simplified scope (structural validation delegated to Pydantic):
+    - Validates exactly 3 variations
+    - Detects duplicates (headline + corpo + prompts)
+    - Validates CTA × objetivo using CTA_BY_OBJECTIVE
+    """
 
     def __init__(self, name: str = "final_delivery_validator") -> None:
         super().__init__(name=name)

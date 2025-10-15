@@ -32,7 +32,8 @@ from google.genai.types import Content, Part
 from pydantic import BaseModel, Field, ValidationError
 
 from .config import config
-from .schemas.reference_assets import ReferenceImageMetadata
+from .schemas.reference_assets import ReferenceImageMetadata, ReferenceAssetPublic
+from .schemas.final_delivery import AdVariationsPayload
 from .tools.generate_transformation_images import generate_transformation_images
 from .tools.web_fetch import web_fetch_tool
 from .utils.audit import append_delivery_audit_event
@@ -1539,31 +1540,26 @@ class FinalAssemblyGuardPre(BaseAgent):
 
 
 class FinalAssemblyNormalizer(BaseAgent):
-    """Normaliza a saída do assembler e prepara estado para validação determinística."""
+    """Normaliza a saída do assembler e prepara estado para validação determinística.
+
+    Implementa dual-write:
+    - state["final_ad_variations"]: objeto AdVariationsPayload (novo)
+    - state["final_code_delivery"]: string JSON serializada (legado, mantido para compatibilidade)
+
+    Injeta reference_assets quando state["reference_images"] está presente.
+    """
 
     def __init__(self, name: str = "final_assembly_normalizer") -> None:
         super().__init__(name=name)
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
         state = ctx.session.state
-        raw_payload = state.get("final_code_delivery")
+        # Novo: tentar obter do output_schema primeiro
+        raw_payload = state.get("final_ad_variations") or state.get("final_code_delivery")
 
         if not raw_payload:
-            detail = "final_code_delivery ausente após montagem."
-            state["deterministic_final_validation"] = {
-                "grade": "fail",
-                "issues": [detail],
-                "source": "normalizer",
-            }
-            state["deterministic_final_blocked"] = True
-            state["deterministic_final_validation_failed"] = True
-            state["deterministic_final_validation_failure_reason"] = detail
-            append_delivery_audit_event(
-                state,
-                stage=self.name,
-                status="failed",
-                detail=detail,
-            )
+            detail = "Payload final ausente após montagem."
+            self._fail_normalization(state, detail)
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
@@ -1571,32 +1567,12 @@ class FinalAssemblyNormalizer(BaseAgent):
             )
             return
 
+        # Parse payload
         try:
-            if isinstance(raw_payload, str):
-                parsed, parsed_value = try_parse_json_string(raw_payload)
-                if not parsed:
-                    parsed_value = json.loads(raw_payload)
-                variations = parsed_value
-            elif isinstance(raw_payload, list):
-                variations = raw_payload
-            else:
-                raise TypeError("Estrutura inesperada recebida pelo normalizer")
+            variations_data = self._parse_payload(raw_payload)
         except (json.JSONDecodeError, TypeError, ValueError) as exc:
             detail = f"Payload inválido: {exc}"
-            state["deterministic_final_validation"] = {
-                "grade": "fail",
-                "issues": [detail],
-                "source": "normalizer",
-            }
-            state["deterministic_final_blocked"] = True
-            state["deterministic_final_validation_failed"] = True
-            state["deterministic_final_validation_failure_reason"] = detail
-            append_delivery_audit_event(
-                state,
-                stage=self.name,
-                status="failed",
-                detail=detail,
-            )
+            self._fail_normalization(state, detail)
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
@@ -1604,22 +1580,9 @@ class FinalAssemblyNormalizer(BaseAgent):
             )
             return
 
-        if not isinstance(variations, list) or not variations:
-            detail = "Lista de variações vazia ou inválida."
-            state["deterministic_final_validation"] = {
-                "grade": "fail",
-                "issues": [detail],
-                "source": "normalizer",
-            }
-            state["deterministic_final_blocked"] = True
-            state["deterministic_final_validation_failed"] = True
-            state["deterministic_final_validation_failure_reason"] = detail
-            append_delivery_audit_event(
-                state,
-                stage=self.name,
-                status="failed",
-                detail=detail,
-            )
+        if not variations_data:
+            detail = "Lista de variações vazia."
+            self._fail_normalization(state, detail)
             yield Event(
                 author=self.name,
                 content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
@@ -1627,101 +1590,25 @@ class FinalAssemblyNormalizer(BaseAgent):
             )
             return
 
-        def _is_blank(value: Any) -> bool:
-            if value is None:
-                return True
-            if isinstance(value, str) and not value.strip():
-                return True
-            return False
+        # Injetar reference_assets se disponível
+        reference_assets_dict = self._build_reference_assets_dict(state)
+        if reference_assets_dict:
+            for variation in variations_data:
+                visual = variation.get("visual")
+                if isinstance(visual, dict):
+                    visual["reference_assets"] = reference_assets_dict
 
-        normalized_variations: list[dict[str, Any]] = []
-        structural_issues: list[str] = []
-
-        for idx, variation in enumerate(variations):
-            if not isinstance(variation, dict):
-                structural_issues.append(f"Variação {idx + 1} não é um objeto JSON.")
-                continue
-
-            required_fields = [
-                "landing_page_url",
-                "formato",
-                "cta_instagram",
-                "fluxo",
-                "referencia_padroes",
-                "contexto_landing",
-            ]
-            missing = [field for field in required_fields if _is_blank(variation.get(field))]
-
-            copy_block = variation.get("copy") or {}
-            visual_block = variation.get("visual") or {}
-            if not isinstance(copy_block, dict) or not isinstance(visual_block, dict):
-                structural_issues.append(
-                    f"Variação {idx + 1} possui 'copy' ou 'visual' inválidos."
-                )
-                continue
-
-            copy_missing = [
-                field for field in ("headline", "corpo", "cta_texto") if _is_blank(copy_block.get(field))
-            ]
-            visual_missing = [
-                field
-                for field in (
-                    "descricao_imagem",
-                    "prompt_estado_atual",
-                    "prompt_estado_intermediario",
-                    "prompt_estado_aspiracional",
-                    "aspect_ratio",
-                )
-                if _is_blank(visual_block.get(field))
-            ]
-
-            if missing or copy_missing or visual_missing:
-                details = []
-                if missing:
-                    details.append(
-                        "campos principais: " + ", ".join(sorted(set(missing)))
-                    )
-                if copy_missing:
-                    details.append("copy: " + ", ".join(copy_missing))
-                if visual_missing:
-                    details.append("visual: " + ", ".join(visual_missing))
-                structural_issues.append(
-                    f"Variação {idx + 1} incompleta ({'; '.join(details)})."
-                )
-                continue
-
+        # Normalizar contexto_landing
+        for variation in variations_data:
             contexto = variation.get("contexto_landing")
             if isinstance(contexto, (dict, list)):
                 variation["contexto_landing"] = json.dumps(contexto, ensure_ascii=False)
 
-            normalized_variations.append(variation)
+        # Dual-write: salvar como objeto e como string
+        state["final_ad_variations"] = {"variations": variations_data}  # Objeto estruturado
+        state["final_code_delivery"] = json.dumps(variations_data, ensure_ascii=False)  # String JSON (legado)
+        state["final_code_delivery_parsed"] = variations_data
 
-        if structural_issues:
-            detail = "; ".join(structural_issues)
-            state["deterministic_final_validation"] = {
-                "grade": "fail",
-                "issues": structural_issues,
-                "source": "normalizer",
-            }
-            state["deterministic_final_blocked"] = True
-            state["deterministic_final_validation_failed"] = True
-            state["deterministic_final_validation_failure_reason"] = detail
-            append_delivery_audit_event(
-                state,
-                stage=self.name,
-                status="failed",
-                detail=detail,
-                issues=structural_issues,
-            )
-            yield Event(
-                author=self.name,
-                content=Content(parts=[Part(text=f"❌ Normalização falhou: {detail}")]),
-                actions=EventActions(escalate=True),
-            )
-            return
-
-        state["final_code_delivery_parsed"] = normalized_variations
-        state["final_code_delivery"] = json.dumps(normalized_variations, ensure_ascii=False)
         state["deterministic_final_validation"] = {
             "grade": "pending",
             "issues": [],
@@ -1730,15 +1617,72 @@ class FinalAssemblyNormalizer(BaseAgent):
         state["deterministic_final_blocked"] = False
         state.pop("deterministic_final_validation_failed", None)
         state.pop("deterministic_final_validation_failure_reason", None)
+
         append_delivery_audit_event(
             state,
             stage=self.name,
             status="pending",
-            detail="Payload normalizado; aguardando validador determinístico.",
+            detail="Payload normalizado com dual-write e reference_assets injetados.",
         )
         yield Event(
             author=self.name,
             content=Content(parts=[Part(text="🧮 JSON final normalizado para validação determinística.")]),
+        )
+
+    def _parse_payload(self, raw: Any) -> list[dict[str, Any]]:
+        """Parse raw payload into list of variation dicts."""
+        if isinstance(raw, str):
+            parsed, value = try_parse_json_string(raw)
+            if parsed:
+                raw = value
+            else:
+                raw = json.loads(raw)
+
+        # Handle AdVariationsPayload format
+        if isinstance(raw, dict):
+            if "variations" in raw:
+                raw = raw["variations"]
+
+        if isinstance(raw, list):
+            return [v for v in raw if isinstance(v, dict)]
+
+        raise TypeError(f"Unexpected payload type: {type(raw)}")
+
+    def _build_reference_assets_dict(self, state: dict[str, Any]) -> dict[str, Any] | None:
+        """Build reference_assets dict from state["reference_images"]."""
+        reference_images = state.get("reference_images")
+        if not reference_images or not isinstance(reference_images, dict):
+            return None
+
+        assets: dict[str, Any] = {}
+        for asset_type in ("character", "product"):
+            metadata_dict = reference_images.get(asset_type)
+            if metadata_dict and isinstance(metadata_dict, dict):
+                try:
+                    metadata = ReferenceImageMetadata(**metadata_dict)
+                    public_asset = ReferenceAssetPublic.from_metadata(metadata)
+                    assets[asset_type] = public_asset.model_dump()
+                except (ValidationError, TypeError) as exc:
+                    logger.warning(f"Failed to convert {asset_type} reference: {exc}")
+                    continue
+
+        return assets if assets else None
+
+    def _fail_normalization(self, state: dict[str, Any], detail: str) -> None:
+        """Mark normalization as failed in state."""
+        state["deterministic_final_validation"] = {
+            "grade": "fail",
+            "issues": [detail],
+            "source": "normalizer",
+        }
+        state["deterministic_final_blocked"] = True
+        state["deterministic_final_validation_failed"] = True
+        state["deterministic_final_validation_failure_reason"] = detail
+        append_delivery_audit_event(
+            state,
+            stage=self.name,
+            status="failed",
+            detail=detail,
         )
 
 
@@ -1780,41 +1724,41 @@ class PersistFinalDeliveryAgent(BaseAgent):
 final_assembler_instruction = """
 ## IDENTIDADE: Final Ads Assembler
 
-Monte **3 variações** de anúncio combinando `approved_code_snippets`.
+Monte **exatamente 3 variações** de anúncio combinando `approved_code_snippets`.
 
 Referências visuais aprovadas (aplicar somente quando disponíveis):
 - Personagem: {reference_image_character_summary} (GCS: {reference_image_character_gcs_uri}, Labels: {reference_image_character_labels}, Descrição: {reference_image_character_user_description})
 - Produto: {reference_image_product_summary} (GCS: {reference_image_product_gcs_uri}, Labels: {reference_image_product_labels}, Descrição: {reference_image_product_user_description})
 - SafeSearch: {reference_image_safe_search_notes}
 
-Campos obrigatórios (saída deve ser uma LISTA com 3 OBJETOS):
+**SCHEMA DE SAÍDA OBRIGATÓRIO: AdVariationsPayload**
+
+Retorne um objeto JSON com o campo `variations` contendo exatamente 3 variações.
+Cada variação deve seguir a estrutura StrictAdItem com os seguintes campos:
+
 - "landing_page_url": usar {landing_page_url} (se vazio, inferir do briefing coerentemente)
-- "formato": usar {formato_anuncio} especificado pelo usuário
+- "formato": usar {formato_anuncio} especificado pelo usuário (valores permitidos baseados em FORMAT_SPECS)
 - "copy": { "headline", "corpo", "cta_texto" } (COPY_DRAFT refinado - CRIAR 3 VARIAÇÕES)
 - "visual": { "descricao_imagem", "prompt_estado_atual", "prompt_estado_intermediario", "prompt_estado_aspiracional", "aspect_ratio" } (sem duração - apenas imagens)
-  - Quando houver referências aprovadas, inclua `"reference_assets"` com:
-    ```json
-    {
-      "character": {"id": "...", "gcs_uri": "...", "labels": [...], "user_description": "..."},
-      "product": {"id": "...", "gcs_uri": "...", "labels": [...], "user_description": "..."}
-    }
-    ```
-    Remova entradas nulas para tipos não fornecidos e **nunca exponha `signed_url`**.
-- "cta_instagram": do COPY_DRAFT
+- "cta_instagram": do COPY_DRAFT (deve ser um dos valores permitidos em CTA_INSTAGRAM_CHOICES)
 - "fluxo": coerente com {objetivo_final}, por padrão "Instagram Ad → Landing Page → Botão WhatsApp"
 - "referencia_padroes": do RESEARCH
 - "contexto_landing": OBRIGATÓRIO em TODAS as variações. Copie integralmente {landing_page_context} ou, se ausente, gere resumo com as chaves StoryBrand (storybrand_persona, storybrand_dores, storybrand_proposta, storybrand_beneficios, storybrand_transformacao, storybrand_cta_principal, storybrand_completeness)
 
-Regras:
-- Criar 3 variações diferentes de copy e visual reutilizando os snippets aprovados sempre que possível.
-- Se qualquer variação chegar sem descrição completa ou sem os três prompts de visual, gere o conteúdo faltante usando o contexto StoryBrand (mesma persona, cenas 1-3) antes de finalizar.
-- Não devolva prompts vazios; se não conseguir completar, pare e sinalize que o snippet VISUAL_DRAFT precisa ser refeito.
-- Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema.
-- Quando apenas o produto estiver aprovado, mantenha a narrativa centrada nele e evite criar personagens inexistentes.
-- Quando apenas o personagem estiver aprovado, preserve aparência física e cite a persona real nas descrições e prompts.
-- Quando ambos existirem, garanta interação coerente entre persona e produto em todas as variações.
-- Mantenha exatamente três prompts sequenciais (`estado_atual`, `estado_intermediario`, `estado_aspiracional`) alinhados às instruções fixas de `code_generator`, `code_reviewer` e `code_refiner`.
-- **Saída**: apenas JSON válido (sem markdown).
+Regras críticas:
+- Retorne **somente JSON válido**, sem markdown (```json) ou formatação adicional
+- Preencha **exatamente três variações** no campo `variations` do AdVariationsPayload
+- Não altere valores aprovados de CTA, formato e aspect_ratio - mantenha coerência com CONFIG e FORMAT_SPECS
+- Criar 3 variações diferentes de copy e visual reutilizando os snippets aprovados sempre que possível
+- Se qualquer variação chegar sem descrição completa ou sem os três prompts de visual, gere o conteúdo faltante usando o contexto StoryBrand (mesma persona, cenas 1-3) antes de finalizar
+- Não devolva prompts vazios; se não conseguir completar, pare e sinalize que o snippet VISUAL_DRAFT precisa ser refeito
+- Se um "foco" foi definido, garanta que as variações respeitam e comunicam o tema
+- Quando apenas o produto estiver aprovado, mantenha a narrativa centrada nele e evite criar personagens inexistentes
+- Quando apenas o personagem estiver aprovado, preserve aparência física e cite a persona real nas descrições e prompts
+- Quando ambos existirem, garanta interação coerente entre persona e produto em todas as variações
+- Mantenha exatamente três prompts sequenciais (`estado_atual`, `estado_intermediario`, `estado_aspiracional`) alinhados às instruções fixas de `code_generator`, `code_reviewer` e `code_refiner`
+
+**IMPORTANTE**: A saída será validada contra o schema AdVariationsPayload. Qualquer desvio causará falha na validação.
 """
 
 final_assembler_llm = LlmAgent(
@@ -1822,7 +1766,8 @@ final_assembler_llm = LlmAgent(
     name="final_assembler_llm",
     description="Gera o JSON final a partir dos snippets aprovados.",
     instruction=final_assembler_instruction,
-    output_key="final_code_delivery",
+    output_schema=AdVariationsPayload,
+    output_key="final_ad_variations",
 )
 
 legacy_final_assembler_llm = LlmAgent(

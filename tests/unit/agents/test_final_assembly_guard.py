@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import uuid
 from types import SimpleNamespace
 
 import pytest
@@ -11,7 +12,29 @@ from app.agent import FinalAssemblyGuardPre
 
 
 def _make_ctx(state: dict) -> InvocationContext:
-    return InvocationContext(session=SimpleNamespace(state=state))
+    """Create a valid InvocationContext for testing.
+
+    Updated to comply with ADK InvocationContext API requirements.
+    """
+    from google.adk.sessions import InMemorySessionService, Session
+    from google.adk.agents import BaseAgent
+
+    session_service = InMemorySessionService()
+    agent = BaseAgent(name="test_agent", description="Test agent for unit tests")
+
+    session = Session(
+        id="test-session",
+        app_name="test-app",
+        user_id="test-user",
+        state=state
+    )
+
+    return InvocationContext(
+        session_service=session_service,
+        invocation_id=f"e-{uuid.uuid4()}",
+        agent=agent,
+        session=session
+    )
 
 
 def _collect(agent, ctx):
@@ -38,6 +61,9 @@ def test_guard_collects_visual_snippets_and_allows_progress():
 
     events = _collect(guard, ctx)
 
+    # Read state from session context
+    state = ctx.session.state
+
     assert events
     assert state["approved_visual_drafts"][0]["snippet_id"] == "abc123"
     assert state["deterministic_final_blocked"] is False
@@ -50,6 +76,9 @@ def test_guard_blocks_when_no_visual_snippets():
     ctx = _make_ctx(state)
 
     events = _collect(guard, ctx)
+
+    # Read state from session context
+    state = ctx.session.state
 
     assert len(events) == 1
     event = events[0]

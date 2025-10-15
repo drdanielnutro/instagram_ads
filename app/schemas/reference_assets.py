@@ -84,4 +84,27 @@ class ReferenceImageMetadata(BaseModel):
         return self.model_dump(mode="json")
 
 
-__all__ = ["ReferenceImageMetadata"]
+class ReferenceAssetPublic(BaseModel):
+    """Public representation of a reference asset without signed URL."""
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    id: str = Field(..., min_length=1)
+    type: Literal["character", "product"]
+    gcs_uri: str = Field(..., min_length=1)
+    labels: list[str] = Field(default_factory=list)
+    user_description: str | None = None
+
+    @classmethod
+    def from_metadata(cls, metadata: ReferenceImageMetadata) -> ReferenceAssetPublic:
+        """Convert ReferenceImageMetadata to ReferenceAssetPublic, removing signed_url."""
+        return cls(
+            id=metadata.id,
+            type=metadata.type,
+            gcs_uri=metadata.gcs_uri,
+            labels=metadata.labels,
+            user_description=metadata.user_description,
+        )
+
+
+__all__ = ["ReferenceImageMetadata", "ReferenceAssetPublic"]

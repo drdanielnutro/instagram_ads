@@ -1,121 +1,78 @@
 {
-  "task_id": "TASK-20251012-0000",
+  "task_id": "TASK-20251015-0000",
   "requirements": {
     "checklist_analysis_file": ".claude/results/checklist-output.json",
     "explicit_requirements": [
-      "P0-1: Criar função _normalize_cta em app/agents/fallback_compiler.py",
-      "P0-2: Importar CTA_INSTAGRAM_CHOICES, CTA_BY_OBJECTIVE, logger",
-      "P0-3: Implementar limpeza/comparação case-insensitive",
-      "P0-4: Mapear sinônimos: 'agendar'→'Enviar mensagem', 'fale conosco'→'Enviar mensagem', 'Saiba Mais'→'Saiba mais'",
-      "P0-5: Usar objetivo como fallback contextual via CTA_BY_OBJECTIVE.get(objetivo)[0]",
-      "P0-6: Default seguro: 'Saiba mais'",
-      "P0-7: Tratar strings vazias/None sem logs repetitivos",
-      "P0-8: Adaptar _extract_ctas (linha 71-88) para aceitar (action_text: str, objetivo: str)",
-      "P0-9: Aplicar _normalize_cta em cta_principal e cta_backup",
-      "P0-10: Atualizar chamada em _run_async_impl (linha ~197)",
-      "P0-11: Log informativo quando normalizar, warning só no fallback padrão",
-      "P0-12: Propagar CTAs normalizados via ActionElement.primary/secondary",
-      "P0-13: Adicionar teste unitário em tests/unit/agents/test_storybrand_fallback.py",
-      "P0-14: Adicionar teste integração forçando fallback + determinística",
-      "P1-1: Atualizar prompts TASK-003 em app/plan_models/fixed_plans.py (Reels, Stories, Feed)",
-      "P1-2: Mencionar CTAs válidos explicitamente nos prompts",
-      "P1-3: Incluir preferências por objetivo",
-      "P1-4: Enriquecer estado inicial em app/server.py (/run_preflight)",
-      "P1-5: Adicionar cta_instagram_choices, cta_by_objective, recommended_cta",
-      "P1-6: Log de debug para monitorar recomendações"
+      "Criar AdVariationsPayload com variations: conlist(StrictAdItem, min_length=3, max_length=3)",
+      "Criar ReferenceAssetPublic (sem signed_url) baseado em ReferenceImageMetadata",
+      "Estender StrictAdVisual para incluir reference_assets: dict[str, ReferenceAssetPublic] | None",
+      "Adicionar output_schema=AdVariationsPayload ao final_assembler_llm",
+      "Atualizar final_assembler_instruction citando schema explicitamente",
+      "Refatorar FinalAssemblyNormalizer para dual-write (final_ad_variations objeto + final_code_delivery string)",
+      "Implementar injeção de reference_assets convertendo ReferenceImageMetadata → ReferenceAssetPublic",
+      "Simplificar FinalDeliveryValidatorAgent removendo validações estruturais",
+      "Criar testes unitários para schemas e normalizer",
+      "Atualizar testes de integração existentes",
+      "Atualizar documentação (CORRECAO_VALIDACAO_DETERMINISTICA.md, changelog, README)"
     ],
     "implicit_requirements": [
-      "Manter compatibilidade com StrictAdItem em app/schemas/final_delivery.py",
-      "Não quebrar serialização existente de storybrand_analysis",
-      "Logs informativos sem poluir output",
-      "CTAs case-sensitive após mapeamento",
-      "Sem dependências circulares nos imports",
-      "Manter performance do fallback",
-      "Validação determinística deve receber CTAs válidos",
-      "Backward compatibility com consumidores de storybrand_analysis"
+      "Manter compatibilidade com fluxo fallback StoryBrand",
+      "Preservar telemetria (delivery_audit_trail) e métricas",
+      "Não quebrar endpoints GET /final/meta e GET /final/download",
+      "Garantir conversão remove signed_url",
+      "Manter compatibilidade com persist_final_delivery",
+      "Usar CTAs de CTA_INSTAGRAM_CHOICES em app/config.py:12",
+      "Usar FORMAT_SPECS de app/format_specifications.py"
     ],
     "acceptance_criteria": [
-      "CTAs gerados pelo fallback ∈ CTA_INSTAGRAM_CHOICES",
-      "deterministic_final_validation.grade == 'pass'",
-      "persist_final_delivery executado (não pulado)",
-      "Testes unitários validam mapeamento de sinônimos",
-      "Teste integração valida: fallback → normalização → validação → persistência",
-      "Logs mostram 'CTA normalizado: X → Y'",
-      "Fallback contextual usa objetivo",
-      "Default 'Saiba mais' quando sem mapeamento",
-      "Prompts mencionam CTAs válidos",
-      "Estado inicial contém cta_instagram_choices e recommended_cta"
+      "AdVariationsPayload valida exatamente 3 variações",
+      "ReferenceAssetPublic sem campo signed_url",
+      "final_assembler_llm retorna objeto em state[final_ad_variations]",
+      "state[final_code_delivery] mantido como string (dual-write)",
+      "reference_assets injetados quando state[reference_images] presente",
+      "FinalDeliveryValidatorAgent valida apenas: contagem, duplicatas, CTA × objetivo",
+      "Validações estruturais delegadas ao Pydantic",
+      "pytest --cov ≥ 80%",
+      "Pipeline determinístico executa sem bloqueios",
+      "Documentação reflete nova arquitetura"
     ]
   },
   "expected_outputs": {
-    "files_to_create": [],
+    "files_to_create": [
+      "tests/unit/schemas/test_final_delivery_schemas.py",
+      "tests/unit/schemas/test_reference_asset_public.py"
+    ],
     "files_to_modify": [
-      "app/agents/fallback_compiler.py - adicionar _normalize_cta, adaptar _extract_ctas",
-      "app/plan_models/fixed_plans.py - atualizar prompts TASK-003",
-      "app/server.py - enriquecer estado inicial em /run_preflight",
-      "tests/unit/agents/test_storybrand_fallback.py - adicionar testes normalização"
+      "app/schemas/final_delivery.py",
+      "app/schemas/reference_assets.py",
+      "app/agent.py",
+      "app/validators/final_delivery_validator.py",
+      "tests/unit/validators/test_final_delivery_validator.py",
+      "tests/integration/pipeline/test_deterministic_flow.py",
+      "docs/ja_implementado/CORRECAO_VALIDACAO_DETERMINISTICA.md"
     ],
     "files_to_delete": [],
     "tests_to_create": [
-      "tests/unit/agents/test_storybrand_fallback.py - test_normalize_cta_synonyms",
-      "tests/unit/agents/test_storybrand_fallback.py - test_normalize_cta_fallback_by_objective",
-      "tests/unit/agents/test_storybrand_fallback.py - test_extract_ctas_with_normalization",
-      "tests/integration/pipeline/test_deterministic_flow.py - test_fallback_with_deterministic_validation"
+      "tests/unit/schemas/test_final_delivery_schemas.py - validar AdVariationsPayload, StrictAdItem, min/max variações",
+      "tests/unit/schemas/test_reference_asset_public.py - validar conversão ReferenceImageMetadata → ReferenceAssetPublic",
+      "Atualizar tests/unit/validators/test_final_delivery_validator.py - refletir escopo simplificado",
+      "Atualizar tests/integration/pipeline/test_deterministic_flow.py - validar dual-write e injeção reference_assets"
     ]
   },
   "testing_requirements": {
     "coverage_target": 80,
-    "test_types": ["unit", "integration"],
-    "test_strategy": "Testes unitários isolam _normalize_cta (sinônimos, objetivo, default). Teste integração valida fluxo E2E: forçar fallback + validação determinística + persistência."
-  },
-  "project_context": "Correção de bug crítico: CTAs gerados pelo fallback StoryBrand não respeitam CTA_INSTAGRAM_CHOICES, quebrando validação determinística e impedindo persistência. Solução: normalizar CTAs na origem (fallback) + reforçar prompts/estado.",
-  "critical_notes": [
-    "LINHA 71-88: _extract_ctas atual retorna tuple[str, str] sem validação",
-    "LINHA ~197: chamada em _run_async_impl precisa passar objetivo",
-    "CTA_INSTAGRAM_CHOICES definido em app/config.py linha 32",
-    "CTA_BY_OBJECTIVE definido em app/config.py linha 42",
-    "ActionElement.primary/secondary são campos str sem validação enum",
-    "StrictAdItem.cta_texto e cta_instagram usam Literal[CTA_INSTAGRAM_CHOICES]",
-    "Validação determinística lê JSON final e valida contra StrictAdItem",
-    "persist_final_delivery é pulado quando grade != 'pass'",
-    "Flags relevantes: ENABLE_DETERMINISTIC_FINAL_VALIDATION, ENABLE_STORYBRAND_FALLBACK, STORYBRAND_GATE_DEBUG",
-    "Não implementar P2 (documentação em format_specifications.py) - considerar tarefa futura"
-  ],
-  "implementation_guidance": {
-    "priority_order": "P0 (normalização + testes) → P1 (prompts + estado)",
-    "synonym_map_suggestion": {
-      "agendar": "Enviar mensagem",
-      "agendar avaliação": "Enviar mensagem",
-      "fale conosco": "Enviar mensagem",
-      "entre em contato": "Enviar mensagem",
-      "Saiba Mais": "Saiba mais",
-      "saiba mais": "Saiba mais",
-      "compre agora": "Comprar agora",
-      "cadastre-se": "Cadastre-se",
-      "inscreva-se": "Cadastre-se"
-    },
-    "normalize_cta_logic": [
-      "1. Se cta is None ou empty string: retornar 'Saiba mais' (sem log error)",
-      "2. Limpar: cta.strip()",
-      "3. Buscar exact match case-sensitive em CTA_INSTAGRAM_CHOICES: retornar direto",
-      "4. Buscar case-insensitive em CTA_INSTAGRAM_CHOICES: retornar versão oficial",
-      "5. Buscar em synonym_map: retornar valor mapeado + log info",
-      "6. Fallback contextual: CTA_BY_OBJECTIVE.get(objetivo, ('Saiba mais',))[0] + log warning",
-      "7. Default: 'Saiba mais' + log warning"
+    "test_types": [
+      "unit",
+      "integration"
     ],
-    "test_scenarios": [
-      "CTA válido exato → retorna inalterado",
-      "CTA válido case diferente → normaliza case",
-      "Sinônimo conhecido → mapeia corretamente",
-      "CTA inválido + objetivo válido → usa CTA do objetivo",
-      "CTA inválido + objetivo inválido → 'Saiba mais'",
-      "None/empty string → 'Saiba mais' sem error log"
-    ]
+    "test_strategy": "Fase 1: testes unitários de schemas (AdVariationsPayload, ReferenceAssetPublic); Fase 2: testes de normalizer (dual-write, injeção); Fase 3: testes de validador simplificado; Fase 4: testes de integração do pipeline completo"
   },
-  "checklist_gaps_addressed": {
-    "gap_1": "Ordem de preferência definida: CTA_BY_OBJECTIVE.get(objetivo)[0]",
-    "gap_2": "Prompts incluirão exemplos de sinônimos aceitos",
-    "gap_3": "Fallback respeitará CTA_INSTAGRAM_CHOICES mas não restringirá a CTA_BY_OBJECTIVE (validador já faz isso)",
-    "gap_4": "P2 não implementado nesta tarefa - considerar futura"
-  }
+  "project_context": "Sistema multiagente ADK que gera anúncios Instagram em JSON. Pipeline: snippets → final_assembler_llm → FinalAssemblyNormalizer → FinalDeliveryValidatorAgent → persistência. CTAs em app/config.py:12, formatos em app/format_specifications.py. Flag ENABLE_DETERMINISTIC_FINAL_VALIDATION=true em app/.env:63.",
+  "critical_notes": [
+    "final_assembler_llm NÃO usa tools/transfers (compatível com output_schema)",
+    "Dual-write temporário até migração completa (1-2 sprints)",
+    "Schemas devem usar Literal para CTAs, formatos, aspect_ratios baseados em config existente",
+    "ReferenceAssetPublic DEVE remover signed_url de ReferenceImageMetadata",
+    "Manter compatibilidade com fallback StoryBrand (FallbackStorybrandCompiler, PersistStorybrandSectionsAgent)"
+  ]
 }

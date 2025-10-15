@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import uuid
 from types import SimpleNamespace
 
 import pytest
@@ -35,8 +36,37 @@ def _make_variation(headline: str, cta: str = "Saiba mais") -> dict[str, object]
 
 
 def _make_ctx(state: dict[str, object]) -> InvocationContext:
-    session = SimpleNamespace(state=state)
-    return InvocationContext(session=session)
+    """Create a valid InvocationContext for testing.
+
+    Updated to comply with ADK InvocationContext API requirements:
+    - session_service: BaseSessionService (required)
+    - invocation_id: str (required)
+    - agent: BaseAgent (required)
+    - session: Session (required)
+    """
+    from google.adk.sessions import InMemorySessionService, Session
+    from google.adk.agents import BaseAgent
+
+    # Create real session_service instance
+    session_service = InMemorySessionService()
+
+    # Create minimal agent instance
+    agent = BaseAgent(name="test_agent", description="Test agent for unit tests")
+
+    # Create session with proper ADK Session class
+    session = Session(
+        id="test-session",
+        app_name="test-app",
+        user_id="test-user",
+        state=state
+    )
+
+    return InvocationContext(
+        session_service=session_service,
+        invocation_id=f"e-{uuid.uuid4()}",
+        agent=agent,
+        session=session
+    )
 
 
 @pytest.fixture()
@@ -84,6 +114,9 @@ def test_validator_passes_and_normalizes(validator):
 
     events = _collect_events(agent, ctx)
 
+    # Read state from session context (agents modify ctx.session.state, not the original dict)
+    state = ctx.session.state
+
     assert events, "esperava ao menos um evento"
     result = state["deterministic_final_validation"]
     assert result["grade"] == "pass"
@@ -110,6 +143,9 @@ def test_validator_detects_duplicates_and_cta_mismatch(validator):
 
     events = _collect_events(agent, ctx)
 
+    # Read state from session context
+    state = ctx.session.state
+
     result = state["deterministic_final_validation"]
     assert result["grade"] == "fail"
     issues = " ".join(result["issues"])
@@ -129,6 +165,9 @@ def test_validator_handles_invalid_payload(validator):
     ctx = _make_ctx(state)
 
     events = _collect_events(agent, ctx)
+
+    # Read state from session context
+    state = ctx.session.state
 
     result = state["deterministic_final_validation"]
     assert result["grade"] == "fail"

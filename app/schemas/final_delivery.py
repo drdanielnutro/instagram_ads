@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from typing import Any, Iterable
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, conlist, field_validator, model_validator
 
 from app.config import CTA_INSTAGRAM_CHOICES
 from app.format_specifications import FORMAT_SPECS
@@ -61,6 +61,7 @@ class StrictAdVisual(StrictBaseModel):
     prompt_estado_intermediario: str = Field(..., min_length=1)
     prompt_estado_aspiracional: str = Field(..., min_length=1)
     aspect_ratio: str
+    reference_assets: dict[str, Any] | None = Field(default=None)
 
     @field_validator("aspect_ratio")
     @classmethod
@@ -178,4 +179,16 @@ def model_dump(variations: Iterable[StrictAdItem]) -> dict[str, Any]:
     """Dump a list of validated variations into canonical structure."""
 
     return {"variations": [variation.canonical_dict() for variation in variations]}
+
+
+class AdVariationsPayload(StrictBaseModel):
+    """Schema for the final ad delivery payload containing exactly 3 variations.
+
+    This schema enforces:
+    - Exactly 3 ad variations (min_length=3, max_length=3)
+    - Each variation must conform to StrictAdItem schema
+    - Used by final_assembler_llm with output_schema parameter
+    """
+
+    variations: conlist(StrictAdItem, min_length=3, max_length=3)  # type: ignore[valid-type]
 

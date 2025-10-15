@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import uuid
 from types import SimpleNamespace
 
 import pytest
@@ -12,7 +13,29 @@ from app.agent import FinalAssemblyNormalizer
 
 
 def _make_ctx(state: dict) -> InvocationContext:
-    return InvocationContext(session=SimpleNamespace(state=state))
+    """Create a valid InvocationContext for testing.
+
+    Updated to comply with ADK InvocationContext API requirements.
+    """
+    from google.adk.sessions import InMemorySessionService, Session
+    from google.adk.agents import BaseAgent
+
+    session_service = InMemorySessionService()
+    agent = BaseAgent(name="test_agent", description="Test agent for unit tests")
+
+    session = Session(
+        id="test-session",
+        app_name="test-app",
+        user_id="test-user",
+        state=state
+    )
+
+    return InvocationContext(
+        session_service=session_service,
+        invocation_id=f"e-{uuid.uuid4()}",
+        agent=agent,
+        session=session
+    )
 
 
 def _variation() -> dict[str, object]:
@@ -59,6 +82,9 @@ def test_normalizer_successfully_transforms_payload():
 
     events = _collect(normalizer, ctx)
 
+    # Read state from session context
+    state = ctx.session.state
+
     assert events
     result = state["deterministic_final_validation"]
     assert result["grade"] == "pending"
@@ -76,6 +102,9 @@ def test_normalizer_fails_with_invalid_payload():
     ctx = _make_ctx(state)
 
     events = _collect(normalizer, ctx)
+
+    # Read state from session context
+    state = ctx.session.state
 
     assert len(events) == 1
     failure = state["deterministic_final_validation"]
