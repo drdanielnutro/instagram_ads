@@ -73,14 +73,14 @@
 - Atualizar `CTA_INSTAGRAM_CHOICES` e `CTA_BY_OBJECTIVE` conforme a lista homologada, refletindo no schema Pydantic (`Literal`/`Enum`).  
 - Revisar prompts (`code_generator`, `final_assembler_llm`) para mencionar o conjunto expandido assim que estiver aprovado.  
 - Garantir que frontend/API que expõem CTAs estejam alinhados antes de liberar a nova enumeração; programar rollout coordenado com UX/wizard.  
-- Base de referência inicial (extraída de `cta_permitidos_instagram_ads.md`, sujeita à validação):  
-  - Reconhecimento/awareness: `Saber mais`, `Ver mais`, `Ouvir agora`, `Visitar perfil do Instagram`.  
-  - Tráfego/vendas de baixo comprometimento: `Visitar website`, `Ver menu`.  
-  - Leads/agendamentos: `Registar`, `Subscrever`, `Transferir`, `Pedir orçamento`, `Candidatar-se`, `Contactar-nos`, `Pedir horário`, `Obter acesso`, `Obter oferta`.  
-  - Interação/contato: `Enviar mensagem`, `Enviar mensagem do WhatsApp`, `Ligar agora`, `Call now`, `Guardar`.  
-  - Vendas/conversão: `Comprar agora`, `Encomendar agora`, `Reservar agora`, `Iniciar encomenda`, `Comprar bilhetes`, `Subscrever`, `Doar agora`.  
-  - Promoção de app/jogos: `Instalar agora`, `Usar app`, `Jogar`.
-- Registrar a validação oficial da lista de CTAs (responsável, data, fonte) antes de atualizar código e prompts; manter artefato vinculado (issue/confluence).
+- Base de referência inicial (extraída de `cta_permitidos_instagram_ads.md`, sujeita à validação e alinhada às categorias atualmente usadas no código):  
+  - `awareness`: `Saber Mais`, `Ver Mais`, `Ouvir Agora`, `Visitar Perfil do Instagram`.  
+  - `agendamentos`: `Enviar Mensagem`, `Enviar Mensagem do WhatsApp`, `Ligar Agora`, `Pedir Horário`, `Contactar-nos`.  
+  - `contato`: `Enviar Mensagem`, `Enviar Mensagem do WhatsApp`, `Ligar Agora`, `Contactar-nos`, `Guardar`.  
+  - `leads`: `Registar`, `Subscrever`, `Transferir`, `Pedir Orçamento`, `Candidatar-se`, `Obter Acesso`, `Obter Oferta`, `Saber Mais`.  
+  - `vendas`: `Comprar Agora`, `Encomendar Agora`, `Reservar Agora`, `Iniciar Encomenda`, `Comprar Bilhetes`, `Subscrever`, `Doar Agora`, `Obter Oferta`.  
+- Registrar a validação oficial da lista de CTAs (responsável, data, fonte) antes de atualizar código e prompts; manter artefato vinculado (issue/confluence).  
+- Para objetivos adicionais (ex.: Tráfego, Promoção da App), documentar em separado caso a plataforma adote essas categorias no futuro.
 
 ## 6. Considerações Adicionais
 - Avaliar se ainda faz sentido manter um validador determinístico pesado após a adoção do schema estruturado; decidir se o agente vira apenas um sanity check ou se mantém lógica extra (ex.: coerência com objetivo). Garantir que telemetry (`delivery_audit_trail`, `deterministic_final_validation`) continue populada para dashboards.  
