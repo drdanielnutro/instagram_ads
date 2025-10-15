@@ -33,10 +33,28 @@
   - “Não altere valores aprovados de CTA, formato, aspect ratio.”  
 - Registrar que, ao usar `output_schema`, o agente não poderá utilizar `tools`/transfer — aceitável no caso por ser um agente de montagem terminal.
 
-### 2.3 Consumidores downstream
-- `FinalAssemblyNormalizer`: adaptar para usar o objeto Pydantic já validado; decidir se a saída oficial continuará armazenada como objeto (`state["final_ad_variations"]`) ou como string JSON (`state["final_code_delivery"]`). Se serializar, documentar a conversão explícita (incluindo normalização de `contexto_landing` → string) e garantir idempotência.  
-- `FinalDeliveryValidatorAgent`: simplificar para checar a presença/instância de `AdVariationsPayload` no estado; preservar métricas/audit trail atuais, mesmo que a validação reduza-se a um sanity check. Se for mantido `final_code_delivery` em string, garantir conversão inversa para compatibilidade.  
-- `persist_outputs.py`/callbacks: ajustar para lidar com o novo formato (objeto vs string) mantendo compatibilidade com artefatos persistidos e com a lógica de referência visual; atualizar docstrings/comentários para indicar o formato esperado.
+#### 2.2.1 Compatibilidade validada
+- Confirmar explicitamente que o `final_assembler_llm`:  
+  - ✅ Não utiliza `tools`/`FunctionTool`.  
+  - ✅ Não transfere/delega execução para subagentes.  
+  - ✅ É o estágio terminal de formatação.  
+- Documentar a limitação: agentes com `output_schema` não podem usar tools/transfers (referência: `gemini_saida_estruturada_llmagent_adk.md`).  
+- Para futuros fluxos que precisem de tools + JSON estruturado, adotar o padrão “Pesquisador (com tools) → Formatador (com output_schema)”.
+
+### 2.3 Formato canônico de saída
+- **Decisão técnica:**  
+  - `state["final_ad_variations"]` → objeto `AdVariationsPayload` (fonte primária).  
+  - `state["final_code_delivery"]` → string JSON derivada (dual-write para compatibilidade).  
+- `FinalAssemblyNormalizer`:  
+  - Recebe o objeto validado, injeta `reference_assets` (ver seção 2.3.1) e serializa `payload.model_dump()["variations"]` para JSON com `ensure_ascii=False`.  
+  - Normaliza `contexto_landing` quando necessário (string ou dict).  
+- **Timeline:** manter dual-write até que todo o pipeline consuma o objeto (meta: 1–2 sprints). Documentar no changelog ao remover a string.
+
+#### 2.3.1 Injeção de `reference_assets`
+- `StrictAdVisual.reference_assets` permanece opcional no schema.  
+- O LLM não preenche/duplica metadados; o normalizer injeta após a geração, a partir de `state["reference_images"]`.  
+- Converter `ReferenceImageMetadata` para `ReferenceAssetPublic` (sem `signed_url`) antes de anexar às variações.  
+- Garantir consistência com `persist_outputs.py`, evitando divergência entre caminho determinístico e fallback.
 
 ## 3. Regras de Domínio e Campos Obrigatórios
 - Consolidar todos os campos de domínio fixo no schema (inclusive para o fluxo fallback, garantindo reutilização do mesmo modelo):  
@@ -82,8 +100,17 @@
 - Registrar a validação oficial da lista de CTAs (responsável, data, fonte) antes de atualizar código e prompts; manter artefato vinculado (issue/confluence).  
 - Para objetivos adicionais (ex.: Tráfego, Promoção da App), documentar em separado caso a plataforma adote essas categorias no futuro.
 
-## 6. Considerações Adicionais
-- Avaliar se ainda faz sentido manter um validador determinístico pesado após a adoção do schema estruturado; decidir se o agente vira apenas um sanity check ou se mantém lógica extra (ex.: coerência com objetivo). Garantir que telemetry (`delivery_audit_trail`, `deterministic_final_validation`) continue populada para dashboards.  
+## 6. Simplificação do validador determinístico
+- Escopo após adoção do `output_schema`:  
+  - ✅ Garantir exatamente três variações.  
+  - ✅ Detectar duplicatas (headline + corpo + prompts).  
+  - ✅ Validar coerência CTA × objetivo usando `CTA_BY_OBJECTIVE`.  
+  - ✅ Manter telemetria (`delivery_audit_trail`, métricas associadas).  
+- Validações delegadas ao schema (remover do validador): campos obrigatórios, tipos/enum, limites de caracteres, aspecto visual.  
+- Atualizar testes para refletir o novo escopo e monitorar redução de LOC/latência.
+
+## 7. Considerações Adicionais
+- Monitorar métricas de desempenho após habilitar `output_schema` (latência p95 do assembler, taxa de retries) e ajustar limites (`max_retries`, alertas).  
 - Caso o assembler precise gerar conteúdo faltante em cenários de fallback, considerar separar montagem determinística de correções via agente secundário.  
 - Preparar plano de rollback (reverter `output_schema` e ajustes no normalizer) até conclusão da migração.  
 - Atualizar diagramas/documentação do pipeline para refletir a nova arquitetura com geração controlada.
