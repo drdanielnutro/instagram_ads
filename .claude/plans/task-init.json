@@ -1,7 +1,23 @@
 {
-  "task_id": "TASK-20251015-0000",
-  "created_at": "2025-10-15T00:00:00Z",
-  "description": "Implementar correção do Final Delivery Validation conforme PLAN_CORRECAO_FINAL_DELIVERY.md: schemas Pydantic com output_schema, refatorar final_assembler_llm, normalizer com dual-write, simplificar validador, testes e documentação",
+  "task_id": "TASK-20251016-0000",
+  "created_at": "2025-10-16T00:00:00Z",
+  "description": "Implementar enums nativos Python no final_delivery.py para substituir validadores Pydantic, garantindo que Gemini API respeite valores restritos (CTAs, formato, aspect_ratio) via output_schema. Escopo: Fases 1, 2, 5, 6 do PLANO_IMPLEMENTACAO_ENUMS_FINAL_DELIVERY.md",
   "requested_by": "user",
-  "initial_phase": "checklist"
+  "initial_phase": "checklist",
+  "plan_reference": "PLANO_IMPLEMENTACAO_ENUMS_FINAL_DELIVERY.md",
+  "estimated_duration": "2h 30min",
+  "phases": [
+    "FASE 1: Criar enums declarativos (CtaInstagramEnum, FormatoAnuncioEnum, AspectRatioEnum)",
+    "FASE 2: Refatorar modelos Pydantic (remover validadores, adicionar tipos enum)",
+    "FASE 5: Criar testes (sincronização + unitários + JSON schema)",
+    "FASE 6: Executar suite completa + validação de drift"
+  ],
+  "files_to_modify": [
+    "app/schemas/final_delivery.py"
+  ],
+  "files_to_create": [
+    "tests/unit/schemas/test_enum_sync.py",
+    "tests/unit/schemas/test_final_delivery_enums.py",
+    "tests/unit/schemas/test_pydantic_json_schema.py"
+  ]
 }

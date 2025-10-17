@@ -1,78 +1,64 @@
 {
-  "task_id": "TASK-20251015-0000",
-  "requirements": {
-    "checklist_analysis_file": ".claude/results/checklist-output.json",
-    "explicit_requirements": [
-      "Criar AdVariationsPayload com variations: conlist(StrictAdItem, min_length=3, max_length=3)",
-      "Criar ReferenceAssetPublic (sem signed_url) baseado em ReferenceImageMetadata",
-      "Estender StrictAdVisual para incluir reference_assets: dict[str, ReferenceAssetPublic] | None",
-      "Adicionar output_schema=AdVariationsPayload ao final_assembler_llm",
-      "Atualizar final_assembler_instruction citando schema explicitamente",
-      "Refatorar FinalAssemblyNormalizer para dual-write (final_ad_variations objeto + final_code_delivery string)",
-      "Implementar injeção de reference_assets convertendo ReferenceImageMetadata → ReferenceAssetPublic",
-      "Simplificar FinalDeliveryValidatorAgent removendo validações estruturais",
-      "Criar testes unitários para schemas e normalizer",
-      "Atualizar testes de integração existentes",
-      "Atualizar documentação (CORRECAO_VALIDACAO_DETERMINISTICA.md, changelog, README)"
-    ],
-    "implicit_requirements": [
-      "Manter compatibilidade com fluxo fallback StoryBrand",
-      "Preservar telemetria (delivery_audit_trail) e métricas",
-      "Não quebrar endpoints GET /final/meta e GET /final/download",
-      "Garantir conversão remove signed_url",
-      "Manter compatibilidade com persist_final_delivery",
-      "Usar CTAs de CTA_INSTAGRAM_CHOICES em app/config.py:12",
-      "Usar FORMAT_SPECS de app/format_specifications.py"
-    ],
-    "acceptance_criteria": [
-      "AdVariationsPayload valida exatamente 3 variações",
-      "ReferenceAssetPublic sem campo signed_url",
-      "final_assembler_llm retorna objeto em state[final_ad_variations]",
-      "state[final_code_delivery] mantido como string (dual-write)",
-      "reference_assets injetados quando state[reference_images] presente",
-      "FinalDeliveryValidatorAgent valida apenas: contagem, duplicatas, CTA × objetivo",
-      "Validações estruturais delegadas ao Pydantic",
-      "pytest --cov ≥ 80%",
-      "Pipeline determinístico executa sem bloqueios",
-      "Documentação reflete nova arquitetura"
-    ]
+  "agent": "writer-agent",
+  "task_id": "TASK-20251016-0000",
+  "phase": "implementation",
+  "reference_plan": "PLANO_IMPLEMENTACAO_ENUMS_FINAL_DELIVERY.md",
+  "scope": {
+    "phases_to_implement": ["FASE 1", "FASE 2", "FASE 5"],
+    "skip_phases": ["FASE 3", "FASE 4", "FASE 6"]
   },
-  "expected_outputs": {
-    "files_to_create": [
-      "tests/unit/schemas/test_final_delivery_schemas.py",
-      "tests/unit/schemas/test_reference_asset_public.py"
-    ],
-    "files_to_modify": [
-      "app/schemas/final_delivery.py",
-      "app/schemas/reference_assets.py",
-      "app/agent.py",
-      "app/validators/final_delivery_validator.py",
-      "tests/unit/validators/test_final_delivery_validator.py",
-      "tests/integration/pipeline/test_deterministic_flow.py",
-      "docs/ja_implementado/CORRECAO_VALIDACAO_DETERMINISTICA.md"
-    ],
-    "files_to_delete": [],
-    "tests_to_create": [
-      "tests/unit/schemas/test_final_delivery_schemas.py - validar AdVariationsPayload, StrictAdItem, min/max variações",
-      "tests/unit/schemas/test_reference_asset_public.py - validar conversão ReferenceImageMetadata → ReferenceAssetPublic",
-      "Atualizar tests/unit/validators/test_final_delivery_validator.py - refletir escopo simplificado",
-      "Atualizar tests/integration/pipeline/test_deterministic_flow.py - validar dual-write e injeção reference_assets"
-    ]
-  },
-  "testing_requirements": {
-    "coverage_target": 80,
-    "test_types": [
-      "unit",
-      "integration"
-    ],
-    "test_strategy": "Fase 1: testes unitários de schemas (AdVariationsPayload, ReferenceAssetPublic); Fase 2: testes de normalizer (dual-write, injeção); Fase 3: testes de validador simplificado; Fase 4: testes de integração do pipeline completo"
-  },
-  "project_context": "Sistema multiagente ADK que gera anúncios Instagram em JSON. Pipeline: snippets → final_assembler_llm → FinalAssemblyNormalizer → FinalDeliveryValidatorAgent → persistência. CTAs em app/config.py:12, formatos em app/format_specifications.py. Flag ENABLE_DETERMINISTIC_FINAL_VALIDATION=true em app/.env:63.",
-  "critical_notes": [
-    "final_assembler_llm NÃO usa tools/transfers (compatível com output_schema)",
-    "Dual-write temporário até migração completa (1-2 sprints)",
-    "Schemas devem usar Literal para CTAs, formatos, aspect_ratios baseados em config existente",
-    "ReferenceAssetPublic DEVE remover signed_url de ReferenceImageMetadata",
-    "Manter compatibilidade com fallback StoryBrand (FallbackStorybrandCompiler, PersistStorybrandSectionsAgent)"
+  "files_to_modify": [
+    {
+      "path": "app/schemas/final_delivery.py",
+      "actions": [
+        "Adicionar imports: enum",
+        "Criar 3 enums declarativos ANTES dos modelos (linhas 92-133 do plano)",
+        "Refatorar StrictAdCopy: trocar str por CtaInstagramEnum, remover @field_validator",
+        "Refatorar StrictAdVisual: trocar str por AspectRatioEnum, remover @field_validator",
+        "Refatorar StrictAdItem: trocar str por FormatoAnuncioEnum e CtaInstagramEnum, remover 2 @field_validator",
+        "CRÍTICO: Ajustar @model_validator para usar .value em 3 locais (linhas 341, 349, 362 do plano)"
+      ]
+    }
+  ],
+  "files_to_create": [
+    {
+      "path": "tests/unit/schemas/test_enum_sync.py",
+      "template": "Código completo nas linhas 402-479 do plano",
+      "tests": ["test_cta_enum_sincronizado_com_config", "test_formato_enum_sincronizado_with_format_specs", "test_aspect_ratio_enum_sincronizado", "test_enums_tem_quantidade_correta"]
+    },
+    {
+      "path": "tests/unit/schemas/test_final_delivery_enums.py",
+      "template": "Código completo nas linhas 482-628 do plano",
+      "tests": ["test_cta_enum_aceita_valores_validos", "test_cta_enum_rejeita_valor_invalido", "test_strict_ad_item_com_enums_validos", "test_feed_aceita_dois_aspect_ratios", "test_reels_so_aceita_9_16", "test_pydantic_converte_strings_para_enums"]
+    },
+    {
+      "path": "tests/unit/schemas/test_pydantic_json_schema.py",
+      "template": "Código completo nas linhas 631-663 do plano",
+      "tests": ["test_enum_gera_campo_enum_no_json_schema"]
+    }
+  ],
+  "critical_instructions": [
+    "USAR CÓDIGO EXATO DO PLANO - é copy-pasteable e testado",
+    "VALIDAR linha-por-linha contra plano ao modificar @model_validator",
+    "ADICIONAR .value em EXATAMENTE 3 locais: FORMAT_SPECS.get(self.formato.value), f-strings com self.formato.value, self.visual.aspect_ratio.value",
+    "MANTER @field_validator('contexto_landing') - não é enum",
+    "MANTER @model_validator - apenas adicionar .value",
+    "EXECUTAR pytest tests/unit/schemas/test_enum_sync.py -v após Fase 1 para confirmar sincronização"
+  ],
+  "validation_checklist": [
+    "Enums declarados com herança (str, enum.Enum)",
+    "Docstrings dos enums citam fontes canônicas",
+    "@field_validator removidos apenas para cta_texto, aspect_ratio, formato, cta_instagram",
+    "@field_validator('contexto_landing') mantido",
+    "@model_validator usa .value ao acessar FORMAT_SPECS e comparar strings",
+    "Todos os 3 arquivos de teste criados com código completo do plano",
+    "Testes executam sem erros de import"
+  ],
+  "acceptance_criteria": [
+    "uv run pytest tests/unit/schemas/test_enum_sync.py -v passa 4/4 testes",
+    "uv run pytest tests/unit/schemas/test_final_delivery_enums.py -v passa 6/6 testes",
+    "uv run pytest tests/unit/schemas/test_pydantic_json_schema.py -v -s mostra campo 'enum' no schema",
+    "uv run pytest tests/unit/validators/test_final_delivery_validator.py -v continua passando (validador compatível)",
+    "make lint passa sem erros"
   ]
 }

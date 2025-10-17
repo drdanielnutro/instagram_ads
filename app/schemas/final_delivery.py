@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import enum
 import json
 from typing import Any, Iterable
 
@@ -32,6 +33,55 @@ HEADLINE_LIMIT_BY_FORMAT: dict[str, int] = {
 MAX_HEADLINE_LENGTH: int = max(HEADLINE_LIMIT_BY_FORMAT.values() or [60])
 
 
+# ============================================================================
+# Enums - Valores restritos para geração controlada com Gemini API
+# SINCRONIZADOS com fontes canônicas via testes obrigatórios
+# ============================================================================
+
+class CtaInstagramEnum(str, enum.Enum):
+    """CTAs permitidos pelo Instagram Ads.
+
+    FONTE CANÔNICA: app.config.CTA_INSTAGRAM_CHOICES
+    SINCRONIZAÇÃO: Garantida por test_cta_enum_sincronizado_com_config()
+
+    NOTA: Expansão futura para ~64 CTAs está prevista no
+    PLAN_CORRECAO_FINAL_DELIVERY.md seção 5. Quando implementar,
+    atualizar este enum E executar testes de sincronização.
+    """
+    SAIBA_MAIS = "Saiba mais"
+    ENVIAR_MENSAGEM = "Enviar mensagem"
+    LIGAR = "Ligar"
+    COMPRAR_AGORA = "Comprar agora"
+    CADASTRE_SE = "Cadastre-se"
+
+
+class FormatoAnuncioEnum(str, enum.Enum):
+    """Formatos de posicionamento suportados.
+
+    FONTE CANÔNICA: app.format_specifications.FORMAT_SPECS.keys()
+    SINCRONIZAÇÃO: Garantida por test_formato_enum_sincronizado_com_format_specs()
+    """
+    FEED = "Feed"
+    REELS = "Reels"
+    STORIES = "Stories"
+
+
+class AspectRatioEnum(str, enum.Enum):
+    """Aspect ratios permitidos.
+
+    FONTE CANÔNICA: app.format_specifications.FORMAT_SPECS[*].visual
+    SINCRONIZAÇÃO: Garantida por test_aspect_ratio_enum_sincronizado()
+
+    Valores coletados de:
+    - FORMAT_SPECS['Feed']['visual']['permitidos'] = ["1:1", "4:5"]
+    - FORMAT_SPECS['Reels']['visual']['aspect_ratio'] = "9:16"
+    - FORMAT_SPECS['Stories']['visual']['aspect_ratio'] = "9:16"
+    """
+    SQUARE = "1:1"      # Feed (permitido)
+    VERTICAL = "4:5"    # Feed (padrão + permitido)
+    STORY = "9:16"      # Reels, Stories (único)
+
+
 class StrictBaseModel(BaseModel):
     """Base configuration shared by strict models."""
 
@@ -43,14 +93,10 @@ class StrictAdCopy(StrictBaseModel):
 
     headline: str = Field(..., min_length=1, max_length=MAX_HEADLINE_LENGTH)
     corpo: str = Field(..., min_length=1)
-    cta_texto: str = Field(..., min_length=1)
-
-    @field_validator("cta_texto")
-    @classmethod
-    def validate_cta_texto(cls, value: str) -> str:
-        if value not in CTA_INSTAGRAM_CHOICES:
-            raise ValueError(f"cta_texto must be one of {CTA_INSTAGRAM_CHOICES}")
-        return value
+    cta_texto: CtaInstagramEnum = Field(
+        ...,
+        description="Texto do CTA exibido no anúncio (enum garantido pelo Gemini durante geração)"
+    )
 
 
 class StrictAdVisual(StrictBaseModel):
@@ -60,42 +106,30 @@ class StrictAdVisual(StrictBaseModel):
     prompt_estado_atual: str = Field(..., min_length=1)
     prompt_estado_intermediario: str = Field(..., min_length=1)
     prompt_estado_aspiracional: str = Field(..., min_length=1)
-    aspect_ratio: str
+    aspect_ratio: AspectRatioEnum = Field(
+        ...,
+        description="Proporção da imagem conforme FORMAT_SPECS (enum garantido)"
+    )
     reference_assets: dict[str, Any] | None = Field(default=None)
-
-    @field_validator("aspect_ratio")
-    @classmethod
-    def validate_aspect_ratio(cls, value: str) -> str:
-        if value not in ALLOWED_ASPECT_RATIOS:
-            raise ValueError(f"aspect_ratio must be one of {ALLOWED_ASPECT_RATIOS}")
-        return value
 
 
 class StrictAdItem(StrictBaseModel):
     """Strict schema for a final ad variation."""
 
     landing_page_url: str = Field(..., min_length=1)
-    formato: str
+    formato: FormatoAnuncioEnum = Field(
+        ...,
+        description="Formato de posicionamento do anúncio (enum garantido)"
+    )
     copy: StrictAdCopy
     visual: StrictAdVisual
-    cta_instagram: str = Field(..., min_length=1)
+    cta_instagram: CtaInstagramEnum = Field(
+        ...,
+        description="CTA nativo do Instagram (enum garantido)"
+    )
     fluxo: str = Field(..., min_length=1)
     referencia_padroes: str = Field(..., min_length=1)
     contexto_landing: str | dict[str, Any] | None = Field(default=None)
-
-    @field_validator("formato")
-    @classmethod
-    def validate_formato(cls, value: str) -> str:
-        if value not in ALLOWED_FORMATS:
-            raise ValueError(f"formato must be one of {ALLOWED_FORMATS}")
-        return value
-
-    @field_validator("cta_instagram")
-    @classmethod
-    def validate_cta_instagram(cls, value: str) -> str:
-        if value not in CTA_INSTAGRAM_CHOICES:
-            raise ValueError(f"cta_instagram must be one of {CTA_INSTAGRAM_CHOICES}")
-        return value
 
     @field_validator("contexto_landing", mode="before")
     @classmethod
@@ -119,13 +153,23 @@ class StrictAdItem(StrictBaseModel):
 
     @model_validator(mode="after")
     def validate_with_format_specs(self) -> "StrictAdItem":
-        specs = FORMAT_SPECS.get(self.formato, {})
+        """Valida coerência formato × aspect_ratio usando FORMAT_SPECS.
+
+        MANTIDO após migração para enums: garante que Feed aceita 1:1 ou 4:5,
+        Reels/Stories aceitam apenas 9:16.
+
+        ⚠️ CRÍTICO: Usar .value para extrair strings dos enums ao comparar
+        com dicionários e sets que contêm strings.
+        """
+        specs = FORMAT_SPECS.get(self.formato.value, {})
+
         copy_specs = specs.get("copy", {})
         max_chars = copy_specs.get("headline_max_chars")
         if isinstance(max_chars, int) and max_chars > 0:
             if len(self.copy.headline) > max_chars:
                 raise ValueError(
-                    f"headline length {len(self.copy.headline)} exceeds limit {max_chars} for formato {self.formato}"
+                    f"headline length {len(self.copy.headline)} exceeds limit {max_chars} "
+                    f"for formato {self.formato.value}"
                 )
 
         visual_specs = specs.get("visual", {})
@@ -136,10 +180,13 @@ class StrictAdItem(StrictBaseModel):
         permitted = visual_specs.get("permitidos")
         if isinstance(permitted, (list, tuple, set)):
             allowed_ratios.update({r for r in permitted if isinstance(r, str)})
-        if allowed_ratios and self.visual.aspect_ratio not in allowed_ratios:
+
+        if allowed_ratios and self.visual.aspect_ratio.value not in allowed_ratios:
             raise ValueError(
-                f"aspect_ratio {self.visual.aspect_ratio} not allowed for formato {self.formato}: {sorted(allowed_ratios)}"
+                f"aspect_ratio {self.visual.aspect_ratio.value} not allowed for "
+                f"formato {self.formato.value}: {sorted(allowed_ratios)}"
             )
+
         return self
 
     def canonical_dict(self) -> dict[str, Any]:

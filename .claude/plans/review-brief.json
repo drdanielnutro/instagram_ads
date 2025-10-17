@@ -1,51 +1,136 @@
 {
-  "task_id": "TASK-20251015-0000",
-  "iteration": 2,
-  "references": {
-    "checklist_analysis": ".claude/results/checklist-output.json",
-    "writer_output": ".claude/results/writer-output.json",
-    "previous_reviewer_output": ".claude/results/reviewer-output.json",
-    "fixer_output": ".claude/results/fixer-output.json"
-  },
-  "review_focus": {
-    "priority_areas": [
-      "Validar que AdVariationsPayload aceita exatamente 3 variações e rejeita outros valores",
-      "Validar que ReferenceAssetPublic não contém campo signed_url",
-      "Validar que final_assembler_llm está configurado com output_schema=AdVariationsPayload",
-      "Validar que FinalAssemblyNormalizer implementa dual-write corretamente",
-      "Validar que reference_assets são injetados quando state[reference_images] está presente",
-      "Validar que FinalDeliveryValidatorAgent foi simplificado (escopo reduzido)",
-      "Validar compatibilidade com fallback StoryBrand",
-      "Validar que testes têm cobertura ≥ 80%"
-    ],
-    "acceptance_criteria_reference": [
-      "AdVariationsPayload valida exatamente 3 variações",
-      "ReferenceAssetPublic sem campo signed_url",
-      "final_assembler_llm retorna objeto em state[final_ad_variations]",
-      "state[final_code_delivery] mantido como string (dual-write)",
-      "reference_assets injetados quando state[reference_images] presente",
-      "FinalDeliveryValidatorAgent valida apenas: contagem, duplicatas, CTA × objetivo",
-      "Validações estruturais delegadas ao Pydantic",
-      "pytest --cov ≥ 80%",
-      "Pipeline determinístico executa sem bloqueios",
-      "Documentação reflete nova arquitetura"
-    ],
-    "testing_expectations": [
-      "Testes unitários de AdVariationsPayload (min/max variações, campos obrigatórios)",
-      "Testes unitários de ReferenceAssetPublic (conversão, ausência de signed_url)",
-      "Testes de normalizer (dual-write, injeção de reference_assets)",
-      "Testes de validador simplificado (escopo reduzido)",
-      "Cobertura ≥ 80% em código novo"
-    ]
-  },
-  "critical_checks": [
-    "Verificar que output_schema não quebra compatibilidade com ADK",
-    "Verificar que dual-write mantém compatibilidade com código existente",
-    "Verificar que conversão ReferenceImageMetadata → ReferenceAssetPublic remove signed_url",
-    "Verificar que schemas usam Literal para CTAs/formatos/aspect_ratios de config existente",
-    "Verificar que fallback StoryBrand continua funcional"
+  "agent": "reviewer-agent",
+  "task_id": "TASK-20251016-0000",
+  "phase": "review",
+  "implementation_reference": ".claude/results/writer-output.json",
+  "plan_reference": "PLANO_IMPLEMENTACAO_ENUMS_FINAL_DELIVERY.md",
+  "files_to_review": [
+    {
+      "path": "app/schemas/final_delivery.py",
+      "review_focus": [
+        "Enums declarados com herança (str, enum.Enum) correta",
+        "Docstrings citam fontes canônicas (CTA_INSTAGRAM_CHOICES, FORMAT_SPECS)",
+        "@field_validator removidos apenas para campos enum (cta_texto, aspect_ratio, formato, cta_instagram)",
+        "@field_validator('contexto_landing') MANTIDO (não é enum)",
+        "@model_validator usa .value em EXATAMENTE 3 locais: FORMAT_SPECS.get(self.formato.value), f-strings, comparação aspect_ratio",
+        "Field descriptions mencionam 'enum garantido pelo Gemini'",
+        "Código segue style guide (type hints, docstrings, linha 88)"
+      ]
+    },
+    {
+      "path": "tests/unit/schemas/test_enum_sync.py",
+      "review_focus": [
+        "4 testes de sincronização implementados",
+        "Testes usam {e.value for e in EnumClass} para comparação",
+        "Mensagens de erro são claras e acionáveis",
+        "Testes detectam drift quando forçado manualmente"
+      ]
+    },
+    {
+      "path": "tests/unit/schemas/test_final_delivery_enums.py",
+      "review_focus": [
+        "6 testes unitários implementados",
+        "Teste com CTA inválido 'Garantir o Meu' presente",
+        "Teste de conversão automática string → enum presente",
+        "Testes validam regras Feed (1:1 ou 4:5) vs Reels/Stories (9:16)"
+      ]
+    },
+    {
+      "path": "tests/unit/schemas/test_pydantic_json_schema.py",
+      "review_focus": [
+        "Teste valida presença de campo 'enum' no JSON Schema",
+        "Teste confirma 5 valores no enum de CTA",
+        "Print do schema para debugging presente"
+      ]
+    }
   ],
-  "known_issues_to_ignore": [
-    "Testes ADK globais quebrados devido a mudanças na API InvocationContext (não relacionado a esta implementação)"
-  ]
+  "critical_validations": [
+    {
+      "name": "model_validator_uses_value_correctly",
+      "description": "Confirmar que @model_validator usa .value em 3 locais específicos",
+      "severity": "CRITICAL",
+      "locations": [
+        "FORMAT_SPECS.get(self.formato.value, {})",
+        "f\"... for formato {self.formato.value}\"",
+        "self.visual.aspect_ratio.value not in allowed_ratios"
+      ]
+    },
+    {
+      "name": "field_validators_removed_correctly",
+      "description": "Confirmar que apenas validadores de enum foram removidos",
+      "severity": "CRITICAL",
+      "removed": ["@field_validator('cta_texto')", "@field_validator('aspect_ratio')", "@field_validator('formato')", "@field_validator('cta_instagram')"],
+      "kept": ["@field_validator('contexto_landing')"]
+    },
+    {
+      "name": "test_suite_passes",
+      "description": "Confirmar que 31/31 testes de schemas passam",
+      "severity": "CRITICAL",
+      "expected": "31 passed"
+    },
+    {
+      "name": "backward_compatibility",
+      "description": "Confirmar que validador determinístico continua funcionando",
+      "severity": "HIGH",
+      "test_file": "tests/unit/validators/test_final_delivery_validator.py"
+    }
+  ],
+  "quality_gates": [
+    {
+      "gate": "completeness",
+      "criteria": [
+        "Todos os 3 enums criados conforme plano",
+        "Todos os 3 arquivos de teste criados",
+        "Todos os validadores corretos removidos/mantidos"
+      ]
+    },
+    {
+      "gate": "correctness",
+      "criteria": [
+        "Enums herdam de (str, enum.Enum)",
+        ".value usado corretamente no @model_validator",
+        "Testes de sincronização comparam values corretamente"
+      ]
+    },
+    {
+      "gate": "security",
+      "criteria": [
+        "Nenhum hardcoded secret",
+        "Validações de segurança mantidas",
+        "Nenhuma injeção de código dinâmico (exec, eval)"
+      ]
+    },
+    {
+      "gate": "quality",
+      "criteria": [
+        "31/31 testes passam",
+        "Cobertura ≥80% em código novo",
+        "Docstrings completas e precisas",
+        "Type hints em todos os campos"
+      ]
+    },
+    {
+      "gate": "testing",
+      "criteria": [
+        "Testes de sincronização detectam drift",
+        "Testes unitários cobrem casos válidos E inválidos",
+        "Teste de JSON Schema confirma campo 'enum'",
+        "Testes existentes continuam passando"
+      ]
+    }
+  ],
+  "acceptance_criteria": [
+    "31/31 testes de schemas passam",
+    "Testes de sincronização detectam drift quando forçado",
+    "JSON Schema contém campo 'enum' com 5 valores de CTA",
+    "Validador determinístico continua funcionando (3/3 testes passam)",
+    "Nenhuma violação de style guide",
+    "Nenhum bug de segurança introduzido",
+    "Quality score ≥7/10"
+  ],
+  "decision_criteria": {
+    "approved": "Todos os acceptance criteria atendidos + quality ≥7/10 + nenhum issue CRITICAL",
+    "needs_revision": "Issues CRITICAL ou HIGH identificados + corrigíveis em ≤3 iterações",
+    "failed": "Issues CRITICAL não corrigíveis OU violações de segurança OU drift arquitetural"
+  }
 }

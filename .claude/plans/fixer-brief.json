@@ -1,25 +1,8 @@
 {
-  "task_id": "TASK-20251015-0000",
+  "task_id": "<TASK_ID>",
   "iteration": 1,
   "review_report": ".claude/results/reviewer-output.json",
-  "priority_fixes": [
-    {
-      "severity": "HIGH",
-      "file": "tests/unit/validators/test_final_delivery_validator.py",
-      "line": 37,
-      "description": "Fixture _make_ctx desatualizada para nova API do InvocationContext. Faltam campos obrigatórios: session_service, invocation_id, agent",
-      "recommendation": "Atualizar fixture para usar API atualizada do InvocationContext. Adicionar campos necessários: session_service (mock), invocation_id (string), agent (mock). Verificar outros testes com mesmo problema."
-    },
-    {
-      "severity": "MEDIUM",
-      "file": "docs/ja_implementado/CORRECAO_VALIDACAO_DETERMINISTICA.md",
-      "line": null,
-      "description": "Documentação não atualizada para refletir nova arquitetura com output_schema",
-      "recommendation": "Adicionar seção explicando: (1) output_schema no assembler, (2) dual-write no normalizer, (3) validator simplificado. Atualizar diagramas se existirem.",
-      "optional": true
-    }
-  ],
-  "time_budget": "60min",
-  "focus": "critical_and_high_only",
-  "notes": "Reviewer recomendou send_to_fixer. Issue HIGH é global (API do ADK mudou), não específico desta implementação. Issues MEDIUM são nice-to-have que não bloqueiam aprovação. Após correção HIGH, re-executar testes e voltar para reviewer."
+  "priority_fixes": [],
+  "time_budget": "<30min|60min|120min>",
+  "focus": "critical_and_high_only"
 }

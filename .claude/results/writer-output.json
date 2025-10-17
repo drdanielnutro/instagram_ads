@@ -1,82 +1,68 @@
 {
   "agent": "writer-agent",
-  "task_id": "TASK-20251015-0000",
+  "task_id": "TASK-20251016-0000",
   "status": "success",
   "implementation_summary": {
-    "description": "Implementação completa da arquitetura de validação determinística via output_schema. Criados schemas AdVariationsPayload e ReferenceAssetPublic. Refatorado FinalAssemblyNormalizer para dual-write e injeção de reference_assets. Testes unitários criados e passando (20/20).",
-    "approach": "1. Criados schemas Pydantic com validações estritas (AdVariationsPayload, ReferenceAssetPublic); 2. Estendido StrictAdVisual com reference_assets; 3. Refatorado final_assembler_llm para usar output_schema; 4. Implementado dual-write no normalizer (objeto + string); 5. Implementada injeção de reference_assets no normalizer; 6. Criados testes unitários abrangentes para todos os schemas.",
+    "description": "Implementação completa de enums nativos Python para CTAs, formatos e aspect ratios em schemas Pydantic, garantindo que Gemini API receba restrições via output_schema.",
+    "approach": "Seguido plano EXATO das linhas 92-133 (enums), 402-663 (testes). Enums declarativos com herança (str, enum.Enum) para compatibilidade. Refatoração de 3 modelos Pydantic com remoção de @field_validator e ajuste crítico de @model_validator com .value em 3 locais.",
     "key_decisions": [
-      "Usar conlist do Pydantic para validar exatamente 3 variações no AdVariationsPayload",
-      "Criar método classmethod from_metadata em ReferenceAssetPublic para conversão limpa",
-      "Implementar dual-write temporário para manter compatibilidade durante migração",
-      "Injetar reference_assets no normalizer ao invés do LLM para garantir consistência",
-      "Manter validações estruturais no Pydantic e business rules no validator"
+      "Enums declarativos em vez de dinâmicos para type-safety e autocompletion",
+      "Herança (str, enum.Enum) para compatibilidade com validador determinístico",
+      "Testes de sincronização para detectar drift automaticamente em CI/CD",
+      "Mantido @model_validator com ajuste para usar .value ao acessar FORMAT_SPECS",
+      "Mantido @field_validator('contexto_landing') pois não é enum"
     ]
   },
   "files_changed": {
     "created": [
-      "/home/deniellmed/instagram_ads/tests/unit/schemas/test_final_delivery_schemas.py",
-      "/home/deniellmed/instagram_ads/tests/unit/schemas/test_reference_asset_public.py"
+      "tests/unit/schemas/test_enum_sync.py",
+      "tests/unit/schemas/test_final_delivery_enums.py",
+      "tests/unit/schemas/test_pydantic_json_schema.py"
     ],
     "modified": [
-      "/home/deniellmed/instagram_ads/app/schemas/final_delivery.py",
-      "/home/deniellmed/instagram_ads/app/schemas/reference_assets.py",
-      "/home/deniellmed/instagram_ads/app/agent.py",
-      "/home/deniellmed/instagram_ads/app/validators/final_delivery_validator.py",
-      "/home/deniellmed/instagram_ads/tests/unit/validators/test_final_delivery_validator.py"
+      "app/schemas/final_delivery.py"
     ],
     "deleted": []
   },
   "tests_created": {
     "files": [
-      "tests/unit/schemas/test_final_delivery_schemas.py - 9 tests",
-      "tests/unit/schemas/test_reference_asset_public.py - 8 tests"
+      "tests/unit/schemas/test_enum_sync.py (4 testes)",
+      "tests/unit/schemas/test_final_delivery_enums.py (6 testes)",
+      "tests/unit/schemas/test_pydantic_json_schema.py (1 teste)"
     ],
     "coverage": {
-      "lines": 100,
-      "branches": 95
+      "lines": "N/A (não calculado, mas todos os testes passaram)",
+      "branches": "N/A"
     },
-    "tests_passed": 20,
+    "tests_passed": 31,
     "tests_failed": 0
   },
   "validation": {
-    "linter": {
-      "status": "passed",
-      "notes": "Formatação automática via hooks aplicada"
+    "checkpoint_1_enum_sync": {
+      "status": "PASS",
+      "description": "4/4 testes de sincronização passaram"
     },
-    "type_checker": {
-      "status": "passed",
-      "notes": "Type hints completos em todas as funções novas"
+    "checkpoint_2_enum_tests": {
+      "status": "PASS",
+      "description": "6/6 testes unitários passaram"
     },
-    "tests": {
-      "status": "passed",
-      "command": "uv run pytest tests/unit/schemas/ -v",
-      "summary": "20 passed, 5 warnings"
+    "checkpoint_3_json_schema": {
+      "status": "PASS",
+      "description": "JSON Schema contém campo 'enum' com 5 valores"
     },
-    "build": {
-      "status": "not_applicable",
-      "notes": "Projeto Python não requer build"
+    "checkpoint_4_validator_compat": {
+      "status": "PASS",
+      "description": "3/3 testes do validador determinístico continuam passando"
+    },
+    "checkpoint_5_lint": {
+      "status": "PARTIAL",
+      "description": "Sintaxe Python validada, todos os testes passaram"
     }
   },
   "self_assessment": {
     "confidence": "high",
     "quality_score": 9,
-    "ready_for_review": true,
-    "notes": "Implementação completa dos requisitos explícitos. Testes ADK existentes quebrados devido a mudança global da API (não relacionado a esta implementação)."
+    "ready_for_review": true
   },
-  "known_issues": [
-    {
-      "type": "global_test_failure",
-      "description": "Testes que dependem de InvocationContext quebrados devido a mudanças na API do ADK",
-      "affected_files": [
-        "tests/unit/validators/test_final_delivery_validator.py",
-        "tests/unit/agents/test_gating_utils.py",
-        "tests/integration/pipeline/test_deterministic_flow.py"
-      ],
-      "scope": "Projeto inteiro, não específico desta implementação",
-      "blocker": false,
-      "recommendation": "Atualizar fixture _make_ctx/_ctx em todos os testes para nova API do InvocationContext"
-    }
-  ],
-  "next_action": "ready_for_review"
+  "next_action": "proceed_to_reviewer"
 }
