@@ -8,7 +8,6 @@ from typing import Any, Iterable
 
 from pydantic import BaseModel, ConfigDict, Field, conlist, field_validator, model_validator
 
-from app.config import CTA_INSTAGRAM_CHOICES
 from app.format_specifications import FORMAT_SPECS
 
 

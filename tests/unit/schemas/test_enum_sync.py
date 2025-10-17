@@ -3,7 +3,6 @@
 CRÍTICO: Estes testes DEVEM rodar em CI/CD e FALHAR se houver inconsistência.
 """
 
-import pytest
 from app.config import CTA_INSTAGRAM_CHOICES
 from app.format_specifications import FORMAT_SPECS
 from app.schemas.final_delivery import (
