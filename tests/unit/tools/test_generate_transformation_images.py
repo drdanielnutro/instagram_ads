@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import json
+import logging
 from datetime import datetime, timezone
 from importlib import import_module
 from types import SimpleNamespace
 from typing import Any
 
 import pytest
+from PIL import Image
 
 from app.schemas.reference_assets import ReferenceImageMetadata
 
@@ -242,3 +245,79 @@ async def test_generate_transformation_images_records_load_errors(
     assert meta["reference_character_id"] == "char-1"
     assert meta["reference_character_used"] is False
     assert "download failed" in meta["reference_character_error"]
+
+
+@pytest.mark.asyncio
+async def test_generate_transformation_images_debug_logs(monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture) -> None:
+    caplog.set_level(logging.DEBUG, logger="app.tools.generate_transformation_images")
+
+    async def fake_call_model(inputs: list[Any]) -> Image.Image:
+        # Always return a fresh image so subsequent stages receive a PIL.Image object
+        return Image.new("RGB", (12, 18), color=(128, 64, 32))
+
+    async def fake_upload_image(*, stage_label: str, **_: Any) -> SimpleNamespace:
+        return SimpleNamespace(gcs_uri=f"gs://generated/{stage_label}", signed_url="")
+
+    monkeypatch.setattr(
+        gti,
+        "_call_model",
+        lambda inputs: fake_call_model(list(inputs)),
+    )
+    monkeypatch.setattr(
+        gti,
+        "_upload_image",
+        lambda image, **kwargs: fake_upload_image(**kwargs),
+    )
+
+    prompt_estado_atual = (
+        "The same persona from the approved references stands beside a lake under overcast skies, "
+        "wearing worn fishing gear and holding a damaged life vest with visible tears. Emotion: despair."
+    )
+    prompt_estado_intermediario = (
+        "The same persona now checks an online store on a tablet showing a highlighted new life vest. "
+        "Lighting becomes brighter to suggest hope. Emotion: determined."
+    )
+    prompt_estado_aspiracional = (
+        "The same persona fishes from a boat wearing the new MG Pesca life vest, smiling while the sun shines "
+        "over calm waters. Emotion: joyful."
+    )
+
+    await gti.generate_transformation_images(
+        prompt_atual=prompt_estado_atual,
+        prompt_intermediario=prompt_estado_intermediario,
+        prompt_aspiracional=prompt_estado_aspiracional,
+        variation_idx=7,
+        metadata={"user_id": "u-test", "session_id": "sess-test"},
+        reference_character=None,
+        reference_product=None,
+    )
+
+    debug_messages = [
+        message for message in caplog.messages if "generate_content inputs" in message
+    ]
+    assert len(debug_messages) == 3
+    assert "estado_atual" in debug_messages[0]
+    assert "estado_intermediario" in debug_messages[1]
+    assert "estado_aspiracional" in debug_messages[2]
+
+    def parse_payload(message: str) -> list[dict[str, Any]]:
+        _, payload = message.split(": ", 1)
+        return json.loads(payload)
+
+    first_payload = parse_payload(debug_messages[0])
+    assert len(first_payload) == 1
+    assert first_payload[0]["type"] == "text"
+    assert first_payload[0]["length"] == len(prompt_estado_atual)
+    assert first_payload[0]["preview"].startswith("The same persona from the approved references")
+
+    second_payload = parse_payload(debug_messages[1])
+    assert len(second_payload) == 2
+    assert second_payload[0]["type"] == "image"
+    assert second_payload[1]["type"] == "text"
+    assert "The same persona now checks an online store" in second_payload[1]["preview"]
+
+    third_payload = parse_payload(debug_messages[2])
+    assert len(third_payload) == 2
+    assert third_payload[0]["type"] == "image"
+    assert third_payload[1]["type"] == "text"
+    assert "The same persona fishes from a boat" in third_payload[1]["preview"]

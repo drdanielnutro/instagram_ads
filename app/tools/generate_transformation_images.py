@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import json
 import logging
 import os
 import time
@@ -197,6 +198,32 @@ async def _call_model(contents: list[Any]) -> Image.Image:
     )
 
 
+def _summarize_stage_inputs(parts: list[Any]) -> list[dict[str, Any]]:
+    summary: list[dict[str, Any]] = []
+    for item in parts:
+        if isinstance(item, str):
+            preview = item if len(item) <= 120 else f"{item[:117]}..."
+            summary.append(
+                {
+                    "type": "text",
+                    "length": len(item),
+                    "preview": preview,
+                }
+            )
+            continue
+        if isinstance(item, Image.Image):
+            summary.append(
+                {
+                    "type": "image",
+                    "mode": getattr(item, "mode", "unknown"),
+                    "size": getattr(item, "size", None),
+                }
+            )
+            continue
+        summary.append({"type": type(item).__name__})
+    return summary
+
+
 async def _notify(callback: Optional[ProgressCallback], stage_idx: int, stage_label: str) -> None:
     if not callback:
         return
@@ -351,6 +378,13 @@ async def generate_transformation_images(
         stage_one_inputs.append(product_image)
     stage_one_inputs.append(prompt_estado_atual)
 
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_atual: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_one_inputs)),
+        )
+
     image_atual = await _call_model(stage_one_inputs)
     upload_atual = await _upload_image(
         image_atual,
@@ -393,6 +427,13 @@ async def generate_transformation_images(
         stage_two_inputs.append(product_image)
     stage_two_inputs.append(transform_prompt_inter)
 
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_intermediario: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_two_inputs)),
+        )
+
     image_intermediario = await _call_model(stage_two_inputs)
     upload_intermediario = await _upload_image(
         image_intermediario,
@@ -429,6 +470,13 @@ async def generate_transformation_images(
     if character_image is not None:
         stage_three_inputs.append(character_image)
     stage_three_inputs.append(transform_prompt_asp)
+
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_aspiracional: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_three_inputs)),
+        )
 
     image_aspiracional = await _call_model(stage_three_inputs)
     upload_aspiracional = await _upload_image(
