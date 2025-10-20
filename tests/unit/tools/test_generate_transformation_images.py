@@ -9,7 +9,6 @@ from typing import Any
 
 import pytest
 
-from app.config import config
 from app.schemas.reference_assets import ReferenceImageMetadata
 
 gti = import_module("app.tools.generate_transformation_images")
@@ -113,10 +112,6 @@ async def test_generate_transformation_images_with_references(
         "_load_reference_image",
         fake_load_reference_image,
     )
-    monkeypatch.setattr(config, "image_current_prompt_template", "C:{prompt_atual} [{character_summary}] {character_labels}")
-    monkeypatch.setattr(config, "image_intermediate_prompt_template", "I:{prompt_intermediario}")
-    monkeypatch.setattr(config, "image_aspirational_prompt_template_with_product", "A:{prompt_aspiracional}:{product_summary}:{product_labels}")
-
     result = await gti.generate_transformation_images(
         prompt_atual="Emotion: Joyful | Stage one",
         prompt_intermediario="Stage two",
@@ -128,9 +123,26 @@ async def test_generate_transformation_images_with_references(
     )
 
     assert len(prompts) == 3
-    assert prompts[0]["prompt"] == "C:Emotion: Joyful | Stage one [Heroína confiante] hero, confident"
-    assert prompts[1]["prompt"] == "I:Stage two"
-    assert prompts[2]["prompt"] == "A:Stage three:Tênis vermelho premium:shoes, leather, red"
+    first_prompt = prompts[0]["prompt"]
+    assert "Gerar a IMAGEM DO ESTADO ATUAL" in first_prompt
+    assert "Use a imagem compartilhada do personagem" in first_prompt
+    assert "destaque Tênis vermelho premium" in first_prompt
+    assert prompts[0]["inputs"] == ["char-1", "prod-9"]
+
+    second_prompt = prompts[1]["prompt"]
+    assert "IMAGEM DO ESTADO INTERMEDIÁRIO" in second_prompt
+    assert "over-the-shoulder" in second_prompt
+    assert "Use como referência a IMAGEM COMPARTILHADA do estado atual" in second_prompt
+    assert "Considere também a imagem compartilhada do personagem" in second_prompt
+    assert "Utilize a imagem compartilhada do produto/serviço" in second_prompt
+    assert prompts[1]["inputs"] == [1, "char-1", "prod-9"]
+
+    third_prompt = prompts[2]["prompt"]
+    assert "IMAGEM DO ESTADO ASPIRACIONAL" in third_prompt
+    assert "Use SOMENTE a IMAGEM ORIGINAL DO PERSONAGEM" in third_prompt
+    assert "Incorpore visualmente a IMAGEM DO PRODUTO/SERVIÇO" in third_prompt
+    assert "Não utilize imagens geradas anteriormente" in third_prompt
+    assert prompts[2]["inputs"] == ["prod-9", "char-1"]
     assert result["estado_atual"]["gcs_uri"].endswith("estado_atual")
     assert result["estado_aspiracional"]["signed_url"].endswith("estado_aspiracional")
     meta = result["meta"]
@@ -181,8 +193,10 @@ async def test_generate_transformation_images_product_only(monkeypatch: pytest.M
         reference_product=reference_product,
     )
 
-    assert prompts[0].startswith("Stage one Highlight the approved product reference")
-    assert "integrate" in prompts[2].lower()
+    assert "Gerar a IMAGEM DO ESTADO ATUAL" in prompts[0]
+    assert "destaque Tênis vermelho premium" in prompts[0]
+    assert "IMAGEM DO ESTADO ASPIRACIONAL" in prompts[2]
+    assert "Incorpore visualmente a IMAGEM DO PRODUTO/SERVIÇO" in prompts[2]
     meta = result["meta"]
     assert meta.get("reference_character_used", False) is False
     assert meta["reference_product_used"] is True
