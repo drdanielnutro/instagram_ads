@@ -1,0 +1,1481 @@
+{
+  "filename": "20251020-134733_20559bf5-a7f0-4651-89d7-f8d73649bbc8_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-20T16:47:34Z",
+  "size_bytes": 38448,
+  "final_delivery_local_path": "artifacts/ads_final/20251020-134733_20559bf5-a7f0-4651-89d7-f8d73649bbc8_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/20559bf5-a7f0-4651-89d7-f8d73649bbc8/20251020-134733_20559bf5-a7f0-4651-89d7-f8d73649bbc8_Feed.json",
+  "user_id": "u_999",
+  "session_id": "20559bf5-a7f0-4651-89d7-f8d73649bbc8",
+  "stage": "deterministic_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": {
+    "grade": "pass",
+    "issues": [],
+    "normalized_payload": {
+      "variations": [
+        {
+          "landing_page_url": "https://www.mgpesca.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Preço Imperdível: Colete Salva-Vidas Certificado!",
+            "corpo": "Sua segurança na pescaria não tem preço, mas economizar é bom demais! Chega de arriscar com colete velho. Aproveite nossa promoção especial e garanta seu colete salva-vidas certificado por um valor que cabe no seu bolso. Pesque com tranquilidade e a certeza de ter feito um ótimo negócio.",
+            "cta_texto": "Comprar agora"
+          },
+          "visual": {
+            "descricao_imagem": "Uma sequência de três cenas mostrando um pescador de meia-idade fazendo uma compra inteligente. 1) O pescador, com expressão preocupada, olha para seu colete salva-vidas velho e depois para a carteira, calculando o custo de um novo. 2) No mesmo cenário, ele olha para um smartphone com uma expressão de alívio e surpresa ao ver a promoção de coletes certificados no site da MG Pesca. 3) O pescador, agora radiante e vestindo o colete azul novo, pesca com um sorriso de satisfação, simbolizando a felicidade de ter garantido segurança com economia.",
+            "prompt_estado_atual": "A middle-aged man with strong facial features, wearing fishing attire, sits in a small boat on a lake under an overcast sky. He holds a faded, old life vest in one hand and looks at his wallet in the other with a deep expression of financial worry. His posture is tense, conveying the stress of a difficult purchasing decision. Emotion: worried.",
+            "prompt_estado_intermediario": "The same middle-aged man in the boat. The lighting is getting brighter. He is now looking intently at a smartphone, his face illuminated by the screen which shows a promotional offer for certified life vests on the MG Pesca website. A look of genuine surprise and relief replaces his worry. The old life vest lies forgotten beside him. Emotion: relieved.",
+            "prompt_estado_aspiracional": "The same middle-aged man, now beaming with satisfaction on a bright, sunny day. He wears a brand new, modern, bright blue certified life vest (Labels: Blue, Recreation, Leisure, Vacation, Adventure) that fits perfectly. He is actively fishing, smiling confidently, embodying the success of a smart purchase that brought both safety and savings. Emotion: satisfied.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_19d061d72e0247cc92a45b658f545308",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+                "labels": [
+                  "Blue",
+                  "Sleeve",
+                  "Collar",
+                  "Button",
+                  "Formal wear",
+                  "Textile",
+                  "Dress shirt",
+                  "Pocket",
+                  "Facial hair",
+                  "Cuff"
+                ],
+                "user_description": null
+              },
+              "product": {
+                "id": "ref_36f88207333540ab9c01127815db1d0e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+                "labels": [
+                  "Blue",
+                  "Recreation",
+                  "Leisure",
+                  "Vacation",
+                  "Adventure",
+                  "Water sport",
+                  "Windsport"
+                ],
+                "user_description": null
+              }
+            }
+          },
+          "cta_instagram": "Comprar agora",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+            "storybrand_dores": [
+              "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+              "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+            ],
+            "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_beneficios": [
+              "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+            ],
+            "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.mgpesca.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Chega de Risco! Pesque com Paz de Espírito.",
+            "corpo": "Aquela pulga atrás da orelha toda vez que o barco balança... Acabe com isso hoje. Um colete salva-vidas certificado não é luxo, é a sua tranquilidade. Na MG Pesca, você troca seu equipamento antigo por um novo, seguro e com preço justo. Volte a focar só na fisgada.",
+            "cta_texto": "Comprar agora"
+          },
+          "visual": {
+            "descricao_imagem": "Uma jornada emocional em três atos, do medo à serenidade. 1) Um pescador em seu barco, com uma expressão de ansiedade profunda, tocando seu colete salva-vidas velho e desgastado, claramente inseguro. 2) O mesmo pescador, com um olhar focado e sério, lendo as especificações e a certificação de um novo colete no site da MG Pesca em seu celular. 3) Um close-up do pescador, que agora veste o colete novo, sorrindo com os olhos fechados, em paz e completamente relaxado, desfrutando do momento.",
+            "prompt_estado_atual": "A middle-aged man with strong facial features sits anxiously in a fishing boat. The sky is grey and the atmosphere is tense. He looks down at his old, visibly worn-out life vest, his hand clutching it with a look of deep-seated fear and vulnerability. His whole body language screams insecurity. Emotion: anxious.",
+            "prompt_estado_intermediario": "The same fisherman, still in the boat. He holds a smartphone and his expression is now one of focused concentration and resolve. He is carefully reading the safety certifications and product details of a new life vest on the MG Pesca website. He is making an informed, life-affirming decision. The old vest is nowhere to be seen. Emotion: focused.",
+            "prompt_estado_aspiracional": "Tight shot on the fisherman's face, now glowing in the warm sunlight. He wears a new, high-quality, bright blue certified life vest (Labels: Blue, Sleeve, Collar, Button, Formal wear). With his eyes closed and a gentle smile, he feels the breeze, completely at peace. He holds a fishing rod loosely, embodying total serenity and trust in his new gear. Emotion: serene.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_19d061d72e0247cc92a45b658f545308",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+                "labels": [
+                  "Blue",
+                  "Sleeve",
+                  "Collar",
+                  "Button",
+                  "Formal wear",
+                  "Textile",
+                  "Dress shirt",
+                  "Pocket",
+                  "Facial hair",
+                  "Cuff"
+                ],
+                "user_description": null
+              },
+              "product": {
+                "id": "ref_36f88207333540ab9c01127815db1d0e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+                "labels": [
+                  "Blue",
+                  "Recreation",
+                  "Leisure",
+                  "Vacation",
+                  "Adventure",
+                  "Water sport",
+                  "Windsport"
+                ],
+                "user_description": null
+              }
+            }
+          },
+          "cta_instagram": "Comprar agora",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+            "storybrand_dores": [
+              "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+              "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+            ],
+            "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_beneficios": [
+              "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+            ],
+            "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.mgpesca.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Seja um Pescador Inteligente: Segurança e Economia.",
+            "corpo": "O pescador inteligente sabe: segurança e economia andam juntas. Na MG Pesca, você encontra coletes salva-vidas certificados com o melhor custo-benefício do mercado. Faça a escolha certa para sua paixão e seu bolso. Renove seu equipamento e pesque com a confiança de quem está preparado.",
+            "cta_texto": "Comprar agora"
+          },
+          "visual": {
+            "descricao_imagem": "Uma sequência de imagens que constrói a identidade do 'Pescador Inteligente'. 1) Um pescador com um olhar crítico e experiente, analisando seu equipamento de pesca antigo, identificando a necessidade de uma atualização. 2) O mesmo pescador, com um semblante de quem sabe o que faz, compara com aprovação um colete salva-vidas no site da MG Pesca em seu celular. 3) O pescador, vestindo seu novo colete azul, posa com confiança em seu barco, olhando para o horizonte, o retrato de um especialista preparado e seguro de suas escolhas.",
+            "prompt_estado_atual": "A middle-aged, experienced-looking fisherman with strong features stands by a riverbank, critically examining his old, worn-out fishing gear. His expression is not worried, but analytical and discerning, like an expert identifying a problem that needs a smart solution. The environment is clear but neutral. Emotion: analytical.",
+            "prompt_estado_intermediario": "The same fisherman now holds a smartphone, his expression confident and knowing. He scrolls through the MG Pesca website, nodding slightly with approval as he finds a certified life vest that meets his standards for both quality and price. He is making a strategic, not emotional, decision. Emotion: discerning.",
+            "prompt_estado_aspiracional": "The same fisherman stands confidently on his boat in a power pose, wearing his new, bright blue certified life vest (Labels: Blue, Sleeve, Collar, Button, Formal wear). He looks out towards the horizon with the proud, assured gaze of a captain in full control. The sun is setting, casting a heroic glow. He embodies the identity of the 'Pescador Inteligente e Preparado'. Emotion: confident.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_19d061d72e0247cc92a45b658f545308",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+                "labels": [
+                  "Blue",
+                  "Sleeve",
+                  "Collar",
+                  "Button",
+                  "Formal wear",
+                  "Textile",
+                  "Dress shirt",
+                  "Pocket",
+                  "Facial hair",
+                  "Cuff"
+                ],
+                "user_description": null
+              },
+              "product": {
+                "id": "ref_36f88207333540ab9c01127815db1d0e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+                "labels": [
+                  "Blue",
+                  "Recreation",
+                  "Leisure",
+                  "Vacation",
+                  "Adventure",
+                  "Water sport",
+                  "Windsport"
+                ],
+                "user_description": null
+              }
+            }
+          },
+          "cta_instagram": "Comprar agora",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+            "storybrand_dores": [
+              "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+              "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+            ],
+            "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+            "storybrand_beneficios": [
+              "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+            ],
+            "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+            ]
+          }
+        }
+      ]
+    },
+    "source": "validator"
+  },
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "Excelente correção. O problema crítico nos prompts visuais foi resolvido. Todas as três variações agora demonstram perfeita consistência narrativa entre a copy, a descrição da imagem e os prompts de IA. As 'Labels' nos prompts aspiracionais foram corrigidas para '(Labels: Blue, Recreation, Leisure, Vacation, Adventure)', garantindo que o visual gerado corresponda a um colete salva-vidas e ao contexto de lazer, e não a uma peça de roupa formal. Com este ajuste, todas as variações estão fortemente alinhadas ao objetivo de vendas, ao foco na promoção de coletes salva-vidas e à persona/dores do StoryBrand, resultando em um conjunto de criativos coeso e de alta qualidade."
+  },
+  "image_assets_review": {
+    "grade": "skipped",
+    "issues": [
+      "character reference invalid: [{'type': 'value_error', 'loc': ('uploaded_at',), 'msg': \"Value error, Invalid isoformat string: '2025-10-20T16:26:29.270107Z'\", 'input': '2025-10-20T16:26:29.270107Z', 'ctx': {'error': ValueError(\"Invalid isoformat string: '2025-10-20T16:26:29.270107Z'\")}, 'url': 'https://errors.pydantic.dev/2.11/v/value_error'}]",
+      "product reference invalid: [{'type': 'value_error', 'loc': ('uploaded_at',), 'msg': \"Value error, Invalid isoformat string: '2025-10-20T16:26:41.211123Z'\", 'input': '2025-10-20T16:26:41.211123Z', 'ctx': {'error': ValueError(\"Invalid isoformat string: '2025-10-20T16:26:41.211123Z'\")}, 'url': 'https://errors.pydantic.dev/2.11/v/value_error'}]",
+      "Nenhuma variação encontrada para gerar imagens."
+    ],
+    "summary": [],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "MG Pesca",
+          "o_que_a_empresa_faz": "Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito.",
+          "sexo_cliente_alvo": "masculino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-20T16:27:02Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-20T16:27:02Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-20T16:27:02Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 795
+      },
+      "timestamp_utc": "2025-10-20T16:27:09Z",
+      "duration_ms": 7285
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:27:09Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o pescador, reconhece sua paixão, suas necessidades de segurança e sua preocupação com o orçamento de forma muito empática e específica. A linguagem é clara e evita generalizações, conectando-se perfeitamente com a promessa de \"trocarem seu equipamento de pesca e material de segurança sem gastar muito\".",
+      "timestamp_utc": "2025-10-20T16:27:17Z",
+      "duration_ms": 7579
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o pescador, reconhece sua paixão, suas necessidades de segurança e sua preocupação com o orçamento de forma muito empática e específica. A linguagem é clara e evita generalizações, conectando-se perfeitamente com a promessa de \"trocarem seu equipamento de pesca e material de segurança sem gastar muito\".",
+      "timestamp_utc": "2025-10-20T16:27:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:27:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-20T16:27:17Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 724
+      },
+      "timestamp_utc": "2025-10-20T16:27:27Z",
+      "duration_ms": 10414
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:27:27Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta diretamente com a experiência e as preocupações do pescador masculino. A linguagem é específica para o universo da pesca (fisgada, colete salva-vidas, caixa de iscas, molinete), evitando clichês. Demonstra empatia ao reconhecer a preocupação com a segurança e o orçamento, alinhando-se perfeitamente com a promessa de \"trocarem seu equipamento de pesca e material de segurança sem gastar muito\".",
+      "timestamp_utc": "2025-10-20T16:27:33Z",
+      "duration_ms": 5522
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se conecta diretamente com a experiência e as preocupações do pescador masculino. A linguagem é específica para o universo da pesca (fisgada, colete salva-vidas, caixa de iscas, molinete), evitando clichês. Demonstra empatia ao reconhecer a preocupação com a segurança e o orçamento, alinhando-se perfeitamente com a promessa de \"trocarem seu equipamento de pesca e material de segurança sem gastar muito\".",
+      "timestamp_utc": "2025-10-20T16:27:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:27:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-20T16:27:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 602
+      },
+      "timestamp_utc": "2025-10-20T16:27:46Z",
+      "duration_ms": 12741
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:27:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha diretamente na experiência do pescador, usando detalhes específicos como 'barco deu aquela balançada inesperada' e a descrição do 'colete salva-vidas' (tecido gasto, cor desbotada, fivelas fracas). A pergunta interna 'E se eu caísse na água agora? Será que isso ainda me protegeria de verdade?' é muito poderosa e empática, conversando diretamente com a preocupação de segurança do cliente masculino. A inclusão da 'preocupação com o preço de um colete novo e de qualidade' conecta perfeitamente com a promessa da empresa de trocar equipamentos 'sem gastar muito'. A linguagem é clara, específica e não usa clichês genéricos, sendo totalmente orientada à realidade do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:27:53Z",
+      "duration_ms": 7321
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha diretamente na experiência do pescador, usando detalhes específicos como 'barco deu aquela balançada inesperada' e a descrição do 'colete salva-vidas' (tecido gasto, cor desbotada, fivelas fracas). A pergunta interna 'E se eu caísse na água agora? Será que isso ainda me protegeria de verdade?' é muito poderosa e empática, conversando diretamente com a preocupação de segurança do cliente masculino. A inclusão da 'preocupação com o preço de um colete novo e de qualidade' conecta perfeitamente com a promessa da empresa de trocar equipamentos 'sem gastar muito'. A linguagem é clara, específica e não usa clichês genéricos, sendo totalmente orientada à realidade do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:27:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:27:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-20T16:27:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 1020
+      },
+      "timestamp_utc": "2025-10-20T16:28:05Z",
+      "duration_ms": 11999
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:28:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha profundamente na experiência do pescador masculino, abordando não apenas a preocupação com a segurança do equipamento (\"colete salva-vidas velho, com as costuras gastas e as fivelas enferrujadas\") mas também o impacto emocional (\"frio na barriga\", \"tranquilidade da sua família\"). A conexão com a promessa da empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao destacar o dilema entre arriscar a segurança e o alto custo de um equipamento novo, finalizando com a busca pela \"liberdade de pescar sem preocupações... sem ter que pagar o preço de um rim por isso\". A linguagem é respeitosa, específica para o universo da pesca e altamente empática, evitando clichês e mantendo-se orientada à solução que a empresa oferece.",
+      "timestamp_utc": "2025-10-20T16:28:12Z",
+      "duration_ms": 6689
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha profundamente na experiência do pescador masculino, abordando não apenas a preocupação com a segurança do equipamento (\"colete salva-vidas velho, com as costuras gastas e as fivelas enferrujadas\") mas também o impacto emocional (\"frio na barriga\", \"tranquilidade da sua família\"). A conexão com a promessa da empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao destacar o dilema entre arriscar a segurança e o alto custo de um equipamento novo, finalizando com a busca pela \"liberdade de pescar sem preocupações... sem ter que pagar o preço de um rim por isso\". A linguagem é respeitosa, específica para o universo da pesca e altamente empática, evitando clichês e mantendo-se orientada à solução que a empresa oferece.",
+      "timestamp_utc": "2025-10-20T16:28:12Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:28:12Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-20T16:28:12Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 825
+      },
+      "timestamp_utc": "2025-10-20T16:28:24Z",
+      "duration_ms": 12475
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:28:24Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha diretamente na frustração e na paixão do pescador masculino, usando termos específicos como 'molinete travou' e 'linha estourou' para criar uma cena vívida e relacionável. A conexão com a promessa da empresa é explícita e poderosa ao finalizar com o dilema: 'como renovar esse arsenal sem ter que abrir mão de outras coisas importantes ou gastar o que não tem?', que se alinha perfeitamente com 'trocarem seu equipamento de pesca e material de segurança sem gastar muito'. A linguagem é empática, respeitosa e específica, evitando clichês genéricos e focando na experiência real do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:28:30Z",
+      "duration_ms": 5828
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele mergulha diretamente na frustração e na paixão do pescador masculino, usando termos específicos como 'molinete travou' e 'linha estourou' para criar uma cena vívida e relacionável. A conexão com a promessa da empresa é explícita e poderosa ao finalizar com o dilema: 'como renovar esse arsenal sem ter que abrir mão de outras coisas importantes ou gastar o que não tem?', que se alinha perfeitamente com 'trocarem seu equipamento de pesca e material de segurança sem gastar muito'. A linguagem é empática, respeitosa e específica, evitando clichês genéricos e focando na experiência real do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:28:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:28:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-20T16:28:30Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 793
+      },
+      "timestamp_utc": "2025-10-20T16:28:39Z",
+      "duration_ms": 9501
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:28:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, abordando suas preocupações específicas com a segurança e a frustração de um equipamento falho (colete salva-vidas velho, molinete travado). A linguagem é específica para o universo da pesca e demonstra grande empatia ao apresentar o dilema de \"gastar uma fortuna\" versus \"arriscar\". A solução prometida (\"garantir sua segurança e renovar seu arsenal de pesca com qualidade, sem ter que esvaziar a carteira\") alinha-se perfeitamente com a proposta da empresa: \"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito.\". Não há clichês genéricos e a linguagem é clara e orientada à ação de buscar uma solução.",
+      "timestamp_utc": "2025-10-20T16:28:46Z",
+      "duration_ms": 6327
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, abordando suas preocupações específicas com a segurança e a frustração de um equipamento falho (colete salva-vidas velho, molinete travado). A linguagem é específica para o universo da pesca e demonstra grande empatia ao apresentar o dilema de \"gastar uma fortuna\" versus \"arriscar\". A solução prometida (\"garantir sua segurança e renovar seu arsenal de pesca com qualidade, sem ter que esvaziar a carteira\") alinha-se perfeitamente com a proposta da empresa: \"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito.\". Não há clichês genéricos e a linguagem é clara e orientada à ação de buscar uma solução.",
+      "timestamp_utc": "2025-10-20T16:28:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:28:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-20T16:28:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 612
+      },
+      "timestamp_utc": "2025-10-20T16:28:54Z",
+      "duration_ms": 8557
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:28:54Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, abordando as dores e dilemas específicos de quem busca equipamentos de pesca e segurança. A linguagem é específica para o universo da pesca ('colete salva-vidas desbotado', 'molinete travado', 'segurança na água') e empática ('É como se o mercado te forçasse a escolher...'). A conexão com a proposta da empresa ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita ao focar na 'dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna' e na 'barreira de custo vs. qualidade e segurança'. Evita clichês e é orientada ao problema real do cliente.",
+      "timestamp_utc": "2025-10-20T16:29:01Z",
+      "duration_ms": 6390
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, abordando as dores e dilemas específicos de quem busca equipamentos de pesca e segurança. A linguagem é específica para o universo da pesca ('colete salva-vidas desbotado', 'molinete travado', 'segurança na água') e empática ('É como se o mercado te forçasse a escolher...'). A conexão com a proposta da empresa ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita ao focar na 'dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna' e na 'barreira de custo vs. qualidade e segurança'. Evita clichês e é orientada ao problema real do cliente.",
+      "timestamp_utc": "2025-10-20T16:29:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:29:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-20T16:29:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 1178
+      },
+      "timestamp_utc": "2025-10-20T16:29:10Z",
+      "duration_ms": 9150
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:29:10Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se aprofunda nas dores internas do pescador masculino de forma muito específica e empática, conectando a frustração de sacrificar segurança e qualidade pela economia com a culpa e o medo de riscos. A linguagem utilizada (\"nó na garganta\", \"lembretes cruéis\", \"culpa secreta\", \"parasita\", \"gosto amargo\") ressoa fortemente com as emoções que um homem na situação descrita sentiria. Ele prepara perfeitamente o terreno para a solução oferecida pela empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\"), ao destacar o dilema entre qualidade/segurança e o orçamento, e o desejo de pescar \"com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado\".",
+      "timestamp_utc": "2025-10-20T16:29:15Z",
+      "duration_ms": 5662
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se aprofunda nas dores internas do pescador masculino de forma muito específica e empática, conectando a frustração de sacrificar segurança e qualidade pela economia com a culpa e o medo de riscos. A linguagem utilizada (\"nó na garganta\", \"lembretes cruéis\", \"culpa secreta\", \"parasita\", \"gosto amargo\") ressoa fortemente com as emoções que um homem na situação descrita sentiria. Ele prepara perfeitamente o terreno para a solução oferecida pela empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\"), ao destacar o dilema entre qualidade/segurança e o orçamento, e o desejo de pescar \"com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado\".",
+      "timestamp_utc": "2025-10-20T16:29:15Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:29:15Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-20T16:29:15Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 804
+      },
+      "timestamp_utc": "2025-10-20T16:29:23Z",
+      "duration_ms": 7115
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:29:23Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o cliente masculino que pesca, usando uma linguagem específica ('pescaria', 'colete salva-vidas', 'molinete', 'pescador responsável') que ressoa com sua paixão e suas preocupações. A conexão com a promessa da empresa ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, pois o texto aborda diretamente a injustiça de ter que escolher entre segurança e orçamento, e a culpa de não poder ter o melhor sem gastar demais. A linguagem é clara, empática e levanta a bandeira da 'justiça' para o pescador, o que o orienta sutilmente para a busca de uma solução que a empresa pode oferecer. Não há clichês genéricos; tudo é centrado na experiência do público-alvo.",
+      "timestamp_utc": "2025-10-20T16:29:28Z",
+      "duration_ms": 5889
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o cliente masculino que pesca, usando uma linguagem específica ('pescaria', 'colete salva-vidas', 'molinete', 'pescador responsável') que ressoa com sua paixão e suas preocupações. A conexão com a promessa da empresa ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, pois o texto aborda diretamente a injustiça de ter que escolher entre segurança e orçamento, e a culpa de não poder ter o melhor sem gastar demais. A linguagem é clara, empática e levanta a bandeira da 'justiça' para o pescador, o que o orienta sutilmente para a busca de uma solução que a empresa pode oferecer. Não há clichês genéricos; tudo é centrado na experiência do público-alvo.",
+      "timestamp_utc": "2025-10-20T16:29:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:29:29Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-20T16:29:29Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 823
+      },
+      "timestamp_utc": "2025-10-20T16:29:33Z",
+      "duration_ms": 4607
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:29:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, reconhecendo sua paixão e suas preocupações legítimas com segurança e orçamento. A linguagem é específica para o universo da pesca (\"colete salva-vidas velho\", \"molinete\") e empática (\"Sabemos que não é justo ter que escolher...\"). A conexão com a promessa da empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao abordar a solução para o dilema de custo versus qualidade e segurança, culminando na promessa de uma \"pescaria mais segura, eficaz e econômica\". Não utiliza clichês genéricos e mantém uma voz clara, empática e orientada à solução.",
+      "timestamp_utc": "2025-10-20T16:29:41Z",
+      "duration_ms": 7547
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, reconhecendo sua paixão e suas preocupações legítimas com segurança e orçamento. A linguagem é específica para o universo da pesca (\"colete salva-vidas velho\", \"molinete\") e empática (\"Sabemos que não é justo ter que escolher...\"). A conexão com a promessa da empresa (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao abordar a solução para o dilema de custo versus qualidade e segurança, culminando na promessa de uma \"pescaria mais segura, eficaz e econômica\". Não utiliza clichês genéricos e mantém uma voz clara, empática e orientada à solução.",
+      "timestamp_utc": "2025-10-20T16:29:41Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:29:41Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-20T16:29:41Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 767
+      },
+      "timestamp_utc": "2025-10-20T16:29:49Z",
+      "duration_ms": 8036
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:29:49Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma direta e respeitosa com o cliente masculino que gosta de pescar, utilizando termos específicos do universo da pesca e da segurança na água. A conexão com a transformação prometida ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, pois o texto aborda diretamente o dilema de custo versus qualidade e segurança, oferecendo uma solução clara. A linguagem é empática ao reconhecer a paixão, a busca por segurança e a preocupação com o orçamento. O texto evita clichês genéricos, sendo altamente específico e orientado à ação, focando nos benefícios de 'promoções exclusivas', 'melhor custo-benefício' e 'preços que cabem no bolso' para 'garantir sua proteção na água e a performance que sua pescaria exige'.",
+      "timestamp_utc": "2025-10-20T16:29:56Z",
+      "duration_ms": 7047
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma direta e respeitosa com o cliente masculino que gosta de pescar, utilizando termos específicos do universo da pesca e da segurança na água. A conexão com a transformação prometida ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, pois o texto aborda diretamente o dilema de custo versus qualidade e segurança, oferecendo uma solução clara. A linguagem é empática ao reconhecer a paixão, a busca por segurança e a preocupação com o orçamento. O texto evita clichês genéricos, sendo altamente específico e orientado à ação, focando nos benefícios de 'promoções exclusivas', 'melhor custo-benefício' e 'preços que cabem no bolso' para 'garantir sua proteção na água e a performance que sua pescaria exige'.",
+      "timestamp_utc": "2025-10-20T16:29:56Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:29:56Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-20T16:29:56Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1227
+      },
+      "timestamp_utc": "2025-10-20T16:30:01Z",
+      "duration_ms": 5098
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:30:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino que gosta de pescar, utilizando uma linguagem específica do universo da pesca ('pescar', 'coletes salva-vidas', 'equipamento de pesca', 'fisgada') e focando em suas preocupações de segurança e orçamento de forma respeitosa e prática. A conexão com a transformação prometida ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, sendo reforçada em todo o plano de três passos, que culmina na promessa de 'voltar a pescar com total tranquilidade e aproveitar cada fisgada' sem gastar muito. O texto evita clichês genéricos, é claro, empático e orientado à ação, guiando o cliente de forma eficaz.",
+      "timestamp_utc": "2025-10-20T16:30:08Z",
+      "duration_ms": 6819
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino que gosta de pescar, utilizando uma linguagem específica do universo da pesca ('pescar', 'coletes salva-vidas', 'equipamento de pesca', 'fisgada') e focando em suas preocupações de segurança e orçamento de forma respeitosa e prática. A conexão com a transformação prometida ('Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito') é explícita e poderosa, sendo reforçada em todo o plano de três passos, que culmina na promessa de 'voltar a pescar com total tranquilidade e aproveitar cada fisgada' sem gastar muito. O texto evita clichês genéricos, é claro, empático e orientado à ação, guiando o cliente de forma eficaz.",
+      "timestamp_utc": "2025-10-20T16:30:08Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:30:08Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-20T16:30:08Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 573
+      },
+      "timestamp_utc": "2025-10-20T16:30:14Z",
+      "duration_ms": 6289
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:30:14Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, reconhecendo suas preocupações com a segurança (\"renove sua segurança\", \"pescar com a cabeça leve\") e com o orçamento (\"sem que isso pese no seu bolso\", \"preço especial\", \"sem gastar muito\"). A linguagem é específica para o universo da pesca (\"pescaria\", \"colete salva-vidas\", \"arsenal\") e as chamadas para ação são claras e diretas (\"CLIQUE AQUI\", \"VEJA TODAS AS NOSSAS OFERTAS\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa na frase final, reforçando o valor da MG Pesca.",
+      "timestamp_utc": "2025-10-20T16:30:20Z",
+      "duration_ms": 5879
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, reconhecendo suas preocupações com a segurança (\"renove sua segurança\", \"pescar com a cabeça leve\") e com o orçamento (\"sem que isso pese no seu bolso\", \"preço especial\", \"sem gastar muito\"). A linguagem é específica para o universo da pesca (\"pescaria\", \"colete salva-vidas\", \"arsenal\") e as chamadas para ação são claras e diretas (\"CLIQUE AQUI\", \"VEJA TODAS AS NOSSAS OFERTAS\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa na frase final, reforçando o valor da MG Pesca.",
+      "timestamp_utc": "2025-10-20T16:30:20Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:30:20Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-20T16:30:20Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1118
+      },
+      "timestamp_utc": "2025-10-20T16:30:33Z",
+      "duration_ms": 13004
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:30:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma direta e respeitosa com o pescador masculino, utilizando a voz \"Você\" e termos altamente específicos do universo da pesca e segurança (\"colete salva-vidas velho\", \"equipamento de pesca desgastado\", \"susto no barco\", \"fisgada perdida\", \"molinete que travou\", \"linha que estourou\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao abordar as consequências negativas de NÃO agir, como \"arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima\" e o custo de \"adiar uma decisão que a MG Pesca tornou tão fácil e acessível\". A linguagem é clara, empática (\"paz de espírito\", \"paixão que se esvai\") e orientada à ação, mostrando o 'alto custo' de não trocar o equipamento. Não há clichês genéricos; tudo é focado na experiência e nos dilemas do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:30:39Z",
+      "duration_ms": 5670
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica de forma direta e respeitosa com o pescador masculino, utilizando a voz \"Você\" e termos altamente específicos do universo da pesca e segurança (\"colete salva-vidas velho\", \"equipamento de pesca desgastado\", \"susto no barco\", \"fisgada perdida\", \"molinete que travou\", \"linha que estourou\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa ao abordar as consequências negativas de NÃO agir, como \"arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima\" e o custo de \"adiar uma decisão que a MG Pesca tornou tão fácil e acessível\". A linguagem é clara, empática (\"paz de espírito\", \"paixão que se esvai\") e orientada à ação, mostrando o 'alto custo' de não trocar o equipamento. Não há clichês genéricos; tudo é focado na experiência e nos dilemas do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:30:39Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:30:39Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-20T16:30:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 1149
+      },
+      "timestamp_utc": "2025-10-20T16:30:45Z",
+      "duration_ms": 6415
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:30:45Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, utilizando a voz \"Você\" e termos altamente específicos do universo da pesca e segurança (\"pulga atrás da orelha\", \"colete salva-vidas novo e certificado\", \"fisgada\", \"molinete responde\", \"linha aguenta o tranco\", \"troféu da sua vida\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa, sendo repetida e demonstrada através dos resultados como \"sem o peso da culpa ou do orçamento estourado\" e \"mais segura e mais econômica do que nunca\". A linguagem é clara, empática e orientada a mostrar o sucesso e a paz de espírito resultantes da solução. Não há clichês genéricos; tudo é focado na experiência e nos dilemas resolvidos do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:30:50Z",
+      "duration_ms": 5074
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele se comunica diretamente com o pescador masculino, utilizando a voz \"Você\" e termos altamente específicos do universo da pesca e segurança (\"pulga atrás da orelha\", \"colete salva-vidas novo e certificado\", \"fisgada\", \"molinete responde\", \"linha aguenta o tranco\", \"troféu da sua vida\"). A conexão com a transformação prometida (\"Ajudamos homens que gostam de pescar a trocarem seu equipamento de pesca e material de segurança sem gastar muito\") é explícita e poderosa, sendo repetida e demonstrada através dos resultados como \"sem o peso da culpa ou do orçamento estourado\" e \"mais segura e mais econômica do que nunca\". A linguagem é clara, empática e orientada a mostrar o sucesso e a paz de espírito resultantes da solução. Não há clichês genéricos; tudo é focado na experiência e nos dilemas resolvidos do cliente-alvo.",
+      "timestamp_utc": "2025-10-20T16:30:50Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:30:50Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-20T16:30:50Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 835
+      },
+      "timestamp_utc": "2025-10-20T16:30:58Z",
+      "duration_ms": 7804
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-20T16:30:58Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, utilizando uma voz respeitosa e específica do universo da pesca ('pescador', 'fisgada', 'segurança e o orçamento', 'melhor custo-benefício para a sua paixão'). Conecta explicitamente a transformação prometida à solução da empresa ('a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia'), reforçando que o cliente se torna um '*Pescador Inteligente e Preparado*' que não gasta muito. Evita clichês genéricos, mantendo uma linguagem clara, empática e orientada para a nova identidade do cliente que tomou a decisão consciente.",
+      "timestamp_utc": "2025-10-20T16:31:03Z",
+      "duration_ms": 5252
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, utilizando uma voz respeitosa e específica do universo da pesca ('pescador', 'fisgada', 'segurança e o orçamento', 'melhor custo-benefício para a sua paixão'). Conecta explicitamente a transformação prometida à solução da empresa ('a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia'), reforçando que o cliente se torna um '*Pescador Inteligente e Preparado*' que não gasta muito. Evita clichês genéricos, mantendo uma linguagem clara, empática e orientada para a nova identidade do cliente que tomou a decisão consciente.",
+      "timestamp_utc": "2025-10-20T16:31:03Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "compiler",
+      "status": "started",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success",
+          "storybrand_identity"
+        ]
+      },
+      "timestamp_utc": "2025-10-20T16:31:04Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "compiler",
+      "status": "completed",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "text_length": 13845
+      },
+      "timestamp_utc": "2025-10-20T16:31:04Z",
+      "duration_ms": 1
+    }
+  ],
+  "storybrand_gate_metrics": {
+    "score_obtained": null,
+    "score_threshold": 0.6,
+    "decision_path": "fallback",
+    "timestamp_utc": "2025-10-20T16:26:58Z",
+    "is_forced_fallback": true,
+    "debug_flag_active": true
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": true,
+    "decision_path": "fallback",
+    "trigger_reason": "forced",
+    "timestamp_utc": "2025-10-20T16:26:58Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "final_assembly_guard_pre",
+      "status": "passed",
+      "timestamp_utc": "2025-10-20T16:43:14.151671+00:00",
+      "detail": "1 VISUAL_DRAFT aprovados."
+    },
+    {
+      "stage": "final_assembly_normalizer",
+      "status": "pending",
+      "timestamp_utc": "2025-10-20T16:45:36.670150+00:00",
+      "detail": "Payload normalizado com dual-write e reference_assets injetados."
+    },
+    {
+      "stage": "deterministic_final_validation",
+      "status": "pass",
+      "timestamp_utc": "2025-10-20T16:45:36.671881+00:00",
+      "issue_count": 0
+    },
+    {
+      "stage": "image_assets_agent",
+      "status": "skipped",
+      "timestamp_utc": "2025-10-20T16:47:33.748650+00:00",
+      "detail": "Nenhuma variação para processar"
+    }
+  ],
+  "reference_images": {
+    "character": {
+      "id": "ref_19d061d72e0247cc92a45b658f545308",
+      "type": "character",
+      "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+      "labels": [
+        "Blue",
+        "Sleeve",
+        "Collar",
+        "Button",
+        "Formal wear",
+        "Textile",
+        "Dress shirt",
+        "Pocket",
+        "Facial hair",
+        "Cuff"
+      ],
+      "safe_search_flags": {
+        "adult": "VERY_UNLIKELY",
+        "violence": "VERY_UNLIKELY",
+        "racy": "VERY_UNLIKELY",
+        "medical": "UNLIKELY",
+        "spoof": "VERY_UNLIKELY"
+      },
+      "user_description": null,
+      "uploaded_at": "2025-10-20T16:26:29.270107+00:00",
+      "signed_url_expires_at": "2025-10-21T16:26:29.270107+00:00",
+      "signed_url_ttl_seconds": 86400
+    },
+    "product": {
+      "id": "ref_36f88207333540ab9c01127815db1d0e",
+      "type": "product",
+      "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+      "labels": [
+        "Blue",
+        "Recreation",
+        "Leisure",
+        "Vacation",
+        "Adventure",
+        "Water sport",
+        "Windsport"
+      ],
+      "safe_search_flags": {
+        "adult": "VERY_UNLIKELY",
+        "violence": "VERY_UNLIKELY",
+        "racy": "UNLIKELY",
+        "medical": "VERY_UNLIKELY",
+        "spoof": "VERY_UNLIKELY"
+      },
+      "user_description": null,
+      "uploaded_at": "2025-10-20T16:26:41.211123+00:00",
+      "signed_url_expires_at": "2025-10-21T16:26:41.211123+00:00",
+      "signed_url_ttl_seconds": 86400
+    }
+  },
+  "reference_images_present": true,
+  "storybrand_sections_saved_path": "artifacts/storybrand/20559bf5-a7f0-4651-89d7-f8d73649bbc8.json",
+  "storybrand_sections_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/20559bf5-a7f0-4651-89d7-f8d73649bbc8/storybrand_sections.json",
+  "storybrand_sections_present": true,
+  "image_signed_url_ttl_seconds": 86400
+}
