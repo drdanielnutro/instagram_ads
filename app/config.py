@@ -88,20 +88,16 @@ class DevelopmentConfiguration:
     image_transformation_steps: int = 3
     image_signed_url_ttl: int = 60 * 60 * 24  # 24h
     image_current_prompt_template: str = (
-        "Use the approved character reference to anchor identity (summary: {character_summary};"
-        " labels: {character_labels}). {prompt_atual}"
+        "Gerar a IMAGEM DO ESTADO ATUAL do personagem. Use a imagem compartilhada do personagem como referência principal e mantenha integralmente as características físicas (rosto, traços, proporções corporais, tom de pele, cabelo). {prompt_atual}"
     )
     image_intermediate_prompt_template: str = (
-        "Transform this scene to show the immediate positive action: {prompt_intermediario}. "
-        "Keep the same person, clothing, environment, framing and lighting. Show determination and focus."  # noqa: E501
+        "Gerar a IMAGEM DO ESTADO INTERMEDIÁRIO a partir da imagem compartilhada do estado atual. O personagem está buscando soluções na internet sobre o produto/serviço. Enquadramento over-the-shoulder (câmera atrás e ao lado do personagem). A TELA do dispositivo (celular/notebook) deve ser o foco principal, mostrando o site ou Instagram do anunciante. Mantenha o cenário da imagem anterior, se possível, com iluminação realista focada na tela. {prompt_intermediario}"
     )
     image_aspirational_prompt_template: str = (
-        "Show the same person after some time has passed achieving the successful outcome: {prompt_aspiracional}. "
-        "Preserve identity and core features while allowing improvements in environment, wardrobe and expression."  # noqa: E501
+        "Gerar a IMAGEM DO ESTADO ASPIRACIONAL. Use SOMENTE a IMAGEM ORIGINAL DO PERSONAGEM (upload inicial) como referência de pessoa. Não altere o rosto ou traços físicos. {prompt_aspiracional}"
     )
     image_aspirational_prompt_template_with_product: str = (
-        "Integrate the approved product reference ({product_summary}; labels: {product_labels}) into the success scene. "
-        "{prompt_aspiracional}"
+        "Gerar a IMAGEM DO ESTADO ASPIRACIONAL. Use SOMENTE a IMAGEM ORIGINAL DO PERSONAGEM (upload inicial) como referência de pessoa. Incorpore visualmente a IMAGEM DO PRODUTO/SERVIÇO compartilhada na cena de sucesso. {prompt_aspiracional}"
     )
     reference_cache_ttl_seconds: int = 60 * 60  # 1 hour
     enable_reference_images: bool = False

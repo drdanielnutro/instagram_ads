@@ -392,7 +392,7 @@ async def generate_transformation_images(
             prompt_aspiracional=prompt_aspiracional
         )
 
-    stage_three_inputs: list[Any] = [image_intermediario]
+    stage_three_inputs: list[Any] = []
     if product_image is not None:
         stage_three_inputs.append(product_image)
     if character_image is not None:
