@@ -67,7 +67,10 @@ class ReferenceImageMetadata(BaseModel):
                 return value.replace(tzinfo=timezone.utc)
             return value.astimezone(timezone.utc)
         if isinstance(value, str):
-            parsed = datetime.fromisoformat(value)
+            normalized = value.strip()
+            if normalized.endswith("Z"):
+                normalized = normalized[:-1] + "+00:00"
+            parsed = datetime.fromisoformat(normalized)
             if parsed.tzinfo is None:
                 return parsed.replace(tzinfo=timezone.utc)
             return parsed.astimezone(timezone.utc)
