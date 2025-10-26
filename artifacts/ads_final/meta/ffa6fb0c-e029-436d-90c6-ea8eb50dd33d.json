@@ -1,0 +1,1648 @@
+{
+  "filename": "20251026-134935_ffa6fb0c-e029-436d-90c6-ea8eb50dd33d_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-26T16:49:36Z",
+  "size_bytes": 56452,
+  "final_delivery_local_path": "artifacts/ads_final/20251026-134935_ffa6fb0c-e029-436d-90c6-ea8eb50dd33d_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/20251026-134935_ffa6fb0c-e029-436d-90c6-ea8eb50dd33d_Feed.json",
+  "user_id": "u_999",
+  "session_id": "ffa6fb0c-e029-436d-90c6-ea8eb50dd33d",
+  "stage": "deterministic_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": {
+    "grade": "pass",
+    "issues": [],
+    "normalized_payload": {
+      "variations": [
+        {
+          "landing_page_url": "https://www.instagram.com/cantinhodocaopetshop/?hl=pt",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Chega de banho bagunçado! Peluda linda, sem estresse.",
+            "corpo": "Você ama sua companheira de pelo longo, mas a hora do banho é sempre um estresse? Pelos molhados, chão escorregadio e horas secando para um resultado que nunca é o ideal? No Cantinho do Cão PetShop, transformamos essa rotina! Nossos pacotes de Banho + Tosa + Hidratação são perfeitos para a pelagem dela, garantindo brilho, maciez e alinhamento de salão, sem você sujar sua casa. Liberte-se da preocupação e tenha mais tempo para os abraços!",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "Uma mulher com expressão exausta em um banheiro caótico tentando dar banho em sua cachorrinha de pelo longo. Em seguida, a mesma mulher, agora determinada, agendando o serviço pelo celular no sofá. Por fim, a mulher radiante abraçando sua cachorrinha com a pelagem impecável em uma sala de estar limpa.",
+            "prompt_estado_atual": "A middle-aged woman, disheveled and with an exhausted, frustrated expression, is struggling to give a bath to her long-haired dog inside a very messy bathroom. Wet dog hair is visible on the floor and walls, water is splashed everywhere. The scene depicts chaos and exhaustion. Emotion: despair.",
+            "prompt_estado_intermediario": "The same middle-aged woman, now with a determined and slightly relieved expression, is sitting on a sofa in a living room. She is holding a smartphone, actively typing a message or browsing, indicating she is booking a service for her pet. Her long-haired dog is calmly sitting beside her. Emotion: determined.",
+            "prompt_estado_aspiracional": "The same middle-aged woman, radiant and joyful, is gently hugging her long-haired dog in a spotless, well-organized living room. The dog's coat is visibly clean, shiny, soft, and perfectly groomed. Both the woman and the environment convey a sense of peace and well-being. Emotion: joyful.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_cb01393dd3fa4d6db05640e13172066e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_cb01393dd3fa4d6db05640e13172066e.webp",
+                "labels": [
+                  "Food",
+                  "Smile",
+                  "Ingredient",
+                  "Tableware",
+                  "Spaghetti",
+                  "Recipe",
+                  "Happiness",
+                  "Cooking",
+                  "Eating",
+                  "Food craving"
+                ],
+                "user_description": null
+              }
+            },
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164747Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0cfd05ef7549ff14f4db854a66c82e84109f9274e083acb3799e7f8b08ede44a2a896d571a6392104eb12dab8fd974634db957a9677a90341053877ac43203bb0ec37edc3b79ce3f9561f9e086557bca1fb9b6bb6f629a0f6d1e2f292d1999a0f5854bc73f879039eaeac0b6bf8b587ac837ef48f4fd10e99cf19102f6f6748854bef7cd75418670a885057e51bd38013ff7b28064b7b1b3300a18d2798ab2e8915c7cbcfe91ea77d20b7cbd94149cbbada957964659ab2d87880344437a35972fbc9dbb2645d2ad7d1781eb3cc3ae5e207c1e3a25325d423d83c700c6676fac00098d2f1c77508f1ac682cc0ccab7b2bd9fe00b15db22cbec1d350f1ccf6de0",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164802Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=3402fbff9ae0c6c48ea4bc5473bd1fe59a72b57d70e43ccd2f2be8ac37008e6af677f466a94290d13ace5be0a4b120aadc7c864d1a3dbcd30c8e97b2b402502303f276f0e513bc777fe2f7110863b8d7a40b9b71585f1daf10651e4f6fb2c3a17923c0e55b4f7fd17f603e85d7872402495af81b6e04900b0db89e89a194aafc958b7065356912b09b629519f7d6eb0e9fda43fa9b9a0890d6fc060a7f21029489ea68f4ff9309b0e5ebab1953f82ab7d69d63711044e28612f2d264e108a28107c76a5e209e4f65867953bf7639bc55f4faf1e4c1e1ded438e152360f82fbf67fd6bff962779bc159f3b4bd1c4021bfa32b8c3502f5c6c930cc5a987013b6bb",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164814Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2a4b6b3ce97be26f76018ca85b95e8cc1005b238959105b84426d3667c2ed864a5232bc3631ca26117939acbb8c12fdfd976ec11a4c94faf8fe1a180d82c72c3cfe98fe5c336f2bf130e01a150c4bf86626a793bbf19dd8338e821277d32d5b99d46109c09bb6fdd1cc6d3ca4b12d40d77355310e25dec35f580339bf619d15d8a811650f19692834d95baa08867eaa626f66eaccd1ee2b18724550bf87e0796c6e80596fc8b2ec7861a74df9448c0186626243586d03bbe9329f9f7cf60ef24d01ada1238dac768bd7f3c49c57f50bf914da3e586141394d9151204eda12de38c542135f1e5c436ec7dbe1abaece8c3083cfa0a2c47a1f793710e3e3367f60",
+            "image_generation_meta": {
+              "variation_idx": 0,
+              "duration_seconds": 41.85361601600016,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025) focam em visuais 4:5 de alta qualidade que mostram a transformação (problema -> solução), com texto sobreposto mínimo e legível. A copy utiliza um gancho emocional que aborda uma dor específica da persona, seguido por uma solução clara e os benefícios, culminando em um CTA direto e específico para agendamento. Autenticidade e clareza são essenciais.",
+          "contexto_landing": {
+            "storybrand_completeness": 1,
+            "storybrand_persona": "Você é uma mulher que ama incondicionalmente sua cachorrinha de pelo longo. Ela é parte da família, sua companheira fiel que ilumina seus dias. Mas, sejamos honestos: o banho em casa é um verdadeiro desafio, não é? Aquele pânico só de pensar em transformar o banheiro numa piscina de pelos e água, o trabalho de secar por horas e ainda não ver o resultado profissional que sua peluda merece. Você quer o melhor para ela, uma pelagem linda e cheirosa, mas não quer sacrificar seu tempo livre, nem sua casa limpa para isso. Você sonha em ter sua amiga impecável, sem stress, sem bagunça e com mais tempo para o que realmente importa: aproveitar a companhia dela. Você deseja a tranquilidade de saber que sua cachorrinha está limpa e bem cuidada, sem precisar se preocupar em ter um exército de limpeza esperando a hora do banho.",
+            "storybrand_dores": [
+              "No fundo, o problema mais evidente que te assombra é a batalha do banho em casa. É a sujeira física que se instala: o banheiro virando uma verdadeira zona de guerra, uma cachoeira de pelos molhados e água por todos os cantos, as paredes respingadas, o chão escorregadio e as toalhas encharcadas. É o cansaço visível de lutar por horas com o secador, tentando em vão alcançar aquele efeito de salão que sua cachorrinha de pelo longo merece. E a frustração de olhar para ela e perceber que, apesar de todo o seu esforço, o resultado profissional, impecável e duradouro que ela merece – e que você tanto sonha – simplesmente não chega. Você quer, desesperadamente, a solução para ter sua peluda sempre limpa, linda e cheirosa, sem todo esse sacrifício, sem estragar seu banheiro e sem bagunçar a sua casa.",
+              "Mas o que realmente te consome por dentro é a angústia de ver o amor incondicional pela sua cachorrinha colidindo com a exaustão e a frustração do banho em casa. É aquela sensação de impotência, de que, por mais que você se esforce e dedique horas, o brilho, a maciez e o alinhamento de salão que sua peluda de pelo longo merece – e que você tanto sonha para ela – simplesmente não são alcançados. Você se sente culpada por adiar o banho, sabe que ela precisa, mas o simples pensamento de transformar seu banheiro em um campo de batalha de pelos e água, perdendo horas limpando, é um peso que rouba sua paz. É o stress de ver seu tempo livre, que você poderia estar dedicando a carinhos e passeios, sendo consumido por uma limpeza sem fim e um resultado mediano. No fundo, é a preocupação constante com a casa, com o cheiro de cachorro molhado que insiste em ficar, os pelos grudados, que te impede de simplesmente relaxar e aproveitar cada abraço, cada momento de aconchego com sua melhor amiga. Você anseia por uma solução que não apenas deixe sua cachorrinha impecável, mas que também te devolva a tranquilidade, o tempo e a certeza de que ela está recebendo o melhor cuidado profissional, sem que isso custe a sua serenidade e a limpeza do seu lar."
+            ],
+            "storybrand_proposta": "No Cantinho do Cão PetShop, nós transformamos o desafio do banho da sua cachorrinha de pelo longo em uma experiência prazerosa e sem preocupações para você. A solução para ter sua companheira sempre linda, cheirosa e com aquela pelagem impecável de salão, sem um único respingo de água ou pelo molhado em seu banheiro, está em nossos serviços especializados. Como fazemos isso? Com foco total em pelagens longas, nossa equipe utiliza técnicas avançadas de banho e secagem, produtos de alta qualidade específicos para não ressecar e manter o brilho natural, além de hidratações profundas e tosas que realçam a beleza da sua peluda. Nós cuidamos de cada detalhe – da remoção suave de nós à escovação que evita o frizz e garante um caimento perfeito. Tudo isso acontece em nosso espaço, cuidadosamente preparado para ser um refúgio de bem-estar para sua cachorrinha. O resultado? Sua melhor amiga volta para casa radiante, com uma pelagem macia, brilhante, cheirosa e perfeitamente alinhada, sem que você precise levantar um dedo. Assim, você recupera seu tempo, mantém sua casa impecável e desfruta da companhia da sua peluda com a certeza de que ela está sempre recebendo o melhor cuidado profissional, sem stress e sem a bagunça do banho caseiro.; Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_autoridade": "Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_beneficios": [
+              "Imagine agora: sua cachorrinha de pelo longo, sua melhor amiga, acabou de chegar do Cantinho do Cão PetShop. Ela entra em casa radiante, com uma pelagem que brilha sob a luz, macia ao toque e com um cheirinho delicioso de banho profissional que perfuma o ambiente. Nada de pelos grudados nos cantos, nada de ressecamento ou frizz. Os pelos estão perfeitamente alinhados, com aquele caimento impecável que você tanto sonhou para ela. E o melhor de tudo? Você a pega no colo para um abraço apertado, sem a menor preocupação com sujeira, pelos molhados ou a necessidade de uma faxina imediata. Seu banheiro está exatamente como você o deixou: limpo, seco e impecável, sem um único respingo de água ou pelo para limpar. Sua casa permanece organizada, sem aquele cheiro persistente de cachorro molhado que antes te tirava a paz. Agora, seu tempo livre é realmente livre. Você pode dedicá-lo a brincadeiras, carinhos, passeios ou simplesmente relaxar ao lado da sua companheira, desfrutando de cada momento sem a sombra do estresse do banho caseiro. Você sente uma paz imensa, sabendo que sua peluda está recebendo o melhor cuidado profissional, exalando saúde e beleza, enquanto você mantém a sua casa um santuário de tranquilidade. É a liberdade de ter o melhor dos dois mundos: uma cachorrinha sempre linda e um lar sempre em ordem, permitindo que o amor e a alegria sejam a única bagunça por aí."
+            ],
+            "storybrand_transformacao": "Você não é mais a mulher que se sente exausta e frustrada com o banho da sua cachorrinha de pelo longo. Agora, você é a dona de pet que, com inteligência e carinho, garante que sua companheira esteja sempre impecável, com a pelagem brilhante, macia e perfeitamente alinhada – aquele resultado de salão que você sempre sonhou. Você se tornou a mulher que desfruta de uma casa limpa e organizada, sem um único pelo molhado ou respingo de água no seu banheiro, e sem aquele cheirinho persistente de cachorro. Sua identidade agora é de uma mulher livre da culpa e do estresse do banho caseiro, que recuperou seu tempo e sua paz, dedicando-o ao que realmente importa: aproveitar cada abraço e cada momento de alegria com sua melhor amiga, sabendo que ela está recebendo o cuidado profissional que merece, e você, a tranquilidade que você merece. Você é a prova viva de que é possível ter uma cachorrinha de pelo longo linda e bem cuidada sem sacrificar a impecabilidade do seu lar ou a sua serenidade.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "E o que acontece se você não mudar essa rotina? Se você continuar a tentar a difícil tarefa de dar banho na sua cachorrinha de pelo longo em casa? Infelizmente, a cena se repetirá: seu banheiro se transformará novamente em um campo de batalha, com pelos molhados grudados por todo lado, água espirrando nas paredes e o chão escorregadio. Você continuará a sacrificar horas preciosas do seu dia, não apenas lavando, mas na exaustiva maratona da secagem, que nunca parece entregar aquele brilho e caimento de salão que você tanto sonha para a pelagem da sua companheira. O resultado? Sua casa continuará com aquele cheirinho de cachorro molhado, você estará exausta e frustrada, e sua peluda, mesmo limpa por um breve momento, não terá o cuidado profissional que evitaria nós, ressecamento e o frizz. Você estará condenada a um ciclo de limpeza sem fim e de resultados medianos, perdendo a tranquilidade de um lar impecável e o tempo que poderia estar dedicando a abraçar e brincar com sua melhor amiga. E o pior: a angústia de saber que sua cachorrinha poderia estar ainda mais linda e confortável, sem que isso custasse sua paz e a organização da sua casa, persistirá."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.instagram.com/cantinhodocaopetshop/?hl=pt",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Sua casa limpa, seu tempo livre. Sua peluda impecável.",
+            "corpo": "Cansada de gastar horas limpando a bagunça do banho da sua cachorrinha de pelo longo? Recupere sua paz e seu tempo! Com nossos pacotes de Banho + Tosa + Hidratação, sua melhor amiga fica com a pelagem de salão, cheirosa e macia, enquanto sua casa permanece um santuário de tranquilidade. Dê a ela o cuidado profissional que merece e a você, a liberdade que precisa. Agende no Cantinho do Cão!",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "Mulher estressada olha para o relógio e para o banheiro caótico pós-banho. Depois, ela relaxa em uma rede com um livro, celular ao lado com a confirmação do agendamento. Por fim, ela e a cachorrinha, com pelo perfeito, brincam felizes no jardim.",
+            "prompt_estado_atual": "A middle-aged woman looking stressed, glancing at her watch and then at a chaotic, wet bathroom, with dog hair everywhere. She looks overwhelmed by the cleanup ahead. The long-haired dog is shaking water off nearby. Emotion: stressed, rushed.",
+            "prompt_estado_intermediario": "The same woman, now looking calm and relieved, resting in a hammock on her porch with a book. A smartphone rests beside her, screen visible showing a booking confirmation for 'Cantinho do Cão PetShop'. Emotion: relief, peace.",
+            "prompt_estado_aspiracional": "The same woman, laughing and joyful, playing fetch with her perfectly groomed, shiny long-haired dog in a beautiful, sunny garden. They are both happy and relaxed, making the most of their free time together. Emotion: happiness, freedom.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_cb01393dd3fa4d6db05640e13172066e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_cb01393dd3fa4d6db05640e13172066e.webp",
+                "labels": [
+                  "Food",
+                  "Smile",
+                  "Ingredient",
+                  "Tableware",
+                  "Spaghetti",
+                  "Recipe",
+                  "Happiness",
+                  "Cooking",
+                  "Eating",
+                  "Food craving"
+                ],
+                "user_description": null
+              }
+            },
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164827Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5206a6b9450525db174f56d1d8e1c84366888c544f5e186cf687e5e07e14c3b47bac3b280c5006a55feb1719bb6695deb54f34efeb2d8b7b2a7061780c02cbdb78716bef2b505da8c46755a1e18f3f7e0c9fb8f4f617c77d430ab6304269798cc13effac7953b0f110364eeb7be74069a0bb10dca001dc4d2c6599ba8642824e4d105052b199abc93e5ac73790539fe6d5c4d23d81a013e0779e48b843e5073f9f980cda8fd8f9f97d00a4bb5c2b0644d7c5f86d0d6bcbee0cc0082b18faa60f16037c1184ed3011b73072647841e009249885e78504fe881bc44127dea325bc9cd07ff57596414bc5a11fae14bf6c8382a545fa018037ef834a8a3a3aad11f1",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164842Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4d3185002aa3a3160f669f5ce9c69ba7a7e068501cf076116c2055bdfb2312cf173fdc9e3600849759278b73835093b3c7bb5d8055b1d43d70f2b66ad5b5a33f466f0df45a71007ac9c4a1fd7c1e27078dc16fb4b40e77de92db0c8d6ac7a9ab604b304d8f2dba6a7b9d6dea9817a96317866966850e88d3f9a096676db5b4fa09326bec85900cdbe0123f1b693d7a45d1d97fda753e3339ab772817696fd38f59b4ff160ace59d0030304091d352b987975421dd2fdb0e8aed0505b5e16fe8b012568fa626d4bef26aa9f1d1cdc7ef31d4342ad8e4c2bbeef602b7e4c94c430f206d398b01aa8f93c8f44e8023308d163966b3cef1d4af75b68ae102f605655",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164855Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=926422a5dde7d965b5508e4d888da46bc9111cd60700916e82b248de9568c056f5e92b570489b60e8470b469527140c4b3b126190dee4d4084fc10ac2151c0e674a19e9fba2c682a9aa95ae291de152facbe1410bd95838ea50c90b652367d0fdc89cb8fab03081f4286328ecda6d3e54332e3e71fc2f72ea227464aa3470b7a8babe5c3ab6a713e35463c74f2e440e4de24e0c9d366cdbc69349b5edd9c7ef637739c242247c32c73b772f76c2860561d2c6be1c771203ddec7e625244a979fe0ff9209c81ce7aaae9764f1eace2d065bdcbefab5f905d841526e30eaf51a89927c123be4a2dbaeac07a684107249c77a36ffaca27350ba2eb3059535c9b38a",
+            "image_generation_meta": {
+              "variation_idx": 1,
+              "duration_seconds": 41.6111998209999,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025) focam em visuais 4:5 de alta qualidade que mostram a transformação (problema -> solução), com texto sobreposto mínimo e legível. A copy utiliza um gancho emocional que aborda uma dor específica da persona, seguido por uma solução clara e os benefícios, culminando em um CTA direto e específico para agendamento. Autenticidade e clareza são essenciais.",
+          "contexto_landing": {
+            "storybrand_completeness": 1,
+            "storybrand_persona": "Você é uma mulher que ama incondicionalmente sua cachorrinha de pelo longo. Ela é parte da família, sua companheira fiel que ilumina seus dias. Mas, sejamos honestos: o banho em casa é um verdadeiro desafio, não é? Aquele pânico só de pensar em transformar o banheiro numa piscina de pelos e água, o trabalho de secar por horas e ainda não ver o resultado profissional que sua peluda merece. Você quer o melhor para ela, uma pelagem linda e cheirosa, mas não quer sacrificar seu tempo livre, nem sua casa limpa para isso. Você sonha em ter sua amiga impecável, sem stress, sem bagunça e com mais tempo para o que realmente importa: aproveitar a companhia dela. Você deseja a tranquilidade de saber que sua cachorrinha está limpa e bem cuidada, sem precisar se preocupar em ter um exército de limpeza esperando a hora do banho.",
+            "storybrand_dores": [
+              "No fundo, o problema mais evidente que te assombra é a batalha do banho em casa. É a sujeira física que se instala: o banheiro virando uma verdadeira zona de guerra, uma cachoeira de pelos molhados e água por todos os cantos, as paredes respingadas, o chão escorregadio e as toalhas encharcadas. É o cansaço visível de lutar por horas com o secador, tentando em vão alcançar aquele efeito de salão que sua cachorrinha de pelo longo merece. E a frustração de olhar para ela e perceber que, apesar de todo o seu esforço, o resultado profissional, impecável e duradouro que ela merece – e que você tanto sonha – simplesmente não chega. Você quer, desesperadamente, a solução para ter sua peluda sempre limpa, linda e cheirosa, sem todo esse sacrifício, sem estragar seu banheiro e sem bagunçar a sua casa.",
+              "Mas o que realmente te consome por dentro é a angústia de ver o amor incondicional pela sua cachorrinha colidindo com a exaustão e a frustração do banho em casa. É aquela sensação de impotência, de que, por mais que você se esforce e dedique horas, o brilho, a maciez e o alinhamento de salão que sua peluda de pelo longo merece – e que você tanto sonha para ela – simplesmente não são alcançados. Você se sente culpada por adiar o banho, sabe que ela precisa, mas o simples pensamento de transformar seu banheiro em um campo de batalha de pelos e água, perdendo horas limpando, é um peso que rouba sua paz. É o stress de ver seu tempo livre, que você poderia estar dedicando a carinhos e passeios, sendo consumido por uma limpeza sem fim e um resultado mediano. No fundo, é a preocupação constante com a casa, com o cheiro de cachorro molhado que insiste em ficar, os pelos grudados, que te impede de simplesmente relaxar e aproveitar cada abraço, cada momento de aconchego com sua melhor amiga. Você anseia por uma solução que não apenas deixe sua cachorrinha impecável, mas que também te devolva a tranquilidade, o tempo e a certeza de que ela está recebendo o melhor cuidado profissional, sem que isso custe a sua serenidade e a limpeza do seu lar."
+            ],
+            "storybrand_proposta": "No Cantinho do Cão PetShop, nós transformamos o desafio do banho da sua cachorrinha de pelo longo em uma experiência prazerosa e sem preocupações para você. A solução para ter sua companheira sempre linda, cheirosa e com aquela pelagem impecável de salão, sem um único respingo de água ou pelo molhado em seu banheiro, está em nossos serviços especializados. Como fazemos isso? Com foco total em pelagens longas, nossa equipe utiliza técnicas avançadas de banho e secagem, produtos de alta qualidade específicos para não ressecar e manter o brilho natural, além de hidratações profundas e tosas que realçam a beleza da sua peluda. Nós cuidamos de cada detalhe – da remoção suave de nós à escovação que evita o frizz e garante um caimento perfeito. Tudo isso acontece em nosso espaço, cuidadosamente preparado para ser um refúgio de bem-estar para sua cachorrinha. O resultado? Sua melhor amiga volta para casa radiante, com uma pelagem macia, brilhante, cheirosa e perfeitamente alinhada, sem que você precise levantar um dedo. Assim, você recupera seu tempo, mantém sua casa impecável e desfruta da companhia da sua peluda com a certeza de que ela está sempre recebendo o melhor cuidado profissional, sem stress e sem a bagunça do banho caseiro.; Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_autoridade": "Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_beneficios": [
+              "Imagine agora: sua cachorrinha de pelo longo, sua melhor amiga, acabou de chegar do Cantinho do Cão PetShop. Ela entra em casa radiante, com uma pelagem que brilha sob a luz, macia ao toque e com um cheirinho delicioso de banho profissional que perfuma o ambiente. Nada de pelos grudados nos cantos, nada de ressecamento ou frizz. Os pelos estão perfeitamente alinhados, com aquele caimento impecável que você tanto sonhou para ela. E o melhor de tudo? Você a pega no colo para um abraço apertado, sem a menor preocupação com sujeira, pelos molhados ou a necessidade de uma faxina imediata. Seu banheiro está exatamente como você o deixou: limpo, seco e impecável, sem um único respingo de água ou pelo para limpar. Sua casa permanece organizada, sem aquele cheiro persistente de cachorro molhado que antes te tirava a paz. Agora, seu tempo livre é realmente livre. Você pode dedicá-lo a brincadeiras, carinhos, passeios ou simplesmente relaxar ao lado da sua companheira, desfrutando de cada momento sem a sombra do estresse do banho caseiro. Você sente uma paz imensa, sabendo que sua peluda está recebendo o melhor cuidado profissional, exalando saúde e beleza, enquanto você mantém a sua casa um santuário de tranquilidade. É a liberdade de ter o melhor dos dois mundos: uma cachorrinha sempre linda e um lar sempre em ordem, permitindo que o amor e a alegria sejam a única bagunça por aí."
+            ],
+            "storybrand_transformacao": "Você não é mais a mulher que se sente exausta e frustrada com o banho da sua cachorrinha de pelo longo. Agora, você é a dona de pet que, com inteligência e carinho, garante que sua companheira esteja sempre impecável, com a pelagem brilhante, macia e perfeitamente alinhada – aquele resultado de salão que você sempre sonhou. Você se tornou a mulher que desfruta de uma casa limpa e organizada, sem um único pelo molhado ou respingo de água no seu banheiro, e sem aquele cheirinho persistente de cachorro. Sua identidade agora é de uma mulher livre da culpa e do estresse do banho caseiro, que recuperou seu tempo e sua paz, dedicando-o ao que realmente importa: aproveitar cada abraço e cada momento de alegria com sua melhor amiga, sabendo que ela está recebendo o cuidado profissional que merece, e você, a tranquilidade que você merece. Você é a prova viva de que é possível ter uma cachorrinha de pelo longo linda e bem cuidada sem sacrificar a impecabilidade do seu lar ou a sua serenidade.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "E o que acontece se você não mudar essa rotina? Se você continuar a tentar a difícil tarefa de dar banho na sua cachorrinha de pelo longo em casa? Infelizmente, a cena se repetirá: seu banheiro se transformará novamente em um campo de batalha, com pelos molhados grudados por todo lado, água espirrando nas paredes e o chão escorregadio. Você continuará a sacrificar horas preciosas do seu dia, não apenas lavando, mas na exaustiva maratona da secagem, que nunca parece entregar aquele brilho e caimento de salão que você tanto sonha para a pelagem da sua companheira. O resultado? Sua casa continuará com aquele cheirinho de cachorro molhado, você estará exausta e frustrada, e sua peluda, mesmo limpa por um breve momento, não terá o cuidado profissional que evitaria nós, ressecamento e o frizz. Você estará condenada a um ciclo de limpeza sem fim e de resultados medianos, perdendo a tranquilidade de um lar impecável e o tempo que poderia estar dedicando a abraçar e brincar com sua melhor amiga. E o pior: a angústia de saber que sua cachorrinha poderia estar ainda mais linda e confortável, sem que isso custasse sua paz e a organização da sua casa, persistirá."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.instagram.com/cantinhodocaopetshop/?hl=pt",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Promoção: Banho, Tosa e Hidratação para pelos longos!",
+            "corpo": "A pelagem da sua melhor amiga merece um tratamento especial! Chega de frizz, nós e resultado mediano em casa. Aproveite nossa promoção e traga sua cachorrinha para o Cantinho do Cão. Com nosso pacote de Banho + Tosa + Hidratação, ela sai com os pelos brilhantes e macios, e você fica livre da bagunça. Garanta o resultado de salão que ela merece e sua casa impecável.",
+            "cta_texto": "Enviar mensagem"
+          },
+          "visual": {
+            "descricao_imagem": "Close-up da pelagem opaca e embaraçada de uma cachorrinha em casa. Em seguida, uma groomer profissional cuidando dela em um pet shop moderno. Por fim, um close-up da mesma cachorrinha com a pelagem perfeita, sendo abraçada por sua dona feliz.",
+            "prompt_estado_atual": "Close-up shot of a sad-looking long-haired dog with a dull, slightly tangled, and damp coat. The background is a dimly lit, messy bathroom floor. Emotion: uncomfortable.",
+            "prompt_estado_intermediario": "A friendly, professional female groomer is gently blow-drying the same long-haired dog in a bright, clean, and modern pet shop environment. The dog looks calm and content. The groomer is smiling. Emotion: caring, professional.",
+            "prompt_estado_aspiracional": "Extreme close-up on the dog's beautiful coat, now incredibly shiny, soft, and perfectly groomed. The shot pulls back to reveal the happy dog being hugged by its equally happy owner in a bright, clean home. The texture of the fur is the hero. Emotion: pride, joy.",
+            "aspect_ratio": "4:5",
+            "reference_assets": {
+              "character": {
+                "id": "ref_cb01393dd3fa4d6db05640e13172066e",
+                "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_cb01393dd3fa4d6db05640e13172066e.webp",
+                "labels": [
+                  "Food",
+                  "Smile",
+                  "Ingredient",
+                  "Tableware",
+                  "Spaghetti",
+                  "Recipe",
+                  "Happiness",
+                  "Cooking",
+                  "Eating",
+                  "Food craving"
+                ],
+                "user_description": null
+              }
+            },
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164908Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9407d56bd79e31a911415fc7d21272779ea39b18561cb171bc529c965856ad914ad7a2fc6200f37cdcf4c187775dd70b15a51774d369a5023c085dc53455b710bec715b6b1eea2553c289b84f5ac111a8120614538216327c621f82f26139b47dcc4b3be1fd551af9734cc94e1b2fbb72eaea4a9aad021b6194f2067808e6eaacaa18c70ee8eb4bee1ff154c2e320c17622df7c26d7c6a124f1293e14fcdb568a60a80ef7c5778903bc7fc803b13c323d631f8b4acdad3cfb8f6c70af67c4f1b367b4aebc5d93b719f9152be30d1fca39ff9d6784f83764e2a9c0742dcd2748cc9bc447db0b0b282eb1be27c0400cfc83494e1b7f8e80a90815172af4b68a32a",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164922Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=036653b85b08659321acc499fb4a7b753ae47d69b2756b5241fe80eb0aaca0243c2166588f2d6718004e814a7a3eff206d3d0130bd6339274d549cf4556be649e39c9ff5361d6de17cd6a9aba6c2ccb3c62440b6d3b132c07ded71898b35bead0dcc5f84f75d552c54c2133d58f65a8e10c348c65f760d09411b1f2e5130c8f313ea485c8bd72f76a23167405b5143e960ab606593c553f4cf06d2ad1a5697d745fdac1503a9e93201fc1639b8be328253a0c5c17cf066574c6e90327664096a0de54f4a4500e16f1e11f4a349c9938ce5d64705017a42dc16db7dfe9dd44ca4ba3da676c9b3ffe459e909477a6a14c01e2b2e72a7165b9bd54caad94ed8e3bc",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164935Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2967736f4f0c1817fc9719d484534935fc5742d3942722dd4345232c86c9d30db96cd54c4bb7add9c6ee08f9b134591bc0c849012f1fee13a271d851844c1888ace91b8da4fc2639a6b46417216b279d10543afbd0750c62162d8acd7540ddfb6b2fc451450d30cb0e508dbb1ffd8c2797849cf3892e817f72e4f07578156ef172660a8ea4feaa0314b19928095af4591c46f2773285f9f9f853d30038f2192796d6aeda81084d4e75491653ae7ac8537a70a22c3427cfefa54aabda4333d95294e1f24305396ecaa6693b1b9113995daa6c8828ebda8526c66fefab9b7445f769663eecd0045c9c81cb991d6437ee74cad73f060ad6ec02aae2c769c727fa0",
+            "image_generation_meta": {
+              "variation_idx": 2,
+              "duration_seconds": 39.88579515799938,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "cta_instagram": "Enviar mensagem",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos de Feed com alta performance (Brasil, 2024–2025) focam em visuais 4:5 de alta qualidade que mostram a transformação (problema -> solução), com texto sobreposto mínimo e legível. A copy utiliza um gancho emocional que aborda uma dor específica da persona, seguido por uma solução clara e os benefícios, culminando em um CTA direto e específico para agendamento. Autenticidade e clareza são essenciais.",
+          "contexto_landing": {
+            "storybrand_completeness": 1,
+            "storybrand_persona": "Você é uma mulher que ama incondicionalmente sua cachorrinha de pelo longo. Ela é parte da família, sua companheira fiel que ilumina seus dias. Mas, sejamos honestos: o banho em casa é um verdadeiro desafio, não é? Aquele pânico só de pensar em transformar o banheiro numa piscina de pelos e água, o trabalho de secar por horas e ainda não ver o resultado profissional que sua peluda merece. Você quer o melhor para ela, uma pelagem linda e cheirosa, mas não quer sacrificar seu tempo livre, nem sua casa limpa para isso. Você sonha em ter sua amiga impecável, sem stress, sem bagunça e com mais tempo para o que realmente importa: aproveitar a companhia dela. Você deseja a tranquilidade de saber que sua cachorrinha está limpa e bem cuidada, sem precisar se preocupar em ter um exército de limpeza esperando a hora do banho.",
+            "storybrand_dores": [
+              "No fundo, o problema mais evidente que te assombra é a batalha do banho em casa. É a sujeira física que se instala: o banheiro virando uma verdadeira zona de guerra, uma cachoeira de pelos molhados e água por todos os cantos, as paredes respingadas, o chão escorregadio e as toalhas encharcadas. É o cansaço visível de lutar por horas com o secador, tentando em vão alcançar aquele efeito de salão que sua cachorrinha de pelo longo merece. E a frustração de olhar para ela e perceber que, apesar de todo o seu esforço, o resultado profissional, impecável e duradouro que ela merece – e que você tanto sonha – simplesmente não chega. Você quer, desesperadamente, a solução para ter sua peluda sempre limpa, linda e cheirosa, sem todo esse sacrifício, sem estragar seu banheiro e sem bagunçar a sua casa.",
+              "Mas o que realmente te consome por dentro é a angústia de ver o amor incondicional pela sua cachorrinha colidindo com a exaustão e a frustração do banho em casa. É aquela sensação de impotência, de que, por mais que você se esforce e dedique horas, o brilho, a maciez e o alinhamento de salão que sua peluda de pelo longo merece – e que você tanto sonha para ela – simplesmente não são alcançados. Você se sente culpada por adiar o banho, sabe que ela precisa, mas o simples pensamento de transformar seu banheiro em um campo de batalha de pelos e água, perdendo horas limpando, é um peso que rouba sua paz. É o stress de ver seu tempo livre, que você poderia estar dedicando a carinhos e passeios, sendo consumido por uma limpeza sem fim e um resultado mediano. No fundo, é a preocupação constante com a casa, com o cheiro de cachorro molhado que insiste em ficar, os pelos grudados, que te impede de simplesmente relaxar e aproveitar cada abraço, cada momento de aconchego com sua melhor amiga. Você anseia por uma solução que não apenas deixe sua cachorrinha impecável, mas que também te devolva a tranquilidade, o tempo e a certeza de que ela está recebendo o melhor cuidado profissional, sem que isso custe a sua serenidade e a limpeza do seu lar."
+            ],
+            "storybrand_proposta": "No Cantinho do Cão PetShop, nós transformamos o desafio do banho da sua cachorrinha de pelo longo em uma experiência prazerosa e sem preocupações para você. A solução para ter sua companheira sempre linda, cheirosa e com aquela pelagem impecável de salão, sem um único respingo de água ou pelo molhado em seu banheiro, está em nossos serviços especializados. Como fazemos isso? Com foco total em pelagens longas, nossa equipe utiliza técnicas avançadas de banho e secagem, produtos de alta qualidade específicos para não ressecar e manter o brilho natural, além de hidratações profundas e tosas que realçam a beleza da sua peluda. Nós cuidamos de cada detalhe – da remoção suave de nós à escovação que evita o frizz e garante um caimento perfeito. Tudo isso acontece em nosso espaço, cuidadosamente preparado para ser um refúgio de bem-estar para sua cachorrinha. O resultado? Sua melhor amiga volta para casa radiante, com uma pelagem macia, brilhante, cheirosa e perfeitamente alinhada, sem que você precise levantar um dedo. Assim, você recupera seu tempo, mantém sua casa impecável e desfruta da companhia da sua peluda com a certeza de que ela está sempre recebendo o melhor cuidado profissional, sem stress e sem a bagunça do banho caseiro.; Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_autoridade": "Sabemos o quanto você se esforça para dar o melhor para sua cachorrinha, e entendemos perfeitamente a frustração de tentar o banho em casa. Vimos essa cena muitas vezes: o banheiro transformado em um caos, o cansaço que bate ao secar por horas e, no fim, aquela sensação de que o resultado poderia ser muito melhor, com o brilho e alinhamento que sua peluda de pelo longo realmente merece. Você não está sozinha nessa batalha. Nós do Cantinho do Cão PetShop estamos aqui para que você não precise mais passar por isso. Com anos de experiência e um carinho especial por pelagens longas como a da sua companheira, desenvolvemos um método que garante não só a limpeza profunda, mas também o brilho, a maciez e o alinhamento que ela merece. Nossa equipe é especializada em cuidar de cada detalhe, usando produtos de alta qualidade e técnicas profissionais que evitam nós, ressecamento e o temido \"cheirinho de molhado\". Mais do que isso, temos um espaço pensado para ser um verdadeiro spa para sua peluda, onde ela será mimada e sairá impecável, sem que você precise levantar um dedo – ou uma toalha. Para ter sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar, é simples: 1. **Agende um banho ou pacote completo:** Escolha o melhor dia e horário para a sua peluda brilhar. 2. **Traga sua companheira para o Cantinho do Cão:** Deixe-a conosco para uma experiência de cuidado e carinho profissional. 3. **Relaxe e aproveite:** Busque sua cachorrinha limpa, cheirosa e radiante, enquanto seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela. Assim, você ganha tempo, paz de espírito e a certeza de que sua melhor amiga está recebendo o tratamento que ela merece, e você pode aproveitar cada momento juntas, sem nenhuma preocupação com a bagunça em casa.",
+            "storybrand_beneficios": [
+              "Imagine agora: sua cachorrinha de pelo longo, sua melhor amiga, acabou de chegar do Cantinho do Cão PetShop. Ela entra em casa radiante, com uma pelagem que brilha sob a luz, macia ao toque e com um cheirinho delicioso de banho profissional que perfuma o ambiente. Nada de pelos grudados nos cantos, nada de ressecamento ou frizz. Os pelos estão perfeitamente alinhados, com aquele caimento impecável que você tanto sonhou para ela. E o melhor de tudo? Você a pega no colo para um abraço apertado, sem a menor preocupação com sujeira, pelos molhados ou a necessidade de uma faxina imediata. Seu banheiro está exatamente como você o deixou: limpo, seco e impecável, sem um único respingo de água ou pelo para limpar. Sua casa permanece organizada, sem aquele cheiro persistente de cachorro molhado que antes te tirava a paz. Agora, seu tempo livre é realmente livre. Você pode dedicá-lo a brincadeiras, carinhos, passeios ou simplesmente relaxar ao lado da sua companheira, desfrutando de cada momento sem a sombra do estresse do banho caseiro. Você sente uma paz imensa, sabendo que sua peluda está recebendo o melhor cuidado profissional, exalando saúde e beleza, enquanto você mantém a sua casa um santuário de tranquilidade. É a liberdade de ter o melhor dos dois mundos: uma cachorrinha sempre linda e um lar sempre em ordem, permitindo que o amor e a alegria sejam a única bagunça por aí."
+            ],
+            "storybrand_transformacao": "Você não é mais a mulher que se sente exausta e frustrada com o banho da sua cachorrinha de pelo longo. Agora, você é a dona de pet que, com inteligência e carinho, garante que sua companheira esteja sempre impecável, com a pelagem brilhante, macia e perfeitamente alinhada – aquele resultado de salão que você sempre sonhou. Você se tornou a mulher que desfruta de uma casa limpa e organizada, sem um único pelo molhado ou respingo de água no seu banheiro, e sem aquele cheirinho persistente de cachorro. Sua identidade agora é de uma mulher livre da culpa e do estresse do banho caseiro, que recuperou seu tempo e sua paz, dedicando-o ao que realmente importa: aproveitar cada abraço e cada momento de alegria com sua melhor amiga, sabendo que ela está recebendo o cuidado profissional que merece, e você, a tranquilidade que você merece. Você é a prova viva de que é possível ter uma cachorrinha de pelo longo linda e bem cuidada sem sacrificar a impecabilidade do seu lar ou a sua serenidade.",
+            "storybrand_cta_principal": "Enviar mensagem",
+            "storybrand_urgencia": [
+              "E o que acontece se você não mudar essa rotina? Se você continuar a tentar a difícil tarefa de dar banho na sua cachorrinha de pelo longo em casa? Infelizmente, a cena se repetirá: seu banheiro se transformará novamente em um campo de batalha, com pelos molhados grudados por todo lado, água espirrando nas paredes e o chão escorregadio. Você continuará a sacrificar horas preciosas do seu dia, não apenas lavando, mas na exaustiva maratona da secagem, que nunca parece entregar aquele brilho e caimento de salão que você tanto sonha para a pelagem da sua companheira. O resultado? Sua casa continuará com aquele cheirinho de cachorro molhado, você estará exausta e frustrada, e sua peluda, mesmo limpa por um breve momento, não terá o cuidado profissional que evitaria nós, ressecamento e o frizz. Você estará condenada a um ciclo de limpeza sem fim e de resultados medianos, perdendo a tranquilidade de um lar impecável e o tempo que poderia estar dedicando a abraçar e brincar com sua melhor amiga. E o pior: a angústia de saber que sua cachorrinha poderia estar ainda mais linda e confortável, sem que isso custasse sua paz e a organização da sua casa, persistirá."
+            ]
+          }
+        }
+      ]
+    },
+    "source": "validator"
+  },
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "The final creative package has been reviewed and is fully approved. All variations are consistent, adhere to the campaign's objectives and StoryBrand strategy, and meet all compliance requirements. The process is complete, and the assets are ready."
+  },
+  "image_assets_review": {
+    "grade": "pass",
+    "issues": [],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164747Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0cfd05ef7549ff14f4db854a66c82e84109f9274e083acb3799e7f8b08ede44a2a896d571a6392104eb12dab8fd974634db957a9677a90341053877ac43203bb0ec37edc3b79ce3f9561f9e086557bca1fb9b6bb6f629a0f6d1e2f292d1999a0f5854bc73f879039eaeac0b6bf8b587ac837ef48f4fd10e99cf19102f6f6748854bef7cd75418670a885057e51bd38013ff7b28064b7b1b3300a18d2798ab2e8915c7cbcfe91ea77d20b7cbd94149cbbada957964659ab2d87880344437a35972fbc9dbb2645d2ad7d1781eb3cc3ae5e207c1e3a25325d423d83c700c6676fac00098d2f1c77508f1ac682cc0ccab7b2bd9fe00b15db22cbec1d350f1ccf6de0"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164802Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=3402fbff9ae0c6c48ea4bc5473bd1fe59a72b57d70e43ccd2f2be8ac37008e6af677f466a94290d13ace5be0a4b120aadc7c864d1a3dbcd30c8e97b2b402502303f276f0e513bc777fe2f7110863b8d7a40b9b71585f1daf10651e4f6fb2c3a17923c0e55b4f7fd17f603e85d7872402495af81b6e04900b0db89e89a194aafc958b7065356912b09b629519f7d6eb0e9fda43fa9b9a0890d6fc060a7f21029489ea68f4ff9309b0e5ebab1953f82ab7d69d63711044e28612f2d264e108a28107c76a5e209e4f65867953bf7639bc55f4faf1e4c1e1ded438e152360f82fbf67fd6bff962779bc159f3b4bd1c4021bfa32b8c3502f5c6c930cc5a987013b6bb"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164814Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2a4b6b3ce97be26f76018ca85b95e8cc1005b238959105b84426d3667c2ed864a5232bc3631ca26117939acbb8c12fdfd976ec11a4c94faf8fe1a180d82c72c3cfe98fe5c336f2bf130e01a150c4bf86626a793bbf19dd8338e821277d32d5b99d46109c09bb6fdd1cc6d3ca4b12d40d77355310e25dec35f580339bf619d15d8a811650f19692834d95baa08867eaa626f66eaccd1ee2b18724550bf87e0796c6e80596fc8b2ec7861a74df9448c0186626243586d03bbe9329f9f7cf60ef24d01ada1238dac768bd7f3c49c57f50bf914da3e586141394d9151204eda12de38c542135f1e5c436ec7dbe1abaece8c3083cfa0a2c47a1f793710e3e3367f60"
+          },
+          "meta": {
+            "variation_idx": 0,
+            "duration_seconds": 41.85361601600016,
+            "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+            "reference_character_used": true
+          }
+        },
+        "character_reference_used": true,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "despair",
+          "prompt_estado_intermediario": "determined",
+          "prompt_estado_aspiracional": "joyful"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 1,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164827Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5206a6b9450525db174f56d1d8e1c84366888c544f5e186cf687e5e07e14c3b47bac3b280c5006a55feb1719bb6695deb54f34efeb2d8b7b2a7061780c02cbdb78716bef2b505da8c46755a1e18f3f7e0c9fb8f4f617c77d430ab6304269798cc13effac7953b0f110364eeb7be74069a0bb10dca001dc4d2c6599ba8642824e4d105052b199abc93e5ac73790539fe6d5c4d23d81a013e0779e48b843e5073f9f980cda8fd8f9f97d00a4bb5c2b0644d7c5f86d0d6bcbee0cc0082b18faa60f16037c1184ed3011b73072647841e009249885e78504fe881bc44127dea325bc9cd07ff57596414bc5a11fae14bf6c8382a545fa018037ef834a8a3a3aad11f1"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164842Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4d3185002aa3a3160f669f5ce9c69ba7a7e068501cf076116c2055bdfb2312cf173fdc9e3600849759278b73835093b3c7bb5d8055b1d43d70f2b66ad5b5a33f466f0df45a71007ac9c4a1fd7c1e27078dc16fb4b40e77de92db0c8d6ac7a9ab604b304d8f2dba6a7b9d6dea9817a96317866966850e88d3f9a096676db5b4fa09326bec85900cdbe0123f1b693d7a45d1d97fda753e3339ab772817696fd38f59b4ff160ace59d0030304091d352b987975421dd2fdb0e8aed0505b5e16fe8b012568fa626d4bef26aa9f1d1cdc7ef31d4342ad8e4c2bbeef602b7e4c94c430f206d398b01aa8f93c8f44e8023308d163966b3cef1d4af75b68ae102f605655"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164855Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=926422a5dde7d965b5508e4d888da46bc9111cd60700916e82b248de9568c056f5e92b570489b60e8470b469527140c4b3b126190dee4d4084fc10ac2151c0e674a19e9fba2c682a9aa95ae291de152facbe1410bd95838ea50c90b652367d0fdc89cb8fab03081f4286328ecda6d3e54332e3e71fc2f72ea227464aa3470b7a8babe5c3ab6a713e35463c74f2e440e4de24e0c9d366cdbc69349b5edd9c7ef637739c242247c32c73b772f76c2860561d2c6be1c771203ddec7e625244a979fe0ff9209c81ce7aaae9764f1eace2d065bdcbefab5f905d841526e30eaf51a89927c123be4a2dbaeac07a684107249c77a36ffaca27350ba2eb3059535c9b38a"
+          },
+          "meta": {
+            "variation_idx": 1,
+            "duration_seconds": 41.6111998209999,
+            "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+            "reference_character_used": true
+          }
+        },
+        "character_reference_used": true,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "stressed",
+          "prompt_estado_intermediario": "relief",
+          "prompt_estado_aspiracional": "happiness"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 2,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164908Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9407d56bd79e31a911415fc7d21272779ea39b18561cb171bc529c965856ad914ad7a2fc6200f37cdcf4c187775dd70b15a51774d369a5023c085dc53455b710bec715b6b1eea2553c289b84f5ac111a8120614538216327c621f82f26139b47dcc4b3be1fd551af9734cc94e1b2fbb72eaea4a9aad021b6194f2067808e6eaacaa18c70ee8eb4bee1ff154c2e320c17622df7c26d7c6a124f1293e14fcdb568a60a80ef7c5778903bc7fc803b13c323d631f8b4acdad3cfb8f6c70af67c4f1b367b4aebc5d93b719f9152be30d1fca39ff9d6784f83764e2a9c0742dcd2748cc9bc447db0b0b282eb1be27c0400cfc83494e1b7f8e80a90815172af4b68a32a"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164922Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=036653b85b08659321acc499fb4a7b753ae47d69b2756b5241fe80eb0aaca0243c2166588f2d6718004e814a7a3eff206d3d0130bd6339274d549cf4556be649e39c9ff5361d6de17cd6a9aba6c2ccb3c62440b6d3b132c07ded71898b35bead0dcc5f84f75d552c54c2133d58f65a8e10c348c65f760d09411b1f2e5130c8f313ea485c8bd72f76a23167405b5143e960ab606593c553f4cf06d2ad1a5697d745fdac1503a9e93201fc1639b8be328253a0c5c17cf066574c6e90327664096a0de54f4a4500e16f1e11f4a349c9938ce5d64705017a42dc16db7dfe9dd44ca4ba3da676c9b3ffe459e909477a6a14c01e2b2e72a7165b9bd54caad94ed8e3bc"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164935Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2967736f4f0c1817fc9719d484534935fc5742d3942722dd4345232c86c9d30db96cd54c4bb7add9c6ee08f9b134591bc0c849012f1fee13a271d851844c1888ace91b8da4fc2639a6b46417216b279d10543afbd0750c62162d8acd7540ddfb6b2fc451450d30cb0e508dbb1ffd8c2797849cf3892e817f72e4f07578156ef172660a8ea4feaa0314b19928095af4591c46f2773285f9f9f853d30038f2192796d6aeda81084d4e75491653ae7ac8537a70a22c3427cfefa54aabda4333d95294e1f24305396ecaa6693b1b9113995daa6c8828ebda8526c66fefab9b7445f769663eecd0045c9c81cb991d6437ee74cad73f060ad6ec02aae2c769c727fa0"
+          },
+          "meta": {
+            "variation_idx": 2,
+            "duration_seconds": 39.88579515799938,
+            "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+            "reference_character_used": true
+          }
+        },
+        "character_reference_used": true,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "uncomfortable",
+          "prompt_estado_intermediario": "caring",
+          "prompt_estado_aspiracional": "pride"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "Cantinho do Cão PetShop",
+          "o_que_a_empresa_faz": "Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro.",
+          "sexo_cliente_alvo": "feminino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-26T16:29:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-26T16:29:39Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-26T16:29:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 826
+      },
+      "timestamp_utc": "2025-10-26T16:29:44Z",
+      "duration_ms": 4743
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:29:44Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala diretamente com o público feminino, demonstrando uma empatia profunda pelas suas dores e desejos. A descrição do desafio do banho em casa e o sonho de ter a cachorrinha limpa sem bagunça estão perfeitamente alinhados com a proposta da empresa de ajudar a \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É específico, não genérico, e o tom é inspirador, estratégico e acionável ao guiar a leitora para a solução que a empresa oferece. Conecta-se emocionalmente com a cliente e o problema.",
+      "timestamp_utc": "2025-10-26T16:29:51Z",
+      "duration_ms": 7385
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala diretamente com o público feminino, demonstrando uma empatia profunda pelas suas dores e desejos. A descrição do desafio do banho em casa e o sonho de ter a cachorrinha limpa sem bagunça estão perfeitamente alinhados com a proposta da empresa de ajudar a \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É específico, não genérico, e o tom é inspirador, estratégico e acionável ao guiar a leitora para a solução que a empresa oferece. Conecta-se emocionalmente com a cliente e o problema.",
+      "timestamp_utc": "2025-10-26T16:29:51Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:29:51Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-26T16:29:51Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 1029
+      },
+      "timestamp_utc": "2025-10-26T16:30:00Z",
+      "duration_ms": 8708
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:30:00Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Excelente! O texto mergulha profundamente na dor da cliente, usando uma linguagem que evoca empatia genuína e é claramente direcionada ao público feminino. A descrição vívida do caos do banho em casa (pelos, água, cheiro, cansaço) cria uma conexão imediata e estabelece perfeitamente o problema que a empresa se propõe a resolver: \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É altamente específico, evitando generalizações, e o tom é estratégico ao maximizar a frustração, preparando a cliente para a solução como um verdadeiro alívio, inspirando o desejo por essa transformação.",
+      "timestamp_utc": "2025-10-26T16:30:07Z",
+      "duration_ms": 7206
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Excelente! O texto mergulha profundamente na dor da cliente, usando uma linguagem que evoca empatia genuína e é claramente direcionada ao público feminino. A descrição vívida do caos do banho em casa (pelos, água, cheiro, cansaço) cria uma conexão imediata e estabelece perfeitamente o problema que a empresa se propõe a resolver: \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É altamente específico, evitando generalizações, e o tom é estratégico ao maximizar a frustração, preparando a cliente para a solução como um verdadeiro alívio, inspirando o desejo por essa transformação.",
+      "timestamp_utc": "2025-10-26T16:30:07Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:30:07Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-26T16:30:07Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 582
+      },
+      "timestamp_utc": "2025-10-26T16:30:17Z",
+      "duration_ms": 9706
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:30:17Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto da seção inciting_incident_1 é excelente! Fala com clareza para o público feminino, demonstrando empatia real ao descrever a exaustão e a frustração com o banho em casa. A transformação desejada (\"ter minha companheira impecável, sem todo esse sacrifício e bagunça na minha casa\") está diretamente ligada à proposta da empresa de ajudar mulheres a manterem seus cães limpos sem sujar o banheiro. É específico e não genérico, usando detalhes como \"pelos molhados de todos os cantos\" e \"brilho sedoso e a pelagem perfeitamente alinhada\". O tom é inspirador e estratégico, preparando a cliente para buscar uma solução que a empresa oferece, tornando-o acionável.",
+      "timestamp_utc": "2025-10-26T16:30:23Z",
+      "duration_ms": 6282
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto da seção inciting_incident_1 é excelente! Fala com clareza para o público feminino, demonstrando empatia real ao descrever a exaustão e a frustração com o banho em casa. A transformação desejada (\"ter minha companheira impecável, sem todo esse sacrifício e bagunça na minha casa\") está diretamente ligada à proposta da empresa de ajudar mulheres a manterem seus cães limpos sem sujar o banheiro. É específico e não genérico, usando detalhes como \"pelos molhados de todos os cantos\" e \"brilho sedoso e a pelagem perfeitamente alinhada\". O tom é inspirador e estratégico, preparando a cliente para buscar uma solução que a empresa oferece, tornando-o acionável.",
+      "timestamp_utc": "2025-10-26T16:30:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:30:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-26T16:30:23Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 854
+      },
+      "timestamp_utc": "2025-10-26T16:30:34Z",
+      "duration_ms": 10484
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:30:34Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excepcional! Ele se aprofunda na dor e nos desafios específicos que mulheres donas de cães de pelagem longa enfrentam. A descrição da \"angústia que começa dias antes\", do \"planejamento mental da logística\", do \"ciclo\" de adiar o banho e da \"drenagem de energia\" é incrivelmente empática e ressoa diretamente com o público feminino. A conexão com a proposta da empresa é perfeita: todos os problemas listados (pelagem opaca, nós, cheiro, bagunça, sujar a roupa) são diretamente alvos da solução de \"manterem seus câes limpos sem precisarem sujar todo o banheiro\". O texto é altamente específico, detalhando as frustrações de forma vívida, e o tom é estrategicamente potente, construindo uma necessidade clara por uma solução que liberte a cliente desse \"peso\" e \"stress\", preparando-a para o que a empresa oferece. Muito bom!",
+      "timestamp_utc": "2025-10-26T16:30:42Z",
+      "duration_ms": 7802
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excepcional! Ele se aprofunda na dor e nos desafios específicos que mulheres donas de cães de pelagem longa enfrentam. A descrição da \"angústia que começa dias antes\", do \"planejamento mental da logística\", do \"ciclo\" de adiar o banho e da \"drenagem de energia\" é incrivelmente empática e ressoa diretamente com o público feminino. A conexão com a proposta da empresa é perfeita: todos os problemas listados (pelagem opaca, nós, cheiro, bagunça, sujar a roupa) são diretamente alvos da solução de \"manterem seus câes limpos sem precisarem sujar todo o banheiro\". O texto é altamente específico, detalhando as frustrações de forma vívida, e o tom é estrategicamente potente, construindo uma necessidade clara por uma solução que liberte a cliente desse \"peso\" e \"stress\", preparando-a para o que a empresa oferece. Muito bom!",
+      "timestamp_utc": "2025-10-26T16:30:42Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:30:42Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-26T16:30:42Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 655
+      },
+      "timestamp_utc": "2025-10-26T16:30:53Z",
+      "duration_ms": 11548
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:30:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto da seção inciting_incident_2 é excelente! Ele se conecta profundamente com o público feminino, descrevendo a frustração tanto com o resultado estético da pelagem (\"sem aquele caimento perfeito, talvez com um frizz aqui, um volume ali\") quanto com a bagunça no ambiente (\"chão do banheiro ainda molhado, as paredes respingadas, os pelos teimando em grudar nos cantos\"). A frase \"Eu não mereço essa bagunça e meu amorzinho merece ter aquele brilho, aquela maciez e alinhamento que só um profissional pode dar\" encapsula perfeitamente a transformação que a empresa oferece: um cão limpo e bem cuidado sem sujar o banheiro. É altamente específico, não genérico, e o tom é estratégico ao levar a cliente a uma certeza que impulsiona a busca por uma solução profissional, tornando-o inspirador e acionável.",
+      "timestamp_utc": "2025-10-26T16:30:59Z",
+      "duration_ms": 5389
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto da seção inciting_incident_2 é excelente! Ele se conecta profundamente com o público feminino, descrevendo a frustração tanto com o resultado estético da pelagem (\"sem aquele caimento perfeito, talvez com um frizz aqui, um volume ali\") quanto com a bagunça no ambiente (\"chão do banheiro ainda molhado, as paredes respingadas, os pelos teimando em grudar nos cantos\"). A frase \"Eu não mereço essa bagunça e meu amorzinho merece ter aquele brilho, aquela maciez e alinhamento que só um profissional pode dar\" encapsula perfeitamente a transformação que a empresa oferece: um cão limpo e bem cuidado sem sujar o banheiro. É altamente específico, não genérico, e o tom é estratégico ao levar a cliente a uma certeza que impulsiona a busca por uma solução profissional, tornando-o inspirador e acionável.",
+      "timestamp_utc": "2025-10-26T16:30:59Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:30:59Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-26T16:30:59Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 704
+      },
+      "timestamp_utc": "2025-10-26T16:31:09Z",
+      "duration_ms": 10166
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:31:09Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e desejos, como o amor pela cachorrinha, o desejo por uma pelagem perfeita e a aversão à bagunça e ao cansaço do banho em casa. A transformação desejada – \"ter sua casa impecável e seu tempo livre preservado, enquanto sua companheira recebe o cuidado profissional que ela merece\" – está diretamente ligada à proposta da empresa de ajudar a \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É altamente específico ao descrever a \"praça de guerra de pelos e água\" e o \"cansaço exaustivo\", não sendo nem um pouco genérico. O tom é inspirador, estratégico e acionável, pois eleva as frustrações da cliente e aponta para uma solução que traz paz e alegria, preparando-a para a oferta da empresa. Muito bem feito!",
+      "timestamp_utc": "2025-10-26T16:31:16Z",
+      "duration_ms": 6757
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e desejos, como o amor pela cachorrinha, o desejo por uma pelagem perfeita e a aversão à bagunça e ao cansaço do banho em casa. A transformação desejada – \"ter sua casa impecável e seu tempo livre preservado, enquanto sua companheira recebe o cuidado profissional que ela merece\" – está diretamente ligada à proposta da empresa de ajudar a \"manterem seus cães limpos sem precisarem sujar todo o banheiro\". É altamente específico ao descrever a \"praça de guerra de pelos e água\" e o \"cansaço exaustivo\", não sendo nem um pouco genérico. O tom é inspirador, estratégico e acionável, pois eleva as frustrações da cliente e aponta para uma solução que traz paz e alegria, preparando-a para a oferta da empresa. Muito bem feito!",
+      "timestamp_utc": "2025-10-26T16:31:16Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:31:16Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-26T16:31:16Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 802
+      },
+      "timestamp_utc": "2025-10-26T16:31:22Z",
+      "duration_ms": 6218
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:31:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e frustrações do banho caseiro. A descrição detalhada da \"zona de guerra\" no banheiro, dos \"pelos molhados e água por todos os cantos\" e do \"cansaço de lutar por horas com o secador\" é extremamente específica e ressoa com a experiência da cliente. A transformação desejada – \"ter sua peluda sempre limpa, linda e cheirosa, sem todo esse sacrifício, sem estragar seu banheiro e sem bagunçar a sua casa\" – está diretamente ligada à proposta da empresa de ajudar mulheres a manterem seus cães limpos sem precisarem sujar o banheiro. O tom é estratégico ao amplificar a dor e o desejo, preparando o terreno para a solução de forma inspiradora e acionável. Não é vago, é muito concreto e emocional.",
+      "timestamp_utc": "2025-10-26T16:31:28Z",
+      "duration_ms": 6148
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e frustrações do banho caseiro. A descrição detalhada da \"zona de guerra\" no banheiro, dos \"pelos molhados e água por todos os cantos\" e do \"cansaço de lutar por horas com o secador\" é extremamente específica e ressoa com a experiência da cliente. A transformação desejada – \"ter sua peluda sempre limpa, linda e cheirosa, sem todo esse sacrifício, sem estragar seu banheiro e sem bagunçar a sua casa\" – está diretamente ligada à proposta da empresa de ajudar mulheres a manterem seus cães limpos sem precisarem sujar o banheiro. O tom é estratégico ao amplificar a dor e o desejo, preparando o terreno para a solução de forma inspiradora e acionável. Não é vago, é muito concreto e emocional.",
+      "timestamp_utc": "2025-10-26T16:31:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:31:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-26T16:31:28Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 1252
+      },
+      "timestamp_utc": "2025-10-26T16:31:37Z",
+      "duration_ms": 9147
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:31:37Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele penetra profundamente nas dores internas do público feminino, abordando a \"angústia\", \"exaustão\", \"frustração\", \"impotência\", \"culpa\" e o \"stress\" que o banho caseiro da cachorrinha de pelo longo gera. A conexão com a proposta da empresa é impecável: a solução almejada é \"devolver a tranquilidade, o tempo e a certeza de que ela está recebendo o melhor cuidado profissional, sem que isso custe a sua serenidade e a limpeza do seu lar\" - o que casa perfeitamente com \"manterem seus câes limpos sem precisarem sujar todo o banheiro\". É altamente específico, utilizando metáforas como \"campo de batalha de pelos e água\" e detalhando a frustração com o \"resultado mediano\" versus o \"brilho, maciez e alinhamento de salão\". O tom é inspirador e estratégico, elevando a dor a um ponto onde a solução se torna um alívio essencial, tornando-o acionável. Muito bem feito!",
+      "timestamp_utc": "2025-10-26T16:31:46Z",
+      "duration_ms": 8509
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele penetra profundamente nas dores internas do público feminino, abordando a \"angústia\", \"exaustão\", \"frustração\", \"impotência\", \"culpa\" e o \"stress\" que o banho caseiro da cachorrinha de pelo longo gera. A conexão com a proposta da empresa é impecável: a solução almejada é \"devolver a tranquilidade, o tempo e a certeza de que ela está recebendo o melhor cuidado profissional, sem que isso custe a sua serenidade e a limpeza do seu lar\" - o que casa perfeitamente com \"manterem seus câes limpos sem precisarem sujar todo o banheiro\". É altamente específico, utilizando metáforas como \"campo de batalha de pelos e água\" e detalhando a frustração com o \"resultado mediano\" versus o \"brilho, maciez e alinhamento de salão\". O tom é inspirador e estratégico, elevando a dor a um ponto onde a solução se torna um alívio essencial, tornando-o acionável. Muito bem feito!",
+      "timestamp_utc": "2025-10-26T16:31:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:31:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-26T16:31:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 1065
+      },
+      "timestamp_utc": "2025-10-26T16:31:54Z",
+      "duration_ms": 8896
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:31:54Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala com uma clareza e empatia notáveis para o público feminino, validando profundamente a experiência da mulher que ama sua cachorrinha de pelo longo, mas se sente sobrecarregada pelos desafios do banho em casa. A transformação desejada – uma casa limpa, tempo precioso e paz para desfrutar da companhia da peluda – está diretamente alinhada com a proposta da empresa: \"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro.\" A descrição é rica em detalhes específicos (\"banheiros respingados, pisos escorregadios, cheiro de cachorro molhado\") e não é de forma alguma vaga ou genérica. O tom é inspirador e estratégico, construindo uma indignação justa que leva à necessidade de uma solução, tornando-o altamente acionável.",
+      "timestamp_utc": "2025-10-26T16:32:01Z",
+      "duration_ms": 6529
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala com uma clareza e empatia notáveis para o público feminino, validando profundamente a experiência da mulher que ama sua cachorrinha de pelo longo, mas se sente sobrecarregada pelos desafios do banho em casa. A transformação desejada – uma casa limpa, tempo precioso e paz para desfrutar da companhia da peluda – está diretamente alinhada com a proposta da empresa: \"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro.\" A descrição é rica em detalhes específicos (\"banheiros respingados, pisos escorregadios, cheiro de cachorro molhado\") e não é de forma alguma vaga ou genérica. O tom é inspirador e estratégico, construindo uma indignação justa que leva à necessidade de uma solução, tornando-o altamente acionável.",
+      "timestamp_utc": "2025-10-26T16:32:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:32:01Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-26T16:32:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 1832
+      },
+      "timestamp_utc": "2025-10-26T16:32:11Z",
+      "duration_ms": 10325
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:32:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e frustrações do banho em casa, como o \"banheiro transformado em um caos\" e o \"cansaço que bate ao secar por horas\". A transformação prometida – \"sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar\" e \"seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela\" – está diretamente alinhada com a proposta da empresa de ajudar mulheres donas de cães com pelagem longa a manterem seus cães limpos sem sujar todo o banheiro. O texto é altamente específico, mencionando \"pelagens longas\", \"brilho, a maciez e o alinhamento\", \"evitam nós, ressecamento e o temido 'cheirinho de molhado'\", e \"spa para sua peluda\", o que o afasta de ser genérico. O tom é inspirador, estratégico (validando a dor e oferecendo uma solução clara com autoridade) e acionável, com um plano simples de 3 passos para o agendamento. Tudo está perfeitamente alinhado.",
+      "timestamp_utc": "2025-10-26T16:32:17Z",
+      "duration_ms": 6145
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala diretamente com o público feminino, demonstrando uma empatia profunda pelas dores e frustrações do banho em casa, como o \"banheiro transformado em um caos\" e o \"cansaço que bate ao secar por horas\". A transformação prometida – \"sua cachorrinha sempre linda, cheirosa e com a pelagem impecável, sem stress e sem bagunça no seu lar\" e \"seu banheiro permanece impecável e você tem mais tempo para aproveitar os abraços dela\" – está diretamente alinhada com a proposta da empresa de ajudar mulheres donas de cães com pelagem longa a manterem seus cães limpos sem sujar todo o banheiro. O texto é altamente específico, mencionando \"pelagens longas\", \"brilho, a maciez e o alinhamento\", \"evitam nós, ressecamento e o temido 'cheirinho de molhado'\", e \"spa para sua peluda\", o que o afasta de ser genérico. O tom é inspirador, estratégico (validando a dor e oferecendo uma solução clara com autoridade) e acionável, com um plano simples de 3 passos para o agendamento. Tudo está perfeitamente alinhado.",
+      "timestamp_utc": "2025-10-26T16:32:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:32:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-26T16:32:17Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 1246
+      },
+      "timestamp_utc": "2025-10-26T16:32:26Z",
+      "duration_ms": 8161
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:32:26Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala diretamente com o público feminino, demonstrando empatia real pela dor do banho caseiro da cachorrinha de pelo longo e o desejo por um resultado profissional sem bagunça. A transformação (\"ter sua companheira sempre linda, cheirosa e com aquela pelagem impecável de salão, sem um único respingo de água ou pelo molhado em seu banheiro\") está diretamente ligada à proposta da empresa. É altamente específico, detalhando as técnicas, produtos e o ambiente, afastando-se de qualquer generalização. O tom é inspirador ao prometer \"experiência prazerosa e sem preocupações\" e \"recupera seu tempo, mantém sua casa impecável\", e estratégico ao mostrar claramente o valor agregado, tornando-o acionável.",
+      "timestamp_utc": "2025-10-26T16:32:32Z",
+      "duration_ms": 6646
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala diretamente com o público feminino, demonstrando empatia real pela dor do banho caseiro da cachorrinha de pelo longo e o desejo por um resultado profissional sem bagunça. A transformação (\"ter sua companheira sempre linda, cheirosa e com aquela pelagem impecável de salão, sem um único respingo de água ou pelo molhado em seu banheiro\") está diretamente ligada à proposta da empresa. É altamente específico, detalhando as técnicas, produtos e o ambiente, afastando-se de qualquer generalização. O tom é inspirador ao prometer \"experiência prazerosa e sem preocupações\" e \"recupera seu tempo, mantém sua casa impecável\", e estratégico ao mostrar claramente o valor agregado, tornando-o acionável.",
+      "timestamp_utc": "2025-10-26T16:32:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:32:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-26T16:32:32Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1580
+      },
+      "timestamp_utc": "2025-10-26T16:32:38Z",
+      "duration_ms": 5640
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:32:38Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala com clareza para o público feminino, demonstrando uma empatia profunda ao abordar a \"rotina de banho em casa\" como algo a ser transformado, focando na eliminação da \"bagunça ou stress no seu lar\". A transformação proposta está intrinsecamente ligada à promessa da empresa de ajudar mulheres a \"manterem seus câes limpos sem precisarem sujar todo o banheiro\", reiterada em cada passo com frases como \"fim da bagunça e o início da tranquilidade\", \"sem preocupações com pelos molhados ou sujeira em casa\" e \"seu banheiro e sua casa permanecem impecáveis, sem a necessidade de uma faxina pós-banho\". O texto é altamente específico, mencionando \"pelagens longas\", \"pacotes de banho, tosa e hidratação\", \"produtos específicos\", e os benefícios detalhados para a pelagem (\"macia, brilhante, cheirosa e perfeitamente alinhada\"), não sendo vago ou genérico. O tom é inspirador, estratégico ao guiar a cliente por um plano simples de três passos, e claramente acionável. Muito bem elaborado!",
+      "timestamp_utc": "2025-10-26T16:32:46Z",
+      "duration_ms": 8500
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente! Fala com clareza para o público feminino, demonstrando uma empatia profunda ao abordar a \"rotina de banho em casa\" como algo a ser transformado, focando na eliminação da \"bagunça ou stress no seu lar\". A transformação proposta está intrinsecamente ligada à promessa da empresa de ajudar mulheres a \"manterem seus câes limpos sem precisarem sujar todo o banheiro\", reiterada em cada passo com frases como \"fim da bagunça e o início da tranquilidade\", \"sem preocupações com pelos molhados ou sujeira em casa\" e \"seu banheiro e sua casa permanecem impecáveis, sem a necessidade de uma faxina pós-banho\". O texto é altamente específico, mencionando \"pelagens longas\", \"pacotes de banho, tosa e hidratação\", \"produtos específicos\", e os benefícios detalhados para a pelagem (\"macia, brilhante, cheirosa e perfeitamente alinhada\"), não sendo vago ou genérico. O tom é inspirador, estratégico ao guiar a cliente por um plano simples de três passos, e claramente acionável. Muito bem elaborado!",
+      "timestamp_utc": "2025-10-26T16:32:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:32:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-26T16:32:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 717
+      },
+      "timestamp_utc": "2025-10-26T16:32:53Z",
+      "duration_ms": 6119
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:32:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_action é excelente! Ele fala com clareza e empatia para o público feminino, atacando diretamente a dor da \"bagunça no seu banheiro e cansaço com a secagem\" e o desejo de \"desfrutar apenas dos momentos bons\". A transformação é ligada de forma direta e poderosa à proposta da empresa, enfatizando o resultado duplo: \"Garanta a ela o brilho, a maciez e o cheirinho de salão, enquanto você desfruta de sua casa impecável e de mais tempo livre\". O texto é altamente específico, mencionando os serviços (Banho + Tosa + Hidratação) e os canais de contato (Instagram, WhatsApp), rejeitando qualquer generalização. O tom é inspirador ao prometer paz e momentos sem preocupações, estratégico ao reiterar a proposta de valor e altamente acionável com chamadas claras para agendar ou buscar mais informações. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:32:59Z",
+      "duration_ms": 6102
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_action é excelente! Ele fala com clareza e empatia para o público feminino, atacando diretamente a dor da \"bagunça no seu banheiro e cansaço com a secagem\" e o desejo de \"desfrutar apenas dos momentos bons\". A transformação é ligada de forma direta e poderosa à proposta da empresa, enfatizando o resultado duplo: \"Garanta a ela o brilho, a maciez e o cheirinho de salão, enquanto você desfruta de sua casa impecável e de mais tempo livre\". O texto é altamente específico, mencionando os serviços (Banho + Tosa + Hidratação) e os canais de contato (Instagram, WhatsApp), rejeitando qualquer generalização. O tom é inspirador ao prometer paz e momentos sem preocupações, estratégico ao reiterar a proposta de valor e altamente acionável com chamadas claras para agendar ou buscar mais informações. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:32:59Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:32:59Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-26T16:32:59Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1168
+      },
+      "timestamp_utc": "2025-10-26T16:33:09Z",
+      "duration_ms": 10714
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:33:09Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala com clareza e empatia para o público feminino, descrevendo vividamente as consequências de não mudar a rotina do banho em casa. A conexão com a proposta da empresa (\"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro\") é fortíssima, ao detalhar o \"banheiro se transformará novamente em um campo de batalha\", \"pelos molhados grudados\", \"água espirrando\", \"chão escorregadio\" e a \"casa continuará com aquele cheirinho de cachorro molhado\". O texto é altamente específico, mencionando a \"maratona da secagem\", o \"brilho e caimento de salão\" que não acontece, e a falta de \"cuidado profissional que evitaria nós, ressecamento e o frizz\". O tom é estratégico ao amplificar a dor da frustração, exaustão e angústia, e inspirador ao ressaltar a perda da \"tranquilidade de um lar impecável e o tempo que poderia estar dedicando a abraçar e brincar com sua melhor amiga\", tornando a busca por uma solução (a empresa) acionável. Não é vago ou genérico.",
+      "timestamp_utc": "2025-10-26T16:33:17Z",
+      "duration_ms": 7566
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente! Ele fala com clareza e empatia para o público feminino, descrevendo vividamente as consequências de não mudar a rotina do banho em casa. A conexão com a proposta da empresa (\"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro\") é fortíssima, ao detalhar o \"banheiro se transformará novamente em um campo de batalha\", \"pelos molhados grudados\", \"água espirrando\", \"chão escorregadio\" e a \"casa continuará com aquele cheirinho de cachorro molhado\". O texto é altamente específico, mencionando a \"maratona da secagem\", o \"brilho e caimento de salão\" que não acontece, e a falta de \"cuidado profissional que evitaria nós, ressecamento e o frizz\". O tom é estratégico ao amplificar a dor da frustração, exaustão e angústia, e inspirador ao ressaltar a perda da \"tranquilidade de um lar impecável e o tempo que poderia estar dedicando a abraçar e brincar com sua melhor amiga\", tornando a busca por uma solução (a empresa) acionável. Não é vago ou genérico.",
+      "timestamp_utc": "2025-10-26T16:33:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:33:17Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-26T16:33:17Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 1393
+      },
+      "timestamp_utc": "2025-10-26T16:33:29Z",
+      "duration_ms": 11926
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:33:29Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_success é excelente! Fala com clareza e empatia para o público feminino, descrevendo vividamente o cenário de sucesso que é a resolução das dores anteriores. A transformação é ligada diretamente à proposta da empresa, pois o cenário ideal inclui a cachorrinha limpa e linda (\"pelagem que brilha, macia ao toque, cheirinho delicioso, caimento impecável\") E o principal, o banheiro e a casa permanecem impecáveis (\"sem a menor preocupação com sujeira, pelos molhados\", \"Seu banheiro está exatamente como você o deixou: limpo, seco e impecável\", \"Sua casa permanece organizada, sem aquele cheiro persistente de cachorro molhado\"). O texto é altamente específico, detalhando os benefícios para a pelagem e para o lar, rejeitando respostas vagas ou genéricas. O tom é inspirador, estratégico ao pintar um quadro desejável do futuro, e acionável ao fazer a cliente ansiar por essa realidade. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:33:37Z",
+      "duration_ms": 7944
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_success é excelente! Fala com clareza e empatia para o público feminino, descrevendo vividamente o cenário de sucesso que é a resolução das dores anteriores. A transformação é ligada diretamente à proposta da empresa, pois o cenário ideal inclui a cachorrinha limpa e linda (\"pelagem que brilha, macia ao toque, cheirinho delicioso, caimento impecável\") E o principal, o banheiro e a casa permanecem impecáveis (\"sem a menor preocupação com sujeira, pelos molhados\", \"Seu banheiro está exatamente como você o deixou: limpo, seco e impecável\", \"Sua casa permanece organizada, sem aquele cheiro persistente de cachorro molhado\"). O texto é altamente específico, detalhando os benefícios para a pelagem e para o lar, rejeitando respostas vagas ou genéricas. O tom é inspirador, estratégico ao pintar um quadro desejável do futuro, e acionável ao fazer a cliente ansiar por essa realidade. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:33:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:33:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-26T16:33:37Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 996
+      },
+      "timestamp_utc": "2025-10-26T16:33:44Z",
+      "duration_ms": 6999
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-26T16:33:44Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_identity é excelente! Ele fala com uma clareza e empatia notáveis para o público feminino, descrevendo vividamente a transformação da cliente de uma situação de exaustão e frustração para uma de inteligência, carinho, impecabilidade e paz. A nova identidade está intrinsecamente ligada à proposta da empresa, pois o texto enfatiza a pelagem impecável e o resultado de salão, **sem a sujeira no banheiro e o cheiro persistente de cachorro**, alinhando-se perfeitamente com \"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro.\". A linguagem é específica (\"pelagem brilhante, macia e perfeitamente alinhada\", \"sem um único pelo molhado ou respingo de água no seu banheiro\"), não sendo vaga ou genérica. O tom é inspirador, estratégico ao delinear a nova e desejável identidade, e acionável por criar um forte desejo de alcançar essa nova realidade. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:33:50Z",
+      "duration_ms": 6461
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto da seção storybrand_identity é excelente! Ele fala com uma clareza e empatia notáveis para o público feminino, descrevendo vividamente a transformação da cliente de uma situação de exaustão e frustração para uma de inteligência, carinho, impecabilidade e paz. A nova identidade está intrinsecamente ligada à proposta da empresa, pois o texto enfatiza a pelagem impecável e o resultado de salão, **sem a sujeira no banheiro e o cheiro persistente de cachorro**, alinhando-se perfeitamente com \"Ajudamos mulheres donas de câes com pelagem longa a manterem seus câes limpos sem precisarem sujar todo o banheiro.\". A linguagem é específica (\"pelagem brilhante, macia e perfeitamente alinhada\", \"sem um único pelo molhado ou respingo de água no seu banheiro\"), não sendo vaga ou genérica. O tom é inspirador, estratégico ao delinear a nova e desejável identidade, e acionável por criar um forte desejo de alcançar essa nova realidade. Perfeitamente alinhado com todos os critérios.",
+      "timestamp_utc": "2025-10-26T16:33:50Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "compiler",
+      "status": "started",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success",
+          "storybrand_identity"
+        ]
+      },
+      "timestamp_utc": "2025-10-26T16:33:52Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "compiler",
+      "status": "completed",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "text_length": 16701
+      },
+      "timestamp_utc": "2025-10-26T16:33:52Z",
+      "duration_ms": 1
+    }
+  ],
+  "storybrand_gate_metrics": {
+    "score_obtained": null,
+    "score_threshold": 0.6,
+    "decision_path": "fallback",
+    "timestamp_utc": "2025-10-26T16:29:32Z",
+    "is_forced_fallback": true,
+    "debug_flag_active": true
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": true,
+    "decision_path": "fallback",
+    "trigger_reason": "forced",
+    "timestamp_utc": "2025-10-26T16:29:32Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "final_assembly_guard_pre",
+      "status": "passed",
+      "timestamp_utc": "2025-10-26T16:45:10.604635+00:00",
+      "detail": "1 VISUAL_DRAFT aprovados."
+    },
+    {
+      "stage": "final_assembly_normalizer",
+      "status": "pending",
+      "timestamp_utc": "2025-10-26T16:46:29.908755+00:00",
+      "detail": "Payload normalizado com dual-write e reference_assets injetados."
+    },
+    {
+      "stage": "deterministic_final_validation",
+      "status": "pass",
+      "timestamp_utc": "2025-10-26T16:46:29.918503+00:00",
+      "issue_count": 0
+    },
+    {
+      "stage": "image_assets_agent",
+      "status": "pass",
+      "timestamp_utc": "2025-10-26T16:49:35.576877+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164747Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0cfd05ef7549ff14f4db854a66c82e84109f9274e083acb3799e7f8b08ede44a2a896d571a6392104eb12dab8fd974634db957a9677a90341053877ac43203bb0ec37edc3b79ce3f9561f9e086557bca1fb9b6bb6f629a0f6d1e2f292d1999a0f5854bc73f879039eaeac0b6bf8b587ac837ef48f4fd10e99cf19102f6f6748854bef7cd75418670a885057e51bd38013ff7b28064b7b1b3300a18d2798ab2e8915c7cbcfe91ea77d20b7cbd94149cbbada957964659ab2d87880344437a35972fbc9dbb2645d2ad7d1781eb3cc3ae5e207c1e3a25325d423d83c700c6676fac00098d2f1c77508f1ac682cc0ccab7b2bd9fe00b15db22cbec1d350f1ccf6de0"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164802Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=3402fbff9ae0c6c48ea4bc5473bd1fe59a72b57d70e43ccd2f2be8ac37008e6af677f466a94290d13ace5be0a4b120aadc7c864d1a3dbcd30c8e97b2b402502303f276f0e513bc777fe2f7110863b8d7a40b9b71585f1daf10651e4f6fb2c3a17923c0e55b4f7fd17f603e85d7872402495af81b6e04900b0db89e89a194aafc958b7065356912b09b629519f7d6eb0e9fda43fa9b9a0890d6fc060a7f21029489ea68f4ff9309b0e5ebab1953f82ab7d69d63711044e28612f2d264e108a28107c76a5e209e4f65867953bf7639bc55f4faf1e4c1e1ded438e152360f82fbf67fd6bff962779bc159f3b4bd1c4021bfa32b8c3502f5c6c930cc5a987013b6bb"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164814Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2a4b6b3ce97be26f76018ca85b95e8cc1005b238959105b84426d3667c2ed864a5232bc3631ca26117939acbb8c12fdfd976ec11a4c94faf8fe1a180d82c72c3cfe98fe5c336f2bf130e01a150c4bf86626a793bbf19dd8338e821277d32d5b99d46109c09bb6fdd1cc6d3ca4b12d40d77355310e25dec35f580339bf619d15d8a811650f19692834d95baa08867eaa626f66eaccd1ee2b18724550bf87e0796c6e80596fc8b2ec7861a74df9448c0186626243586d03bbe9329f9f7cf60ef24d01ada1238dac768bd7f3c49c57f50bf914da3e586141394d9151204eda12de38c542135f1e5c436ec7dbe1abaece8c3083cfa0a2c47a1f793710e3e3367f60"
+            },
+            "meta": {
+              "variation_idx": 0,
+              "duration_seconds": 41.85361601600016,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "character_reference_used": true,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "despair",
+            "prompt_estado_intermediario": "determined",
+            "prompt_estado_aspiracional": "joyful"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 1,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164827Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=5206a6b9450525db174f56d1d8e1c84366888c544f5e186cf687e5e07e14c3b47bac3b280c5006a55feb1719bb6695deb54f34efeb2d8b7b2a7061780c02cbdb78716bef2b505da8c46755a1e18f3f7e0c9fb8f4f617c77d430ab6304269798cc13effac7953b0f110364eeb7be74069a0bb10dca001dc4d2c6599ba8642824e4d105052b199abc93e5ac73790539fe6d5c4d23d81a013e0779e48b843e5073f9f980cda8fd8f9f97d00a4bb5c2b0644d7c5f86d0d6bcbee0cc0082b18faa60f16037c1184ed3011b73072647841e009249885e78504fe881bc44127dea325bc9cd07ff57596414bc5a11fae14bf6c8382a545fa018037ef834a8a3a3aad11f1"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164842Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4d3185002aa3a3160f669f5ce9c69ba7a7e068501cf076116c2055bdfb2312cf173fdc9e3600849759278b73835093b3c7bb5d8055b1d43d70f2b66ad5b5a33f466f0df45a71007ac9c4a1fd7c1e27078dc16fb4b40e77de92db0c8d6ac7a9ab604b304d8f2dba6a7b9d6dea9817a96317866966850e88d3f9a096676db5b4fa09326bec85900cdbe0123f1b693d7a45d1d97fda753e3339ab772817696fd38f59b4ff160ace59d0030304091d352b987975421dd2fdb0e8aed0505b5e16fe8b012568fa626d4bef26aa9f1d1cdc7ef31d4342ad8e4c2bbeef602b7e4c94c430f206d398b01aa8f93c8f44e8023308d163966b3cef1d4af75b68ae102f605655"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164855Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=926422a5dde7d965b5508e4d888da46bc9111cd60700916e82b248de9568c056f5e92b570489b60e8470b469527140c4b3b126190dee4d4084fc10ac2151c0e674a19e9fba2c682a9aa95ae291de152facbe1410bd95838ea50c90b652367d0fdc89cb8fab03081f4286328ecda6d3e54332e3e71fc2f72ea227464aa3470b7a8babe5c3ab6a713e35463c74f2e440e4de24e0c9d366cdbc69349b5edd9c7ef637739c242247c32c73b772f76c2860561d2c6be1c771203ddec7e625244a979fe0ff9209c81ce7aaae9764f1eace2d065bdcbefab5f905d841526e30eaf51a89927c123be4a2dbaeac07a684107249c77a36ffaca27350ba2eb3059535c9b38a"
+            },
+            "meta": {
+              "variation_idx": 1,
+              "duration_seconds": 41.6111998209999,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "character_reference_used": true,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "stressed",
+            "prompt_estado_intermediario": "relief",
+            "prompt_estado_aspiracional": "happiness"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 2,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164908Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=9407d56bd79e31a911415fc7d21272779ea39b18561cb171bc529c965856ad914ad7a2fc6200f37cdcf4c187775dd70b15a51774d369a5023c085dc53455b710bec715b6b1eea2553c289b84f5ac111a8120614538216327c621f82f26139b47dcc4b3be1fd551af9734cc94e1b2fbb72eaea4a9aad021b6194f2067808e6eaacaa18c70ee8eb4bee1ff154c2e320c17622df7c26d7c6a124f1293e14fcdb568a60a80ef7c5778903bc7fc803b13c323d631f8b4acdad3cfb8f6c70af67c4f1b367b4aebc5d93b719f9152be30d1fca39ff9d6784f83764e2a9c0742dcd2748cc9bc447db0b0b282eb1be27c0400cfc83494e1b7f8e80a90815172af4b68a32a"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164922Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=036653b85b08659321acc499fb4a7b753ae47d69b2756b5241fe80eb0aaca0243c2166588f2d6718004e814a7a3eff206d3d0130bd6339274d549cf4556be649e39c9ff5361d6de17cd6a9aba6c2ccb3c62440b6d3b132c07ded71898b35bead0dcc5f84f75d552c54c2133d58f65a8e10c348c65f760d09411b1f2e5130c8f313ea485c8bd72f76a23167405b5143e960ab606593c553f4cf06d2ad1a5697d745fdac1503a9e93201fc1639b8be328253a0c5c17cf066574c6e90327664096a0de54f4a4500e16f1e11f4a349c9938ce5d64705017a42dc16db7dfe9dd44ca4ba3da676c9b3ffe459e909477a6a14c01e2b2e72a7165b9bd54caad94ed8e3bc"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251026%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251026T164935Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=a2967736f4f0c1817fc9719d484534935fc5742d3942722dd4345232c86c9d30db96cd54c4bb7add9c6ee08f9b134591bc0c849012f1fee13a271d851844c1888ace91b8da4fc2639a6b46417216b279d10543afbd0750c62162d8acd7540ddfb6b2fc451450d30cb0e508dbb1ffd8c2797849cf3892e817f72e4f07578156ef172660a8ea4feaa0314b19928095af4591c46f2773285f9f9f853d30038f2192796d6aeda81084d4e75491653ae7ac8537a70a22c3427cfefa54aabda4333d95294e1f24305396ecaa6693b1b9113995daa6c8828ebda8526c66fefab9b7445f769663eecd0045c9c81cb991d6437ee74cad73f060ad6ec02aae2c769c727fa0"
+            },
+            "meta": {
+              "variation_idx": 2,
+              "duration_seconds": 39.88579515799938,
+              "reference_character_id": "ref_cb01393dd3fa4d6db05640e13172066e",
+              "reference_character_used": true
+            }
+          },
+          "character_reference_used": true,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "uncomfortable",
+            "prompt_estado_intermediario": "caring",
+            "prompt_estado_aspiracional": "pride"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "reference_images": {
+    "character": {
+      "id": "ref_cb01393dd3fa4d6db05640e13172066e",
+      "type": "character",
+      "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_cb01393dd3fa4d6db05640e13172066e.webp",
+      "labels": [
+        "Food",
+        "Smile",
+        "Ingredient",
+        "Tableware",
+        "Spaghetti",
+        "Recipe",
+        "Happiness",
+        "Cooking",
+        "Eating",
+        "Food craving"
+      ],
+      "safe_search_flags": {
+        "adult": "VERY_UNLIKELY",
+        "violence": "VERY_UNLIKELY",
+        "racy": "UNLIKELY",
+        "medical": "VERY_UNLIKELY",
+        "spoof": "VERY_UNLIKELY"
+      },
+      "user_description": null,
+      "uploaded_at": "2025-10-26T16:29:07.031505+00:00",
+      "signed_url_expires_at": "2025-10-27T16:29:07.031505+00:00",
+      "signed_url_ttl_seconds": 86400
+    }
+  },
+  "reference_images_present": true,
+  "storybrand_sections_saved_path": "artifacts/storybrand/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d.json",
+  "storybrand_sections_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/ffa6fb0c-e029-436d-90c6-ea8eb50dd33d/storybrand_sections.json",
+  "storybrand_sections_present": true,
+  "image_signed_url_ttl_seconds": 86400
+}

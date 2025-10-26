@@ -119,15 +119,51 @@ function buildContext(raw: unknown): ContextInfo {
   return "";
 }
 
-function extractHostname(url?: string): string {
+function normalizeHandleSegment(segment: string): string {
+  if (!segment) {
+    return "";
+  }
+  const cleaned = segment.replace(/[-_]+/g, " ").trim();
+  if (!cleaned) {
+    return "";
+  }
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
+function resolveBrandLabel(variation?: AdVariation): string {
+  if (!variation) {
+    return "";
+  }
+
+  const namedCompany = (variation.nome_empresa ?? "").trim();
+  if (namedCompany) {
+    return namedCompany;
+  }
+
+  const url = (variation.landing_page_url ?? "").trim();
   if (!url) {
     return "";
   }
+
   try {
-    const { hostname } = new URL(url);
-    return hostname.replace(/^www\./, "");
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace(/^www\./, "");
+
+    if (!hostname) {
+      return "";
+    }
+
+    const socialHosts = new Set(["instagram.com", "facebook.com", "linktr.ee", "m.facebook.com"]);
+    if (!socialHosts.has(hostname)) {
+      return hostname;
+    }
+
+    const pathname = parsed.pathname.replace(/\/+$/, "");
+    const segments = pathname.split("/").filter(Boolean);
+    const candidate = normalizeHandleSegment(segments.at(-1) ?? "");
+    return candidate || hostname;
   } catch (error) {
-    console.warn("Não foi possível extrair domínio de landing_page_url", error);
+    console.warn("Não foi possível interpretar landing_page_url", error);
     return "";
   }
 }
@@ -139,6 +175,7 @@ function sanitizeVariation(raw: unknown): AdVariation | null {
 
   const copy = buildCopy(raw.copy);
   const visual = buildVisual(raw.visual);
+  const companyName = coerceString(raw.nome_empresa);
 
   return {
     landing_page_url: coerceString(raw.landing_page_url),
@@ -149,6 +186,7 @@ function sanitizeVariation(raw: unknown): AdVariation | null {
     fluxo: coerceString(raw.fluxo),
     referencia_padroes: coerceString(raw.referencia_padroes),
     contexto_landing: buildContext(raw.contexto_landing),
+    nome_empresa: companyName || undefined,
   };
 }
 
@@ -255,22 +293,22 @@ function ImageCarousel({
               onError={() => onImageError(currentIndex)}
             />
             {currentIndex === 0 && Boolean(headline?.trim()) && (
-              <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] bg-gradient-to-b from-black/70 via-black/40 to-transparent px-5 pb-6 pt-9">
-                <p className="text-base font-semibold leading-snug text-white line-clamp-2 drop-shadow">
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] max-w-[70%] bg-gradient-to-b from-black/75 via-black/40 to-transparent pb-10 pl-6 pr-8 pt-12">
+                <p className="text-xl font-bold leading-tight tracking-tight text-white drop-shadow line-clamp-3 sm:text-2xl sm:leading-tight sm:line-clamp-none">
                   {headline}
                 </p>
               </div>
             )}
             {currentIndex === 1 && Boolean(companyLabel?.trim()) && (
-              <div className="pointer-events-none absolute left-4 top-14 z-10 rounded-full border border-border/60 bg-background/85 px-4 py-1 text-xs font-medium text-foreground/85 shadow-sm backdrop-blur">
+              <div className="pointer-events-none absolute left-5 top-16 z-10 rounded-full border border-border/50 bg-background/85 px-4 py-1.5 text-sm font-semibold text-foreground/90 shadow-md backdrop-blur">
                 {companyLabel}
               </div>
             )}
             {currentIndex === 2 && Boolean(resolvedCta) && (
-              <div className="absolute bottom-5 left-1/2 z-20 w-full max-w-[min(190px,80%)] -translate-x-1/2 px-4 sm:left-auto sm:right-5 sm:max-w-none sm:translate-x-0 sm:px-0">
+              <div className="absolute bottom-5 left-1/2 z-30 w-full max-w-[220px] -translate-x-1/2 px-4 sm:bottom-6 sm:left-auto sm:right-6 sm:w-auto sm:max-w-[220px] sm:translate-x-0 sm:px-0">
                 <Button
                   size="sm"
-                  className="w-full justify-center shadow-lg sm:w-auto"
+                  className="w-full justify-center shadow-xl sm:w-auto"
                   aria-label={`Chamada para ação: ${resolvedCta}`}
                   title={resolvedCta}
                 >
@@ -529,10 +567,7 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
   const variationImages = useMemo(() => getVariationImages(activeVariation), [activeVariation]);
   const aspectRatioClass = getAspectRatioClass(activeVariation?.visual.aspect_ratio);
   const hasImageError = imageErrors.get(`${currentVariation}-${currentImageIndex}`) ?? false;
-  const companyLabel = useMemo(
-    () => extractHostname(activeVariation?.landing_page_url),
-    [activeVariation?.landing_page_url],
-  );
+  const companyLabel = useMemo(() => resolveBrandLabel(activeVariation), [activeVariation]);
 
   useEffect(() => {
     if (isOpen) {

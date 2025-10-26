@@ -28,4 +28,5 @@ export interface AdVariation {
   fluxo: string;
   referencia_padroes: string;
   contexto_landing: ContextInfo;
+  nome_empresa?: string;
 }
