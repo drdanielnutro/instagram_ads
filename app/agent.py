@@ -538,7 +538,14 @@ class ImageAssetsAgent(BaseAgent):
                 parsed, parsed_value = try_parse_json_string(raw_delivery)
                 if not parsed:
                     parsed_value = json.loads(raw_delivery)
-                variations = parsed_value
+                raw_delivery = parsed_value
+
+            if isinstance(raw_delivery, dict):
+                maybe_variations = raw_delivery.get("variations")
+                if isinstance(maybe_variations, list):
+                    variations = maybe_variations
+                else:
+                    raise TypeError("Estrutura inesperada em final_code_delivery (dict sem 'variations')")
             elif isinstance(raw_delivery, list):
                 variations = raw_delivery
             else:

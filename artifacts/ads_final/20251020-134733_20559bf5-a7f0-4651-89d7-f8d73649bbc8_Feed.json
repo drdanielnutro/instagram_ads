@@ -1,0 +1,212 @@
+[
+  {
+    "landing_page_url": "https://www.mgpesca.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Preço Imperdível: Colete Salva-Vidas Certificado!",
+      "corpo": "Sua segurança na pescaria não tem preço, mas economizar é bom demais! Chega de arriscar com colete velho. Aproveite nossa promoção especial e garanta seu colete salva-vidas certificado por um valor que cabe no seu bolso. Pesque com tranquilidade e a certeza de ter feito um ótimo negócio.",
+      "cta_texto": "Comprar agora"
+    },
+    "visual": {
+      "descricao_imagem": "Uma sequência de três cenas mostrando um pescador de meia-idade fazendo uma compra inteligente. 1) O pescador, com expressão preocupada, olha para seu colete salva-vidas velho e depois para a carteira, calculando o custo de um novo. 2) No mesmo cenário, ele olha para um smartphone com uma expressão de alívio e surpresa ao ver a promoção de coletes certificados no site da MG Pesca. 3) O pescador, agora radiante e vestindo o colete azul novo, pesca com um sorriso de satisfação, simbolizando a felicidade de ter garantido segurança com economia.",
+      "prompt_estado_atual": "A middle-aged man with strong facial features, wearing fishing attire, sits in a small boat on a lake under an overcast sky. He holds a faded, old life vest in one hand and looks at his wallet in the other with a deep expression of financial worry. His posture is tense, conveying the stress of a difficult purchasing decision. Emotion: worried.",
+      "prompt_estado_intermediario": "The same middle-aged man in the boat. The lighting is getting brighter. He is now looking intently at a smartphone, his face illuminated by the screen which shows a promotional offer for certified life vests on the MG Pesca website. A look of genuine surprise and relief replaces his worry. The old life vest lies forgotten beside him. Emotion: relieved.",
+      "prompt_estado_aspiracional": "The same middle-aged man, now beaming with satisfaction on a bright, sunny day. He wears a brand new, modern, bright blue certified life vest (Labels: Blue, Recreation, Leisure, Vacation, Adventure) that fits perfectly. He is actively fishing, smiling confidently, embodying the success of a smart purchase that brought both safety and savings. Emotion: satisfied.",
+      "aspect_ratio": "4:5",
+      "reference_assets": {
+        "character": {
+          "id": "ref_19d061d72e0247cc92a45b658f545308",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+          "labels": [
+            "Blue",
+            "Sleeve",
+            "Collar",
+            "Button",
+            "Formal wear",
+            "Textile",
+            "Dress shirt",
+            "Pocket",
+            "Facial hair",
+            "Cuff"
+          ],
+          "user_description": null
+        },
+        "product": {
+          "id": "ref_36f88207333540ab9c01127815db1d0e",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+          "labels": [
+            "Blue",
+            "Recreation",
+            "Leisure",
+            "Vacation",
+            "Adventure",
+            "Water sport",
+            "Windsport"
+          ],
+          "user_description": null
+        }
+      }
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+    "contexto_landing": {
+      "storybrand_completeness": 1.0,
+      "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+      "storybrand_dores": [
+        "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+        "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+      ],
+      "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_beneficios": [
+        "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+      ],
+      "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+      "storybrand_cta_principal": "Comprar agora",
+      "storybrand_urgencia": [
+        "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://www.mgpesca.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Chega de Risco! Pesque com Paz de Espírito.",
+      "corpo": "Aquela pulga atrás da orelha toda vez que o barco balança... Acabe com isso hoje. Um colete salva-vidas certificado não é luxo, é a sua tranquilidade. Na MG Pesca, você troca seu equipamento antigo por um novo, seguro e com preço justo. Volte a focar só na fisgada.",
+      "cta_texto": "Comprar agora"
+    },
+    "visual": {
+      "descricao_imagem": "Uma jornada emocional em três atos, do medo à serenidade. 1) Um pescador em seu barco, com uma expressão de ansiedade profunda, tocando seu colete salva-vidas velho e desgastado, claramente inseguro. 2) O mesmo pescador, com um olhar focado e sério, lendo as especificações e a certificação de um novo colete no site da MG Pesca em seu celular. 3) Um close-up do pescador, que agora veste o colete novo, sorrindo com os olhos fechados, em paz e completamente relaxado, desfrutando do momento.",
+      "prompt_estado_atual": "A middle-aged man with strong facial features sits anxiously in a fishing boat. The sky is grey and the atmosphere is tense. He looks down at his old, visibly worn-out life vest, his hand clutching it with a look of deep-seated fear and vulnerability. His whole body language screams insecurity. Emotion: anxious.",
+      "prompt_estado_intermediario": "The same fisherman, still in the boat. He holds a smartphone and his expression is now one of focused concentration and resolve. He is carefully reading the safety certifications and product details of a new life vest on the MG Pesca website. He is making an informed, life-affirming decision. The old vest is nowhere to be seen. Emotion: focused.",
+      "prompt_estado_aspiracional": "Tight shot on the fisherman's face, now glowing in the warm sunlight. He wears a new, high-quality, bright blue certified life vest (Labels: Blue, Sleeve, Collar, Button, Formal wear). With his eyes closed and a gentle smile, he feels the breeze, completely at peace. He holds a fishing rod loosely, embodying total serenity and trust in his new gear. Emotion: serene.",
+      "aspect_ratio": "4:5",
+      "reference_assets": {
+        "character": {
+          "id": "ref_19d061d72e0247cc92a45b658f545308",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+          "labels": [
+            "Blue",
+            "Sleeve",
+            "Collar",
+            "Button",
+            "Formal wear",
+            "Textile",
+            "Dress shirt",
+            "Pocket",
+            "Facial hair",
+            "Cuff"
+          ],
+          "user_description": null
+        },
+        "product": {
+          "id": "ref_36f88207333540ab9c01127815db1d0e",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+          "labels": [
+            "Blue",
+            "Recreation",
+            "Leisure",
+            "Vacation",
+            "Adventure",
+            "Water sport",
+            "Windsport"
+          ],
+          "user_description": null
+        }
+      }
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+    "contexto_landing": {
+      "storybrand_completeness": 1.0,
+      "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+      "storybrand_dores": [
+        "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+        "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+      ],
+      "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_beneficios": [
+        "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+      ],
+      "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+      "storybrand_cta_principal": "Comprar agora",
+      "storybrand_urgencia": [
+        "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+      ]
+    }
+  },
+  {
+    "landing_page_url": "https://www.mgpesca.com.br/",
+    "formato": "Feed",
+    "copy": {
+      "headline": "Seja um Pescador Inteligente: Segurança e Economia.",
+      "corpo": "O pescador inteligente sabe: segurança e economia andam juntas. Na MG Pesca, você encontra coletes salva-vidas certificados com o melhor custo-benefício do mercado. Faça a escolha certa para sua paixão e seu bolso. Renove seu equipamento e pesque com a confiança de quem está preparado.",
+      "cta_texto": "Comprar agora"
+    },
+    "visual": {
+      "descricao_imagem": "Uma sequência de imagens que constrói a identidade do 'Pescador Inteligente'. 1) Um pescador com um olhar crítico e experiente, analisando seu equipamento de pesca antigo, identificando a necessidade de uma atualização. 2) O mesmo pescador, com um semblante de quem sabe o que faz, compara com aprovação um colete salva-vidas no site da MG Pesca em seu celular. 3) O pescador, vestindo seu novo colete azul, posa com confiança em seu barco, olhando para o horizonte, o retrato de um especialista preparado e seguro de suas escolhas.",
+      "prompt_estado_atual": "A middle-aged, experienced-looking fisherman with strong features stands by a riverbank, critically examining his old, worn-out fishing gear. His expression is not worried, but analytical and discerning, like an expert identifying a problem that needs a smart solution. The environment is clear but neutral. Emotion: analytical.",
+      "prompt_estado_intermediario": "The same fisherman now holds a smartphone, his expression confident and knowing. He scrolls through the MG Pesca website, nodding slightly with approval as he finds a certified life vest that meets his standards for both quality and price. He is making a strategic, not emotional, decision. Emotion: discerning.",
+      "prompt_estado_aspiracional": "The same fisherman stands confidently on his boat in a power pose, wearing his new, bright blue certified life vest (Labels: Blue, Sleeve, Collar, Button, Formal wear). He looks out towards the horizon with the proud, assured gaze of a captain in full control. The sun is setting, casting a heroic glow. He embodies the identity of the 'Pescador Inteligente e Preparado'. Emotion: confident.",
+      "aspect_ratio": "4:5",
+      "reference_assets": {
+        "character": {
+          "id": "ref_19d061d72e0247cc92a45b658f545308",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/character/ref_19d061d72e0247cc92a45b658f545308.jpg",
+          "labels": [
+            "Blue",
+            "Sleeve",
+            "Collar",
+            "Button",
+            "Formal wear",
+            "Textile",
+            "Dress shirt",
+            "Pocket",
+            "Facial hair",
+            "Cuff"
+          ],
+          "user_description": null
+        },
+        "product": {
+          "id": "ref_36f88207333540ab9c01127815db1d0e",
+          "gcs_uri": "gs://instagram-ads-472021-reference-images/reference-images/anonymous/session/product/ref_36f88207333540ab9c01127815db1d0e.jpg",
+          "labels": [
+            "Blue",
+            "Recreation",
+            "Leisure",
+            "Vacation",
+            "Adventure",
+            "Water sport",
+            "Windsport"
+          ],
+          "user_description": null
+        }
+      }
+    },
+    "cta_instagram": "Comprar agora",
+    "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+    "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025) em formato 4:5 para vendas: use visuais autênticos e de alta qualidade (fotos/vídeos de pescadores reais com coletes salva-vidas certificados ou equipamento renovado), com pouco texto sobreposto. A copy deve ter um gancho que ressoe com a dor (segurança vs. custo), apresentar a solução de forma clara (promoção em coletes certificados) e reforçar o benefício de paz de espírito e economia, finalizando com CTA direto para a compra. Foco na legibilidade e composição visual.",
+    "contexto_landing": {
+      "storybrand_completeness": 1.0,
+      "storybrand_persona": "Você é o pescador que adora a emoção de fisgar um bom peixe, a tranquilidade da natureza e a camaradagem com os amigos na beira do rio ou no barco. Você valoriza cada momento da pescaria, mas sabe que, para aproveitar ao máximo e com segurança, o equipamento precisa estar em dia. Não dá para sair com um colete salva-vidas velho ou um molinete enferrujado, né? Só que você também é esperto com o dinheiro. Você não quer gastar uma fortuna para garantir sua segurança e ter um equipamento de qualidade. Sua paixão pela pesca é grande, mas seu orçamento é real. Você está sempre de olho nas melhores oportunidades para manter seu arsenal de pesca renovado e sua segurança garantida, sem que isso vire uma dor de cabeça para o seu bolso. Você quer qualidade e economia, e sabe que isso é possível.",
+      "storybrand_dores": [
+        "O problema externo não é só seu colete salva-vidas estar desbotado, ou seu molinete ter travado. O verdadeiro obstáculo é a dificuldade de encontrar equipamentos de pesca e segurança de *qualidade* que não custem uma fortuna. É como se o mercado te forçasse a escolher entre sua segurança na água e a saúde da sua carteira. Você quer pescar com tranquilidade, sabendo que está protegido e bem equipado, mas a maioria das lojas parece querer te fazer pagar um preço absurdo por isso. É essa barreira de custo vs. qualidade e segurança que te impede de aproveitar sua paixão ao máximo sem preocupações financeiras.",
+        "Você sente um nó na garganta. Aquela balançada inesperada no barco, a fisgada do peixe que escapou por culpa do molinete... Elas não são só incidentes; são lembretes cruéis de que você está *escolhendo* arriscar sua segurança e comprometer sua paixão para economizar. Essa escolha pesa, tira um pedaço do brilho da sua pescaria. Você sente uma culpa secreta por não poder oferecer o melhor para si mesmo, por não se sentir 100% seguro na água, ou por perder oportunidades únicas. O medo de que algo dê errado por causa de um equipamento falho é um parasita que mina sua paz de espírito, rouba a tranquilidade que você busca na pescaria. A frustração de ter que aceitar menos do que você merece, de ter que sacrificar a qualidade e a segurança para manter as contas em dia, te deixa com um gosto amargo. No fundo, você se sente traído por um mercado que parece não entender a sua paixão nem o seu bolso, forçando-o a um dilema injusto. Você quer pescar com a cabeça leve, com a certeza de que está protegido e equipado para o sucesso, sem que isso signifique a dor de cabeça de um orçamento estourado ou a sensação de que está sendo irresponsável consigo mesmo e com sua família."
+      ],
+      "storybrand_proposta": "Na MG Pesca, nós resolvemos esse dilema para você. Não se trata de vender por vender, mas de selecionar a dedo e negociar as melhores condições para que você tenha acesso a equipamentos de pesca e, principalmente, a coletes salva-vidas seguros e certificados, sem que o preço seja um obstáculo. Nosso compromisso é com a sua segurança e com a sua paixão. Por isso, você encontra aqui promoções exclusivas e produtos com o melhor custo-benefício, como nosso foco atual em coletes salva-vidas de alta qualidade com preços que realmente cabem no seu bolso. Assim, você troca seu equipamento de pesca e material de segurança sem gastar muito, garantindo sua proteção na água e a performance que sua pescaria exige, com a tranquilidade e a economia que você sempre buscou.; É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_autoridade": "É por isso que a MG Pesca está aqui. Nós entendemos perfeitamente essa sua paixão pela pescaria e a sua preocupação legítima com a segurança e com a qualidade do equipamento. Sabemos que não é justo ter que escolher entre proteger sua vida na água ou comprometer suas finanças. Você não precisa mais passar por esse dilema. Acreditamos que todo pescador merece ter o melhor equipamento de segurança e de pesca, sem que isso vire uma dor de cabeça para o bolso. Por isso, nos dedicamos a encontrar as melhores ofertas e soluções para que você possa, finalmente, trocar seu colete salva-vidas velho, renovar seu molinete, e ter todo o material que precisa, com a tranquilidade que você busca e os preços que você merece. A MG Pesca é a sua parceira, o seu guia nessa jornada para uma pescaria mais segura, eficaz e econômica.",
+      "storybrand_beneficios": [
+        "Agora, a cada saída para a pescaria, tudo mudou. Aquela pulga atrás da orelha desapareceu. Você está no barco, concentrado na isca, mas com uma paz de espírito que não sentia há tempos. O colete salva-vidas, novo e certificado, te abraça com a certeza de que a segurança não é mais uma dúvida, mas uma garantia. Não há mais sustos ou a preocupação de que algo possa falhar no momento crucial. E aquela fisgada? Agora, ela vem com a alegria pura de quem sabe que o equipamento está à altura. Seu molinete responde perfeitamente, a linha aguenta o tranco, e o troféu da sua vida finalmente encontra o caminho para o seu barco, sem frustrações. Você voltou a pescar como sempre sonhou: com a tranquilidade de estar protegido, a eficácia de um equipamento de qualidade e, o melhor de tudo, sem o peso da culpa ou do orçamento estourado. A MG Pesca te ajudou a trocar seu equipamento de pesca e material de segurança sem gastar muito, e agora você pode focar no que realmente importa: a emoção de cada fisgada, a beleza da natureza e os momentos inesquecíveis com os amigos. Sua paixão pela pesca está renovada, mais segura e mais econômica do que nunca."
+      ],
+      "storybrand_transformacao": "Agora, você se vê de uma forma diferente. Não é mais o pescador que vive com aquela pulga atrás da orelha, ou que se sente culpado por ter que escolher entre a segurança e o orçamento. Você se tornou o *Pescador Inteligente e Preparado*, aquele que domina a arte de pescar com a máxima segurança e o melhor equipamento, sem que isso pese no bolso. Sua identidade agora é de quem toma decisões conscientes, que sabe onde encontrar o melhor custo-benefício para a sua paixão. Você é o homem que não deixa nada atrapalhar a alegria da fisgada, que desfruta da natureza com total paz de espírito, porque a MG Pesca te mostrou que é possível ter o melhor dos dois mundos: equipamento de pesca e segurança renovados, com qualidade e economia. Você é o pescador que aproveita cada momento, livre de preocupações e orgulhoso das suas escolhas.",
+      "storybrand_cta_principal": "Comprar agora",
+      "storybrand_urgencia": [
+        "E se você não agir agora? Simplesmente não trocar seu colete salva-vidas velho ou seu equipamento de pesca desgastado significa continuar com aquela mesma pulga atrás da orelha em cada saída. Aquele susto no barco pode se repetir, e a pergunta \"será que isso me protegeria?\" pode ter uma resposta trágica. Não é só sobre um colete desbotado; é sobre arriscar a sua vida e a tranquilidade da sua família por uma economia que pode sair caríssima. Além da segurança, cada fisgada perdida por um molinete que travou ou uma linha que estourou é um pedaço da sua paixão que se esvai, uma história épica que não foi contada. Sua pescaria, que deveria ser um momento de paz e alegria, continuará sendo um campo minado de preocupações e frustrações. Você vai se lamentar por não ter aproveitado plenamente, por não ter tido a certeza de que estava seguro e bem equipado, e por ter deixado o melhor peixe escapar – tudo por adiar uma decisão que a MG Pesca tornou tão fácil e acessível. A verdadeira perda não é o dinheiro, é a sua paz de espírito, a alegria da fisgada perfeita e, em casos mais graves, a sua própria segurança."
+      ]
+    }
+  }
+]

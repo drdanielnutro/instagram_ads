@@ -1,0 +1,1119 @@
+{
+  "sections": {
+    "storybrand_character": "Você é o pescador que entende que cada linha lançada é uma promessa de aventura e cada equipamento, um companheiro nessa jornada. Não é qualquer um que pesca, mas você, que dedica seu tempo e paixão a essa arte. Você quer sentir a adrenalina de uma fisgada certeira, a paz da natureza e a satisfação de um dia bem-sucedido. Mas, para isso, sabe que precisa de ferramentas que não te deixem na mão. O que te frustra é a busca interminável por equipamentos de qualidade que, muitas vezes, parecem ter um preço inflacionado, ou o risco de investir em algo que não entrega o prometido. Você se recusa a pagar mais do que o justo por um equipamento que garanta a sua segurança e o sucesso da sua pescaria. No fundo, você busca a confiança de que está fazendo a melhor escolha, o prazer de investir bem na sua paixão e a tranquilidade de que, quando o momento certo chegar, você estará com o equipamento perfeito em mãos. Você é o homem que quer desfrutar de cada minuto na água, sem preocupações com o material, e com a certeza de que seu dinheiro foi bem empregado.",
+    "exposition_1": "A adrenalina da próxima pescaria já pulsa nas suas veias. Você já se imagina à beira d'água, sentindo a brisa, a concentração antes de lançar. E, claro, a mente já viaja para o equipamento. Você pensa em dar um upgrade, talvez substituir aquela carretilha que já não está 100%, ou investir numa vara nova para aquela espécie específica. Você sabe que seu tempo na natureza é valioso demais para ser comprometido por materiais que te deixem na mão. A paixão pela pesca é algo que você leva a sério, e cada peça do seu arsenal precisa refletir isso. Mas antes de qualquer compra, você já sabe: a qualidade é inegociável, e o preço precisa ser justo. É uma máxima que você leva consigo, buscando sempre o melhor para sua paixão, sem comprometer seu orçamento.",
+    "inciting_incident_1": "Você decide: é hora de dar o próximo passo. A carretilha antiga já não responde como antes, a linha precisa de um upgrade urgente, ou, pensando naquela aventura mais longe, percebe que um colete salva-vidas de confiança é fundamental. Você abre o navegador, pronto para pesquisar, mas o desafio logo se impõe. Sites e mais sites, com promessas de qualidade que vêm acompanhadas de preços estratosféricos, ou então, ofertas que piscam como uma armadilha, vendendo equipamentos que não inspiram nenhuma confiança. A frustração bate: como encontrar o que realmente funciona, sem pagar o olho da cara ou arriscar seu tempo na água com algo que vai te deixar na mão?",
+    "exposition_2": "É nessa busca que a imagem se torna clara: você vê fotos e mais fotos de equipamentos, alguns com um brilho sedutor, mas com um preço que faz seu queixo cair. Outros, aparentemente mais acessíveis, parecem frágeis, quase descartáveis, e a ideia de confiar neles sua aventura ou, pior, sua segurança, já te tira o sono. Você passa horas comparando, lendo descrições vagas, tentando decifrar o que é marketing e o que é qualidade real. A tela do computador se torna um campo minado de incertezas. Você se pergunta: será que essa carretilha vai aguentar a briga com aquele dourado? Esse colete salva-vidas realmente me protegerá se o inesperado acontecer? A dúvida corrói a excitação da compra, transformando o que deveria ser um prazer em uma verdadeira maratona de desconfiança. Você só quer a garantia de que seu investimento valerá a pena, que o material estará à altura do seu desafio, sem ter que sacrificar suas economias ou a qualidade da sua pescaria.",
+    "inciting_incident_2": "Mas a realidade te atinge quando uma nova data se aproxima, ou aquela viagem dos sonhos começa a virar realidade. De repente, você percebe que o tempo está passando, e a necessidade de equipar-se com o melhor se torna urgente. Talvez seja um colete salva-vidas que te dê a tranquilidade de estar seguro em qualquer situação, ou uma nova isca que promete ser o segredo para aquela espécie elusiva. Você esbarra em uma oferta \"imperdível\" ou em uma promoção com prazo limitado, e a dúvida martela: será que essa é a solução ou mais um risco? A pressão para decidir aumenta, mas a lição de que o barato pode sair caro – e comprometer sua pescaria ou até sua segurança – fala mais alto. Você não quer apenas comprar; você quer investir certo, e rápido, antes que a próxima aventura o pegue despreparado.",
+    "unmet_needs_summary": "Você já passou pela frustração de ter que escolher entre pagar uma fortuna por um equipamento que parece bom ou arriscar sua pescaria e segurança com algo barato e de procedência duvidosa. Essa indecisão, essa maratona de desconfiança, rouba o prazer da sua paixão. Você precisa de algo mais do que uma simples loja; você precisa de uma garantia. A garantia de que aquela carretilha vai aguentar a pressão, de que a linha não vai te deixar na mão, e que um colete salva-vidas vai te proteger sem custar um absurdo. Sua maior necessidade é a tranquilidade de saber que pode investir no melhor para sua pescaria, sem ter que pagar mais do que o justo por isso. Você busca uma solução confiável que elimine a dúvida e permita que você foque no que realmente importa: a aventura na água.",
+    "storybrand_problem_external": "O problema externo que assola o pescador como você é a eterna gangorra entre encontrar equipamentos de pesca realmente bons e pagar um preço justo por eles. Você está cansado de ver lojas que inflacionam produtos básicos ou que vendem itens duvidosos a preços baixíssimos, mas sem nenhuma garantia de qualidade ou durabilidade. Parece que, para ter o melhor equipamento que garanta sua aventura e segurança, você precisa sacrificar suas economias, ou para economizar, tem que se contentar com o que não te dá confiança na hora H, comprometendo o sucesso da sua pescaria.",
+    "storybrand_problem_internal": "Você sabe que deveria estar animado com a perspectiva de uma nova carretilha, uma vara melhor ou um colete salva-vidas que garanta sua segurança, mas, no fundo, sente uma pontada de ansiedade. É a dúvida que corrói: \"Será que estou jogando dinheiro fora com algo que não vale a pena?\" ou, pior, \"Será que esse equipamento vai me deixar na mão no momento crucial da pescaria?\". Essa incerteza não só tira o prazer da busca, mas também rouba a tranquilidade da sua paixão, transformando a expectativa de uma aventura em mais uma preocupação. Você se sente frustrado por ter que ser um \"detetive\" para encontrar algo que preste, sem ser explorado, e essa batalha interna constante para conciliar o desejo por qualidade com a necessidade de um preço justo é exaustiva. O que você realmente quer é a paz de espírito e a confiança inabalável de que sua escolha é a correta, para poder focar no que realmente importa: a próxima fisgada, a tranquilidade da água e a aventura de mais um dia de pesca, sem arrependimentos ou sustos.",
+    "storybrand_problem_philosophical": "É simplesmente inaceitável que a sua paixão pela pesca – um refúgio de paz, aventura e conexão com a natureza – seja manchada pela frustração de ter que escolher entre equipamentos caros demais ou de qualidade duvidosa. Você dedica tempo, energia e alma a cada pescaria; por que deveria ser obrigado a gastar horas pesquisando ou a arriscar sua segurança e o sucesso da sua aventura por causa de preços inflacionados ou produtos de baixo desempenho? Acreditar que, para ter o melhor e garantir sua tranquilidade na água, você precise sacrificar suas economias ou se contentar com o 'mais ou menos' é uma afronta. Não é justo que a busca pelo equipamento perfeito se transforme numa batalha exaustiva e incerta. Você merece ter a certeza de que seu investimento é inteligente e que cada centavo gasto te trará confiança, segurança e o prazer genuíno de uma pescaria bem-sucedida. Sua paixão merece ser honrada com a oportunidade de comprar os melhores equipamentos pelo preço justo, sem complicação ou arrependimento.",
+    "storybrand_guide": "Você já nos contou da sua frustração, pescador. A MG Pesca entende perfeitamente a sua busca incansável por equipamentos que garantam a adrenalina e a segurança da sua pescaria, sem que você se sinta explorado no preço. Nós não somos apenas mais uma loja; nós somos a sua equipe de confiança, dedicados a ser o guia que você precisa nesse mar de opções. Com anos de experiência na beira do rio e no mercado, a MG Pesca se tornou especialista em garimpar os melhores equipamentos, testá-los e, o mais importante, negociar para que cheguem até você pelo preço justo. Nosso compromisso é eliminar as dúvidas e incertezas, oferecendo uma curadoria rigorosa e preços transparentes. Estamos aqui para simplificar sua escolha, assegurando que cada item – de uma nova carretilha a um colete salva-vidas em promoção – entregue a performance e a confiança que você exige, para que sua única preocupação seja desfrutar da sua paixão.",
+    "storybrand_value_proposition": "Na MG Pesca, sabemos que sua paixão merece o melhor, sem que isso signifique esvaziar seu bolso ou arriscar sua pescaria. É por isso que não nos contentamos em ser apenas um catálogo. Nós somos seu parceiro estratégico. Com uma curadoria rigorosa e anos de experiência, vasculhamos o mercado para garimpar e testar cada item, desde as iscas mais eficientes até os coletes salva-vidas mais seguros, garantindo que só o que realmente funciona e entrega alta performance chegue até você. E, mais do que isso, nossa expertise nos permite negociar diretamente com fornecedores, eliminando intermediários e as margens abusivas, para que você tenha acesso a equipamentos de ponta com a certeza de que está pagando um preço justo. Assim, a MG Pesca te entrega não só os melhores equipamentos, mas a paz de espírito de que cada investimento na sua pescaria é inteligente, confiável e, acima de tudo, justo, permitindo que você se concentre na próxima grande fisgada e na pura alegria de estar na água.",
+    "storybrand_plan": "Para acabar com a incerteza e ter o equipamento que você realmente precisa, o plano da MG Pesca é simples e direto, feito para que você foque no que realmente importa: a próxima fisgada.\n\n1.  **Descubra o Equipamento Ideal para Sua Aventura:** Esqueça a maratona de pesquisa em sites duvidosos. Navegue pela nossa curadoria especializada. Aqui, cada vara, carretilha, isca e acessório já passou por um crivo rigoroso. Precisa de segurança extra? Confira nossa seleção de coletes salva-vidas, incluindo a promoção imperdível que vai até sábado, dia 25/10 – garantia de tranquilidade que não pesa no bolso, mas que garante a sua vida na água.\n\n2.  **Adquira com Confiança e Preço Justo:** Uma vez que você identificou o que busca, finalize sua compra de forma rápida e segura. Com poucos cliques, você garante seu equipamento na MG Pesca. Sem asteriscos, sem surpresas, apenas a certeza de que está investindo em alta qualidade pelo preço justo, graças à nossa negociação direta com os melhores fornecedores. É o fim da dúvida sobre se está pagando caro demais ou comprando algo que não vale a pena.\n\n3.  **Desfrute da Sua Paixão com Segurança e Sucesso:** Com seu equipamento MG Pesca em mãos, a única preocupação que você terá é qual será o seu próximo local de pesca. Sinta a adrenalina de uma fisgada certeira e a paz de um dia na natureza, com a confiança de que cada item do seu arsenal foi uma escolha inteligente e justa. Deixe que a qualidade e o preço justo te libertem para viver plenamente a aventura da pesca.",
+    "storybrand_action": "Chega de adiar a segurança e a certeza de um bom negócio. Sua paixão merece o melhor, sem comprometer seu bolso. A oportunidade de garantir o colete salva-vidas que vai te dar total tranquilidade na água, por um preço imperdível, está acabando! Essa promoção é só até sábado, dia 25/10. Não perca tempo: **Garanta seu colete salva-vidas em oferta e pesque com segurança total!** Quer conferir outras opções para sua próxima aventura? Não pare por aqui! Descubra como é fácil equipar-se com excelência e justiça. **Explore nosso catálogo completo e encontre os melhores equipamentos de pesca pelo preço que você realmente pode pagar.**",
+    "storybrand_failure": "E se você ignorar essa chance e continuar na mesma batida? É simples: a próxima aventura na água pode se transformar em uma dor de cabeça. Aquela linha que arrebenta no peixe grande que você tanto esperava, a carretilha que trava no meio da briga, ou a vara que te abandona no momento crucial. Além da frustração de perder uma grande fisgada, o pior é ter a sua segurança comprometida por um colete salva-vidas de má qualidade ou que você adiou a compra, expondo-se a riscos desnecessários. Você continuará jogando dinheiro fora com equipamentos que não entregam o prometido ou pagando mais do que o justo por algo que deveria ser um investimento, não um gasto. Sua paixão pela pesca, que deveria ser um refúgio, se tornará mais uma fonte de preocupação e arrependimento. Você vai perder a tranquilidade e a confiança, e o tempo na água será marcado pela dúvida, não pela pura adrenalina e satisfação de uma pescaria bem-sucedida. E não esqueça: aquela promoção do colete salva-vidas que te daria paz de espírito na água, e por um preço justo, termina sábado, dia 25/10. Depois, pode ser tarde demais.",
+    "storybrand_success": "Imagine você, com a caixa de pesca organizada, cada item no seu devido lugar e a certeza de que cada equipamento é um investimento inteligente, não uma aposta. Essa é a realidade quando você escolhe a MG Pesca. A adrenalina de uma fisgada certeira não é mais acompanhada pela preocupação de que a linha vai arrebentar ou a carretilha vai travar. Agora, é pura emoção, com a confiança de que seu equipamento é tão resiliente quanto a sua paixão. Você se sente mais seguro na água, sabendo que seu colete salva-vidas não é apenas um item a mais, mas uma garantia de proteção que você adquiriu por um preço justo. A paz de espírito que você tanto buscava finalmente chegou. Seu tempo na pescaria é agora um refúgio genuíno, livre de preocupações com gastos excessivos ou com a qualidade duvidosa. Você não apenas comprou um produto; você investiu na sua paixão, na sua segurança e na certeza de que cada momento na água será inesquecível, sem arrependimentos, apenas o prazer da pesca bem-sucedida.",
+    "storybrand_identity": "Agora, você não é mais o pescador que se debate entre qualidade e preço. Você se transformou no Pescador Confiante e Estratégico. Cada item na sua caixa de pesca é um testemunho da sua escolha inteligente: o equipamento certo, com a durabilidade que você exige, e o melhor de tudo, adquirido pelo preço justo que você sempre buscou. Você se sente no controle, não mais refém de promoções enganosas ou preços inflacionados. Sua mente está livre para se concentrar na natureza, na técnica e na emoção da fisgada, porque a MG Pesca te garantiu a paz de espírito. Você agora é aquele que, na beira do rio ou no meio do lago, inspira confiança – não apenas por sua habilidade, mas pela certeza de que seu equipamento é uma extensão perfeita da sua paixão, sem qualquer arrependimento financeiro. Você é o pescador que faz o investimento certo, desfruta da pescaria ao máximo e sabe que cada minuto na água é puro prazer, porque sua segurança e seu sucesso estão garantidos sem custar uma fortuna."
+  },
+  "audit": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "MG Pesca",
+          "o_que_a_empresa_faz": "Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.",
+          "sexo_cliente_alvo": "masculino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-18T13:30:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-18T13:30:11Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-18T13:30:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 1061
+      },
+      "timestamp_utc": "2025-10-18T13:30:21Z",
+      "duration_ms": 10682
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:30:21Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, utilizando uma linguagem específica do universo da pesca e apelando para suas paixões e frustrações. Conecta de forma clara o desejo do cliente ('recusa a pagar mais do que o justo', 'investir bem na sua paixão') com a proposta da empresa de oferecer 'os melhores equipamentos pelo preço justo'. Evita clichês genéricos e mantém uma voz empática e orientada ao problema/solução do cliente. A linguagem é clara e envolvente.",
+      "timestamp_utc": "2025-10-18T13:30:28Z",
+      "duration_ms": 6544
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto é excelente. Ele conversa diretamente com o cliente masculino, utilizando uma linguagem específica do universo da pesca e apelando para suas paixões e frustrações. Conecta de forma clara o desejo do cliente ('recusa a pagar mais do que o justo', 'investir bem na sua paixão') com a proposta da empresa de oferecer 'os melhores equipamentos pelo preço justo'. Evita clichês genéricos e mantém uma voz empática e orientada ao problema/solução do cliente. A linguagem é clara e envolvente.",
+      "timestamp_utc": "2025-10-18T13:30:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:30:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-18T13:30:28Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 756
+      },
+      "timestamp_utc": "2025-10-18T13:30:40Z",
+      "duration_ms": 12182
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:30:40Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente que ressoa com a paixão e as preocupações desse público (\"adrenalina\", \"carretilha\", \"vara\", \"arsenal\"). A seção estabelece de forma muito clara o problema e o desejo do cliente - \"qualidade é inegociável, e o preço precisa ser justo\" - que se conecta perfeitamente com a promessa da empresa de \"comprar os melhores equipamentos pelo preço justo\". Não utiliza clichês genéricos e mantém uma voz empática e direcionada, preparando o terreno para a solução oferecida pela MG Pesca.",
+      "timestamp_utc": "2025-10-18T13:30:47Z",
+      "duration_ms": 6855
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente que ressoa com a paixão e as preocupações desse público (\"adrenalina\", \"carretilha\", \"vara\", \"arsenal\"). A seção estabelece de forma muito clara o problema e o desejo do cliente - \"qualidade é inegociável, e o preço precisa ser justo\" - que se conecta perfeitamente com a promessa da empresa de \"comprar os melhores equipamentos pelo preço justo\". Não utiliza clichês genéricos e mantém uma voz empática e direcionada, preparando o terreno para a solução oferecida pela MG Pesca.",
+      "timestamp_utc": "2025-10-18T13:30:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:30:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-18T13:30:47Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 661
+      },
+      "timestamp_utc": "2025-10-18T13:30:58Z",
+      "duration_ms": 11133
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:30:58Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e relevante para o universo da pesca (\"carretilha\", \"linha\", \"colete salva-vidas\", \"tempo na água\"). O problema descrito - a dificuldade de encontrar equipamentos de qualidade a um preço justo - conecta-se perfeitamente com a proposta da empresa: \"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\" Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao descrever a frustração do cliente e orientada a ação, retratando o cliente em busca de uma solução.",
+      "timestamp_utc": "2025-10-18T13:31:05Z",
+      "duration_ms": 7288
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e relevante para o universo da pesca (\"carretilha\", \"linha\", \"colete salva-vidas\", \"tempo na água\"). O problema descrito - a dificuldade de encontrar equipamentos de qualidade a um preço justo - conecta-se perfeitamente com a proposta da empresa: \"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\" Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao descrever a frustração do cliente e orientada a ação, retratando o cliente em busca de uma solução.",
+      "timestamp_utc": "2025-10-18T13:31:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:31:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-18T13:31:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 957
+      },
+      "timestamp_utc": "2025-10-18T13:31:13Z",
+      "duration_ms": 8201
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:31:13Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica do universo da pesca (\"carretilha\", \"dourado\", \"colete salva-vidas\"). A seção descreve a frustração de encontrar equipamentos de qualidade a um preço justo, conectando-se perfeitamente com a promessa da empresa (\"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\"). Evita clichês genéricos ao focar nas preocupações específicas de segurança e durabilidade no contexto da pesca. A linguagem é clara, empática ao expor as incertezas e a desconfiança do cliente, e prepara o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:31:21Z",
+      "duration_ms": 7035
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica do universo da pesca (\"carretilha\", \"dourado\", \"colete salva-vidas\"). A seção descreve a frustração de encontrar equipamentos de qualidade a um preço justo, conectando-se perfeitamente com a promessa da empresa (\"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\"). Evita clichês genéricos ao focar nas preocupações específicas de segurança e durabilidade no contexto da pesca. A linguagem é clara, empática ao expor as incertezas e a desconfiança do cliente, e prepara o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:31:21Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:31:21Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-18T13:31:21Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 799
+      },
+      "timestamp_utc": "2025-10-18T13:31:33Z",
+      "duration_ms": 12808
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:31:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele conversa diretamente com o cliente masculino que gosta de pescaria, utilizando uma linguagem específica (\"colete salva-vidas\", \"isca\", \"espécie elusiva\", \"pescaria\", \"aventura\") e respeitosa. Conecta explicitamente a urgência e o medo de investir errado com a necessidade de \"investir certo\" e obter \"os melhores equipamentos pelo preço justo\", preparando o terreno para a solução da MG Pesca. Evita clichês genéricos e mantém uma linguagem clara, empática (\"dúvida martela\", \"pressão para decidir\") e orientada a ação, descrevendo a necessidade iminente de equipar-se para a próxima aventura.",
+      "timestamp_utc": "2025-10-18T13:31:39Z",
+      "duration_ms": 5686
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele conversa diretamente com o cliente masculino que gosta de pescaria, utilizando uma linguagem específica (\"colete salva-vidas\", \"isca\", \"espécie elusiva\", \"pescaria\", \"aventura\") e respeitosa. Conecta explicitamente a urgência e o medo de investir errado com a necessidade de \"investir certo\" e obter \"os melhores equipamentos pelo preço justo\", preparando o terreno para a solução da MG Pesca. Evita clichês genéricos e mantém uma linguagem clara, empática (\"dúvida martela\", \"pressão para decidir\") e orientada a ação, descrevendo a necessidade iminente de equipar-se para a próxima aventura.",
+      "timestamp_utc": "2025-10-18T13:31:39Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:31:39Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-18T13:31:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 783
+      },
+      "timestamp_utc": "2025-10-18T13:31:48Z",
+      "duration_ms": 9232
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:31:48Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e envolvente para o universo da pesca (\"carretilha\", \"linha\", \"colete salva-vidas\"). Descreve a frustração do cliente em escolher entre preço e qualidade, conectando-se explicitamente à transformação prometida de \"comprar os melhores equipamentos pelo preço justo\". Evita clichês genéricos e mantém uma voz empática, clara e orientada à ação, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:31:53Z",
+      "duration_ms": 4948
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e envolvente para o universo da pesca (\"carretilha\", \"linha\", \"colete salva-vidas\"). Descreve a frustração do cliente em escolher entre preço e qualidade, conectando-se explicitamente à transformação prometida de \"comprar os melhores equipamentos pelo preço justo\". Evita clichês genéricos e mantém uma voz empática, clara e orientada à ação, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:31:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:31:53Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-18T13:31:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 570
+      },
+      "timestamp_utc": "2025-10-18T13:32:01Z",
+      "duration_ms": 7670
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:32:01Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pratica pesca, usando uma linguagem específica (\"equipamentos de pesca\", \"pescaria\", \"confiança na hora H\") e respeitosa. Conecta explicitamente o problema central da \"gangorra entre encontrar equipamentos de pesca realmente bons e pagar um preço justo\" com a proposta de valor da empresa (\"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\"). Evita clichês genéricos e mantém uma voz clara, empática ao descrever a frustração do cliente e orientada a ação, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:32:06Z",
+      "duration_ms": 5091
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pratica pesca, usando uma linguagem específica (\"equipamentos de pesca\", \"pescaria\", \"confiança na hora H\") e respeitosa. Conecta explicitamente o problema central da \"gangorra entre encontrar equipamentos de pesca realmente bons e pagar um preço justo\" com a proposta de valor da empresa (\"Ajudamos homens que gostam de pescaria a comprarem os melhores equipamentos pelo preço justo.\"). Evita clichês genéricos e mantém uma voz clara, empática ao descrever a frustração do cliente e orientada a ação, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:32:06Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:32:06Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-18T13:32:06Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 1022
+      },
+      "timestamp_utc": "2025-10-18T13:32:15Z",
+      "duration_ms": 8609
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:32:15Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente para o universo da pesca (\"carretilha\", \"vara\", \"colete salva-vidas\", \"pescaria\", \"fisgada\"). Conecta explicitamente o problema interno da \"batalha interna constante para conciliar o desejo por qualidade com a necessidade de um preço justo\" com a transformação prometida pela empresa de oferecer \"os melhores equipamentos pelo preço justo\", resultando em \"paz de espírito e confiança inabalável\". Evita clichês genéricos ao focar nas preocupações e emoções específicas desse público. A linguagem é clara, empática ao descrever a ansiedade e frustração, e orientada a ação ao focar na busca por essa tranquilidade.",
+      "timestamp_utc": "2025-10-18T13:32:22Z",
+      "duration_ms": 7771
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente para o universo da pesca (\"carretilha\", \"vara\", \"colete salva-vidas\", \"pescaria\", \"fisgada\"). Conecta explicitamente o problema interno da \"batalha interna constante para conciliar o desejo por qualidade com a necessidade de um preço justo\" com a transformação prometida pela empresa de oferecer \"os melhores equipamentos pelo preço justo\", resultando em \"paz de espírito e confiança inabalável\". Evita clichês genéricos ao focar nas preocupações e emoções específicas desse público. A linguagem é clara, empática ao descrever a ansiedade e frustração, e orientada a ação ao focar na busca por essa tranquilidade.",
+      "timestamp_utc": "2025-10-18T13:32:22Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:32:22Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-18T13:32:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 1016
+      },
+      "timestamp_utc": "2025-10-18T13:32:31Z",
+      "duration_ms": 8452
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:32:31Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e envolvente que ressoa com a paixão pela pesca (\"pescaria\", \"na água\", \"equipamentos\") e suas frustrações. Conecta explicitamente o problema filosófico (\"inaceitável que a sua paixão pela pesca... seja manchada pela frustração de ter que escolher entre equipamentos caros demais ou de qualidade duvidosa\") com a transformação prometida pela empresa (\"comprar os melhores equipamentos pelo preço justo\"). Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao validar a paixão e a frustração do cliente, e orientada a ação ao expressar o que o cliente \"merece\" e o que busca, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:32:38Z",
+      "duration_ms": 7532
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, usando uma linguagem específica e envolvente que ressoa com a paixão pela pesca (\"pescaria\", \"na água\", \"equipamentos\") e suas frustrações. Conecta explicitamente o problema filosófico (\"inaceitável que a sua paixão pela pesca... seja manchada pela frustração de ter que escolher entre equipamentos caros demais ou de qualidade duvidosa\") com a transformação prometida pela empresa (\"comprar os melhores equipamentos pelo preço justo\"). Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao validar a paixão e a frustração do cliente, e orientada a ação ao expressar o que o cliente \"merece\" e o que busca, preparando o terreno para a solução oferecida.",
+      "timestamp_utc": "2025-10-18T13:32:38Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:32:38Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-18T13:32:38Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 922
+      },
+      "timestamp_utc": "2025-10-18T13:32:48Z",
+      "duration_ms": 9674
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:32:48Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente (\"pescador\", \"adrenalina da sua pescaria\", \"na beira do rio\", \"carretilha\", \"colete salva-vidas\"). A seção conecta explicitamente a promessa de \"comprar os melhores equipamentos pelo preço justo\" através da curadoria e negociação da MG Pesca, eliminando a frustração de ser \"explorado no preço\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a \"frustração\" e a \"busca incansável\" do cliente, e orientada a ação ao posicionar a MG Pesca como o \"guia\" e a \"equipe de confiança\" que simplifica a escolha e assegura a performance e confiança necessárias para que o cliente possa desfrutar de sua paixão.",
+      "timestamp_utc": "2025-10-18T13:32:55Z",
+      "duration_ms": 6870
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente (\"pescador\", \"adrenalina da sua pescaria\", \"na beira do rio\", \"carretilha\", \"colete salva-vidas\"). A seção conecta explicitamente a promessa de \"comprar os melhores equipamentos pelo preço justo\" através da curadoria e negociação da MG Pesca, eliminando a frustração de ser \"explorado no preço\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a \"frustração\" e a \"busca incansável\" do cliente, e orientada a ação ao posicionar a MG Pesca como o \"guia\" e a \"equipe de confiança\" que simplifica a escolha e assegura a performance e confiança necessárias para que o cliente possa desfrutar de sua paixão.",
+      "timestamp_utc": "2025-10-18T13:32:55Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:32:55Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-18T13:32:55Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 992
+      },
+      "timestamp_utc": "2025-10-18T13:33:04Z",
+      "duration_ms": 9081
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:33:04Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente para o universo da pesca (\"iscas mais eficientes\", \"coletes salva-vidas mais seguros\", \"próxima grande fisgada\", \"estar na água\"). Conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") com a metodologia da empresa (\"curadoria rigorosa\", \"testar cada item\", \"negociar diretamente com fornecedores, eliminando intermediários e as margens abusivas\"). Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a \"paixão\" do cliente e sua busca por \"paz de espírito\", e orientada a ação ao focar nos resultados que o cliente obterá (concentrar-se na pescaria).",
+      "timestamp_utc": "2025-10-18T13:33:11Z",
+      "duration_ms": 6964
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que pesca, usando uma linguagem específica e envolvente para o universo da pesca (\"iscas mais eficientes\", \"coletes salva-vidas mais seguros\", \"próxima grande fisgada\", \"estar na água\"). Conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") com a metodologia da empresa (\"curadoria rigorosa\", \"testar cada item\", \"negociar diretamente com fornecedores, eliminando intermediários e as margens abusivas\"). Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a \"paixão\" do cliente e sua busca por \"paz de espírito\", e orientada a ação ao focar nos resultados que o cliente obterá (concentrar-se na pescaria).",
+      "timestamp_utc": "2025-10-18T13:33:11Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:33:11Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-18T13:33:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1520
+      },
+      "timestamp_utc": "2025-10-18T13:33:20Z",
+      "duration_ms": 8861
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:33:20Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente (\"próxima fisgada\", \"vara, carretilha, isca\", \"coletes salva-vidas\", \"vida na água\", \"adrenalina de uma fisgada certeira\"). A seção conecta explicitamente o plano da MG Pesca à transformação prometida, ao abordar a \"incerteza\", garantir \"alta qualidade pelo preço justo\" e permitir que o cliente \"desfrute da Sua Paixão com Segurança e Sucesso\", eliminando a dúvida de \"pagar caro demais ou comprar algo que não vale a pena\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a busca por \"tranquilidade\" e \"confiança\", e orientada a ação em cada passo do plano.",
+      "timestamp_utc": "2025-10-18T13:33:30Z",
+      "duration_ms": 10402
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente (\"próxima fisgada\", \"vara, carretilha, isca\", \"coletes salva-vidas\", \"vida na água\", \"adrenalina de uma fisgada certeira\"). A seção conecta explicitamente o plano da MG Pesca à transformação prometida, ao abordar a \"incerteza\", garantir \"alta qualidade pelo preço justo\" e permitir que o cliente \"desfrute da Sua Paixão com Segurança e Sucesso\", eliminando a dúvida de \"pagar caro demais ou comprar algo que não vale a pena\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao reconhecer a busca por \"tranquilidade\" e \"confiança\", e orientada a ação em cada passo do plano.",
+      "timestamp_utc": "2025-10-18T13:33:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:33:30Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-18T13:33:30Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 634
+      },
+      "timestamp_utc": "2025-10-18T13:33:38Z",
+      "duration_ms": 7305
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:33:38Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica (\"colete salva-vidas\", \"pesque\", \"na água\", \"aventura\", \"equipamentos de pesca\") e respeitosa. Conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") com frases como \"sem comprometer seu bolso\", \"preço imperdível\", \"equipamentos de pesca pelo preço que você realmente pode pagar\" e \"excelência e justiça\". Evita clichês genéricos, sendo muito específico para o nicho. A linguagem é clara, empática ao abordar a paixão e a necessidade de segurança do cliente, e altamente orientada a ação com chamadas claras para \"Garanta seu colete salva-vidas\" e \"Explore nosso catálogo completo\".",
+      "timestamp_utc": "2025-10-18T13:33:46Z",
+      "duration_ms": 7985
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica (\"colete salva-vidas\", \"pesque\", \"na água\", \"aventura\", \"equipamentos de pesca\") e respeitosa. Conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") com frases como \"sem comprometer seu bolso\", \"preço imperdível\", \"equipamentos de pesca pelo preço que você realmente pode pagar\" e \"excelência e justiça\". Evita clichês genéricos, sendo muito específico para o nicho. A linguagem é clara, empática ao abordar a paixão e a necessidade de segurança do cliente, e altamente orientada a ação com chamadas claras para \"Garanta seu colete salva-vidas\" e \"Explore nosso catálogo completo\".",
+      "timestamp_utc": "2025-10-18T13:33:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:33:46Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-18T13:33:46Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1101
+      },
+      "timestamp_utc": "2025-10-18T13:33:53Z",
+      "duration_ms": 7735
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:33:53Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele conversa diretamente com o cliente masculino que pratica pesca, utilizando uma linguagem específica e envolvente (\"linha que arrebenta no peixe grande\", \"carretilha que trava\", \"vara que te abandona\", \"fisgada\", \"colete salva-vidas\", \"pescaria\", \"adrenalina\"). A seção conecta explicitamente a falha (continuar na mesma batida) com a transformação prometida pela MG Pesca, ao descrever a frustração de \"jogar dinheiro fora\" ou \"pagar mais do que o justo\", e a \"segurança comprometida\", que são os opostos da promessa de \"melhores equipamentos pelo preço justo\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao abordar a perda de prazer e a preocupação do pescador, e orientada a ação com a urgência da promoção do colete salva-vidas no final.",
+      "timestamp_utc": "2025-10-18T13:34:00Z",
+      "duration_ms": 6392
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele conversa diretamente com o cliente masculino que pratica pesca, utilizando uma linguagem específica e envolvente (\"linha que arrebenta no peixe grande\", \"carretilha que trava\", \"vara que te abandona\", \"fisgada\", \"colete salva-vidas\", \"pescaria\", \"adrenalina\"). A seção conecta explicitamente a falha (continuar na mesma batida) com a transformação prometida pela MG Pesca, ao descrever a frustração de \"jogar dinheiro fora\" ou \"pagar mais do que o justo\", e a \"segurança comprometida\", que são os opostos da promessa de \"melhores equipamentos pelo preço justo\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao abordar a perda de prazer e a preocupação do pescador, e orientada a ação com a urgência da promoção do colete salva-vidas no final.",
+      "timestamp_utc": "2025-10-18T13:34:00Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:34:00Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-18T13:34:00Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 995
+      },
+      "timestamp_utc": "2025-10-18T13:34:05Z",
+      "duration_ms": 5190
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:34:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente para o universo da pesca (\"caixa de pesca organizada\", \"fisgada certeira\", \"linha vai arrebentar\", \"carretilha vai travar\", \"colete salva-vidas\"). A seção conecta explicitamente a transformação prometida de \"comprar os melhores equipamentos pelo preço justo\" através de frases como \"investimento inteligente\", \"garantia de proteção que você adquiriu por um preço justo\" e \"livre de preocupações com gastos excessivos ou com a qualidade duvidosa\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao descrever a \"adrenalina\", \"emoção\", \"confiança\" e \"paz de espírito\" do cliente, e orientada a ação, mostrando o sucesso como resultado de escolher a MG Pesca.",
+      "timestamp_utc": "2025-10-18T13:34:13Z",
+      "duration_ms": 8438
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino que gosta de pescaria, utilizando uma linguagem específica e envolvente para o universo da pesca (\"caixa de pesca organizada\", \"fisgada certeira\", \"linha vai arrebentar\", \"carretilha vai travar\", \"colete salva-vidas\"). A seção conecta explicitamente a transformação prometida de \"comprar os melhores equipamentos pelo preço justo\" através de frases como \"investimento inteligente\", \"garantia de proteção que você adquiriu por um preço justo\" e \"livre de preocupações com gastos excessivos ou com a qualidade duvidosa\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao descrever a \"adrenalina\", \"emoção\", \"confiança\" e \"paz de espírito\" do cliente, e orientada a ação, mostrando o sucesso como resultado de escolher a MG Pesca.",
+      "timestamp_utc": "2025-10-18T13:34:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-18T13:34:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-18T13:34:13Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 991
+      },
+      "timestamp_utc": "2025-10-18T13:34:22Z",
+      "duration_ms": 8358
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-18T13:34:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, utilizando uma linguagem específica e envolvente para o universo da pesca (\"pescador\", \"caixa de pesca\", \"fisgada\", \"beira do rio\", \"no meio do lago\", \"pescaria\", \"na água\"). A seção conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") ao descrever o cliente como \"Pescador Confiante e Estratégico\" que adquire o \"equipamento certo, com a durabilidade que você exige, e o melhor de tudo, adquirido pelo preço justo\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao abordar a \"paz de espírito\" e a \"confiança\" que o cliente ganha, e orientada a ação ao descrever a nova identidade e os resultados positivos de suas escolhas.",
+      "timestamp_utc": "2025-10-18T13:34:28Z",
+      "duration_ms": 6682
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto é excelente e atende a todos os critérios. Ele se dirige diretamente ao cliente masculino, utilizando uma linguagem específica e envolvente para o universo da pesca (\"pescador\", \"caixa de pesca\", \"fisgada\", \"beira do rio\", \"no meio do lago\", \"pescaria\", \"na água\"). A seção conecta explicitamente a transformação prometida (\"comprar os melhores equipamentos pelo preço justo\") ao descrever o cliente como \"Pescador Confiante e Estratégico\" que adquire o \"equipamento certo, com a durabilidade que você exige, e o melhor de tudo, adquirido pelo preço justo\". Evita clichês genéricos, sendo muito específico para o nicho de pesca. A linguagem é clara, empática ao abordar a \"paz de espírito\" e a \"confiança\" que o cliente ganha, e orientada a ação ao descrever a nova identidade e os resultados positivos de suas escolhas.",
+      "timestamp_utc": "2025-10-18T13:34:28Z",
+      "duration_ms": 0
+    }
+  ],
+  "enriched_inputs": {},
+  "timestamp_utc": "2025-10-18T13:34:28Z"
+}

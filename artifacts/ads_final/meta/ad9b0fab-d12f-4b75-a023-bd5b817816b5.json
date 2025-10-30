@@ -1,0 +1,1543 @@
+{
+  "filename": "20251019-175314_ad9b0fab-d12f-4b75-a023-bd5b817816b5_Feed.json",
+  "formato": "Feed",
+  "timestamp": "2025-10-19T20:53:15Z",
+  "size_bytes": 51718,
+  "final_delivery_local_path": "artifacts/ads_final/20251019-175314_ad9b0fab-d12f-4b75-a023-bd5b817816b5_Feed.json",
+  "final_delivery_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/ad9b0fab-d12f-4b75-a023-bd5b817816b5/20251019-175314_ad9b0fab-d12f-4b75-a023-bd5b817816b5_Feed.json",
+  "user_id": "u_999",
+  "session_id": "ad9b0fab-d12f-4b75-a023-bd5b817816b5",
+  "stage": "deterministic_final_validation",
+  "grade": "pass",
+  "deterministic_final_validation": {
+    "grade": "pass",
+    "issues": [],
+    "normalized_payload": {
+      "variations": [
+        {
+          "landing_page_url": "https://www.lojaflame.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Body Caracol: Sofisticação & Preço Justo. Oferta até Sexta!",
+            "corpo": "Cansada de buscar peças que unem elegância, qualidade e bom preço? A frustração de ter que escolher entre estilo e orçamento acaba aqui! Conheça o Body Caracol Tomara Que Caia (cód. 24710) da Loja Flamê: a união perfeita de um caimento impecável que valoriza sua silhueta de forma sofisticada, sem exageros, e um preço que respeita sua inteligência financeira. Sinta-se linda e poderosa sem abrir mão do seu bolso. Mas corra! Esta oferta exclusiva tem prazo limitado e termina nesta sexta-feira.",
+            "cta_texto": "Comprar agora"
+          },
+          "visual": {
+            "descricao_imagem": "1) Uma mulher jovem, com os ombros curvados e um olhar de profunda frustração, está em frente a um guarda-roupa abarrotado de roupas desinteressantes ou que caem mal. 2) A mesma mulher, agora sentada de forma focada, olhando atentamente para a tela de um smartphone ou laptop que exibe a Loja Flamê e o Body Caracol Tomara Que Caia, com uma expressão de determinação e otimismo. 3) A mesma mulher, sorrindo radiantemente e exalando confiança e elegância, vestindo o Body Caracol Tomara Que Caia em um ambiente sofisticado, com o body ajustado perfeitamente, valorizando sua silhueta de forma impecável.",
+            "prompt_estado_atual": "A young woman, same physical traits as before (skin tone, hair texture, facial structure), standing in front of an overflowing closet filled with uninspiring clothes, some visibly ill-fitting or looking cheap. She holds a flimsy-looking dress, her shoulders slumped, head slightly down, a look of deep frustration and exhaustion on her face. The room is slightly cluttered, emphasizing the overwhelming feeling. Emotion: despair.",
+            "prompt_estado_intermediario": "The same young woman, same physical traits, sitting at a desk or on a sofa, intently looking at a smartphone or laptop screen showing the Loja Flamê website. Her posture is engaged, one hand perhaps hovering over the screen, a look of focused determination and cautious optimism on her face as she discovers the 'Body Caracol Tomara Que Caia'. The background is neutral, suggesting a shift from frustration to action. Emotion: determined.",
+            "prompt_estado_aspiracional": "The same young woman, same physical traits, radiating confidence and elegance, wearing the 'Body Caracol Tomara Que Caia'. She is either smiling genuinely at her reflection in a mirror, or standing in a chic, modern setting (like a well-lit restaurant or a sophisticated office lobby), receiving an admiring glance from someone off-camera. The body is perfectly fitted, highlighting her silhouette without being vulgar. Her head is held high, her smile is radiant and her eyes sparkle with self-assurance. Emotion: joyful.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205132Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=ba2fa316bd6457635906d40e944e298407b99113be47ce28d4bf833bd3cb5513aad633284c83040f525c35706f14e37289c395d649d6a1098f9dc89223489df4be2c321b68af9c25308aaf520d8a3120de1b33320365b26fbcfaf1a563aeab5677fbbc695a2383710da212fa35ce615359ca74093a68f728219dd1311f9a185e03d3d3a7b821702e81d31c5e803f637d9b75be1066611ebe63df6e5f8db9c0c1bfa0b37801d9b25fa4dd691e0a86430aacd80d8d27eb0b16b31666290887b01406ebe905195f1277d38c5adcf5697019017ac637e494caeed82226c8638a94f0bc1344fd6bc559bce06e465e8224cfc5ee6ea94ee836f494c3e6fd12f020c116",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205145Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=962722f03d805550d56e1f77f14fd5b6dbea72958907b606e87f5755b02f565fc341d2d512c62aa66d78d04c1b0fd1038201e2135075d480dcc1fdfcad395c5e58509ca47927ac6b952cf111b74cb757fada380726dcd976265209821384286540a4a361c1efd25838e5c173cfc0f600fcd1e2c139dcde71293bdd3a87e9b3ae4a2f894e67e7f27cee31ecf4b05de3674b9fb11820c2172d5f259be59cb489b78326ddab3b9f06560e3e34fd9290172ea553961f4df28cba665e9e079b32f837b02b23e4c4293c185667512260570278f18cfe82d73cc87f085767c299ddae4bb803214290efefa08ccdf570f948264eeb28723b783e22094ecb21e8b86d63b8",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205200Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2e2e7ac68219af5b1b6ada3f3a2c6609b58204a46665db2bd70d082242d7150e88fddcae624c120bdc9f39abe99ee448dce4877284447ac80218e01ea18a3e685638490985a87be99f7e8b02f9bb8adccee964e8e5e4ef7c2c763c5de74fb05a43dcdf7a20f4a0adc9b83a4e609cd23b71538938eec22cd397b7a04c123234e586cb2214ee90f6f50eb3b6c04dfdcbc0fbace7d5f559e861f9fe4ebaa4b634a850998b42df5aa9e0beb230c6f742575adcdd8494afc991aa2261518ec82053729713c414b0def8079ce60af3e78063cfa518438ef86584670f416fda9e6d74544addfb4a51fe057b1228c0c1af49735323da7e5026cfacd9fa57b291b9defd45",
+            "image_generation_meta": {
+              "variation_idx": 0,
+              "duration_seconds": 39.94184785900006
+            }
+          },
+          "cta_instagram": "Comprar agora",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Narrativa visual em 3 atos (Problema -> Descoberta/Solução -> Transformação/Resultado aspiracional) com foco na jornada da persona. Ênfase em clareza, empatia e alinhamento com o framework StoryBrand.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é aquela mulher que sabe que se vestir bem é sobre mais do que apenas roupas. É sobre expressar quem você é, sentir-se confiante e elegante em qualquer ocasião. Mas você também é prática e inteligente: não quer gastar uma fortuna e detesta a ideia de parecer vulgar. Você busca um estilo atraente e sofisticado, que comunique sua força e bom gosto, sem abrir mão do seu orçamento. Você quer se ver no espelho e se sentir linda, poderosa, com peças que te valorizam sem exageros.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro: o mercado da moda simplesmente não oferece o que você realmente precisa. É um desafio quase impossível encontrar peças de roupa que consigam equilibrar três coisas essenciais para você: um estilo atraente e sofisticado, sem qualquer toque de vulgaridade, uma qualidade que garanta bom caimento e durabilidade, e um preço justo que não comprometa seu orçamento. Você se vê constantemente forçada a escolher entre pagar uma fortuna por algo que a valorize, ou se contentar com alternativas \"baratas\" que, na verdade, acabam sendo caras demais para o seu bom gosto e para a sua imagem, entregando qualidade duvidosa, caimento ruim ou um visual que beira o inapropriado.",
+              "O problema externo de um mercado que não te serve gera uma série de dores internas profundas. Você não se sente apenas frustrada por não encontrar a roupa certa, mas sim *incompreendida* pelo mundo da moda. Essa busca constante e infrutífera deixa você exausta, com a sensação de que não importa o quanto se esforce ou pesquise, o estilo que você tanto almeja – atraente, sofisticado, sem um pingo de vulgaridade e que caiba no seu bolso – parece uma miragem. Surge um conflito interno: você se questiona se é possível ter bom gosto e ser inteligente financeiramente ao mesmo tempo, ou se é condenada a escolher entre parecer elegante (gastando rios de dinheiro) ou prática (abrindo mão da sua imagem). Você se pega duvidando da sua própria capacidade de se vestir bem, ou pior, com medo constante de que, ao tentar ser atraente, acabe beirando a vulgaridade, o que a faz questionar seu próprio discernimento. Essa montanha-russa de esperança e decepção mina sua confiança, deixando você com uma sensação persistente de inadequação e a incerteza de que um dia poderá se ver no espelho e sentir a plenitude de ser linda, poderosa e verdadeiramente *você*, sem exageros ou preocupações financeiras."
+            ],
+            "storybrand_proposta": "Nós da Loja Flamê materializamos a promessa de um guarda-roupa que a representa de verdade – atraente, sofisticado, sem vulgaridade e que cabe no seu bolso. Fazemos isso por meio de uma curadoria meticulosa, onde cada peça é selecionada pensando no seu desejo por elegância e economia. Não se trata apenas de vender roupas; trata-se de oferecer soluções de estilo para acabar com aquela frustração de não ter o que vestir ou de se sentir incompreendida pelo mercado da moda.\n\nNossa equipe está constantemente buscando e testando tecidos que garantam caimento perfeito e durabilidade, para que o “barato” não se torne “caro” na primeira lavagem e para que suas roupas mantenham a forma e a beleza que você espera. Priorizamos cortes e designs que valorizam o corpo feminino de forma refinada, longe de qualquer indício de vulgaridade, assegurando que você transmita a confiança e o bom gosto que tanto preza em qualquer ambiente. E tudo isso, com o compromisso de manter preços que respeitem seu orçamento, provando que é possível, sim, unir estilo impecável à inteligência financeira, sem a falsa dicotomia que o mercado impõe.\n\nCom a Loja Flamê, você não compra apenas uma peça; você adquire a certeza de que está investindo em um estilo autêntico que eleva sua autoestima, sem sacrifícios desnecessários ou medo de estar passando a imagem errada. É a nossa forma de garantir que você se verá no espelho e sentirá a plenitude de ser linda, poderosa e confiante, sempre.; Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_autoridade": "Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_beneficios": [
+              "Imagine só: você abre o guarda-roupa e, em vez daquela velha frustração, encontra um espelho que reflete a mulher linda, poderosa e autêntica que você sempre soube que era. Você escolhe uma peça Loja Flamê e a veste com a certeza de que ela abraça sua silhueta de forma elegante, sem qualquer sombra de vulgaridade, exalando a sofisticação que você tanto preza. Não há mais aquela preocupação com o preço, pois você sabe que fez uma escolha inteligente, que respeita seu orçamento e valoriza seu dinheiro. Essa é a sua nova realidade. Você caminha com confiança em qualquer ambiente, seja uma reunião de trabalho importante, um jantar especial ou o dia a dia, sabendo que está impecavelmente vestida, recebendo olhares de admiração e elogiada pelo seu bom gosto. O \"barato que saiu caro\" é coisa do passado, pois suas roupas mantêm a forma e a beleza lavagem após lavagem, provando que é possível, sim, unir qualidade, estilo e inteligência financeira. Você não apenas se veste; você comunica sua personalidade forte, sua autoconfiança e a paz de espírito de quem sabe que está fazendo escolhas que a valorizam por completo, sem abrir mão de quem você é ou do seu bolso. Com a Loja Flamê, você se vê no espelho e sorri, porque finalmente encontrou o equilíbrio perfeito: um estilo atraente, sofisticado, sem vulgaridade e que cabe na sua vida e no seu orçamento."
+            ],
+            "storybrand_transformacao": "Você não é mais aquela mulher que se frustrava com o guarda-roupa ou que se sentia dividida entre o bom gosto e o bom preço. Agora, você é a personificação da elegância inteligente. Você se vê no espelho e enxerga uma mulher atraente e sofisticada, que expressa sua personalidade forte com confiança inabalável, sem um pingo de vulgaridade. A preocupação com o preço é coisa do passado, pois você sabe que faz escolhas assertivas que valorizam seu orçamento e seu bom gosto. Sua identidade é a de alguém que provou que é perfeitamente possível ter um estilo impecável, sentir-se linda e poderosa, gastando pouco e sem abrir mão da qualidade ou da imagem que deseja projetar. Você se tornou a mulher que sabe que a moda é uma ferramenta poderosa para expressar quem você é, uma aliada que a empodera em todos os momentos, e que o verdadeiro luxo reside em se sentir autêntica e plenamente você, por dentro e por fora, com peças que a representam em todos os sentidos.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você decidir não seguir esse caminho? O ciclo de frustração e decepção continuará. Você continuará abrindo o guarda-roupa e não encontrando nada que a faça sentir verdadeiramente atraente e sofisticada, sem receio de parecer vulgar. Sua busca incessante por peças que unam qualidade, bom caimento e um preço justo será uma jornada sem fim, resultando em mais \"barato que sai caro\" e na sensação constante de que seu dinheiro está sendo mal investido. A cada peça que não te valoriza, que se desfaz na primeira lavagem ou que te deixa insegura, você não apenas perde dinheiro, mas também mina sua confiança, alimentando a crença de que é impossível ter bom gosto e inteligência financeira ao mesmo tempo. Você continuará se sentindo incompreendida, cansada de ter que escolher entre gastar uma fortuna por algo que a represente ou se contentar com opções que comprometem sua imagem e sua autoestima. A consequência final é a perda de oportunidades – de se sentir poderosa em uma reunião importante, de desfrutar plenamente de um evento social, de simplesmente se ver no espelho e amar o que vê. Sua imagem, sua confiança e seu bolso continuarão pagando o preço por essa falsa dicotomia que a Loja Flamê veio para desconstruir."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.lojaflame.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Elegância Inteligente: seu Body Caracol com desconto.",
+            "corpo": "Imagine se sentir linda, poderosa e sofisticada, sem estourar o orçamento. Com o Body Caracol Tomara Que Caia, você pode! Chega de peças que não te valorizam. Nosso body oferece caimento perfeito, valorizando sua silhueta sem vulgaridade. Aproveite o desconto exclusivo até sexta-feira (cód. 24710) e transforme seu estilo. Clique e garanta o seu!",
+            "cta_texto": "Comprar agora"
+          },
+          "visual": {
+            "descricao_imagem": "1) Close-up no rosto de uma mulher com expressão de dúvida e frustração enquanto olha para uma roupa de má qualidade. 2) A mesma mulher, agora com um sorriso sutil, adicionando o Body Caracol Tomara Que Caia ao seu carrinho de compras online. 3) A mulher, vestindo o Body Caracol, caminha com confiança em um evento social, recebendo um olhar de admiração.",
+            "prompt_estado_atual": "A close-up shot of a young woman's face, her expression a mix of frustration and self-doubt as she holds up a poorly made piece of clothing against her body. The lighting is unflattering, highlighting her discontent. Emotion: inadequacy.",
+            "prompt_estado_intermediario": "The same woman, a look of decisive action on her face, confidently taps the 'Add to Cart' button on a stylish website displaying the 'Body Caracol Tomara Que Caia' on her phone. The environment is bright and clean. Emotion: empowered.",
+            "prompt_estado_aspiracional": "The same woman, now looking radiant and self-assured in the perfectly fitted 'Body Caracol Tomara Que Caia', walks through a chic art gallery opening. She catches a subtle, admiring glance from another well-dressed person, which brings a confident smile to her face. The scene is elegant and well-lit. Emotion: confident.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205210Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=7e464a7a983f5b266bf98bdc43bc8a2205220630f19f53da0085ed3f2501ec7936a76846dce690d5abcc42c8977707b706e4501f1b8d03755fc856ada3bb523eb755d417c48e0bba18922d8d78d9c124700ef309326a0dfbba62f5441a79d0e68b02131c871cb8f34870fe1cd7bd21f00dcdb010d52a03e6f3c76f336082f15006bb58f1ef1badbcc7c25674b2c63b7db541739f25412ad3363c2ada2e0ca5304dff5136911c49820a9cbd8ab3b6d9ae206e083264c8a77f0d5620ee7ee85435a38fa84a680899231fd6fb4546e03f5805a0979173f9a53d035de5b670791f4cf2c4931d0d3bd19e2812009d8abdc05eb24552a9024ae8d13c4db405e1089bd0",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205223Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2679bc02250e969d1379923c2df733ccf3a61430ce10140d73d2904040d03ad1c30c4d8b92d18da3711f0fdcb3ebeff14d412b27740b70f9de0797a6bae7f50f039e1cf0ad415f40adbb0624057bc4a8a91fc4d71ad7a3e98f0d374a730e645b8183db3df52bcdc17203ffac0cdcb4893434ed9e53f8ce721d1a7384ecf98f533deb89d98564a49dbfd35cefb1ae07772635c7ccef152247e057ddeb1ea82debfc0e7d538edb205388c4c47c55797ad8d187533f0a534a5ae7b58a72e8f8c0ac66f10ab489a3459531c195ba998788bd615dd80e0e59a977d70bfc5e63187a9e6f405e01cb1c69329941a3817bd09092f02d7a51c038c2ca289b24d5cd4527f4",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205237Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=233d068c807f7f728678a8d5cdc4570e5570223e031f6cb769f827f4855ea9edfb09ecabfbc6c91f5d7271b8f850435d537cb08796aca42926178fd04f8b6badf53cbac725aa7805e40014c6cad489c5c435c831c39b79585769463846d066109a4fb1d49d3848395a3def506a066b62a5fb566462d3ac5c6c9a1eabcb9b22f2e199f2baac8f07b6f13207b29043ea3082f16d0990ea07e0f90c034965df37e1d27d58332bf816a5928dc312224b95a845457659dc78488cd7327ed39636f6cdc89685fe4fd02f8eb564c9f374d484e74a59cd34962f0008ad1a7675de0b05ec4bf73d0a5c447e9c3cb8966437cc4b6c6724c048424a1c3037d53ff92a6cd732",
+            "image_generation_meta": {
+              "variation_idx": 1,
+              "duration_seconds": 37.22176493799998
+            }
+          },
+          "cta_instagram": "Comprar agora",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Narrativa visual em 3 atos (Problema -> Descoberta/Solução -> Transformação/Resultado aspiracional) com foco na jornada da persona. Ênfase em clareza, empatia e alinhamento com o framework StoryBrand.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é aquela mulher que sabe que se vestir bem é sobre mais do que apenas roupas. É sobre expressar quem você é, sentir-se confiante e elegante em qualquer ocasião. Mas você também é prática e inteligente: não quer gastar uma fortuna e detesta a ideia de parecer vulgar. Você busca um estilo atraente e sofisticado, que comunique sua força e bom gosto, sem abrir mão do seu orçamento. Você quer se ver no espelho e se sentir linda, poderosa, com peças que te valorizam sem exageros.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro: o mercado da moda simplesmente não oferece o que você realmente precisa. É um desafio quase impossível encontrar peças de roupa que consigam equilibrar três coisas essenciais para você: um estilo atraente e sofisticado, sem qualquer toque de vulgaridade, uma qualidade que garanta bom caimento e durabilidade, e um preço justo que não comprometa seu orçamento. Você se vê constantemente forçada a escolher entre pagar uma fortuna por algo que a valorize, ou se contentar com alternativas \"baratas\" que, na verdade, acabam sendo caras demais para o seu bom gosto e para a sua imagem, entregando qualidade duvidosa, caimento ruim ou um visual que beira o inapropriado.",
+              "O problema externo de um mercado que não te serve gera uma série de dores internas profundas. Você não se sente apenas frustrada por não encontrar a roupa certa, mas sim *incompreendida* pelo mundo da moda. Essa busca constante e infrutífera deixa você exausta, com a sensação de que não importa o quanto se esforce ou pesquise, o estilo que você tanto almeja – atraente, sofisticado, sem um pingo de vulgaridade e que caiba no seu bolso – parece uma miragem. Surge um conflito interno: você se questiona se é possível ter bom gosto e ser inteligente financeiramente ao mesmo tempo, ou se é condenada a escolher entre parecer elegante (gastando rios de dinheiro) ou prática (abrindo mão da sua imagem). Você se pega duvidando da sua própria capacidade de se vestir bem, ou pior, com medo constante de que, ao tentar ser atraente, acabe beirando a vulgaridade, o que a faz questionar seu próprio discernimento. Essa montanha-russa de esperança e decepção mina sua confiança, deixando você com uma sensação persistente de inadequação e a incerteza de que um dia poderá se ver no espelho e sentir a plenitude de ser linda, poderosa e verdadeiramente *você*, sem exageros ou preocupações financeiras."
+            ],
+            "storybrand_proposta": "Nós da Loja Flamê materializamos a promessa de um guarda-roupa que a representa de verdade – atraente, sofisticado, sem vulgaridade e que cabe no seu bolso. Fazemos isso por meio de uma curadoria meticulosa, onde cada peça é selecionada pensando no seu desejo por elegância e economia. Não se trata apenas de vender roupas; trata-se de oferecer soluções de estilo para acabar com aquela frustração de não ter o que vestir ou de se sentir incompreendida pelo mercado da moda.\n\nNossa equipe está constantemente buscando e testando tecidos que garantam caimento perfeito e durabilidade, para que o “barato” não se torne “caro” na primeira lavagem e para que suas roupas mantenham a forma e a beleza que você espera. Priorizamos cortes e designs que valorizam o corpo feminino de forma refinada, longe de qualquer indício de vulgaridade, assegurando que você transmita a confiança e o bom gosto que tanto preza em qualquer ambiente. E tudo isso, com o compromisso de manter preços que respeitem seu orçamento, provando que é possível, sim, unir estilo impecável à inteligência financeira, sem a falsa dicotomia que o mercado impõe.\n\nCom a Loja Flamê, você não compra apenas uma peça; você adquire a certeza de que está investindo em um estilo autêntico que eleva sua autoestima, sem sacrifícios desnecessários ou medo de estar passando a imagem errada. É a nossa forma de garantir que você se verá no espelho e sentirá a plenitude de ser linda, poderosa e confiante, sempre.; Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_autoridade": "Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_beneficios": [
+              "Imagine só: você abre o guarda-roupa e, em vez daquela velha frustração, encontra um espelho que reflete a mulher linda, poderosa e autêntica que você sempre soube que era. Você escolhe uma peça Loja Flamê e a veste com a certeza de que ela abraça sua silhueta de forma elegante, sem qualquer sombra de vulgaridade, exalando a sofisticação que você tanto preza. Não há mais aquela preocupação com o preço, pois você sabe que fez uma escolha inteligente, que respeita seu orçamento e valoriza seu dinheiro. Essa é a sua nova realidade. Você caminha com confiança em qualquer ambiente, seja uma reunião de trabalho importante, um jantar especial ou o dia a dia, sabendo que está impecavelmente vestida, recebendo olhares de admiração e elogiada pelo seu bom gosto. O \"barato que saiu caro\" é coisa do passado, pois suas roupas mantêm a forma e a beleza lavagem após lavagem, provando que é possível, sim, unir qualidade, estilo e inteligência financeira. Você não apenas se veste; você comunica sua personalidade forte, sua autoconfiança e a paz de espírito de quem sabe que está fazendo escolhas que a valorizam por completo, sem abrir mão de quem você é ou do seu bolso. Com a Loja Flamê, você se vê no espelho e sorri, porque finalmente encontrou o equilíbrio perfeito: um estilo atraente, sofisticado, sem vulgaridade e que cabe na sua vida e no seu orçamento."
+            ],
+            "storybrand_transformacao": "Você não é mais aquela mulher que se frustrava com o guarda-roupa ou que se sentia dividida entre o bom gosto e o bom preço. Agora, você é a personificação da elegância inteligente. Você se vê no espelho e enxerga uma mulher atraente e sofisticada, que expressa sua personalidade forte com confiança inabalável, sem um pingo de vulgaridade. A preocupação com o preço é coisa do passado, pois você sabe que faz escolhas assertivas que valorizam seu orçamento e seu bom gosto. Sua identidade é a de alguém que provou que é perfeitamente possível ter um estilo impecável, sentir-se linda e poderosa, gastando pouco e sem abrir mão da qualidade ou da imagem que deseja projetar. Você se tornou a mulher que sabe que a moda é uma ferramenta poderosa para expressar quem você é, uma aliada que a empodera em todos os momentos, e que o verdadeiro luxo reside em se sentir autêntica e plenamente você, por dentro e por fora, com peças que a representam em todos os sentidos.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você decidir não seguir esse caminho? O ciclo de frustração e decepção continuará. Você continuará abrindo o guarda-roupa e não encontrando nada que a faça sentir verdadeiramente atraente e sofisticada, sem receio de parecer vulgar. Sua busca incessante por peças que unam qualidade, bom caimento e um preço justo será uma jornada sem fim, resultando em mais \"barato que sai caro\" e na sensação constante de que seu dinheiro está sendo mal investido. A cada peça que não te valoriza, que se desfaz na primeira lavagem ou que te deixa insegura, você não apenas perde dinheiro, mas também mina sua confiança, alimentando a crença de que é impossível ter bom gosto e inteligência financeira ao mesmo tempo. Você continuará se sentindo incompreendida, cansada de ter que escolher entre gastar uma fortuna por algo que a represente ou se contentar com opções que comprometem sua imagem e sua autoestima. A consequência final é a perda de oportunidades – de se sentir poderosa em uma reunião importante, de desfrutar plenamente de um evento social, de simplesmente se ver no espelho e amar o que vê. Sua imagem, sua confiança e seu bolso continuarão pagando o preço por essa falsa dicotomia que a Loja Flamê veio para desconstruir."
+            ]
+          }
+        },
+        {
+          "landing_page_url": "https://www.lojaflame.com.br/",
+          "formato": "Feed",
+          "copy": {
+            "headline": "Cansada do 'barato que sai caro'? Oferta até sexta!",
+            "corpo": "Seu guarda-roupa está cheio, mas nada parece certo? Você merece mais do que peças que perdem a forma ou te deixam insegura. Dê um basta na frustração! O Body Caracol Tomara Que Caia da Loja Flamê é a escolha inteligente: qualidade, sofisticação e um preço que te respeita. A promoção acaba sexta (cód. 24710). Não perca!",
+            "cta_texto": "Saiba mais"
+          },
+          "visual": {
+            "descricao_imagem": "1) Uma mulher olha para a etiqueta de preço de uma roupa cara com uma expressão de desapontamento. 2) A mesma mulher, aliviada, compara o preço do Body Caracol em promoção no site da Loja Flamê. 3) A mulher, vestindo o Body Caracol, sorri enquanto coloca dinheiro que economizou em uma carteira, sentindo-se inteligente e elegante.",
+            "prompt_estado_atual": "A young woman stands in a boutique, looking disheartened at a price tag on a beautiful but exorbitant dress. Her body language expresses the conflict between desire and budget. The store is intimidatingly luxurious. Emotion: frustrated.",
+            "prompt_estado_intermediario": "Over-the-shoulder shot of the same woman on her couch, a look of pleasant surprise on her face as she sees the affordable price of the 'Body Caracol Tomara Que Caia' during a sale on the Loja Flamê website. She is relaxed and comfortable at home. Emotion: relief.",
+            "prompt_estado_aspiracional": "The same woman, chic and elegant in the 'Body Caracol Tomara Que Caia', confidently places a bill into her wallet. She is smiling, portraying a sense of pride in her smart financial decision and her stylish appearance. The setting is her own beautiful, well-organized living space. Emotion: smart and proud.",
+            "aspect_ratio": "4:5",
+            "image_estado_atual_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png",
+            "image_estado_atual_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205247Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4b0dc3a540c287aadcc8c738b3b2c5c4a323d879adb1e2f1e150dd8be1c75d46e1b609aeeafd377af6b1c58cc9bd358d8653b6985689f35df48f89016e80e0dbaec498d36b5c3c27f3a01936c22366368d55ea5dc72591baa5cd0d0f65e510a5bc6345f31572fa9c986384f67512f48783b799a2174d080ff884863377f1b00c6dfe540423fdd42ac6f2fa8d8d8654214a796e04186e3cc58de84fb5c7be44c837efec991fe0f3fd7482aef9102577c1b328acbe1d5809312edabbb8e6d7947584270f341f50c05ce7cf8ad3cb5f19145ccd81070bb996b3c4147c36fb93aada2352f3eecf1d03396034b5691900025e8141b8333f0a2d5da921225306d15959",
+            "image_estado_intermediario_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png",
+            "image_estado_intermediario_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205301Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0916d103ab679fc167820cc4ea2202963ce4780b0593a89b76c0aa57b2c01b50ebf6f49f3fa0a731175b4ac519778930688816bd5ccd78babf6cd1f266afdd2877af6476af654f519e4b2270fc87bece62ef3dc8fe9a861d34769f277e1ae3079a27485f7ef127beb33eb130aa0f8fa5e3c7c795698df198aa832922167fb129e8293b480665abe6f0a9584796bdfea3b84e3eac1ddfa01035c42b7d51f0e073fe927871382f5148a6d73241f3a39d1ee9cfc60b03ffaea8bd756f0a5090e354e641dd3897a195cef1a815046658f91ea40addd396f9b20fe9155cc838130d040e37933974b93b67d520090a7e7db0ddad28ab2f300ed1ec66f13a90ddeb3d0e",
+            "image_estado_aspiracional_gcs": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png",
+            "image_estado_aspiracional_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205314Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=59f56294a6761c33826bbe231a9695f4130349071871c596fae7d603b14be20a8be98991f808320ab7705b699721ce8861efb22d420b91caf7876b01349d30558738dcd7a5e14749f226a674f4fff218f5f1642f69ea8cd0b3bf9c46f0cca11a2ebad9d3a85e8a7a1b12928c2e41eb27d2f86fe6db84ebe9a71565db6e0030f73fbd401df3aaf75827c82539d4b1f322bf3f18265b571832c06f5e08b7cf8b823fa80afc832f5383745c583c35b7730fd1ba9eadf3c65c00aaab3f62055b74704c1b31f35922b920beba74ff50c4b653e6b124e35c6975f70ecb0bb650be924189757bc050ec8f0af94bb72c1448fb6b0c7456ce054ea325c7ebadc602645d3f",
+            "image_generation_meta": {
+              "variation_idx": 2,
+              "duration_seconds": 37.129094057999964
+            }
+          },
+          "cta_instagram": "Saiba mais",
+          "fluxo": "Instagram Ad → Landing Page → Botão WhatsApp",
+          "referencia_padroes": "Padrões de criativos com alta performance (Brasil, 2024–2025): Narrativa visual em 3 atos (Problema -> Descoberta/Solução -> Transformação/Resultado aspiracional) com foco na jornada da persona. Ênfase em clareza, empatia e alinhamento com o framework StoryBrand.",
+          "contexto_landing": {
+            "storybrand_completeness": 1.0,
+            "storybrand_persona": "Você é aquela mulher que sabe que se vestir bem é sobre mais do que apenas roupas. É sobre expressar quem você é, sentir-se confiante e elegante em qualquer ocasião. Mas você também é prática e inteligente: não quer gastar uma fortuna e detesta a ideia de parecer vulgar. Você busca um estilo atraente e sofisticado, que comunique sua força e bom gosto, sem abrir mão do seu orçamento. Você quer se ver no espelho e se sentir linda, poderosa, com peças que te valorizam sem exageros.",
+            "storybrand_dores": [
+              "O problema externo que você enfrenta é claro: o mercado da moda simplesmente não oferece o que você realmente precisa. É um desafio quase impossível encontrar peças de roupa que consigam equilibrar três coisas essenciais para você: um estilo atraente e sofisticado, sem qualquer toque de vulgaridade, uma qualidade que garanta bom caimento e durabilidade, e um preço justo que não comprometa seu orçamento. Você se vê constantemente forçada a escolher entre pagar uma fortuna por algo que a valorize, ou se contentar com alternativas \"baratas\" que, na verdade, acabam sendo caras demais para o seu bom gosto e para a sua imagem, entregando qualidade duvidosa, caimento ruim ou um visual que beira o inapropriado.",
+              "O problema externo de um mercado que não te serve gera uma série de dores internas profundas. Você não se sente apenas frustrada por não encontrar a roupa certa, mas sim *incompreendida* pelo mundo da moda. Essa busca constante e infrutífera deixa você exausta, com a sensação de que não importa o quanto se esforce ou pesquise, o estilo que você tanto almeja – atraente, sofisticado, sem um pingo de vulgaridade e que caiba no seu bolso – parece uma miragem. Surge um conflito interno: você se questiona se é possível ter bom gosto e ser inteligente financeiramente ao mesmo tempo, ou se é condenada a escolher entre parecer elegante (gastando rios de dinheiro) ou prática (abrindo mão da sua imagem). Você se pega duvidando da sua própria capacidade de se vestir bem, ou pior, com medo constante de que, ao tentar ser atraente, acabe beirando a vulgaridade, o que a faz questionar seu próprio discernimento. Essa montanha-russa de esperança e decepção mina sua confiança, deixando você com uma sensação persistente de inadequação e a incerteza de que um dia poderá se ver no espelho e sentir a plenitude de ser linda, poderosa e verdadeiramente *você*, sem exageros ou preocupações financeiras."
+            ],
+            "storybrand_proposta": "Nós da Loja Flamê materializamos a promessa de um guarda-roupa que a representa de verdade – atraente, sofisticado, sem vulgaridade e que cabe no seu bolso. Fazemos isso por meio de uma curadoria meticulosa, onde cada peça é selecionada pensando no seu desejo por elegância e economia. Não se trata apenas de vender roupas; trata-se de oferecer soluções de estilo para acabar com aquela frustração de não ter o que vestir ou de se sentir incompreendida pelo mercado da moda.\n\nNossa equipe está constantemente buscando e testando tecidos que garantam caimento perfeito e durabilidade, para que o “barato” não se torne “caro” na primeira lavagem e para que suas roupas mantenham a forma e a beleza que você espera. Priorizamos cortes e designs que valorizam o corpo feminino de forma refinada, longe de qualquer indício de vulgaridade, assegurando que você transmita a confiança e o bom gosto que tanto preza em qualquer ambiente. E tudo isso, com o compromisso de manter preços que respeitem seu orçamento, provando que é possível, sim, unir estilo impecável à inteligência financeira, sem a falsa dicotomia que o mercado impõe.\n\nCom a Loja Flamê, você não compra apenas uma peça; você adquire a certeza de que está investindo em um estilo autêntico que eleva sua autoestima, sem sacrifícios desnecessários ou medo de estar passando a imagem errada. É a nossa forma de garantir que você se verá no espelho e sentirá a plenitude de ser linda, poderosa e confiante, sempre.; Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_autoridade": "Nós da Loja Flamê entendemos profundamente essa sua busca incessante. Vemos a frustração no seu olhar diante de um guarda-roupa que não te serve, a exaustão de tentar equilibrar bom gosto, elegância e um preço justo, e o receio de que ser atraente possa, de alguma forma, beirar a vulgaridade. Sabemos que você é uma mulher inteligente, prática e com um senso estético apurado, e que a moda não deveria ser um campo de batalha, mas sim uma ferramenta para expressar quem você realmente é. É por isso que estamos aqui para ser a sua guia. A Loja Flamê nasceu com a missão de provar que você não precisa mais se conformar com essa falsa dicotomia imposta pelo mercado. Com anos de experiência e um olhar apurado para o universo feminino, nos dedicamos a garimpar e curar coleções que quebram essa barreira. Selecionamos cada peça pensando em cada detalhe que você valoriza: tecidos de qualidade que abraçam sua silhueta de forma impecável, cortes modernos que exalam sofisticação sem exageros e, acima de tudo, um preço acessível que respeita sua inteligência financeira. Conosco, você terá a certeza de que pode se vestir de forma atraente e sofisticada, sem vulgaridade e gastando pouco, transformando seu guarda-roupa em um reflexo autêntico da mulher poderosa e elegante que você é, todos os dias. Deixe a Loja Flamê guiá-la para a confiança de se ver no espelho e amar o que vê, sem preocupações.",
+            "storybrand_beneficios": [
+              "Imagine só: você abre o guarda-roupa e, em vez daquela velha frustração, encontra um espelho que reflete a mulher linda, poderosa e autêntica que você sempre soube que era. Você escolhe uma peça Loja Flamê e a veste com a certeza de que ela abraça sua silhueta de forma elegante, sem qualquer sombra de vulgaridade, exalando a sofisticação que você tanto preza. Não há mais aquela preocupação com o preço, pois você sabe que fez uma escolha inteligente, que respeita seu orçamento e valoriza seu dinheiro. Essa é a sua nova realidade. Você caminha com confiança em qualquer ambiente, seja uma reunião de trabalho importante, um jantar especial ou o dia a dia, sabendo que está impecavelmente vestida, recebendo olhares de admiração e elogiada pelo seu bom gosto. O \"barato que saiu caro\" é coisa do passado, pois suas roupas mantêm a forma e a beleza lavagem após lavagem, provando que é possível, sim, unir qualidade, estilo e inteligência financeira. Você não apenas se veste; você comunica sua personalidade forte, sua autoconfiança e a paz de espírito de quem sabe que está fazendo escolhas que a valorizam por completo, sem abrir mão de quem você é ou do seu bolso. Com a Loja Flamê, você se vê no espelho e sorri, porque finalmente encontrou o equilíbrio perfeito: um estilo atraente, sofisticado, sem vulgaridade e que cabe na sua vida e no seu orçamento."
+            ],
+            "storybrand_transformacao": "Você não é mais aquela mulher que se frustrava com o guarda-roupa ou que se sentia dividida entre o bom gosto e o bom preço. Agora, você é a personificação da elegância inteligente. Você se vê no espelho e enxerga uma mulher atraente e sofisticada, que expressa sua personalidade forte com confiança inabalável, sem um pingo de vulgaridade. A preocupação com o preço é coisa do passado, pois você sabe que faz escolhas assertivas que valorizam seu orçamento e seu bom gosto. Sua identidade é a de alguém que provou que é perfeitamente possível ter um estilo impecável, sentir-se linda e poderosa, gastando pouco e sem abrir mão da qualidade ou da imagem que deseja projetar. Você se tornou a mulher que sabe que a moda é uma ferramenta poderosa para expressar quem você é, uma aliada que a empodera em todos os momentos, e que o verdadeiro luxo reside em se sentir autêntica e plenamente você, por dentro e por fora, com peças que a representam em todos os sentidos.",
+            "storybrand_cta_principal": "Comprar agora",
+            "storybrand_urgencia": [
+              "E se você decidir não seguir esse caminho? O ciclo de frustração e decepção continuará. Você continuará abrindo o guarda-roupa e não encontrando nada que a faça sentir verdadeiramente atraente e sofisticada, sem receio de parecer vulgar. Sua busca incessante por peças que unam qualidade, bom caimento e um preço justo será uma jornada sem fim, resultando em mais \"barato que sai caro\" e na sensação constante de que seu dinheiro está sendo mal investido. A cada peça que não te valoriza, que se desfaz na primeira lavagem ou que te deixa insegura, você não apenas perde dinheiro, mas também mina sua confiança, alimentando a crença de que é impossível ter bom gosto e inteligência financeira ao mesmo tempo. Você continuará se sentindo incompreendida, cansada de ter que escolher entre gastar uma fortuna por algo que a represente ou se contentar com opções que comprometem sua imagem e sua autoestima. A consequência final é a perda de oportunidades – de se sentir poderosa em uma reunião importante, de desfrutar plenamente de um evento social, de simplesmente se ver no espelho e amar o que vê. Sua imagem, sua confiança e seu bolso continuarão pagando o preço por essa falsa dicotomia que a Loja Flamê veio para desconstruir."
+            ]
+          }
+        }
+      ]
+    },
+    "source": "validator"
+  },
+  "semantic_visual_review": {
+    "grade": "pass",
+    "comment": "The final semantic review process is complete. All creative variations within the final delivery have been validated and approved. The assets demonstrate full narrative consistency, strategic alignment, and adherence to the StoryBrand framework. The task is concluded."
+  },
+  "image_assets_review": {
+    "grade": "pass",
+    "issues": [],
+    "summary": [
+      {
+        "variation_index": 0,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205132Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=ba2fa316bd6457635906d40e944e298407b99113be47ce28d4bf833bd3cb5513aad633284c83040f525c35706f14e37289c395d649d6a1098f9dc89223489df4be2c321b68af9c25308aaf520d8a3120de1b33320365b26fbcfaf1a563aeab5677fbbc695a2383710da212fa35ce615359ca74093a68f728219dd1311f9a185e03d3d3a7b821702e81d31c5e803f637d9b75be1066611ebe63df6e5f8db9c0c1bfa0b37801d9b25fa4dd691e0a86430aacd80d8d27eb0b16b31666290887b01406ebe905195f1277d38c5adcf5697019017ac637e494caeed82226c8638a94f0bc1344fd6bc559bce06e465e8224cfc5ee6ea94ee836f494c3e6fd12f020c116"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205145Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=962722f03d805550d56e1f77f14fd5b6dbea72958907b606e87f5755b02f565fc341d2d512c62aa66d78d04c1b0fd1038201e2135075d480dcc1fdfcad395c5e58509ca47927ac6b952cf111b74cb757fada380726dcd976265209821384286540a4a361c1efd25838e5c173cfc0f600fcd1e2c139dcde71293bdd3a87e9b3ae4a2f894e67e7f27cee31ecf4b05de3674b9fb11820c2172d5f259be59cb489b78326ddab3b9f06560e3e34fd9290172ea553961f4df28cba665e9e079b32f837b02b23e4c4293c185667512260570278f18cfe82d73cc87f085767c299ddae4bb803214290efefa08ccdf570f948264eeb28723b783e22094ecb21e8b86d63b8"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205200Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2e2e7ac68219af5b1b6ada3f3a2c6609b58204a46665db2bd70d082242d7150e88fddcae624c120bdc9f39abe99ee448dce4877284447ac80218e01ea18a3e685638490985a87be99f7e8b02f9bb8adccee964e8e5e4ef7c2c763c5de74fb05a43dcdf7a20f4a0adc9b83a4e609cd23b71538938eec22cd397b7a04c123234e586cb2214ee90f6f50eb3b6c04dfdcbc0fbace7d5f559e861f9fe4ebaa4b634a850998b42df5aa9e0beb230c6f742575adcdd8494afc991aa2261518ec82053729713c414b0def8079ce60af3e78063cfa518438ef86584670f416fda9e6d74544addfb4a51fe057b1228c0c1af49735323da7e5026cfacd9fa57b291b9defd45"
+          },
+          "meta": {
+            "variation_idx": 0,
+            "duration_seconds": 39.94184785900006
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "despair",
+          "prompt_estado_intermediario": "determined",
+          "prompt_estado_aspiracional": "joyful"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 1,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205210Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=7e464a7a983f5b266bf98bdc43bc8a2205220630f19f53da0085ed3f2501ec7936a76846dce690d5abcc42c8977707b706e4501f1b8d03755fc856ada3bb523eb755d417c48e0bba18922d8d78d9c124700ef309326a0dfbba62f5441a79d0e68b02131c871cb8f34870fe1cd7bd21f00dcdb010d52a03e6f3c76f336082f15006bb58f1ef1badbcc7c25674b2c63b7db541739f25412ad3363c2ada2e0ca5304dff5136911c49820a9cbd8ab3b6d9ae206e083264c8a77f0d5620ee7ee85435a38fa84a680899231fd6fb4546e03f5805a0979173f9a53d035de5b670791f4cf2c4931d0d3bd19e2812009d8abdc05eb24552a9024ae8d13c4db405e1089bd0"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205223Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2679bc02250e969d1379923c2df733ccf3a61430ce10140d73d2904040d03ad1c30c4d8b92d18da3711f0fdcb3ebeff14d412b27740b70f9de0797a6bae7f50f039e1cf0ad415f40adbb0624057bc4a8a91fc4d71ad7a3e98f0d374a730e645b8183db3df52bcdc17203ffac0cdcb4893434ed9e53f8ce721d1a7384ecf98f533deb89d98564a49dbfd35cefb1ae07772635c7ccef152247e057ddeb1ea82debfc0e7d538edb205388c4c47c55797ad8d187533f0a534a5ae7b58a72e8f8c0ac66f10ab489a3459531c195ba998788bd615dd80e0e59a977d70bfc5e63187a9e6f405e01cb1c69329941a3817bd09092f02d7a51c038c2ca289b24d5cd4527f4"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205237Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=233d068c807f7f728678a8d5cdc4570e5570223e031f6cb769f827f4855ea9edfb09ecabfbc6c91f5d7271b8f850435d537cb08796aca42926178fd04f8b6badf53cbac725aa7805e40014c6cad489c5c435c831c39b79585769463846d066109a4fb1d49d3848395a3def506a066b62a5fb566462d3ac5c6c9a1eabcb9b22f2e199f2baac8f07b6f13207b29043ea3082f16d0990ea07e0f90c034965df37e1d27d58332bf816a5928dc312224b95a845457659dc78488cd7327ed39636f6cdc89685fe4fd02f8eb564c9f374d484e74a59cd34962f0008ad1a7675de0b05ec4bf73d0a5c447e9c3cb8966437cc4b6c6724c048424a1c3037d53ff92a6cd732"
+          },
+          "meta": {
+            "variation_idx": 1,
+            "duration_seconds": 37.22176493799998
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "inadequacy",
+          "prompt_estado_intermediario": "empowered",
+          "prompt_estado_aspiracional": "confident"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      },
+      {
+        "variation_index": 2,
+        "status": "ok",
+        "assets": {
+          "estado_atual": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205247Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4b0dc3a540c287aadcc8c738b3b2c5c4a323d879adb1e2f1e150dd8be1c75d46e1b609aeeafd377af6b1c58cc9bd358d8653b6985689f35df48f89016e80e0dbaec498d36b5c3c27f3a01936c22366368d55ea5dc72591baa5cd0d0f65e510a5bc6345f31572fa9c986384f67512f48783b799a2174d080ff884863377f1b00c6dfe540423fdd42ac6f2fa8d8d8654214a796e04186e3cc58de84fb5c7be44c837efec991fe0f3fd7482aef9102577c1b328acbe1d5809312edabbb8e6d7947584270f341f50c05ce7cf8ad3cb5f19145ccd81070bb996b3c4147c36fb93aada2352f3eecf1d03396034b5691900025e8141b8333f0a2d5da921225306d15959"
+          },
+          "estado_intermediario": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205301Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0916d103ab679fc167820cc4ea2202963ce4780b0593a89b76c0aa57b2c01b50ebf6f49f3fa0a731175b4ac519778930688816bd5ccd78babf6cd1f266afdd2877af6476af654f519e4b2270fc87bece62ef3dc8fe9a861d34769f277e1ae3079a27485f7ef127beb33eb130aa0f8fa5e3c7c795698df198aa832922167fb129e8293b480665abe6f0a9584796bdfea3b84e3eac1ddfa01035c42b7d51f0e073fe927871382f5148a6d73241f3a39d1ee9cfc60b03ffaea8bd756f0a5090e354e641dd3897a195cef1a815046658f91ea40addd396f9b20fe9155cc838130d040e37933974b93b67d520090a7e7db0ddad28ab2f300ed1ec66f13a90ddeb3d0e"
+          },
+          "estado_aspiracional": {
+            "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png",
+            "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205314Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=59f56294a6761c33826bbe231a9695f4130349071871c596fae7d603b14be20a8be98991f808320ab7705b699721ce8861efb22d420b91caf7876b01349d30558738dcd7a5e14749f226a674f4fff218f5f1642f69ea8cd0b3bf9c46f0cca11a2ebad9d3a85e8a7a1b12928c2e41eb27d2f86fe6db84ebe9a71565db6e0030f73fbd401df3aaf75827c82539d4b1f322bf3f18265b571832c06f5e08b7cf8b823fa80afc832f5383745c583c35b7730fd1ba9eadf3c65c00aaab3f62055b74704c1b31f35922b920beba74ff50c4b653e6b124e35c6975f70ecb0bb650be924189757bc050ec8f0af94bb72c1448fb6b0c7456ce054ea325c7ebadc602645d3f"
+          },
+          "meta": {
+            "variation_idx": 2,
+            "duration_seconds": 37.129094057999964
+          }
+        },
+        "character_reference_used": false,
+        "product_reference_used": false,
+        "emotions": {
+          "prompt_estado_atual": "frustrated",
+          "prompt_estado_intermediario": "relief",
+          "prompt_estado_aspiracional": "smart and proud"
+        },
+        "safe_search_notes": null,
+        "reference_errors": null
+      }
+    ],
+    "source": "image_assets_agent"
+  },
+  "storybrand_audit_trail": [
+    {
+      "stage": "collector",
+      "status": "completed",
+      "section_key": null,
+      "iteration": null,
+      "details": {
+        "inputs": {
+          "nome_empresa": "Loja Flamê",
+          "o_que_a_empresa_faz": "Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.",
+          "sexo_cliente_alvo": "feminino"
+        },
+        "enriched_fields": {}
+      },
+      "timestamp_utc": "2025-10-19T20:34:18Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "display_name": "StoryBrand – Personagem",
+        "approved_sections": []
+      },
+      "timestamp_utc": "2025-10-19T20:34:18Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "Definir com clareza quem é o herói da história.",
+      "timestamp_utc": "2025-10-19T20:34:18Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": {
+        "length": 483
+      },
+      "timestamp_utc": "2025-10-19T20:34:27Z",
+      "duration_ms": 8740
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:34:27Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto atende perfeitamente aos critérios. Demonstra empatia real com o público feminino, abordando suas preocupações com confiança, elegância e orçamento. A descrição da transformação e dos desejos da mulher está diretamente alinhada com a proposta da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.'. O tom é inspirador e estratégico, descrevendo uma cliente que busca o que a Loja Flamê oferece de forma clara e específica, sem generalizações.",
+      "timestamp_utc": "2025-10-19T20:34:32Z",
+      "duration_ms": 5889
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_character",
+      "iteration": 1,
+      "details": "O texto atende perfeitamente aos critérios. Demonstra empatia real com o público feminino, abordando suas preocupações com confiança, elegância e orçamento. A descrição da transformação e dos desejos da mulher está diretamente alinhada com a proposta da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.'. O tom é inspirador e estratégico, descrevendo uma cliente que busca o que a Loja Flamê oferece de forma clara e específica, sem generalizações.",
+      "timestamp_utc": "2025-10-19T20:34:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Inicial",
+        "approved_sections": [
+          "storybrand_character"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:34:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "Apresentar a situação inicial do cliente antes do conflito.",
+      "timestamp_utc": "2025-10-19T20:34:32Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": {
+        "length": 563
+      },
+      "timestamp_utc": "2025-10-19T20:34:43Z",
+      "duration_ms": 10188
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:34:43Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto da exposição 1 é excelente. Ele capta a essência da frustração do público feminino em relação à moda de forma empática e precisa. Cada frase ressoa com as preocupações de estilo, orçamento e desejo de sofisticação sem vulgaridade, que a empresa se propõe a resolver. A forma como a \"encruzilhada\" do mercado é apresentada, confrontando o gasto excessivo com a falta de personalidade, é muito eficaz. O texto prepara perfeitamente o terreno para a solução oferecida, alinhando-se diretamente com \"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.\" É inspirador ao reconhecer o desejo por confiança e elegância, e estratégico ao posicionar o problema que a empresa irá resolver.",
+      "timestamp_utc": "2025-10-19T20:34:49Z",
+      "duration_ms": 6790
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_1",
+      "iteration": 1,
+      "details": "O texto da exposição 1 é excelente. Ele capta a essência da frustração do público feminino em relação à moda de forma empática e precisa. Cada frase ressoa com as preocupações de estilo, orçamento e desejo de sofisticação sem vulgaridade, que a empresa se propõe a resolver. A forma como a \"encruzilhada\" do mercado é apresentada, confrontando o gasto excessivo com a falta de personalidade, é muito eficaz. O texto prepara perfeitamente o terreno para a solução oferecida, alinhando-se diretamente com \"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.\" É inspirador ao reconhecer o desejo por confiança e elegância, e estratégico ao posicionar o problema que a empresa irá resolver.",
+      "timestamp_utc": "2025-10-19T20:34:49Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 1",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:34:49Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "Destacar o primeiro gatilho que evidencia o problema.",
+      "timestamp_utc": "2025-10-19T20:34:49Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": {
+        "length": 877
+      },
+      "timestamp_utc": "2025-10-19T20:35:05Z",
+      "duration_ms": 15655
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:35:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto do incidente incitante é excelente. Ele capta a frustração comum de forma muito empática e específica para o público feminino. Cada ponto de dor mencionado — o custo, o risco de vulgaridade, a falta de sofisticação em opções mais baratas — está diretamente alinhado com a promessa da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.'. O cenário descrito é extremamente relacionável e prepara a cliente para a solução de forma estratégica. O tom é perfeito para um inciting incident, reconhecendo a dor e a necessidade de uma transformação.",
+      "timestamp_utc": "2025-10-19T20:35:11Z",
+      "duration_ms": 5791
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_1",
+      "iteration": 1,
+      "details": "O texto do incidente incitante é excelente. Ele capta a frustração comum de forma muito empática e específica para o público feminino. Cada ponto de dor mencionado — o custo, o risco de vulgaridade, a falta de sofisticação em opções mais baratas — está diretamente alinhado com a promessa da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.'. O cenário descrito é extremamente relacionável e prepara a cliente para a solução de forma estratégica. O tom é perfeito para um inciting incident, reconhecendo a dor e a necessidade de uma transformação.",
+      "timestamp_utc": "2025-10-19T20:35:11Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Exposição Complementar",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:35:11Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "Aprofundar o contexto com detalhes visuais e emocionais.",
+      "timestamp_utc": "2025-10-19T20:35:11Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": {
+        "length": 1082
+      },
+      "timestamp_utc": "2025-10-19T20:35:21Z",
+      "duration_ms": 9928
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:35:21Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "A exposição 2 é excepcional e cumpre todos os critérios com maestria. O texto demonstra uma empatia profunda com o público feminino, abordando frustrações e desejos de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é evidente e direta em cada ponto de dor e anseio mencionado. O tom é inspirador ao falar sobre confiança, autoexpressão e paz de espírito, e estratégico ao detalhar as objeções (vulgaridade, parecer barata, preço alto) que a empresa se propõe a resolver. Não há vaguidão; pelo contrário, o texto é ricamente detalhado e focado na transformação que a cliente busca. É uma excelente continuação da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:35:28Z",
+      "duration_ms": 7251
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "exposition_2",
+      "iteration": 1,
+      "details": "A exposição 2 é excepcional e cumpre todos os critérios com maestria. O texto demonstra uma empatia profunda com o público feminino, abordando frustrações e desejos de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é evidente e direta em cada ponto de dor e anseio mencionado. O tom é inspirador ao falar sobre confiança, autoexpressão e paz de espírito, e estratégico ao detalhar as objeções (vulgaridade, parecer barata, preço alto) que a empresa se propõe a resolver. Não há vaguidão; pelo contrário, o texto é ricamente detalhado e focado na transformação que a cliente busca. É uma excelente continuação da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:35:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "display_name": "Incidente Inicial 2",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:35:28Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "Reforçar o problema com um segundo gatilho complementar.",
+      "timestamp_utc": "2025-10-19T20:35:28Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": {
+        "length": 967
+      },
+      "timestamp_utc": "2025-10-19T20:35:41Z",
+      "duration_ms": 12981
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:35:41Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto do incidente incitante 2 é excelente. Ele aprofunda a frustração do público feminino de forma muito empática e específica, conectando-se diretamente com as promessas da empresa. A narrativa dos 'ciclos de esperança e decepção' ao tentar economizar, mas acabar com 'barato que saiu caro' devido à má qualidade, tecido que marca ou caimento inadequado, é um ponto de dor extremamente relacionável. Isso reforça a necessidade de uma solução que ofereça 'atraente e sofisticada, sem vulgaridade e gastando pouco', diferenciando a proposta da empresa dos insucessos anteriores da cliente. O tom é estratégico ao evidenciar as falhas do mercado e inspirar a busca por uma alternativa que resolva esses problemas de uma vez por todas.",
+      "timestamp_utc": "2025-10-19T20:35:50Z",
+      "duration_ms": 8470
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "inciting_incident_2",
+      "iteration": 1,
+      "details": "O texto do incidente incitante 2 é excelente. Ele aprofunda a frustração do público feminino de forma muito empática e específica, conectando-se diretamente com as promessas da empresa. A narrativa dos 'ciclos de esperança e decepção' ao tentar economizar, mas acabar com 'barato que saiu caro' devido à má qualidade, tecido que marca ou caimento inadequado, é um ponto de dor extremamente relacionável. Isso reforça a necessidade de uma solução que ofereça 'atraente e sofisticada, sem vulgaridade e gastando pouco', diferenciando a proposta da empresa dos insucessos anteriores da cliente. O tom é estratégico ao evidenciar as falhas do mercado e inspirar a busca por uma alternativa que resolva esses problemas de uma vez por todas.",
+      "timestamp_utc": "2025-10-19T20:35:50Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "display_name": "Necessidades Não Atendidas",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:35:50Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "Sintetizar necessidades não atendidas que justificam a proposta.",
+      "timestamp_utc": "2025-10-19T20:35:50Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": {
+        "length": 1095
+      },
+      "timestamp_utc": "2025-10-19T20:35:57Z",
+      "duration_ms": 7894
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:35:57Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto da 'unmet_needs_summary' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas frustrações e desejos de forma precisa e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente em cada ponto de dor e anseio mencionado. O texto aborda especificamente a busca por peças que unam qualidade, caimento impecável e preço justo, e a aversão ao 'barato que sai caro' ou à vulgaridade, o que o torna altamente relevante. O tom é inspirador, falando de liberdade, confiança, paz de espírito e inteligência financeira, e estratégico ao posicionar claramente os problemas que a empresa se propõe a resolver. Não há vaguidão; pelo contrário, é rico em detalhes e focado na transformação que a cliente busca. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:07Z",
+      "duration_ms": 9481
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "unmet_needs_summary",
+      "iteration": 1,
+      "details": "O texto da 'unmet_needs_summary' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas frustrações e desejos de forma precisa e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente em cada ponto de dor e anseio mencionado. O texto aborda especificamente a busca por peças que unam qualidade, caimento impecável e preço justo, e a aversão ao 'barato que sai caro' ou à vulgaridade, o que o torna altamente relevante. O tom é inspirador, falando de liberdade, confiança, paz de espírito e inteligência financeira, e estratégico ao posicionar claramente os problemas que a empresa se propõe a resolver. Não há vaguidão; pelo contrário, é rico em detalhes e focado na transformação que a cliente busca. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:07Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Externo",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:36:07Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "Nomear o problema externo enfrentado pelo cliente.",
+      "timestamp_utc": "2025-10-19T20:36:07Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": {
+        "length": 712
+      },
+      "timestamp_utc": "2025-10-19T20:36:16Z",
+      "duration_ms": 9454
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:36:16Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto do problema externo é excelente. Ele capta a essência da frustração do público feminino de forma muito empática e precisa. A descrição de como o mercado falha em oferecer \"estilo atraente e sofisticado, sem qualquer toque de vulgaridade, uma qualidade que garanta bom caimento e durabilidade, e um preço justo\" se alinha perfeitamente com a promessa da empresa: \"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.\". A dicotomia entre pagar caro ou se contentar com o \"barato que sai caro\" é uma dor extremamente real e bem articulada. O tom é estratégico ao posicionar o problema que a empresa se propõe a resolver, não é vago e fala diretamente com as preocupações da cliente.",
+      "timestamp_utc": "2025-10-19T20:36:23Z",
+      "duration_ms": 6462
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_external",
+      "iteration": 1,
+      "details": "O texto do problema externo é excelente. Ele capta a essência da frustração do público feminino de forma muito empática e precisa. A descrição de como o mercado falha em oferecer \"estilo atraente e sofisticado, sem qualquer toque de vulgaridade, uma qualidade que garanta bom caimento e durabilidade, e um preço justo\" se alinha perfeitamente com a promessa da empresa: \"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.\". A dicotomia entre pagar caro ou se contentar com o \"barato que sai caro\" é uma dor extremamente real e bem articulada. O tom é estratégico ao posicionar o problema que a empresa se propõe a resolver, não é vago e fala diretamente com as preocupações da cliente.",
+      "timestamp_utc": "2025-10-19T20:36:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Interno",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:36:23Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "Explorar as dores internas e emocionais.",
+      "timestamp_utc": "2025-10-19T20:36:23Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": {
+        "length": 1196
+      },
+      "timestamp_utc": "2025-10-19T20:36:29Z",
+      "duration_ms": 5945
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:36:29Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto da seção 'storybrand_problem_internal' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas dores internas (frustração, incompreensão, exaustão, dúvida sobre a própria capacidade, medo da vulgaridade, inadequação) de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, pois todas as dores internas giram em torno da dificuldade de atingir esse objetivo sem sacrifícios. O texto não é vago, mas sim rico em detalhes emocionais, como o 'conflito interno' de ter bom gosto e ser inteligente financeiramente, e o 'medo constante de que, ao tentar ser atraente, acabe beirando a vulgaridade'. O tom é inspirador ao tocar na busca por autoconfiança, plenitude e autenticidade ('verdadeiramente *você*') e é estratégico ao posicionar claramente os problemas emocionais que a empresa se propõe a resolver. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:37Z",
+      "duration_ms": 8037
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_internal",
+      "iteration": 1,
+      "details": "O texto da seção 'storybrand_problem_internal' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas dores internas (frustração, incompreensão, exaustão, dúvida sobre a própria capacidade, medo da vulgaridade, inadequação) de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, pois todas as dores internas giram em torno da dificuldade de atingir esse objetivo sem sacrifícios. O texto não é vago, mas sim rico em detalhes emocionais, como o 'conflito interno' de ter bom gosto e ser inteligente financeiramente, e o 'medo constante de que, ao tentar ser atraente, acabe beirando a vulgaridade'. O tom é inspirador ao tocar na busca por autoconfiança, plenitude e autenticidade ('verdadeiramente *você*') e é estratégico ao posicionar claramente os problemas emocionais que a empresa se propõe a resolver. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "display_name": "Problema Filosófico",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:36:37Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "Explicar por que é injusto o cliente enfrentar esse problema.",
+      "timestamp_utc": "2025-10-19T20:36:37Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": {
+        "length": 1304
+      },
+      "timestamp_utc": "2025-10-19T20:36:48Z",
+      "duration_ms": 10802
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:36:48Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto da seção 'storybrand_problem_philosophical' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas dores e anseios de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, abordando explicitamente a falsa dicotomia entre elegância e preço, a busca por peças que valorizem a silhueta e durem, e a aversão à vulgaridade. O texto não é vago, mas sim rico em detalhes, validando a inteligência e o bom gosto da cliente. O tom é inspirador ao falar de justiça, direito a um estilo que inspira confiança e reflete a personalidade, e é estratégico ao posicionar a luta como um problema imposto pelo mercado, não pela cliente. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:56Z",
+      "duration_ms": 8279
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_problem_philosophical",
+      "iteration": 1,
+      "details": "O texto da seção 'storybrand_problem_philosophical' é excelente e cumpre todos os critérios com maestria. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas dores e anseios de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, abordando explicitamente a falsa dicotomia entre elegância e preço, a busca por peças que valorizem a silhueta e durem, e a aversão à vulgaridade. O texto não é vago, mas sim rico em detalhes, validando a inteligência e o bom gosto da cliente. O tom é inspirador ao falar de justiça, direito a um estilo que inspira confiança e reflete a personalidade, e é estratégico ao posicionar a luta como um problema imposto pelo mercado, não pela cliente. É uma peça fundamental na construção da narrativa StoryBrand.",
+      "timestamp_utc": "2025-10-19T20:36:56Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "display_name": "Guia",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:36:56Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "Posicionar a empresa como guia confiável.",
+      "timestamp_utc": "2025-10-19T20:36:56Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": {
+        "length": 1399
+      },
+      "timestamp_utc": "2025-10-19T20:37:06Z",
+      "duration_ms": 9568
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:37:06Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto da seção StoryBrand para a 'guia' é excelente. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas frustrações e desejos de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, abordando explicitamente o equilíbrio entre bom gosto, elegância, preço justo e o receio de vulgaridade. O texto não é vago, mas sim rico em detalhes sobre como a Loja Flamê oferece a solução (tecidos de qualidade, cortes modernos, preço acessível). O tom é inspirador ao validar a cliente como uma 'mulher inteligente, prática e com um senso estético apurado' e estratégico ao posicionar a Loja Flamê como a 'guia' que quebra a 'falsa dicotomia' do mercado, levando à confiança e autenticidade. O convite final é acionável e claro. Cumpre todos os critérios com maestria.",
+      "timestamp_utc": "2025-10-19T20:37:13Z",
+      "duration_ms": 7414
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_guide",
+      "iteration": 1,
+      "details": "O texto da seção StoryBrand para a 'guia' é excelente. Ele demonstra uma empatia profunda e autêntica com o público feminino, articulando suas frustrações e desejos de forma muito específica e relacionável. A conexão com a proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') é direta e evidente, abordando explicitamente o equilíbrio entre bom gosto, elegância, preço justo e o receio de vulgaridade. O texto não é vago, mas sim rico em detalhes sobre como a Loja Flamê oferece a solução (tecidos de qualidade, cortes modernos, preço acessível). O tom é inspirador ao validar a cliente como uma 'mulher inteligente, prática e com um senso estético apurado' e estratégico ao posicionar a Loja Flamê como a 'guia' que quebra a 'falsa dicotomia' do mercado, levando à confiança e autenticidade. O convite final é acionável e claro. Cumpre todos os critérios com maestria.",
+      "timestamp_utc": "2025-10-19T20:37:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "display_name": "Proposta de Valor",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:37:13Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "Explicar como a empresa entrega a transformação prometida.",
+      "timestamp_utc": "2025-10-19T20:37:13Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": {
+        "length": 1470
+      },
+      "timestamp_utc": "2025-10-19T20:37:22Z",
+      "duration_ms": 9551
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:37:22Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto da proposta de valor é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, abordando diretamente as dores e desejos como a frustração de não ter o que vestir, a busca por elegância e economia, o medo do 'barato que sai caro' e a preocupação em transmitir uma imagem atraente e sofisticada sem vulgaridade. A transformação oferecida (guarda-roupa que representa a mulher de verdade, elevando a autoestima e a confiança) está diretamente ligada à promessa da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'. Não há respostas vagas ou genéricas; pelo contrário, o texto detalha a curadoria, a busca por tecidos de qualidade, cortes que valorizam o corpo e o compromisso com preços justos. O tom é inspirador ao falar de autoestima, autenticidade e plenitude, estratégico ao apresentar a solução para a 'falsa dicotomia' do mercado e acionável ao mostrar o que a cliente adquire além de uma peça de roupa.",
+      "timestamp_utc": "2025-10-19T20:37:32Z",
+      "duration_ms": 9617
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_value_proposition",
+      "iteration": 1,
+      "details": "O texto da proposta de valor é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, abordando diretamente as dores e desejos como a frustração de não ter o que vestir, a busca por elegância e economia, o medo do 'barato que sai caro' e a preocupação em transmitir uma imagem atraente e sofisticada sem vulgaridade. A transformação oferecida (guarda-roupa que representa a mulher de verdade, elevando a autoestima e a confiança) está diretamente ligada à promessa da empresa: 'Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'. Não há respostas vagas ou genéricas; pelo contrário, o texto detalha a curadoria, a busca por tecidos de qualidade, cortes que valorizam o corpo e o compromisso com preços justos. O tom é inspirador ao falar de autoestima, autenticidade e plenitude, estratégico ao apresentar a solução para a 'falsa dicotomia' do mercado e acionável ao mostrar o que a cliente adquire além de uma peça de roupa.",
+      "timestamp_utc": "2025-10-19T20:37:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "display_name": "Plano",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:37:32Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "Apresentar um plano em passos claros e acionáveis.",
+      "timestamp_utc": "2025-10-19T20:37:32Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": {
+        "length": 1581
+      },
+      "timestamp_utc": "2025-10-19T20:37:39Z",
+      "duration_ms": 6944
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:37:39Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto da seção do StoryBrand é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, abordando diretamente suas dores e anseios em cada um dos três passos. A transformação prometida ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') está intrinsecamente ligada ao plano, sendo revisitada e reforçada de maneira muito específica, especialmente nos pontos de 'elegância sem gastar uma fortuna', 'valorizar a mulher sem jamais beirar a vulgaridade', 'tecidos de qualidade, com caimento impecável que valoriza sua silhueta de forma sofisticada' e 'preço que respeita seu orçamento'. O texto rejeita respostas vagas, detalhando a curadoria inteligente, a escolha consciente e os resultados de um estilo autêntico e poderoso, sem exageros ou preocupações financeiras. O tom é consistentemente inspirador (confiança inabalável, liberdade, poderoso), estratégico (passos claros, fim da dicotomia) e acionável, guiando a cliente de forma eficaz através da solução da Loja Flamê.",
+      "timestamp_utc": "2025-10-19T20:37:47Z",
+      "duration_ms": 7593
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_plan",
+      "iteration": 1,
+      "details": "O texto da seção do StoryBrand é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, abordando diretamente suas dores e anseios em cada um dos três passos. A transformação prometida ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco.') está intrinsecamente ligada ao plano, sendo revisitada e reforçada de maneira muito específica, especialmente nos pontos de 'elegância sem gastar uma fortuna', 'valorizar a mulher sem jamais beirar a vulgaridade', 'tecidos de qualidade, com caimento impecável que valoriza sua silhueta de forma sofisticada' e 'preço que respeita seu orçamento'. O texto rejeita respostas vagas, detalhando a curadoria inteligente, a escolha consciente e os resultados de um estilo autêntico e poderoso, sem exageros ou preocupações financeiras. O tom é consistentemente inspirador (confiança inabalável, liberdade, poderoso), estratégico (passos claros, fim da dicotomia) e acionável, guiando a cliente de forma eficaz através da solução da Loja Flamê.",
+      "timestamp_utc": "2025-10-19T20:37:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "display_name": "Chamado à Ação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:37:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "Convocar o cliente para a ação com CTA direto e secundário.",
+      "timestamp_utc": "2025-10-19T20:37:47Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": {
+        "length": 642
+      },
+      "timestamp_utc": "2025-10-19T20:37:58Z",
+      "duration_ms": 11267
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:37:58Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto da seção de ação é excelente e cumpre todos os critérios com maestria. Ele fala com clareza e empatia para o público feminino, utilizando termos como \"linda, poderosa e elegante\" e abordando a preocupação com o \"sem gastar uma fortuna\" e o \"respeita seu bolso\". A transformação proposta está diretamente ligada à promessa da empresa (\"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco\"), focando na sofisticação e na inteligência financeira. O texto é altamente específico, mencionando um produto (\"Body Caracol Tomara Que Caia\"), uma urgência (\"termina nesta sexta-feira!\") e múltiplas chamadas para ação (\"Clique AQUI\", \"Descubra nossa curadoria\", \"cadastre-se em nossa newsletter\"), o que rejeita qualquer vaguidão ou genericidade. O tom é inspirador ao prometer uma sensação de beleza e poder, estratégico ao criar senso de urgência e oferecer diversas vias de engajamento, e altamente acionável. É uma chamada para ação muito bem elaborada.",
+      "timestamp_utc": "2025-10-19T20:38:05Z",
+      "duration_ms": 6611
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_action",
+      "iteration": 1,
+      "details": "O texto da seção de ação é excelente e cumpre todos os critérios com maestria. Ele fala com clareza e empatia para o público feminino, utilizando termos como \"linda, poderosa e elegante\" e abordando a preocupação com o \"sem gastar uma fortuna\" e o \"respeita seu bolso\". A transformação proposta está diretamente ligada à promessa da empresa (\"Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco\"), focando na sofisticação e na inteligência financeira. O texto é altamente específico, mencionando um produto (\"Body Caracol Tomara Que Caia\"), uma urgência (\"termina nesta sexta-feira!\") e múltiplas chamadas para ação (\"Clique AQUI\", \"Descubra nossa curadoria\", \"cadastre-se em nossa newsletter\"), o que rejeita qualquer vaguidão ou genericidade. O tom é inspirador ao prometer uma sensação de beleza e poder, estratégico ao criar senso de urgência e oferecer diversas vias de engajamento, e altamente acionável. É uma chamada para ação muito bem elaborada.",
+      "timestamp_utc": "2025-10-19T20:38:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "display_name": "Consequências da Inação",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:38:05Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "Mostrar riscos de não agir.",
+      "timestamp_utc": "2025-10-19T20:38:05Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": {
+        "length": 1230
+      },
+      "timestamp_utc": "2025-10-19T20:38:12Z",
+      "duration_ms": 7672
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:38:12Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto da seção 'failure' é excelente e cumpre todos os critérios com maestria. Ele fala com clareza e empatia com o público feminino, abordando diretamente as frustrações de não encontrar roupas que a deixem atraente e sofisticada sem parecer vulgar, a decepção com o 'barato que sai caro', a perda de confiança e a sensação de incompreensão. A transformação negativa está ligada diretamente à promessa da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'), mostrando as consequências de não atingir esses objetivos: 'não encontrando nada que a faça sentir verdadeiramente atraente e sofisticada, sem receio de parecer vulgar', 'impossível ter bom gosto e inteligência financeira ao mesmo tempo'. O texto rejeita respostas vagas, sendo extremamente específico ao mencionar 'barato que sai caro', 'se desfaz na primeira lavagem', 'perda de oportunidades – de se sentir poderosa em uma reunião importante, de desfrutar plenamente de um evento social, de simplesmente se ver no espelho e amar o que vê'. O tom é impactante e estratégico, criando um forte senso de urgência e aversão ao problema, e a frase final 'falsa dicotomia que a Loja Flamê veio para desconstruir' conecta o problema diretamente à solução da empresa. É uma peça fundamental para motivar a cliente a buscar a solução.",
+      "timestamp_utc": "2025-10-19T20:38:20Z",
+      "duration_ms": 7843
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_failure",
+      "iteration": 1,
+      "details": "O texto da seção 'failure' é excelente e cumpre todos os critérios com maestria. Ele fala com clareza e empatia com o público feminino, abordando diretamente as frustrações de não encontrar roupas que a deixem atraente e sofisticada sem parecer vulgar, a decepção com o 'barato que sai caro', a perda de confiança e a sensação de incompreensão. A transformação negativa está ligada diretamente à promessa da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'), mostrando as consequências de não atingir esses objetivos: 'não encontrando nada que a faça sentir verdadeiramente atraente e sofisticada, sem receio de parecer vulgar', 'impossível ter bom gosto e inteligência financeira ao mesmo tempo'. O texto rejeita respostas vagas, sendo extremamente específico ao mencionar 'barato que sai caro', 'se desfaz na primeira lavagem', 'perda de oportunidades – de se sentir poderosa em uma reunião importante, de desfrutar plenamente de um evento social, de simplesmente se ver no espelho e amar o que vê'. O tom é impactante e estratégico, criando um forte senso de urgência e aversão ao problema, e a frase final 'falsa dicotomia que a Loja Flamê veio para desconstruir' conecta o problema diretamente à solução da empresa. É uma peça fundamental para motivar a cliente a buscar a solução.",
+      "timestamp_utc": "2025-10-19T20:38:20Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "display_name": "Sucesso",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:38:20Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "Descrever os resultados positivos alcançados.",
+      "timestamp_utc": "2025-10-19T20:38:20Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": {
+        "length": 1362
+      },
+      "timestamp_utc": "2025-10-19T20:38:25Z",
+      "duration_ms": 4747
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:38:25Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto da seção de sucesso é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, pintando um cenário aspiracional que aborda diretamente suas dores e desejos, como a frustração com o guarda-roupa, a busca por elegância sem vulgaridade, a preocupação com o preço e a valorização da inteligência financeira. A transformação prometida está intrinsecamente ligada à proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'), sendo revisitada e reforçada em cada benefício descrito: 'elegante, sem qualquer sombra de vulgaridade', 'respeita seu orçamento e valoriza seu dinheiro', 'barato que saiu caro é coisa do passado', 'unir qualidade, estilo e inteligência financeira'. O texto rejeita respostas vagas, detalhando a nova realidade de confiança, admiração, bom gosto e paz de espírito. O tom é consistentemente inspirador (linda, poderosa, autêntica, autoconfiança, paz de espírito), estratégico (mostrando como a Loja Flamê resolve a falsa dicotomia de estilo vs. preço) e culmina com a visão clara do sucesso que a cliente alcançará. É uma peça fundamental que fecha o ciclo da narrativa StoryBrand de forma impactante.",
+      "timestamp_utc": "2025-10-19T20:38:33Z",
+      "duration_ms": 7880
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_success",
+      "iteration": 1,
+      "details": "O texto da seção de sucesso é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia com o público feminino, pintando um cenário aspiracional que aborda diretamente suas dores e desejos, como a frustração com o guarda-roupa, a busca por elegância sem vulgaridade, a preocupação com o preço e a valorização da inteligência financeira. A transformação prometida está intrinsecamente ligada à proposta da empresa ('Ajudamos mulheres a se vestirem de forma atraente e sofisticada, sem vulgaridade e gastando pouco'), sendo revisitada e reforçada em cada benefício descrito: 'elegante, sem qualquer sombra de vulgaridade', 'respeita seu orçamento e valoriza seu dinheiro', 'barato que saiu caro é coisa do passado', 'unir qualidade, estilo e inteligência financeira'. O texto rejeita respostas vagas, detalhando a nova realidade de confiança, admiração, bom gosto e paz de espírito. O tom é consistentemente inspirador (linda, poderosa, autêntica, autoconfiança, paz de espírito), estratégico (mostrando como a Loja Flamê resolve a falsa dicotomia de estilo vs. preço) e culmina com a visão clara do sucesso que a cliente alcançará. É uma peça fundamental que fecha o ciclo da narrativa StoryBrand de forma impactante.",
+      "timestamp_utc": "2025-10-19T20:38:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "preparer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "display_name": "Nova Identidade",
+        "approved_sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:38:33Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "writer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "Conectar a nova identidade do cliente após o sucesso.",
+      "timestamp_utc": "2025-10-19T20:38:33Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "writer",
+      "status": "completed",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": {
+        "length": 966
+      },
+      "timestamp_utc": "2025-10-19T20:38:40Z",
+      "duration_ms": 7497
+    },
+    {
+      "stage": "reviewer",
+      "status": "started",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": null,
+      "timestamp_utc": "2025-10-19T20:38:40Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "reviewer",
+      "status": "pass",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto da identidade é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia para o público feminino, abordando diretamente as frustrações passadas com guarda-roupa e preço, e transformando-as em uma nova identidade de 'elegância inteligente'. A transformação descrita está intrinsecamente ligada à proposta da empresa: 'atraente e sofisticada, sem vulgaridade e gastando pouco' é repetida e detalhada em vários pontos, como 'sem um pingo de vulgaridade', 'valorizam seu orçamento', 'estilo impecável', 'linda e poderosa, gastando pouco e sem abrir mão da qualidade'. O texto não é vago, sendo bastante específico sobre os benefícios e a nova percepção de si mesma da cliente. O tom é consistentemente inspirador (personificação da elegância, confiança inabalável, poderosa, autêntica) e estratégico, posicionando a moda como uma ferramenta de empoderamento. É uma peça fundamental que estabelece a nova identidade da cliente de forma muito eficaz.",
+      "timestamp_utc": "2025-10-19T20:38:47Z",
+      "duration_ms": 6722
+    },
+    {
+      "stage": "checker",
+      "status": "approved",
+      "section_key": "storybrand_identity",
+      "iteration": 1,
+      "details": "O texto da identidade é excelente e cumpre todos os critérios com maestria. Ele dialoga com clareza e empatia para o público feminino, abordando diretamente as frustrações passadas com guarda-roupa e preço, e transformando-as em uma nova identidade de 'elegância inteligente'. A transformação descrita está intrinsecamente ligada à proposta da empresa: 'atraente e sofisticada, sem vulgaridade e gastando pouco' é repetida e detalhada em vários pontos, como 'sem um pingo de vulgaridade', 'valorizam seu orçamento', 'estilo impecável', 'linda e poderosa, gastando pouco e sem abrir mão da qualidade'. O texto não é vago, sendo bastante específico sobre os benefícios e a nova percepção de si mesma da cliente. O tom é consistentemente inspirador (personificação da elegância, confiança inabalável, poderosa, autêntica) e estratégico, posicionando a moda como uma ferramenta de empoderamento. É uma peça fundamental que estabelece a nova identidade da cliente de forma muito eficaz.",
+      "timestamp_utc": "2025-10-19T20:38:47Z",
+      "duration_ms": 0
+    },
+    {
+      "stage": "compiler",
+      "status": "started",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "sections": [
+          "storybrand_character",
+          "exposition_1",
+          "inciting_incident_1",
+          "exposition_2",
+          "inciting_incident_2",
+          "unmet_needs_summary",
+          "storybrand_problem_external",
+          "storybrand_problem_internal",
+          "storybrand_problem_philosophical",
+          "storybrand_guide",
+          "storybrand_value_proposition",
+          "storybrand_plan",
+          "storybrand_action",
+          "storybrand_failure",
+          "storybrand_success",
+          "storybrand_identity"
+        ]
+      },
+      "timestamp_utc": "2025-10-19T20:38:49Z",
+      "duration_ms": null
+    },
+    {
+      "stage": "compiler",
+      "status": "completed",
+      "section_key": "compiler",
+      "iteration": null,
+      "details": {
+        "text_length": 16929
+      },
+      "timestamp_utc": "2025-10-19T20:38:49Z",
+      "duration_ms": 1
+    }
+  ],
+  "storybrand_gate_metrics": {
+    "score_obtained": null,
+    "score_threshold": 0.6,
+    "decision_path": "fallback",
+    "timestamp_utc": "2025-10-19T20:34:12Z",
+    "is_forced_fallback": true,
+    "debug_flag_active": true
+  },
+  "storybrand_fallback_meta": {
+    "fallback_engaged": true,
+    "decision_path": "fallback",
+    "trigger_reason": "forced",
+    "timestamp_utc": "2025-10-19T20:34:12Z"
+  },
+  "delivery_audit_trail": [
+    {
+      "stage": "final_assembly_guard_pre",
+      "status": "passed",
+      "timestamp_utc": "2025-10-19T20:48:55.178215+00:00",
+      "detail": "1 VISUAL_DRAFT aprovados."
+    },
+    {
+      "stage": "final_assembly_normalizer",
+      "status": "pending",
+      "timestamp_utc": "2025-10-19T20:50:11.441497+00:00",
+      "detail": "Payload normalizado com dual-write e reference_assets injetados."
+    },
+    {
+      "stage": "deterministic_final_validation",
+      "status": "pass",
+      "timestamp_utc": "2025-10-19T20:50:11.442932+00:00",
+      "issue_count": 0
+    },
+    {
+      "stage": "image_assets_agent",
+      "status": "pass",
+      "timestamp_utc": "2025-10-19T20:53:14.523963+00:00",
+      "detail": "Resumo da geração de imagens",
+      "summary": [
+        {
+          "variation_index": 0,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205132Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=ba2fa316bd6457635906d40e944e298407b99113be47ce28d4bf833bd3cb5513aad633284c83040f525c35706f14e37289c395d649d6a1098f9dc89223489df4be2c321b68af9c25308aaf520d8a3120de1b33320365b26fbcfaf1a563aeab5677fbbc695a2383710da212fa35ce615359ca74093a68f728219dd1311f9a185e03d3d3a7b821702e81d31c5e803f637d9b75be1066611ebe63df6e5f8db9c0c1bfa0b37801d9b25fa4dd691e0a86430aacd80d8d27eb0b16b31666290887b01406ebe905195f1277d38c5adcf5697019017ac637e494caeed82226c8638a94f0bc1344fd6bc559bce06e465e8224cfc5ee6ea94ee836f494c3e6fd12f020c116"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205145Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=962722f03d805550d56e1f77f14fd5b6dbea72958907b606e87f5755b02f565fc341d2d512c62aa66d78d04c1b0fd1038201e2135075d480dcc1fdfcad395c5e58509ca47927ac6b952cf111b74cb757fada380726dcd976265209821384286540a4a361c1efd25838e5c173cfc0f600fcd1e2c139dcde71293bdd3a87e9b3ae4a2f894e67e7f27cee31ecf4b05de3674b9fb11820c2172d5f259be59cb489b78326ddab3b9f06560e3e34fd9290172ea553961f4df28cba665e9e079b32f837b02b23e4c4293c185667512260570278f18cfe82d73cc87f085767c299ddae4bb803214290efefa08ccdf570f948264eeb28723b783e22094ecb21e8b86d63b8"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205200Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2e2e7ac68219af5b1b6ada3f3a2c6609b58204a46665db2bd70d082242d7150e88fddcae624c120bdc9f39abe99ee448dce4877284447ac80218e01ea18a3e685638490985a87be99f7e8b02f9bb8adccee964e8e5e4ef7c2c763c5de74fb05a43dcdf7a20f4a0adc9b83a4e609cd23b71538938eec22cd397b7a04c123234e586cb2214ee90f6f50eb3b6c04dfdcbc0fbace7d5f559e861f9fe4ebaa4b634a850998b42df5aa9e0beb230c6f742575adcdd8494afc991aa2261518ec82053729713c414b0def8079ce60af3e78063cfa518438ef86584670f416fda9e6d74544addfb4a51fe057b1228c0c1af49735323da7e5026cfacd9fa57b291b9defd45"
+            },
+            "meta": {
+              "variation_idx": 0,
+              "duration_seconds": 39.94184785900006
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "despair",
+            "prompt_estado_intermediario": "determined",
+            "prompt_estado_aspiracional": "joyful"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 1,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205210Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=7e464a7a983f5b266bf98bdc43bc8a2205220630f19f53da0085ed3f2501ec7936a76846dce690d5abcc42c8977707b706e4501f1b8d03755fc856ada3bb523eb755d417c48e0bba18922d8d78d9c124700ef309326a0dfbba62f5441a79d0e68b02131c871cb8f34870fe1cd7bd21f00dcdb010d52a03e6f3c76f336082f15006bb58f1ef1badbcc7c25674b2c63b7db541739f25412ad3363c2ada2e0ca5304dff5136911c49820a9cbd8ab3b6d9ae206e083264c8a77f0d5620ee7ee85435a38fa84a680899231fd6fb4546e03f5805a0979173f9a53d035de5b670791f4cf2c4931d0d3bd19e2812009d8abdc05eb24552a9024ae8d13c4db405e1089bd0"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205223Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=2679bc02250e969d1379923c2df733ccf3a61430ce10140d73d2904040d03ad1c30c4d8b92d18da3711f0fdcb3ebeff14d412b27740b70f9de0797a6bae7f50f039e1cf0ad415f40adbb0624057bc4a8a91fc4d71ad7a3e98f0d374a730e645b8183db3df52bcdc17203ffac0cdcb4893434ed9e53f8ce721d1a7384ecf98f533deb89d98564a49dbfd35cefb1ae07772635c7ccef152247e057ddeb1ea82debfc0e7d538edb205388c4c47c55797ad8d187533f0a534a5ae7b58a72e8f8c0ac66f10ab489a3459531c195ba998788bd615dd80e0e59a977d70bfc5e63187a9e6f405e01cb1c69329941a3817bd09092f02d7a51c038c2ca289b24d5cd4527f4"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205237Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=233d068c807f7f728678a8d5cdc4570e5570223e031f6cb769f827f4855ea9edfb09ecabfbc6c91f5d7271b8f850435d537cb08796aca42926178fd04f8b6badf53cbac725aa7805e40014c6cad489c5c435c831c39b79585769463846d066109a4fb1d49d3848395a3def506a066b62a5fb566462d3ac5c6c9a1eabcb9b22f2e199f2baac8f07b6f13207b29043ea3082f16d0990ea07e0f90c034965df37e1d27d58332bf816a5928dc312224b95a845457659dc78488cd7327ed39636f6cdc89685fe4fd02f8eb564c9f374d484e74a59cd34962f0008ad1a7675de0b05ec4bf73d0a5c447e9c3cb8966437cc4b6c6724c048424a1c3037d53ff92a6cd732"
+            },
+            "meta": {
+              "variation_idx": 1,
+              "duration_seconds": 37.22176493799998
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "inadequacy",
+            "prompt_estado_intermediario": "empowered",
+            "prompt_estado_aspiracional": "confident"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        },
+        {
+          "variation_index": 2,
+          "status": "ok",
+          "assets": {
+            "estado_atual": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_atual_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205247Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=4b0dc3a540c287aadcc8c738b3b2c5c4a323d879adb1e2f1e150dd8be1c75d46e1b609aeeafd377af6b1c58cc9bd358d8653b6985689f35df48f89016e80e0dbaec498d36b5c3c27f3a01936c22366368d55ea5dc72591baa5cd0d0f65e510a5bc6345f31572fa9c986384f67512f48783b799a2174d080ff884863377f1b00c6dfe540423fdd42ac6f2fa8d8d8654214a796e04186e3cc58de84fb5c7be44c837efec991fe0f3fd7482aef9102577c1b328acbe1d5809312edabbb8e6d7947584270f341f50c05ce7cf8ad3cb5f19145ccd81070bb996b3c4147c36fb93aada2352f3eecf1d03396034b5691900025e8141b8333f0a2d5da921225306d15959"
+            },
+            "estado_intermediario": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_intermediario_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205301Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=0916d103ab679fc167820cc4ea2202963ce4780b0593a89b76c0aa57b2c01b50ebf6f49f3fa0a731175b4ac519778930688816bd5ccd78babf6cd1f266afdd2877af6476af654f519e4b2270fc87bece62ef3dc8fe9a861d34769f277e1ae3079a27485f7ef127beb33eb130aa0f8fa5e3c7c795698df198aa832922167fb129e8293b480665abe6f0a9584796bdfea3b84e3eac1ddfa01035c42b7d51f0e073fe927871382f5148a6d73241f3a39d1ee9cfc60b03ffaea8bd756f0a5090e354e641dd3897a195cef1a815046658f91ea40addd396f9b20fe9155cc838130d040e37933974b93b67d520090a7e7db0ddad28ab2f300ed1ec66f13a90ddeb3d0e"
+            },
+            "estado_aspiracional": {
+              "gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png",
+              "signed_url": "https://storage.googleapis.com/instagram-ads-472021-deliveries/deliveries/anonymous/ad9b0fab-d12f-4b75-a023-bd5b817816b5/images/estado_aspiracional_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=instagram-ads-sa%40instagram-ads-472021.iam.gserviceaccount.com%2F20251019%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251019T205314Z&X-Goog-Expires=86400&X-Goog-SignedHeaders=host&response-content-type=image%2Fpng&X-Goog-Signature=59f56294a6761c33826bbe231a9695f4130349071871c596fae7d603b14be20a8be98991f808320ab7705b699721ce8861efb22d420b91caf7876b01349d30558738dcd7a5e14749f226a674f4fff218f5f1642f69ea8cd0b3bf9c46f0cca11a2ebad9d3a85e8a7a1b12928c2e41eb27d2f86fe6db84ebe9a71565db6e0030f73fbd401df3aaf75827c82539d4b1f322bf3f18265b571832c06f5e08b7cf8b823fa80afc832f5383745c583c35b7730fd1ba9eadf3c65c00aaab3f62055b74704c1b31f35922b920beba74ff50c4b653e6b124e35c6975f70ecb0bb650be924189757bc050ec8f0af94bb72c1448fb6b0c7456ce054ea325c7ebadc602645d3f"
+            },
+            "meta": {
+              "variation_idx": 2,
+              "duration_seconds": 37.129094057999964
+            }
+          },
+          "character_reference_used": false,
+          "product_reference_used": false,
+          "emotions": {
+            "prompt_estado_atual": "frustrated",
+            "prompt_estado_intermediario": "relief",
+            "prompt_estado_aspiracional": "smart and proud"
+          },
+          "safe_search_notes": null,
+          "reference_errors": null
+        }
+      ],
+      "issues": []
+    }
+  ],
+  "reference_images_present": false,
+  "storybrand_sections_saved_path": "artifacts/storybrand/ad9b0fab-d12f-4b75-a023-bd5b817816b5.json",
+  "storybrand_sections_gcs_uri": "gs://instagram-ads-472021-deliveries/deliveries/u_999/ad9b0fab-d12f-4b75-a023-bd5b817816b5/storybrand_sections.json",
+  "storybrand_sections_present": true,
+  "image_signed_url_ttl_seconds": 86400
+}

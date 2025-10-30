@@ -38,6 +38,10 @@ interface ImageCarouselProps {
   onRetry: () => void;
   hasError: boolean;
   isLoading: boolean;
+  headline?: string;
+  ctaText?: string;
+  ctaInstagram?: string;
+  companyLabel?: string;
 }
 
 const VARIATION_TAB_CLASS = "rounded-lg data-[state=active]:bg-card/80 data-[state=active]:text-foreground";
@@ -115,6 +119,55 @@ function buildContext(raw: unknown): ContextInfo {
   return "";
 }
 
+function normalizeHandleSegment(segment: string): string {
+  if (!segment) {
+    return "";
+  }
+  const cleaned = segment.replace(/[-_]+/g, " ").trim();
+  if (!cleaned) {
+    return "";
+  }
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
+}
+
+function resolveBrandLabel(variation?: AdVariation): string {
+  if (!variation) {
+    return "";
+  }
+
+  const namedCompany = (variation.nome_empresa ?? "").trim();
+  if (namedCompany) {
+    return namedCompany;
+  }
+
+  const url = (variation.landing_page_url ?? "").trim();
+  if (!url) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(url);
+    const hostname = parsed.hostname.replace(/^www\./, "");
+
+    if (!hostname) {
+      return "";
+    }
+
+    const socialHosts = new Set(["instagram.com", "facebook.com", "linktr.ee", "m.facebook.com"]);
+    if (!socialHosts.has(hostname)) {
+      return hostname;
+    }
+
+    const pathname = parsed.pathname.replace(/\/+$/, "");
+    const segments = pathname.split("/").filter(Boolean);
+    const candidate = normalizeHandleSegment(segments.at(-1) ?? "");
+    return candidate || hostname;
+  } catch (error) {
+    console.warn("Não foi possível interpretar landing_page_url", error);
+    return "";
+  }
+}
+
 function sanitizeVariation(raw: unknown): AdVariation | null {
   if (!isRecord(raw)) {
     return null;
@@ -122,6 +175,7 @@ function sanitizeVariation(raw: unknown): AdVariation | null {
 
   const copy = buildCopy(raw.copy);
   const visual = buildVisual(raw.visual);
+  const companyName = coerceString(raw.nome_empresa);
 
   return {
     landing_page_url: coerceString(raw.landing_page_url),
@@ -132,6 +186,7 @@ function sanitizeVariation(raw: unknown): AdVariation | null {
     fluxo: coerceString(raw.fluxo),
     referencia_padroes: coerceString(raw.referencia_padroes),
     contexto_landing: buildContext(raw.contexto_landing),
+    nome_empresa: companyName || undefined,
   };
 }
 
@@ -159,12 +214,17 @@ function ImageCarousel({
   onRetry,
   hasError,
   isLoading,
+  headline,
+  ctaText,
+  ctaInstagram,
+  companyLabel,
 }: ImageCarouselProps) {
   const hasImages = images.length > 0;
   const totalSlides = Math.max(prompts.length, hasImages ? images.length : 1);
   const stageLabel = prompts[currentIndex]?.label ?? "Descrição visual";
   const activePrompt = prompts[currentIndex];
   const imageSrc = images[currentIndex];
+  const resolvedCta = (ctaText || ctaInstagram || "").trim();
 
   const canGoPrev = currentIndex > 0;
   const canGoNext = currentIndex < totalSlides - 1;
@@ -224,13 +284,39 @@ function ImageCarousel({
             </Button>
           </div>
         ) : hasImages && imageSrc ? (
-          <img
-            key={`${variationIndex}-${currentIndex}`}
-            src={imageSrc}
-            alt={`Variação ${variationIndex + 1} - imagem ${currentIndex + 1}`}
-            className="h-full w-full object-cover"
-            onError={() => onImageError(currentIndex)}
-          />
+          <>
+            <img
+              key={`${variationIndex}-${currentIndex}`}
+              src={imageSrc}
+              alt={`Variação ${variationIndex + 1} - imagem ${currentIndex + 1}`}
+              className="h-full w-full object-cover"
+              onError={() => onImageError(currentIndex)}
+            />
+            {currentIndex === 0 && Boolean(headline?.trim()) && (
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-[5] max-w-[70%] bg-gradient-to-b from-black/75 via-black/40 to-transparent pb-10 pl-6 pr-8 pt-12">
+                <p className="text-xl font-bold leading-tight tracking-tight text-white drop-shadow line-clamp-3 sm:text-2xl sm:leading-tight sm:line-clamp-none">
+                  {headline}
+                </p>
+              </div>
+            )}
+            {currentIndex === 1 && Boolean(companyLabel?.trim()) && (
+              <div className="pointer-events-none absolute left-5 top-16 z-10 rounded-full border border-border/50 bg-background/85 px-4 py-1.5 text-sm font-semibold text-foreground/90 shadow-md backdrop-blur">
+                {companyLabel}
+              </div>
+            )}
+            {currentIndex === 2 && Boolean(resolvedCta) && (
+              <div className="absolute bottom-5 left-1/2 z-30 w-full max-w-[220px] -translate-x-1/2 px-4 sm:bottom-6 sm:left-auto sm:right-6 sm:w-auto sm:max-w-[220px] sm:translate-x-0 sm:px-0">
+                <Button
+                  size="sm"
+                  className="w-full justify-center shadow-xl sm:w-auto"
+                  aria-label={`Chamada para ação: ${resolvedCta}`}
+                  title={resolvedCta}
+                >
+                  {resolvedCta}
+                </Button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex h-full flex-col justify-end gap-4 p-6 text-left">
             <Badge variant="outline" className="w-fit bg-background/70 text-xs">
@@ -481,6 +567,7 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
   const variationImages = useMemo(() => getVariationImages(activeVariation), [activeVariation]);
   const aspectRatioClass = getAspectRatioClass(activeVariation?.visual.aspect_ratio);
   const hasImageError = imageErrors.get(`${currentVariation}-${currentImageIndex}`) ?? false;
+  const companyLabel = useMemo(() => resolveBrandLabel(activeVariation), [activeVariation]);
 
   useEffect(() => {
     if (isOpen) {
@@ -511,6 +598,10 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
         onRetry={fetchPreviewData}
         hasError={hasImageError}
         isLoading={isFetchingPreview}
+        headline={activeVariation.copy.headline}
+        ctaText={activeVariation.copy.cta_texto}
+        ctaInstagram={activeVariation.cta_instagram}
+        companyLabel={companyLabel}
       />
       <Card className="rounded-2xl border border-border/60 bg-card/80 shadow-sm">
         <CardContent className="space-y-4 py-6">
@@ -552,6 +643,10 @@ export function AdsPreview({ userId, sessionId, isOpen, onClose }: AdsPreviewPro
           onRetry={fetchPreviewData}
           hasError={hasImageError}
           isLoading={isFetchingPreview}
+          headline={activeVariation.copy.headline}
+          ctaText={activeVariation.copy.cta_texto}
+          ctaInstagram={activeVariation.cta_instagram}
+          companyLabel={companyLabel}
         />
         <div className="pointer-events-none absolute inset-0">
           <div className="flex justify-center">

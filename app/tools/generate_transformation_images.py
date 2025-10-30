@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import json
 import logging
 import os
 import time
@@ -197,6 +198,32 @@ async def _call_model(contents: list[Any]) -> Image.Image:
     )
 
 
+def _summarize_stage_inputs(parts: list[Any]) -> list[dict[str, Any]]:
+    summary: list[dict[str, Any]] = []
+    for item in parts:
+        if isinstance(item, str):
+            preview = item if len(item) <= 120 else f"{item[:117]}..."
+            summary.append(
+                {
+                    "type": "text",
+                    "length": len(item),
+                    "preview": preview,
+                }
+            )
+            continue
+        if isinstance(item, Image.Image):
+            summary.append(
+                {
+                    "type": "image",
+                    "mode": getattr(item, "mode", "unknown"),
+                    "size": getattr(item, "size", None),
+                }
+            )
+            continue
+        summary.append({"type": type(item).__name__})
+    return summary
+
+
 async def _notify(callback: Optional[ProgressCallback], stage_idx: int, stage_label: str) -> None:
     if not callback:
         return
@@ -326,17 +353,23 @@ async def generate_transformation_images(
             product_summary = reference_product.user_description or product_labels
 
     # Etapa 1 – estado atual
-    prompt_estado_atual = prompt_atual
-    if reference_character is not None and character_image is not None:
-        prompt_estado_atual = config.image_current_prompt_template.format(
-            prompt_atual=prompt_atual,
-            character_labels=character_labels,
-            character_summary=character_summary or character_labels,
+    prompt_estado_atual_parts: list[str] = [
+        "Gerar a IMAGEM DO ESTADO ATUAL do personagem. Não altere rosto, traços, proporções corporais, tom de pele ou cabelo."
+    ]
+    if character_image is not None:
+        prompt_estado_atual_parts.append(
+            "Use a imagem compartilhada do personagem como referência principal e mantenha integralmente as características físicas."
         )
-    elif reference_product is not None and product_summary:
-        prompt_estado_atual = (
-            f"{prompt_atual} Highlight the approved product reference: {product_summary}."
-        )
+    if product_image is not None:
+        extra_product_context = product_summary or product_labels
+        product_instruction = "Use a imagem compartilhada do produto/serviço como referência visual na cena."
+        if extra_product_context:
+            product_instruction = (
+                f"Use a imagem compartilhada do produto/serviço como referência visual e destaque {extra_product_context}."
+            )
+        prompt_estado_atual_parts.append(product_instruction)
+    prompt_estado_atual_parts.append(prompt_atual)
+    prompt_estado_atual = " ".join(prompt_estado_atual_parts)
 
     stage_one_inputs: list[Any] = []
     if character_image is not None:
@@ -344,6 +377,13 @@ async def generate_transformation_images(
     if product_image is not None:
         stage_one_inputs.append(product_image)
     stage_one_inputs.append(prompt_estado_atual)
+
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_atual: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_one_inputs)),
+        )
 
     image_atual = await _call_model(stage_one_inputs)
     upload_atual = await _upload_image(
@@ -357,15 +397,42 @@ async def generate_transformation_images(
     await _notify(progress_callback, 1, "estado_atual")
 
     # Etapa 2 – intermediário (usa imagem base)
-    transform_prompt_inter = config.image_intermediate_prompt_template.format(
-        prompt_intermediario=prompt_intermediario
+    transform_prompt_inter_parts: list[str] = [
+        "Gerar a IMAGEM DO ESTADO INTERMEDIÁRIO: o personagem está buscando soluções na internet sobre o produto/serviço do anunciante.",
+        "Enquadramento over-the-shoulder (por trás e levemente de lado), câmera atrás e lateral do personagem.",
+        "A TELA do dispositivo deve estar de frente para a câmera e ser o foco principal, mostrando Instagram, site ou resultados de busca do anunciante.",
+        "Iluminação realista, foco na tela e sem reflexos que impeçam a leitura."
+    ]
+    if image_atual is not None:
+        transform_prompt_inter_parts.append(
+            "Use como referência a IMAGEM COMPARTILHADA do estado atual para manter o mesmo personagem, características físicas e expressões."
+        )
+    if character_image is not None:
+        transform_prompt_inter_parts.append(
+            "Considere também a imagem compartilhada do personagem para reforçar consistência de rosto e proporções."
+        )
+    if product_image is not None:
+        transform_prompt_inter_parts.append(
+            "Utilize a imagem compartilhada do produto/serviço apenas se for exibida no contexto da pesquisa."
+        )
+    transform_prompt_inter_parts.append(
+        "Mantenha o cenário da imagem anterior quando fizer sentido; caso contrário, ajuste para um ambiente plausível de pesquisa online (quarto, sala ou escritório)."
     )
+    transform_prompt_inter_parts.append(prompt_intermediario)
+    transform_prompt_inter = " ".join(transform_prompt_inter_parts)
     stage_two_inputs: list[Any] = [image_atual]
     if character_image is not None:
         stage_two_inputs.append(character_image)
     if product_image is not None:
         stage_two_inputs.append(product_image)
     stage_two_inputs.append(transform_prompt_inter)
+
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_intermediario: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_two_inputs)),
+        )
 
     image_intermediario = await _call_model(stage_two_inputs)
     upload_intermediario = await _upload_image(
@@ -378,26 +445,38 @@ async def generate_transformation_images(
     )
     await _notify(progress_callback, 2, "estado_intermediario")
 
-    # Etapa 3 – aspiracional (usa imagem intermediária)
-    if reference_product is not None and product_image is not None:
-        transform_prompt_asp = (
-            config.image_aspirational_prompt_template_with_product.format(
-                prompt_aspiracional=prompt_aspiracional,
-                product_labels=product_labels,
-                product_summary=product_summary or product_labels,
-            )
+    # Etapa 3 – aspiracional (usa apenas uploads aprovados)
+    transform_prompt_asp_parts: list[str] = [
+        "Gerar a IMAGEM DO ESTADO ASPIRACIONAL (futuro desejado/sucesso), conforme o prompt aspiracional fornecido.",
+        "Não altere o rosto, traços, proporções corporais, tom de pele ou cabelo do personagem."
+    ]
+    if character_image is not None:
+        transform_prompt_asp_parts.append(
+            "Use SOMENTE a IMAGEM ORIGINAL DO PERSONAGEM (upload inicial) como referência de pessoa, mantendo integralmente as características físicas."
         )
-    else:
-        transform_prompt_asp = config.image_aspirational_prompt_template.format(
-            prompt_aspiracional=prompt_aspiracional
+    if product_image is not None:
+        transform_prompt_asp_parts.append(
+            "Incorpore visualmente a IMAGEM DO PRODUTO/SERVIÇO compartilhada na cena aspiracional."
         )
+    transform_prompt_asp_parts.append(
+        "Não utilize imagens geradas anteriormente como referência principal nesta etapa."
+    )
+    transform_prompt_asp_parts.append(prompt_aspiracional)
+    transform_prompt_asp = " ".join(transform_prompt_asp_parts)
 
-    stage_three_inputs: list[Any] = [image_intermediario]
+    stage_three_inputs: list[Any] = []
     if product_image is not None:
         stage_three_inputs.append(product_image)
     if character_image is not None:
         stage_three_inputs.append(character_image)
     stage_three_inputs.append(transform_prompt_asp)
+
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug(
+            "generate_content inputs for variation %s - estado_aspiracional: %s",
+            variation_idx,
+            json.dumps(_summarize_stage_inputs(stage_three_inputs)),
+        )
 
     image_aspiracional = await _call_model(stage_three_inputs)
     upload_aspiracional = await _upload_image(
