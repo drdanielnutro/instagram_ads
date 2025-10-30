@@ -92,8 +92,8 @@ Este documento concentra as informações essenciais para qualquer pessoa que co
 - Obedecer `codex/anexo_revisao_codigo.md` (checklist → plano → código). Garanta testes completos e documentação atualizada antes de aprovar.
 
 ### StoryBrand Checklist → Plano → Código
-- Sempre abra `plano_storybrand_salvo_checklist.md` e atualize o item atual para `in progress`.
-- Leia o plano `plano_storybrand_salvo.md` antes de tocar no código.
+- Sempre abra `checklist_refatoracao_storybrand.md` e atualize o item atual para `in progress`.
+- Leia o plano `plano_refatoracao_storybrand.md` antes de tocar no código.
 - Ao finalizar, marque como `done` e relate o resultado na resposta/PR.
 
 ---
