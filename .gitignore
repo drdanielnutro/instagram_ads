@@ -171,3 +171,5 @@ node_modules/
 
 # Claude configuration
 sa-key.json
+.gemini/
+gha-creds-*.json
