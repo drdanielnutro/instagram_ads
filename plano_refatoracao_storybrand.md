@@ -88,6 +88,7 @@ state["storybrand_fallback_meta"] = {
                },
                "storybrand_analysis": compiled_sections,
                "storybrand_summary": summary,
+               "storybrand_ad_context": ad_context,
            },
            event_type="storybrand.completed",
        ),
@@ -151,7 +152,12 @@ state["storybrand_fallback_meta"] = {
    - Iniciar SSE imediatamente após bootstrap começar; exibir spinner “Gerando StoryBrand”.  
 3. Ao receber evento `storybrand.completed`, atualizar:  
    ```ts
-   setStorybrandInputs(delta.storybrand_fallback_meta);
+   setStorybrandArtifacts({
+     analysis: delta.storybrand_analysis,
+     summary: delta.storybrand_summary,
+     adContext: delta.storybrand_ad_context,
+   });
+   setStorybrandMeta((prev) => ({ ...prev, ...delta.storybrand_fallback_meta }));
    setIsStorybrandReady(true);
    ```
    e, se houver payload da campanha pendente, executar automaticamente `runCampaignPhase()`.
@@ -183,8 +189,8 @@ state["storybrand_fallback_meta"] = {
 ## 6. Migração, Compatibilidade e Flags
 
 1. **Novas Flags**  
-   - `ENABLE_STORYBRAND_BOOTSTRAP` (backend, default `False`): ativa o novo estágio; permite rollout progressivo.  
-   - `STORYBRAND_BOOTSTRAP_ROLLOUT_PERCENTAGE` (0–100): percentual de sessões que entram no novo fluxo.  
+   - `ENABLE_STORYBRAND_BOOTSTRAP` (backend, default `True`): mantém o novo estágio ativo por padrão; pode ser desativado manualmente apenas em cenários de rollback controlado.  
+   - `STORYBRAND_BOOTSTRAP_ROLLOUT_PERCENTAGE` (0–100): percentual de sessões que entram no novo fluxo (utilizar para rollout progressivo sem alterar o default da flag principal).  
    - `VITE_DEBUG_STORYBRAND` (frontend, default `false`): habilita logs extras durante testes.
 2. **Sessões em andamento**  
    - Detectar ausência de `storybrand_fallback_meta.status` e inicializar como `"unknown"` ao carregar estado.  
